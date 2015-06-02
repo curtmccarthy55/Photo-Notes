@@ -10,11 +10,7 @@
 
 @implementation CJMFileSerializer
 
-- (BOOL)writeObject:(id)data toRelativePath:(NSString *)path
-{
-    return [NSKeyedArchiver archiveRootObject:data toFile:[self absolutePathFromRelativePath:path]];
-}
-
+#pragma mark - read/write/delete
 - (id)readObjectFromRelativePath:(NSString *)path
 {
     NSString *absolutePath = [self absolutePathFromRelativePath:path];
@@ -25,10 +21,45 @@
     return object;
 }
 
+- (BOOL)writeObject:(id)data toRelativePath:(NSString *)path
+{
+    return [NSKeyedArchiver archiveRootObject:data toFile:[self absolutePathFromRelativePath:path]];
+}
+
+- (void)deleteImageWithFileName:(NSString *)fileName
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *filePath = [self absolutePathFromRelativePath:fileName];
+    NSString *thumbnailFilePath = [filePath stringByAppendingString:@"_sm"];
+    
+    NSError *error;
+    
+    BOOL fullImageSuccess = [fileManager removeItemAtPath:filePath error:&error];
+    
+    if (fullImageSuccess) {
+        NSLog(@"Full image file deleted successfully!");
+    } else {
+        NSLog(@"Could not delete full image file: %@", [error localizedDescription]);
+    }
+    
+    BOOL thumbnailSuccess = [fileManager removeItemAtPath:thumbnailFilePath
+                                                    error:&error];
+    
+    if (thumbnailSuccess) {
+        NSLog(@"Thumbnail deleted successfully!");
+    } else {
+        NSLog(@"Could not delete thumbnail file: %@", [error localizedDescription]);
+    }
+    
+}
+
+#pragma mark - File pathing
 - (NSString *)documentsDirectory
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths firstObject];
+    //NSLog(@"%@ *****", documentsDirectory);
     return documentsDirectory;
 }
 

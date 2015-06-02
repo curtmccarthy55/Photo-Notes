@@ -26,5 +26,6 @@
 //- (void)addAsset:(PHAsset *)asset;
 //- (void)addAssetsFromArray:(NSArray *)array;
 - (void)addCJMImage:(CJMImage *)image;
+- (void)removeCJMImage:(CJMImage *)image;
 
 @end

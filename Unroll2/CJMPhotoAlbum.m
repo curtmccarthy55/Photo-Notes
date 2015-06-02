@@ -66,6 +66,11 @@
     [_albumEditablePhotos addObject:image];
 }
 
+- (void)removeCJMImage:(CJMImage *)image
+{
+    [_albumEditablePhotos removeObject:image];
+}
+
 - (NSArray *)albumPhotos
 {
     return [_albumEditablePhotos array];

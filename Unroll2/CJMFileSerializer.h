@@ -12,6 +12,7 @@
 @interface CJMFileSerializer : NSObject
 
 - (BOOL)writeObject:(id)data toRelativePath:(NSString *)path;
+- (void)deleteImageWithFileName:(NSString *)fileName;
 
 - (id)readObjectFromRelativePath:(NSString *)path;
 

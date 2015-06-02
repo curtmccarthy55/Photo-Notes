@@ -56,7 +56,6 @@
     }];
     
     self.editNoteButton.hidden = YES;
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -67,6 +66,9 @@
     
     self.imageView.image = _fullImage;
     self.scrollView.delegate = self;
+    [self updateZoom];
+    
+    
     
     self.noteTitle.text = _cjmImage.photoTitle;
     self.noteEntry.text = _cjmImage.photoNote;
@@ -93,9 +95,11 @@
 {
     [super viewDidAppear:animated];
     
-    self.scrollView.zoomScale = _initialZoomScale * 0.9999;
-    [self updateZoom];
-    self.scrollView.zoomScale = _initialZoomScale;
+//    self.scrollView.zoomScale = _initialZoomScale * 0.9999;
+//    [self updateZoom];
+//    self.scrollView.zoomScale = _initialZoomScale;
+
+    
     [self updateZoom];
 }
 - (void)prepareWithAlbumNamed:(NSString *)name andIndex:(NSInteger)index
@@ -302,6 +306,40 @@
     [alertController addAction:saveImageAction];
     [alertController addAction:setPreviewImage];
     [alertController addAction:cancelAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)confirmImageDelete
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete Photo?"
+                                             message:@"You cannot recover this photo after deleting."
+                                      preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *saveToPhotosAndDelete = [UIAlertAction actionWithTitle:@"Save to Photos app and then delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete) {
+            UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
+            [[CJMServices sharedInstance] deleteImage:self.cjmImage];
+            [[CJMAlbumManager sharedInstance] removeImageWithUUID:self.cjmImage.fileName fromAlbum:self.albumName];
+        
+            [[CJMAlbumManager sharedInstance] save];
+        
+            [self.delegate viewController:self deletedImageAtIndex:self.index];
+    }];
+    
+    UIAlertAction *deletePhoto = [UIAlertAction actionWithTitle:@"Delete permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
+            [[CJMServices sharedInstance] deleteImage:self.cjmImage];
+            [[CJMAlbumManager sharedInstance] removeImageWithUUID:self.cjmImage.fileName fromAlbum:self.albumName];
+        
+            [[CJMAlbumManager sharedInstance] save];
+        
+            [self.delegate viewController:self deletedImageAtIndex:self.index];
+    }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
+    
+    [alertController addAction:saveToPhotosAndDelete];
+    [alertController addAction:deletePhoto];
+    [alertController addAction:cancel];
     
     [self presentViewController:alertController animated:YES completion:nil];
 }

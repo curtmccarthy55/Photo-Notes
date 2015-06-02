@@ -105,6 +105,12 @@
     [currentVC showPopUpMenu];
 }
 
+- (IBAction)deleteCurrentPhoto:(id)sender
+{
+    CJMFullImageViewController *currentVC = (CJMFullImageViewController *)self.viewControllers[0];
+    
+    [currentVC confirmImageDelete];
+}
 
 - (void)toggleViewVisibility
 {
@@ -130,13 +136,39 @@
     self.makeViewsVisible = !self.makeViewsVisible;
     NSLog(@"makeViewsVisible is %@", [NSNumber numberWithBool:self.makeViewsVisible]);
     
-    [self pageViewController:self viewControllerBeforeViewController:viewController];
-    [self pageViewController:self viewControllerAfterViewController:viewController];
+    //[self pageViewController:self viewControllerBeforeViewController:viewController];
+    //[self pageViewController:self viewControllerAfterViewController:viewController];
     
     [viewController setViewsVisible:self.makeViewsVisible];
 }
 
-//- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers;
+- (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex
+{
+    if ((imageIndex + 1) >= _albumCount) {
+        CJMFullImageViewController *previousVC = (CJMFullImageViewController *)[self pageViewController:self viewControllerBeforeViewController:currentVC];
+        NSLog(@"We need to go to the previous image");
+        //previousVC.index = imageIndex;
+        self.albumCount -= 1;
+        
+        [self setViewControllers:@[previousVC]
+                                          direction:UIPageViewControllerNavigationDirectionReverse
+                                           animated:YES
+                                         completion:nil];
+    } else {
+        CJMFullImageViewController *nextVC = (CJMFullImageViewController *)[self pageViewController:self viewControllerAfterViewController:currentVC];
+    NSLog(@"%@", nextVC);
+        nextVC.index = imageIndex;
+        self.albumCount -= 1;
+    
+        [self setViewControllers:@[nextVC]
+                       direction:UIPageViewControllerNavigationDirectionForward
+                        animated:YES
+                      completion:NULL];
+    
+    }
+    //pageview not moving to new image after deletion
+}
+
 
 
 @end

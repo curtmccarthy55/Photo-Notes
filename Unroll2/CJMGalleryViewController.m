@@ -47,16 +47,19 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     // Do any additional setup after loading the view.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBar.alpha = 1;
+    self.navigationController.toolbar.alpha = 1;
+    
+    [self.collectionView reloadData];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    if (self.navigationController.navigationBar.alpha < 1) {
-    self.navigationController.navigationBar.alpha = 1;
-    self.navigationController.toolbar.alpha = 1;
-        
-    [self.collectionView reloadData];
-    }
     
     if (self.album.albumPhotos.count == 0) {
         UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];

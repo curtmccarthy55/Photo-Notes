@@ -14,6 +14,7 @@
 @protocol CJMFullImageViewControllerDelegate <NSObject>
 
 - (void)toggleFullImageShowForViewController:(CJMFullImageViewController *)viewController;
+- (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex;
 
 @end
 
@@ -26,5 +27,6 @@
 @property (nonatomic) BOOL viewsVisible;
 
 - (void)showPopUpMenu;
+- (void)confirmImageDelete;
 
 @end
