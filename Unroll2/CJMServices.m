@@ -64,6 +64,19 @@ static CJMServices *__sharedInstance;
     }
 }
 
+- (void)deleteImage:(CJMImage *)userImage
+{
+    if ([self.cache objectForKey:userImage.fileName]) {
+        [self.cache removeObjectForKey:userImage.fileName];
+    }
+    
+    if ([self.cache objectForKey:userImage.thumbnailFileName]) {
+        [self.cache removeObjectForKey:userImage.thumbnailFileName];
+    }
+    
+    [self.fileSerializer deleteImageWithFileName:userImage.fileName];
+}
+
 # pragma mark - Interface
 
 - (void)fetchUserAlbums:(CJMCompletionHandler)handler
@@ -71,6 +84,8 @@ static CJMServices *__sharedInstance;
     if(handler)
         handler([[CJMAlbumManager sharedInstance] allAlbums]);
 }
+
+#pragma mark - Image fetching and deletion
 
 - (void)fetchImage:(CJMImage *)image handler:(CJMImageCompletionHandler)handler
 {

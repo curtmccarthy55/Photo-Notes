@@ -75,9 +75,15 @@ static CJMAlbumManager *__sharedInstance;
     [self.allAlbumsEdit addObject:album];
 }
 
-- (void)removeAlbum:(CJMPhotoAlbum *)album
+- (void)removeAlbumAtIndex:(NSUInteger)index
 {
-    [self.allAlbumsEdit removeObject:album];
+    CJMPhotoAlbum *doomedAlbum = [self.allAlbumsEdit objectAtIndex:index];
+    
+    for (CJMImage *cjmImage in doomedAlbum.albumPhotos) {
+    [[CJMServices sharedInstance] deleteImage:cjmImage];
+    }
+    
+    [self.allAlbumsEdit removeObjectAtIndex:index];
 }
 
 - (void)replaceAlbumAtIndex:(NSInteger)index withAlbum:(CJMPhotoAlbum *)album
@@ -96,6 +102,18 @@ static CJMAlbumManager *__sharedInstance;
     }];
     
     return exists;
+}
+
+- (void)removeImageWithUUID:(NSString *)fileName fromAlbum:(NSString *)albumName
+{
+    CJMPhotoAlbum *shrinkingAlbum = [self scanForAlbumWithName:albumName];
+    
+    for (CJMImage *cjmImage in shrinkingAlbum.albumPhotos) {
+        if ([cjmImage.fileName isEqualToString:fileName]) {
+            [shrinkingAlbum removeCJMImage:cjmImage];
+            break;
+        }
+    }
 }
 
 - (NSMutableOrderedSet *)allAlbumsEdit
