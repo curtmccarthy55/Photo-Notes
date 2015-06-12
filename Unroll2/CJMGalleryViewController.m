@@ -24,12 +24,19 @@
 
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
 @property (nonatomic, strong) CJMFIGalleryViewController *fullImageVC;
+@property (nonatomic) BOOL editMode;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *deleteButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *exportButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *cameraButton;
 
 @end
 
 @implementation CJMGalleryViewController
 
 static NSString * const reuseIdentifier = @"GalleryCell";
+
+#pragma mark - View prep and display
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -51,15 +58,21 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 {
     [super viewWillAppear:animated];
     
+    self.editMode = NO;
+    
+    [self toggleEditControls];
+    
     self.navigationController.navigationBar.alpha = 1;
     self.navigationController.toolbar.alpha = 1;
     
     [self.collectionView reloadData];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
     
     if (self.album.albumPhotos.count == 0) {
         UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
@@ -79,14 +92,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark <UICollectionViewDataSource>
-
+#pragma mark - collectionView data source
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return [self.album.albumPhotos count];
 }
-
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -95,6 +106,34 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [cell updateWithImage:_album.albumPhotos[indexPath.item]];
     
     return cell;
+}
+
+#pragma mark - collectionView delegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.editMode == NO) {
+        [self shouldPerformSegueWithIdentifier:@"ViewPhoto" sender:nil];
+    } else if (self.editMode == YES) {
+        [self shouldPerformSegueWithIdentifier:@"ViewPhoto" sender:nil];
+        CJMPhotoCell *selectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+        selectedCell.cellSelectCover.hidden = NO;
+    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CJMPhotoCell *deselectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+    deselectedCell.cellSelectCover.hidden = YES;
+}
+
+- (void)clearCellSelections
+{
+    //NSInteger collectonViewCount = [self.collectionView numberOfItemsInSection:0];
+    for (CJMPhotoCell *cell in self.collectionView.visibleCells)
+    {
+        cell.cellSelectCover.hidden = YES;
+    }
 }
 
 #pragma mark - Navigation
@@ -118,19 +157,56 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.navigationItem.title = album.albumTitle;
 }
 
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    if (self.editMode == YES) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
 #pragma mark - NavBar items
 
+- (IBAction)toggleEditMode:(id)sender
+{
+    if ([self.editButton.title isEqualToString:@"Edit"]) {
+        [self.editButton setTitle:@"Done"];
+        self.editMode = YES;
+        [self toggleEditControls];
+        self.collectionView.allowsMultipleSelection = YES;
+    } else if ([self.editButton.title isEqualToString:@"Done"]) {
+        [self.editButton setTitle:@"Edit"];
+        self.editMode = NO;
+//        [self clearCellSelections];
+        [self toggleEditControls];
+        self.collectionView.allowsMultipleSelection = NO;
+    }
+}
+
+- (void)toggleEditControls
+{
+    if (self.editMode == YES) {
+        self.cameraButton.enabled = NO;
+        self.deleteButton.title = @"Delete";
+        self.deleteButton.enabled = YES;
+        self.exportButton.title = @"Export";
+        self.exportButton.enabled = YES;
+    } else {
+        self.cameraButton.enabled = YES;
+        self.deleteButton.title = nil;
+        self.deleteButton.enabled = NO;
+        self.exportButton.title = nil;
+        self.exportButton.enabled = NO;
+    }
+}
 
 - (IBAction)photoGrab:(id)sender
 {
-    [self showPopUpMenu];
-}
-
-- (void)showPopUpMenu
-{
+    
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
-                                        message:nil
-                                 preferredStyle:UIAlertControllerStyleActionSheet];
+                                                                             message:nil
+                                                                      preferredStyle:UIAlertControllerStyleActionSheet];
     //find a way to delay camera permission request to after user presses camera button
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForCamera) {
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
@@ -164,50 +240,79 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
-
-#pragma mark <UICollectionViewDelegate>
-
-//- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    _fullImageVC = [[CJMFIGalleryViewController alloc] init];
-//    
-//    _fullImageVC.initialIndex = indexPath.item;
-//    _fullImageVC.album = _album;
-//    
-//    [self presentViewController:_fullImageVC animated:YES completion:nil];
-//}
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
+- (IBAction)deleteSelcted:(id)sender
+{
+    NSArray *selectedCells = [NSArray arrayWithArray:[self.collectionView indexPathsForSelectedItems]];
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete photos?" message:@"You cannot recover these photos after deleting." preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    //Save selected photos to Photos app and then delete
+    UIAlertAction *saveThenDeleteAction = [UIAlertAction actionWithTitle:@"Save to Photos app and then delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete){
+        
+        __block UIImage *fullImage = [[UIImage alloc] init];
+        
+            for (NSIndexPath *itemPath in selectedCells) {
+                CJMImage *doomedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
+                [[CJMServices sharedInstance] fetchImage:doomedImage handler:^(UIImage *fetchedImage) {
+                    fullImage = fetchedImage;
+                }];
+                UIImageWriteToSavedPhotosAlbum(fullImage, nil, nil, nil);
+                fullImage = nil;
+                
+                [[CJMServices sharedInstance] deleteImage:doomedImage];
+            }
+            NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+            for (NSIndexPath *itemPath in selectedCells) {
+                [indexSet addIndex:itemPath.row];
+            }
+        [self.album removeCJMImagesAtIndexes:indexSet];
+        
+        [[CJMAlbumManager sharedInstance] save];
+        
+        [self.collectionView deleteItemsAtIndexPaths:selectedCells];
+        
+        [self toggleEditMode:self];
+        
+        [self.collectionView reloadData];
+    }];
+    
+    //Delete photos without saving to Photos app
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete photos permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
+       
+        for (NSIndexPath *itemPath in selectedCells) {
+            CJMImage *doomedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
+            [[CJMServices sharedInstance] deleteImage:doomedImage];
+        }
+        NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+        for (NSIndexPath *itemPath in selectedCells) {
+            [indexSet addIndex:itemPath.row];
+        }
+        [self.album removeCJMImagesAtIndexes:indexSet];
+        
+        [[CJMAlbumManager sharedInstance] save];
+        
+        [self.collectionView deleteItemsAtIndexPaths:selectedCells];
+        
+        [self toggleEditMode:self];
+        
+        [self.collectionView reloadData];
+        }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
+    
+    [alertController addAction:saveThenDeleteAction];
+    [alertController addAction:deleteAction];
+    [alertController addAction:cancel];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
-*/
 
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
+- (IBAction)exportSelected:(id)sender
+{
+    
 }
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 #pragma mark - CJMPhotoGrabber Delegate
-
 
 - (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller
 {
@@ -276,7 +381,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
 }
 
-#pragma mark UICollectionViewFlowLayoutDelegate
+#pragma mark - collectionViewFlowLayout Delegate
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {

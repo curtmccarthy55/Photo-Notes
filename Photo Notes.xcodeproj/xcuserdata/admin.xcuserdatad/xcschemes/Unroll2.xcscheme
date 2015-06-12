@@ -17,7 +17,7 @@
                BlueprintIdentifier = "84A769501ADAE39F00DE6741"
                BuildableName = "Unroll2.app"
                BlueprintName = "Unroll2"
-               ReferencedContainer = "container:Unroll.xcodeproj">
+               ReferencedContainer = "container:Photo Notes.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,7 +31,7 @@
                BlueprintIdentifier = "84A769691ADAE3A000DE6741"
                BuildableName = "Unroll2Tests.xctest"
                BlueprintName = "Unroll2Tests"
-               ReferencedContainer = "container:Unroll.xcodeproj">
+               ReferencedContainer = "container:Photo Notes.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -49,7 +49,7 @@
                BlueprintIdentifier = "84A769691ADAE3A000DE6741"
                BuildableName = "Unroll2Tests.xctest"
                BlueprintName = "Unroll2Tests"
-               ReferencedContainer = "container:Unroll.xcodeproj">
+               ReferencedContainer = "container:Photo Notes.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -59,7 +59,7 @@
             BlueprintIdentifier = "84A769501ADAE39F00DE6741"
             BuildableName = "Unroll2.app"
             BlueprintName = "Unroll2"
-            ReferencedContainer = "container:Unroll.xcodeproj">
+            ReferencedContainer = "container:Photo Notes.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -79,7 +79,7 @@
             BlueprintIdentifier = "84A769501ADAE39F00DE6741"
             BuildableName = "Unroll2.app"
             BlueprintName = "Unroll2"
-            ReferencedContainer = "container:Unroll.xcodeproj">
+            ReferencedContainer = "container:Photo Notes.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -98,7 +98,7 @@
             BlueprintIdentifier = "84A769501ADAE39F00DE6741"
             BuildableName = "Unroll2.app"
             BlueprintName = "Unroll2"
-            ReferencedContainer = "container:Unroll.xcodeproj">
+            ReferencedContainer = "container:Photo Notes.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -18,32 +18,6 @@
 
 @implementation CJMPhotoAlbum
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
-    [aCoder encodeObject:self.albumTitle forKey:@"Title"];
-    [aCoder encodeObject:self.albumNote forKey:@"Note"];
-    [aCoder encodeObject:self.albumEditablePhotos forKey:@"AlbumPhotos"];
-    [aCoder encodeObject:self.albumPreviewImage forKey:@"PreviewImage"];
-    //[aCoder encodeObject:self.internalImages forKey:@"Images"];
-}
-
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
-    self = [super init];
-    if (self) {
-        _albumTitle = [coder decodeObjectForKey:@"Title"];
-        _albumNote = [coder decodeObjectForKey:@"Note"];
-        _albumEditablePhotos = [coder decodeObjectForKey:@"AlbumPhotos"];
-        _albumPreviewImage = [coder decodeObjectForKey:@"PreviewImage"];
-
-        //_internalImages = [NSMutableArray new];
-        //NSArray *images = [coder decodeObjectForKey:@"Images"]; //encoding | decoding is always immutable
-        //if(images)
-        //    [_internalImages addObjectsFromArray:images];
-    }
-    return self;
-}
-
 - (instancetype)initWithName:(NSString *)name andNote:(NSString *)note
 {
     self = [super init];
@@ -61,6 +35,34 @@
     return [self initWithName:name andNote:@""];
 }
 
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.albumTitle forKey:@"Title"];
+    [aCoder encodeObject:self.albumNote forKey:@"Note"];
+    [aCoder encodeObject:self.albumEditablePhotos forKey:@"AlbumPhotos"];
+    [aCoder encodeObject:self.albumPreviewImage forKey:@"PreviewImage"];
+    //[aCoder encodeObject:self.internalImages forKey:@"Images"];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
+    if (self) {
+        _albumTitle = [coder decodeObjectForKey:@"Title"];
+        _albumNote = [coder decodeObjectForKey:@"Note"];
+        _albumEditablePhotos = [coder decodeObjectForKey:@"AlbumPhotos"];
+        _albumPreviewImage = [coder decodeObjectForKey:@"PreviewImage"];
+    }
+    return self;
+}
+
+#pragma mark - Content management
+
+- (NSArray *)albumPhotos
+{
+    return [_albumEditablePhotos array];
+}
+
 - (void)addCJMImage:(CJMImage *)image
 {
     [_albumEditablePhotos addObject:image];
@@ -71,9 +73,10 @@
     [_albumEditablePhotos removeObject:image];
 }
 
-- (NSArray *)albumPhotos
+- (void)removeCJMImagesAtIndexes:(NSIndexSet *)indexSet
 {
-    return [_albumEditablePhotos array];
+    [self.albumEditablePhotos removeObjectsAtIndexes:indexSet];
 }
+
 
 @end

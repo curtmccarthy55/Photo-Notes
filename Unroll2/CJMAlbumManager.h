@@ -14,15 +14,16 @@
 @property (nonatomic, readonly) NSArray *allAlbums;
 
 + (instancetype)sharedInstance;
-- (CJMImage *)albumWithName:(NSString *)name returnImageAtIndex:(NSInteger)index;
+
 - (void)addAlbum:(CJMPhotoAlbum *)album;
 - (void)removeAlbumAtIndex:(NSUInteger)index;
 - (void)replaceAlbumAtIndex:(NSInteger)index withAlbum:(CJMPhotoAlbum *)album;
 - (BOOL)containsAlbumNamed:(NSString *)name;
-- (void)removeImageWithUUID:(NSString *)fileName fromAlbum:(NSString *)albumName;
+
+- (CJMImage *)albumWithName:(NSString *)name returnImageAtIndex:(NSInteger)index;
+- (void)albumWithName:(NSString *)albumName removeImageWithUUID:(NSString *)fileName;
+- (void)albumWithName:(NSString *)name createPreviewFromCJMImage:(CJMImage *)image;
 
 - (BOOL)save;
-
-- (void)albumWithName:(NSString *)name createPreviewFromCJMImage:(CJMImage *)image;
 
 @end

@@ -27,5 +27,6 @@
 //- (void)addAssetsFromArray:(NSArray *)array;
 - (void)addCJMImage:(CJMImage *)image;
 - (void)removeCJMImage:(CJMImage *)image;
+- (void)removeCJMImagesAtIndexes:(NSIndexSet *)indexSet;
 
 @end

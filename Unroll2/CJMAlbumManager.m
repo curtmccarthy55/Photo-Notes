@@ -26,49 +26,46 @@ static CJMAlbumManager *__sharedInstance;
 
 + (instancetype)sharedInstance
 {
-    /*
-     * this dispatch_once macro creats a static token object which ensures the code contained within
-     * the block ^{ [code] } will never be run more than once - without this there is, albeit a very unlikely case, that
-     * the code inside this method is called several times, resulting in an undefined outcome.
-     
-     * when you have a 'sharedInstance' (seen in things like [NSNotificationCenter defaultCenter], [NSFileManager defaultManager], [UIApplication sharedAppication]) the instance is created the first time its
-     * requested, and will stick around for the life of the application.
-     */
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         __sharedInstance = [CJMAlbumManager new];
     });
     
     return __sharedInstance;
-    
-    
-//    static CJMAlbumManager *albumStore;
-//    
-//    if (!albumStore) {
-//        albumStore = [[self alloc] initPrivate];
-//    }
-//    
-//    return albumStore;
 }
-
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
         _fileSerializer = [CJMFileSerializer new];
-        
     }
     return self;
 }
 
-
-#pragma mark - Album Management
+#pragma mark - Content
 
 - (NSArray *)allAlbums
 {
     return [self.allAlbumsEdit array];
 }
+
+
+- (NSMutableOrderedSet *)allAlbumsEdit
+{
+    if(!_allAlbumsEdit)
+    {
+        //lazy load from disk
+        NSOrderedSet *set = [self.fileSerializer readObjectFromRelativePath:CJMAlbumFileName];
+        _allAlbumsEdit = [NSMutableOrderedSet new];
+        
+        if(set)
+            [_allAlbumsEdit addObjectsFromArray:[set array]];
+    }
+    return _allAlbumsEdit;
+}
+
+#pragma mark - Content management
 
 - (void)addAlbum:(CJMPhotoAlbum *)album
 {
@@ -104,33 +101,6 @@ static CJMAlbumManager *__sharedInstance;
     return exists;
 }
 
-- (void)removeImageWithUUID:(NSString *)fileName fromAlbum:(NSString *)albumName
-{
-    CJMPhotoAlbum *shrinkingAlbum = [self scanForAlbumWithName:albumName];
-    
-    for (CJMImage *cjmImage in shrinkingAlbum.albumPhotos) {
-        if ([cjmImage.fileName isEqualToString:fileName]) {
-            [shrinkingAlbum removeCJMImage:cjmImage];
-            break;
-        }
-    }
-}
-
-- (NSMutableOrderedSet *)allAlbumsEdit
-{
-    if(!_allAlbumsEdit)
-    {
-        //this is lazy loading from disk
-        NSOrderedSet *set = [self.fileSerializer readObjectFromRelativePath:CJMAlbumFileName];
-        _allAlbumsEdit = [NSMutableOrderedSet new];
-        
-        if(set)
-            [_allAlbumsEdit addObjectsFromArray:[set array]];
-    }
-    return _allAlbumsEdit;
-}
-
-
 - (CJMPhotoAlbum *)scanForAlbumWithName:(NSString *)name
 {
     CJMPhotoAlbum *foundAlbum;
@@ -144,8 +114,7 @@ static CJMAlbumManager *__sharedInstance;
     return foundAlbum;
 }
 
-
-#pragma mark - requests to album manager
+#pragma mark - Requests to album manager
 
 - (void)albumWithName:(NSString *)name createPreviewFromCJMImage:(CJMImage *)image
 {
@@ -166,7 +135,19 @@ static CJMAlbumManager *__sharedInstance;
     }
 }
 
-#pragma mark - album saving
+- (void)albumWithName:(NSString *)albumName removeImageWithUUID:(NSString *)fileName
+{
+    CJMPhotoAlbum *shrinkingAlbum = [self scanForAlbumWithName:albumName];
+    
+    for (CJMImage *cjmImage in shrinkingAlbum.albumPhotos) {
+        if ([cjmImage.fileName isEqualToString:fileName]) {
+            [shrinkingAlbum removeCJMImage:cjmImage];
+            break;
+        }
+    }
+}
+
+#pragma mark - Album saving
 
 - (BOOL)save
 {

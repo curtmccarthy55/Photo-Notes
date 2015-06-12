@@ -121,18 +121,27 @@
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="B1b-S2-9o5">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                         </imageView>
+                                        <view hidden="YES" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="xmg-kw-fvZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="B1b-S2-9o5" firstAttribute="trailing" secondItem="xmg-kw-fvZ" secondAttribute="trailing" id="C7k-l8-Xze"/>
                                     <constraint firstItem="B1b-S2-9o5" firstAttribute="leading" secondItem="t2s-nU-dYX" secondAttribute="leading" id="KFB-Wk-8va"/>
                                     <constraint firstAttribute="bottom" secondItem="B1b-S2-9o5" secondAttribute="bottom" id="Qgr-Fc-qxJ"/>
+                                    <constraint firstItem="B1b-S2-9o5" firstAttribute="leading" secondItem="xmg-kw-fvZ" secondAttribute="leading" id="ZUD-Q8-Kea"/>
+                                    <constraint firstItem="B1b-S2-9o5" firstAttribute="bottom" secondItem="xmg-kw-fvZ" secondAttribute="bottom" id="cWA-jF-Esi"/>
                                     <constraint firstAttribute="trailing" secondItem="B1b-S2-9o5" secondAttribute="trailing" id="eTJ-bx-ok2"/>
+                                    <constraint firstItem="B1b-S2-9o5" firstAttribute="top" secondItem="xmg-kw-fvZ" secondAttribute="top" id="qJx-9v-1Jn"/>
                                     <constraint firstItem="B1b-S2-9o5" firstAttribute="top" secondItem="t2s-nU-dYX" secondAttribute="top" id="yzi-Zl-qem"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="cellImage" destination="B1b-S2-9o5" id="59b-6M-icP"/>
+                                    <outlet property="cellSelectCover" destination="xmg-kw-fvZ" id="Hk5-re-I6G"/>
                                     <segue destination="auB-ij-Inv" kind="show" identifier="ViewPhoto" id="Xt5-RV-hF1"/>
                                 </connections>
                             </collectionViewCell>
@@ -158,7 +167,31 @@
                                 <action selector="photoGrab:" destination="uLg-8C-qq2" id="jOd-cG-Tvi"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="IDE-TX-idm"/>
+                        <barButtonItem enabled="NO" title="Delete" id="wBf-Pk-UhX">
+                            <connections>
+                                <action selector="deleteSelcted:" destination="uLg-8C-qq2" id="xUL-Xo-zi3"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="VPv-qD-CsF"/>
+                        <barButtonItem enabled="NO" title="Export" id="26C-DL-UK1">
+                            <connections>
+                                <action selector="exportSelected:" destination="uLg-8C-qq2" id="LtV-uC-Hi5"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="vjI-ag-2pA"/>
+                        <barButtonItem title="Edit" id="zne-Rb-ioX">
+                            <connections>
+                                <action selector="toggleEditMode:" destination="uLg-8C-qq2" id="xHv-Pj-5gp"/>
+                            </connections>
+                        </barButtonItem>
                     </toolbarItems>
+                    <connections>
+                        <outlet property="cameraButton" destination="r9C-xl-G7l" id="NPB-SI-bTW"/>
+                        <outlet property="deleteButton" destination="wBf-Pk-UhX" id="0uK-Nm-jhv"/>
+                        <outlet property="editButton" destination="zne-Rb-ioX" id="nDH-8i-cKd"/>
+                        <outlet property="exportButton" destination="26C-DL-UK1" id="bzp-44-psX"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EAx-UQ-3ix" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

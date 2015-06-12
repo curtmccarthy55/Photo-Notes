@@ -45,6 +45,8 @@
     float _initialZoomScale;
 }
 
+#pragma mark - View preparation and display
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -62,13 +64,9 @@
 {
     [super viewWillAppear:animated];
     
-    NSLog(@"pageVC viewWillAppear called");
-    
     self.imageView.image = _fullImage;
     self.scrollView.delegate = self;
     [self updateZoom];
-    
-    
     
     self.noteTitle.text = _cjmImage.photoTitle;
     self.noteEntry.text = _cjmImage.photoNote;
@@ -89,8 +87,6 @@
     [self updateConstraints];
 }
 
-
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -102,6 +98,7 @@
     
     [self updateZoom];
 }
+
 - (void)prepareWithAlbumNamed:(NSString *)name andIndex:(NSInteger)index
 {
     CJMImage *image = [[CJMAlbumManager sharedInstance] albumWithName:name returnImageAtIndex:index];
@@ -110,6 +107,7 @@
     _cjmImage = image;
 }
 
+#pragma mark - scrollView handling
 
 // Update zoom scale and constraints
 // It will also animate because willAnimateRotationToInterfaceOrientation
@@ -192,7 +190,7 @@
 }
 
 
-#pragma mark - Screen reactions
+#pragma mark - Buttons and taps
 
 - (IBAction)shiftNote:(id)sender
 {
@@ -251,8 +249,6 @@
     }
 }
 
-
-
 - (void)setViewsVisible:(BOOL)viewsVisible
 {
     _viewsVisible = viewsVisible;
@@ -264,12 +260,12 @@
 - (void)updateForSingleTap
 {
     if (self.viewsVisible == YES) {
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.25 animations:^{
         self.scrollView.backgroundColor = [UIColor whiteColor];
         self.noteSection.alpha = 1;
         }];
     } else if (self.viewsVisible == NO) {
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.25 animations:^{
         self.scrollView.backgroundColor = [UIColor blackColor];
         self.noteSection.alpha = 0;
         }];
@@ -281,7 +277,7 @@
     [self.delegate toggleFullImageShowForViewController:self];
 }
 
-#pragma mark Button Presses
+#pragma mark - Button responses
 
 - (void)showPopUpMenu
 {
@@ -319,7 +315,7 @@
     UIAlertAction *saveToPhotosAndDelete = [UIAlertAction actionWithTitle:@"Save to Photos app and then delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete) {
             UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
             [[CJMServices sharedInstance] deleteImage:self.cjmImage];
-            [[CJMAlbumManager sharedInstance] removeImageWithUUID:self.cjmImage.fileName fromAlbum:self.albumName];
+            [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
         
             [[CJMAlbumManager sharedInstance] save];
         
@@ -328,7 +324,7 @@
     
     UIAlertAction *deletePhoto = [UIAlertAction actionWithTitle:@"Delete permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
             [[CJMServices sharedInstance] deleteImage:self.cjmImage];
-            [[CJMAlbumManager sharedInstance] removeImageWithUUID:self.cjmImage.fileName fromAlbum:self.albumName];
+            [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
         
             [[CJMAlbumManager sharedInstance] save];
         

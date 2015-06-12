@@ -23,6 +23,8 @@
 
 @implementation CJMAListViewController
 
+#pragma mark - view prep and display
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -42,12 +44,7 @@
     [self.tableView reloadData];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - Table view data source
+#pragma mark - tableView data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -85,8 +82,6 @@
             cell.cellThumbnail.image = [UIImage imageNamed:@"no_image.jpg"];
         }
     }
-    
-
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -110,7 +105,7 @@
     return view;
 }
 
-#pragma mark - Table view delegate methods
+#pragma mark - tableView delegate methods
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
