@@ -320,7 +320,7 @@
                                         </connections>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
-                                        <rect key="frame" x="8" y="53" width="584" height="320"/>
+                                        <rect key="frame" x="8" y="53" width="584" height="334"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="18"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -330,7 +330,7 @@
                                 <constraints>
                                     <constraint firstItem="upp-GS-1zm" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" constant="2" id="2W3-3H-u7U"/>
                                     <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="pWS-x4-vhI" secondAttribute="bottom" constant="5" id="6FN-Ha-NcP"/>
-                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="bottom" secondItem="rlx-cQ-nGb" secondAttribute="bottomMargin" constant="-219" id="FUe-Lg-77e"/>
+                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="bottom" secondItem="rlx-cQ-nGb" secondAttribute="bottomMargin" constant="-205" id="FUe-Lg-77e"/>
                                     <constraint firstAttribute="trailing" secondItem="Wdb-G9-he9" secondAttribute="trailing" constant="8" id="Jkf-s6-woI"/>
                                     <constraint firstItem="pWS-x4-vhI" firstAttribute="top" secondItem="upp-GS-1zm" secondAttribute="bottom" constant="2" id="MSR-NJ-xSD"/>
                                     <constraint firstItem="pWS-x4-vhI" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="8" id="MeW-Zp-5Y2"/>
