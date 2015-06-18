@@ -22,6 +22,8 @@
     self.dataSource = self;
     self.makeViewsVisible = YES;
     
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     CJMFullImageViewController *fullImageVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"FullImageVC"];
     fullImageVC.albumName = _albumName;
     fullImageVC.index = _initialIndex;

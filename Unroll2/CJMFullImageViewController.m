@@ -10,6 +10,7 @@
 #import "CJMAlbumManager.h"
 #import "CJMServices.h"
 #import "CJMImage.h"
+#import "CJMHudView.h"
 
 @import Photos;
 
@@ -25,12 +26,13 @@
 
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteShiftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomConstraint;
+
 
 @property (strong, nonatomic) IBOutlet UIView *noteSection;
 @property (strong, nonatomic) IBOutlet UITextField *noteTitle;
 @property (strong, nonatomic) IBOutlet UITextView *noteEntry;
 @property (strong, nonatomic) IBOutlet UILabel *photoLocAndDate;
-@property (strong, nonatomic) IBOutlet UIView *noteEntryShush;
 
 
 @property (strong, nonatomic) IBOutlet UIButton *seeNoteButton;
@@ -43,6 +45,7 @@
 @implementation CJMFullImageViewController
 {
     float _initialZoomScale;
+    BOOL _focusIsOnImage;
 }
 
 #pragma mark - View preparation and display
@@ -67,22 +70,33 @@
     self.imageView.image = _fullImage;
     self.scrollView.delegate = self;
     [self updateZoom];
-    
+
     self.noteTitle.text = _cjmImage.photoTitle;
-    self.noteEntry.text = _cjmImage.photoNote;
+    self.noteTitle.textColor = [UIColor whiteColor];
     
-    if (self.cjmImage.photoCreationDate == nil && self.cjmImage.photoLocation == nil) {
+    self.noteEntry.text = _cjmImage.photoNote;
+    self.noteEntry.textColor = [UIColor whiteColor];
+    self.noteEntry.font = [UIFont fontWithName:@"Verdana" size:14];
+    
+    [self.noteEntry setAlpha:0.0];
+    [self.photoLocAndDate setAlpha:0.0];
+    
+    
+    if (self.cjmImage.photoCreationDate == nil) {
         self.photoLocAndDate.hidden = YES;
-    } else if (self.cjmImage.photoCreationDate != nil && self.cjmImage.photoLocation == nil) {
-        self.photoLocAndDate.text = [NSString stringWithFormat:@"%@", self.cjmImage.photoCreationDate];
-    } else if (self.cjmImage.photoCreationDate == nil && self.cjmImage.photoLocation != nil) {
-        self.photoLocAndDate.text = [NSString stringWithFormat:@"%@", self.cjmImage.photoLocation];
-    } else if (self.cjmImage.photoCreationDate != nil && self.cjmImage.photoLocation != nil) {
-        self.photoLocAndDate.text = [NSString stringWithFormat:@"%@, %@", self.cjmImage.photoLocation, self.cjmImage.photoCreationDate];
+    } else {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+        [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+        
+        self.photoLocAndDate.hidden = NO;
+        self.photoLocAndDate.text = [NSString stringWithFormat:@"Photo taken %@", [dateFormatter stringFromDate:self.cjmImage.photoCreationDate]];
     }
     
     _initialZoomScale = self.scrollView.zoomScale;
-    NSLog(@"initialZoomScale is %f", _initialZoomScale);
+    _focusIsOnImage = NO;
+    
+    [self handleNoteSectionAlignment];
     
     [self updateConstraints];
 }
@@ -90,11 +104,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-//    self.scrollView.zoomScale = _initialZoomScale * 0.9999;
-//    [self updateZoom];
-//    self.scrollView.zoomScale = _initialZoomScale;
-
     
     [self updateZoom];
 }
@@ -107,31 +116,37 @@
     _cjmImage = image;
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    //if note section is visible and the user swipes to the next page, slide the section out with animation.
+    if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
+        [self handleNoteSectionDismissal];
+    }
+    
+    if (_focusIsOnImage) {
+        [self imageViewTapped:self];
+    }
+    
+    [self updateZoom];
+    
+    NSLog(@"fullImageViewer disappearing");
+}
+
 #pragma mark - scrollView handling
 
 // Update zoom scale and constraints
 // It will also animate because willAnimateRotationToInterfaceOrientation
 // is called from within an animation block
-//
-// DEPRECATION NOTICE: This method is said to be deprecated in iOS 8.0. But it still works.
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
 {
     [super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
     
-    if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
-        if ([self.editNoteButton.titleLabel.text  isEqual:@"Done"]) {
-            [self enableEdit:self.seeNoteButton];
-        }
-        
-        self.noteShiftConstraint.constant = -88.0f;
-        [self.noteSection setNeedsUpdateConstraints];        
-
-        [self.noteSection layoutIfNeeded];
-        self.editNoteButton.hidden = YES;
-        
-        [self.seeNoteButton setTitle:@"See Note" forState:UIControlStateNormal];
-    
-        self.noteEntryShush.hidden = NO;
+    if ([self.seeNoteButton.titleLabel.text isEqual:@"Dismiss"]) {
+        [self handleNoteSectionDismissal];
+    } else if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
+        [self handleNoteSectionAlignment];
     }
     
     [self updateZoom];
@@ -140,6 +155,16 @@
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
     [self updateConstraints];
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
+{
+    if (_initialZoomScale < self.scrollView.zoomScale) {
+        self.scrollView.scrollEnabled = YES;
+    } else if (_initialZoomScale >= self.scrollView.zoomScale) {
+        self.scrollView.scrollEnabled = NO;
+    }
+    
 }
 
 - (void)updateConstraints
@@ -181,8 +206,6 @@
     if (minZoom == self.lastZoomScale) minZoom += 0.000001;
     
     self.lastZoomScale = self.scrollView.zoomScale = minZoom;
-    
-
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
@@ -194,42 +217,56 @@
 
 - (IBAction)shiftNote:(id)sender
 {
-    CGFloat shiftConstant = -(self.view.bounds.size.height - 64);
+    CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
     
-    if (self.noteShiftConstraint.constant == -88.0f) {
+    CGFloat shiftConstant = -(self.view.bounds.size.height - topBarsHeight);
+    
+    if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
         self.noteShiftConstraint.constant = shiftConstant;
         [self.noteSection setNeedsUpdateConstraints];
-        
-        self.noteEntryShush.hidden = YES;
         
         [UIView animateWithDuration:0.25 animations:^{
             [self.noteSection layoutIfNeeded];
             
             self.editNoteButton.hidden = NO;
             [self.seeNoteButton setTitle:@"Dismiss" forState:UIControlStateNormal];
-        }];
-        
-    } else {
-        if ([self.editNoteButton.titleLabel.text  isEqual:@"Done"]) {
-            [self enableEdit:(id)sender];
-        }
-        
-        self.noteShiftConstraint.constant = -88.0f;
-        [self.noteSection setNeedsUpdateConstraints];
-        
-        [UIView animateWithDuration:0.25 animations:^{
-            [self.noteSection layoutIfNeeded];
-            self.editNoteButton.hidden = YES;
             
-            [self.seeNoteButton setTitle:@"See Note" forState:UIControlStateNormal];
+            [self.noteEntry setAlpha:1.0];
+            [self.photoLocAndDate setAlpha:1.0];
         }];
-        self.noteEntryShush.hidden = NO;
+
+    } else {
+        [self handleNoteSectionDismissal];
     }
+}
+
+- (void)handleNoteSectionDismissal
+{
+    if ([self.editNoteButton.titleLabel.text isEqual:@"Done"]) {
+        [self enableEdit:self];
+    }
+    [self handleNoteSectionAlignment];
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.noteSection layoutIfNeeded];
+        self.editNoteButton.hidden = YES;
+        
+        [self.seeNoteButton setTitle:@"See Note" forState:UIControlStateNormal];
+        
+        [self.noteEntry setAlpha:0.0];
+        [self.photoLocAndDate setAlpha:0.0];
+    }];
+}
+
+- (void)handleNoteSectionAlignment
+{
+    self.noteShiftConstraint.constant = -(32.0 + self.navigationController.toolbar.frame.size.height);
+    [self.noteSection setNeedsUpdateConstraints];
 }
 
 - (IBAction)enableEdit:(id)sender
 {
-    if (self.noteTitle.enabled == NO) {
+    if ([self.editNoteButton.titleLabel.text isEqual:@"Edit"]) {
         self.noteTitle.enabled = YES;
         self.noteEntry.editable = YES;
         [self.editNoteButton setTitle:@"Done" forState:UIControlStateNormal];
@@ -237,8 +274,6 @@
     } else {
         self.cjmImage.photoTitle = self.noteTitle.text;
         self.cjmImage.photoNote = self.noteEntry.text;
-        
-        NSLog(@"The photo title should be %@ and the photo note should be %@", self.cjmImage.photoTitle, self.cjmImage.photoNote);
         
         self.noteTitle.enabled = NO;
         self.noteEntry.editable = NO;
@@ -274,6 +309,12 @@
 
 - (IBAction)imageViewTapped:(id)sender
 {
+    if (!_focusIsOnImage) {
+        _focusIsOnImage = YES;
+    } else {
+        _focusIsOnImage = NO;
+    }
+    
     [self.delegate toggleFullImageShowForViewController:self];
 }
 
@@ -290,11 +331,28 @@
         
         [[CJMAlbumManager sharedInstance] save];
         
+        CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view animated:YES];
+        
+        hudView.text = @"Done!";
+        hudView.type = @"Success";
+        
+        [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
+
+        self.navigationController.view.userInteractionEnabled = YES;
         NSLog(@"Save called from popUpMenu");
     }];
     
     UIAlertAction *saveImageAction = [UIAlertAction actionWithTitle:@"Save To Camera Roll" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSave){
         UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
+        
+        CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view animated:YES];
+        
+        hudView.text = @"Done!";
+        hudView.type = @"Success";
+        
+        [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
+        
+        self.navigationController.view.userInteractionEnabled = YES;
     }];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];

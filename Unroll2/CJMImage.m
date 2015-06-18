@@ -10,16 +10,17 @@
 
 @implementation CJMImage
 
-- (instancetype)initWithName:(NSString *)name
-{
-    self = [self init];
-    if(self)
-    {
-        _name = name;
-        _local = YES;
-    }
-    return self;
-}
+//- (instancetype)initWithName:(NSString *)name
+//{
+//    self = [self init];
+//    if(self)
+//    {
+//        _name = name;
+//        _local = YES;
+//        NSLog(@"CJMImage initWithName called");
+//    }
+//    return self;
+//}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
@@ -68,6 +69,14 @@
 - (NSString *)thumbnailFileName
 {
     return [[self fileName] stringByAppendingString:@"_sm"];
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    CJMImage *cjmImage = [[CJMImage allocWithZone: zone] init];
+    
+    //[cjmImage setAccount: accountNumber andBalance: accountBalance];
+    return cjmImage;
 }
 
 @end

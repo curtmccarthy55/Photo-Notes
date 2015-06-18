@@ -9,17 +9,19 @@
 #import "CJMGalleryViewController.h"
 #import "CJMFIGalleryViewController.h"
 #import "CJMFullImageViewController.h"
+#import "CJMAListPickerViewController.h"
 #import "CJMServices.h"
 #import "CJMPhotoAlbum.h"
 #import "CJMAlbumManager.h"
 #import "CJMPhotoCell.h"
 #import "CJMImage.h"
+#import "CJMHudView.h"
 
 #import "CJMFileSerializer.h"
 
 @import Photos;
 
-@interface CJMGalleryViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface CJMGalleryViewController () <CJMAListPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 //UICollectionViewDelegateFlowLayout is a sub-protocol of UICollectionViewDelegate, so there's no need to list both.
 
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
@@ -29,6 +31,7 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *deleteButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *exportButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cameraButton;
+@property (nonatomic, strong) NSArray *selectedCells;
 
 @end
 
@@ -73,7 +76,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 {
     [super viewDidAppear:animated];
     
-    
     if (self.album.albumPhotos.count == 0) {
         UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
         
@@ -85,6 +87,16 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
     
     NSLog(@"Gallery view appeared");
+}
+
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"Footer" forIndexPath:indexPath];
+    
+    UILabel *footerLabel = (UILabel *)[footer viewWithTag:100];
+    footerLabel.text = [NSString stringWithFormat:@"%lu Photos", (unsigned long)_album.albumPhotos.count];
+    
+    return footer;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -118,6 +130,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [self shouldPerformSegueWithIdentifier:@"ViewPhoto" sender:nil];
         CJMPhotoCell *selectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
         selectedCell.cellSelectCover.hidden = NO;
+        self.deleteButton.enabled = YES;
+        self.exportButton.enabled = YES;
     }
 }
 
@@ -125,13 +139,21 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 {
     CJMPhotoCell *deselectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
     deselectedCell.cellSelectCover.hidden = YES;
+    
+    if ([self.collectionView indexPathsForSelectedItems].count == 0) {
+        self.deleteButton.enabled = NO;
+        self.exportButton.enabled = NO;
+    }
 }
+
 
 - (void)clearCellSelections
 {
-    //NSInteger collectonViewCount = [self.collectionView numberOfItemsInSection:0];
-    for (CJMPhotoCell *cell in self.collectionView.visibleCells)
+    for (NSIndexPath *indexPath in [self.collectionView indexPathsForSelectedItems])
     {
+        [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+        CJMPhotoCell *cell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+        
         cell.cellSelectCover.hidden = YES;
     }
 }
@@ -170,16 +192,17 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 - (IBAction)toggleEditMode:(id)sender
 {
-    if ([self.editButton.title isEqualToString:@"Edit"]) {
-        [self.editButton setTitle:@"Done"];
+    if ([self.editButton.title isEqualToString:@"Select"]) {
+        [self.editButton setTitle:@"Cancel"];
         self.editMode = YES;
         [self toggleEditControls];
         self.collectionView.allowsMultipleSelection = YES;
-    } else if ([self.editButton.title isEqualToString:@"Done"]) {
-        [self.editButton setTitle:@"Edit"];
+    } else if ([self.editButton.title isEqualToString:@"Cancel"]) {
+        [self.editButton setTitle:@"Select"];
         self.editMode = NO;
-//        [self clearCellSelections];
+        [self clearCellSelections];
         [self toggleEditControls];
+        self.selectedCells = nil;
         self.collectionView.allowsMultipleSelection = NO;
     }
 }
@@ -189,9 +212,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     if (self.editMode == YES) {
         self.cameraButton.enabled = NO;
         self.deleteButton.title = @"Delete";
-        self.deleteButton.enabled = YES;
-        self.exportButton.title = @"Export";
-        self.exportButton.enabled = YES;
+        self.deleteButton.enabled = NO;
+        self.exportButton.title = @"Transfer";
+        self.exportButton.enabled = NO;
     } else {
         self.cameraButton.enabled = YES;
         self.deleteButton.title = nil;
@@ -242,7 +265,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 - (IBAction)deleteSelcted:(id)sender
 {
-    NSArray *selectedCells = [NSArray arrayWithArray:[self.collectionView indexPathsForSelectedItems]];
+    self.selectedCells = [NSArray arrayWithArray:[self.collectionView indexPathsForSelectedItems]];
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete photos?" message:@"You cannot recover these photos after deleting." preferredStyle:UIAlertControllerStyleActionSheet];
     
@@ -251,7 +274,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         
         __block UIImage *fullImage = [[UIImage alloc] init];
         
-            for (NSIndexPath *itemPath in selectedCells) {
+            for (NSIndexPath *itemPath in _selectedCells) {
                 CJMImage *doomedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
                 [[CJMServices sharedInstance] fetchImage:doomedImage handler:^(UIImage *fetchedImage) {
                     fullImage = fetchedImage;
@@ -262,14 +285,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                 [[CJMServices sharedInstance] deleteImage:doomedImage];
             }
             NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-            for (NSIndexPath *itemPath in selectedCells) {
+            for (NSIndexPath *itemPath in _selectedCells) {
                 [indexSet addIndex:itemPath.row];
             }
         [self.album removeCJMImagesAtIndexes:indexSet];
         
         [[CJMAlbumManager sharedInstance] save];
         
-        [self.collectionView deleteItemsAtIndexPaths:selectedCells];
+        [self.collectionView deleteItemsAtIndexPaths:_selectedCells];
         
         [self toggleEditMode:self];
         
@@ -279,19 +302,19 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     //Delete photos without saving to Photos app
     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete photos permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
        
-        for (NSIndexPath *itemPath in selectedCells) {
+        for (NSIndexPath *itemPath in _selectedCells) {
             CJMImage *doomedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
             [[CJMServices sharedInstance] deleteImage:doomedImage];
         }
         NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-        for (NSIndexPath *itemPath in selectedCells) {
+        for (NSIndexPath *itemPath in _selectedCells) {
             [indexSet addIndex:itemPath.row];
         }
         [self.album removeCJMImagesAtIndexes:indexSet];
         
         [[CJMAlbumManager sharedInstance] save];
         
-        [self.collectionView deleteItemsAtIndexPaths:selectedCells];
+        [self.collectionView deleteItemsAtIndexPaths:_selectedCells];
         
         [self toggleEditMode:self];
         
@@ -309,6 +332,53 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 - (IBAction)exportSelected:(id)sender
 {
+    self.selectedCells = [NSArray arrayWithArray:[self.collectionView indexPathsForSelectedItems]];
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Transfer:" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    //Copy selected photos to Camera Roll in the Photos app.
+    UIAlertAction *photosAppExport = [UIAlertAction actionWithTitle:@"Copies of photos to Photos App" style:UIAlertActionStyleDefault handler:^(UIAlertAction *sendToPhotosApp) {
+        
+        __block UIImage *fullImage = [[UIImage alloc] init];
+        
+        for (NSIndexPath *itemPath in _selectedCells) {
+            CJMImage *doomedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
+            [[CJMServices sharedInstance] fetchImage:doomedImage handler:^(UIImage *fetchedImage) {
+                fullImage = fetchedImage;
+            }];
+            UIImageWriteToSavedPhotosAlbum(fullImage, nil, nil, nil);
+            fullImage = nil;
+        }
+        
+        CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view animated:YES];
+        
+        hudView.text = @"Done!";
+        hudView.type = @"Success";
+        
+        [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
+        
+        [self toggleEditMode:self];
+    }];
+    
+    //Copy the selected photos to another album within Photo Notes.
+    UIAlertAction *alternateAlbumExport = [UIAlertAction actionWithTitle:@"Photos and notes to alternate album" style:UIAlertActionStyleDefault handler:^(UIAlertAction *sendToAlternateAlbum) {
+        NSString * storyboardName = @"Main";
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+        UINavigationController *vc = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"AListPickerViewController"];
+        CJMAListPickerViewController *aListPickerVC = (CJMAListPickerViewController *)[vc topViewController];
+        aListPickerVC.delegate = self;
+        [self presentViewController:vc animated:YES completion:nil];
+
+    }];
+    
+    //Cancel action
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
+    
+    [alertController addAction:photosAppExport];
+    [alertController addAction:alternateAlbumExport];
+    [alertController addAction:cancel];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
     
 }
 
@@ -323,6 +393,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 {
     NSLog(@"%lu photos received by the gallery", (unsigned long)photos.count);
     
+
     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
@@ -366,6 +437,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                       }
                                   }];
         
+        assetImage.photoTitle = @"No Title";
+        assetImage.photoNote = @"No Note Entered";
         [_album addCJMImage:assetImage];
     }
 
@@ -379,6 +452,52 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         NSLog(@"There are %lu photos present in the album", (unsigned long)[self.album.albumPhotos count]);
     });
     
+    self.navigationController.view.userInteractionEnabled = YES;
+    
+}
+
+#pragma mark - CJMAListPicker Delegate
+
+- (void)aListPickerViewControllerDidCancel:(CJMAListPickerViewController *)controller
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [self toggleEditMode:self];
+}
+
+- (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album
+{
+    //take CJMImages in selected cells in current album (self.album) and copy them to the picked album.
+    for (NSIndexPath *itemPath in _selectedCells) {
+        CJMImage *imageToTransfer = [_album.albumPhotos objectAtIndex:itemPath.row];
+        [album addCJMImage:imageToTransfer];
+    }
+    
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+    for (NSIndexPath *itemPath in _selectedCells) {
+        [indexSet addIndex:itemPath.row];
+    }
+    [self.album removeCJMImagesAtIndexes:indexSet];
+    
+    [[CJMAlbumManager sharedInstance] save];
+    
+    [self.collectionView deleteItemsAtIndexPaths:_selectedCells];
+    
+    [self toggleEditMode:self];
+    
+    [self.collectionView reloadData];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view animated:YES];
+    
+    hudView.text = @"Done!";
+    hudView.type = @"Success";
+    
+    [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
+    
+    self.navigationController.view.userInteractionEnabled = YES;
+
 }
 
 #pragma mark - collectionViewFlowLayout Delegate

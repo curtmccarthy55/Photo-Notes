@@ -10,12 +10,12 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface CJMImage : NSObject <NSCoding>
+@interface CJMImage : NSObject <NSCoding, NSCopying>
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) BOOL local;
 
-- (instancetype)initWithName:(NSString *)name;
+//- (instancetype)initWithName:(NSString *)name;
 
 @property (nonatomic, strong) NSString *photoTitle;
 @property (nonatomic, strong) NSString *photoNote;

@@ -8,6 +8,8 @@
 
 #import "CJMPhotoGrabViewController.h"
 #import "CJMGrabCell.h"
+#import "CJMHudView.h"
+
 @import Photos;
 
 @interface CJMPhotoGrabViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -113,6 +115,11 @@ static NSString * const reuseIdentifier = @"GrabCell";
 
 - (IBAction)donePressed:(id)sender
 {
+    CJMHudView *hudView = [CJMHudView hudInView:self.view animated:YES];
+    
+    hudView.text = @"Importing";
+    hudView.type = @"Pending";
+    
     NSArray *selectedItems = [[NSArray alloc] initWithArray:[self.collectionView indexPathsForSelectedItems]];
     
     _pickedPhotos = [[NSMutableArray alloc] init];
@@ -123,6 +130,8 @@ static NSString * const reuseIdentifier = @"GrabCell";
         
         [_pickedPhotos addObject:asset];
     }
+    
+
     
     NSLog(@"There are %lu photos being sent to the album", (unsigned long)_pickedPhotos.count);
     [self.delegate photoGrabViewController:self didFinishSelectingPhotos:[_pickedPhotos copy]];
