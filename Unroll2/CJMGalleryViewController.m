@@ -114,8 +114,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMPhotoCell *cell = (CJMPhotoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    CJMImage *imageForCell = (CJMImage *)[self.album.albumPhotos objectAtIndex:indexPath.item];
     
-    [cell updateWithImage:_album.albumPhotos[indexPath.item]];
+    [cell updateWithImage:imageForCell];
     
     return cell;
 }
@@ -157,8 +158,10 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     {
         [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
         CJMPhotoCell *cell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+        CJMImage *imageForCell = (CJMImage *)[self.album.albumPhotos objectAtIndex:indexPath.row];
         
-        cell.cellSelectCover.hidden = YES;
+        [imageForCell toggleSelected];
+        cell.cellSelectCover.hidden = imageForCell.selected;
     }
 }
 

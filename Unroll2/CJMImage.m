@@ -25,7 +25,7 @@
         _photoCreationDate = [aDecoder decodeObjectForKey:@"CreationDate"];
         _photoLocation = [aDecoder decodeObjectForKey:@"Location"];
         
-        _selected = NO;
+        _selected = YES;
     }
     return self;
 }
@@ -49,7 +49,7 @@
     if (self) {
         _photoID = [NSUUID UUID];
     }
-    
+    _selected = YES;
     return self;
 }
 
