@@ -173,7 +173,7 @@
         CJMADetailViewController *detailVC = (CJMADetailViewController *)navigationController.viewControllers[0];
         detailVC.albumToEdit = sentAlbum;
                 
-        detailVC.title = @"Edit Album";
+        detailVC.title = @"Album Info";
         detailVC.delegate = self;
     } else if ([segue.identifier isEqualToString:@"AddAlbum"]) {
         UINavigationController *navigationController = segue.destinationViewController;

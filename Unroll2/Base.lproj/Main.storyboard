@@ -46,7 +46,7 @@
                         <sections>
                             <tableViewSection headerTitle="Album Name" id="TNv-4k-r0a">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="6JI-tl-K7e">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="6JI-tl-K7e">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6JI-tl-K7e" id="2ZV-kC-dIT">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -55,6 +55,9 @@
                                                     <rect key="frame" x="8" y="7" width="579" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="f3N-Zz-OdE" id="kYW-4C-RRi"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -63,7 +66,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Album Note" id="0YC-l6-llA">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="200" id="euC-Be-1sv">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="200" id="euC-Be-1sv">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="euC-Be-1sv" id="9bV-4I-mUg">
                                             <autoresizingMask key="autoresizingMask"/>

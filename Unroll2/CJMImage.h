@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface CJMImage : NSObject <NSCoding, NSCopying>
+@interface CJMImage : NSObject <NSCoding>
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) BOOL local;
@@ -27,6 +27,10 @@
 @property (nonatomic, readonly) NSString *fileName;
 @property (nonatomic, readonly) NSString *thumbnailFileName;
 
+@property (nonatomic) BOOL selected;
+
 @property (nonatomic, weak) UIImage *photoImage;
+
+- (void)toggleSelected;
 
 @end

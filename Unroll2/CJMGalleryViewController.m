@@ -129,7 +129,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     } else if (self.editMode == YES) {
         [self shouldPerformSegueWithIdentifier:@"ViewPhoto" sender:nil];
         CJMPhotoCell *selectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-        selectedCell.cellSelectCover.hidden = NO;
+        CJMImage *selectedImage = (CJMImage *)[self.album.albumPhotos objectAtIndex:indexPath.row];
+        [selectedImage toggleSelected];
+        selectedCell.cellSelectCover.hidden = selectedImage.selected;
         self.deleteButton.enabled = YES;
         self.exportButton.enabled = YES;
     }
@@ -138,7 +140,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMPhotoCell *deselectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-    deselectedCell.cellSelectCover.hidden = YES;
+    CJMImage *deselectedImage = (CJMImage *)[self.album.albumPhotos objectAtIndex:indexPath.row];
+    [deselectedImage toggleSelected];
+    deselectedCell.cellSelectCover.hidden = deselectedImage.selected;
     
     if ([self.collectionView indexPathsForSelectedItems].count == 0) {
         self.deleteButton.enabled = NO;

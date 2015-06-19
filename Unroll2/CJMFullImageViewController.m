@@ -279,9 +279,8 @@
         self.noteTitle.enabled = YES;
         self.noteEntry.editable = YES;
         [self.editNoteButton setTitle:@"Done" forState:UIControlStateNormal];
-        
-
         [self.noteEntry becomeFirstResponder];
+        self.noteEntry.selectedRange = NSMakeRange([self.noteEntry.text length], 0);
     } else {
         self.cjmImage.photoTitle = self.noteTitle.text;
         self.cjmImage.photoNote = self.noteEntry.text;

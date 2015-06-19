@@ -36,6 +36,7 @@
 {
     [super viewWillAppear:YES];
     
+    if (self.albumToEdit == nil) {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:self
@@ -44,12 +45,25 @@
                                                                               style:UIBarButtonItemStyleDone
                                                                              target:self
                                                                              action:@selector(donePressed)];
+        
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     
-    if (self.albumToEdit != nil) {
-        //_note = self.albumToEdit.albumNote;
+    } else if (self.albumToEdit != nil) {
         
         self.nameField.text = self.albumToEdit.albumTitle;
         self.noteField.text = self.albumToEdit.albumNote;
+        
+        self.nameField.enabled = NO;
+        self.noteField.editable = NO;
+        
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+                                                                                 style:UIBarButtonItemStylePlain
+                                                                                target:self
+                                                                                action:@selector(cancelPressed)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit"
+                                                                                  style:UIBarButtonItemStyleDone
+                                                                                 target:self
+                                                                                 action:@selector(donePressed)];
     }
 }
 
@@ -57,7 +71,9 @@
 {
     [super viewDidAppear:YES];
     
+    if (self.albumToEdit == nil) {
     [self.nameField becomeFirstResponder];
+    };
 }
 
 - (void)didReceiveMemoryWarning {
@@ -86,7 +102,8 @@
     
     [self.delegate albumDetailViewController:self didFinishAddingAlbum:album];
     } else {
-        
+        if ([self.navigationItem.rightBarButtonItem.title isEqual:@"Done"]) {
+            
         self.albumToEdit.albumTitle = self.nameField.text;
         self.albumToEdit.albumNote = self.noteField.text;
         
@@ -94,6 +111,12 @@
         [self.noteField resignFirstResponder];
         
         [self.delegate albumDetailViewController:self didFinishEditingAlbum:self.albumToEdit];
+        } else if ([self.navigationItem.rightBarButtonItem.title isEqual:@"Edit"]) {
+            self.nameField.enabled = YES;
+            self.noteField.editable = YES;
+            [self.noteField becomeFirstResponder];
+            self.navigationItem.rightBarButtonItem.title = @"Done";
+        }
     }
 }
 
@@ -123,7 +146,7 @@
     return YES;
 }
 
-#pragma mark - Table view data source
+#pragma mark - tableView data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -133,6 +156,36 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 1;
+}
+
+#pragma mark - tableView delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        [self.nameField becomeFirstResponder];
+    } else if (indexPath.section == 1) {
+        [self.noteField becomeFirstResponder];
+    }
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return nil;
+}
+
+#pragma mark - textView delegate
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *currentTitleText = [self.nameField.text stringByReplacingCharactersInRange:range
+                                                                         withString:string];
+    if ([currentTitleText length] > 0) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    } else {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+    return YES;
 }
 
 @end

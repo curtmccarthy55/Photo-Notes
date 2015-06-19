@@ -8,19 +8,9 @@
 
 #import "CJMImage.h"
 
-@implementation CJMImage
 
-//- (instancetype)initWithName:(NSString *)name
-//{
-//    self = [self init];
-//    if(self)
-//    {
-//        _name = name;
-//        _local = YES;
-//        NSLog(@"CJMImage initWithName called");
-//    }
-//    return self;
-//}
+
+@implementation CJMImage
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
@@ -34,6 +24,8 @@
         _photoNote = [aDecoder decodeObjectForKey:@"Note"];
         _photoCreationDate = [aDecoder decodeObjectForKey:@"CreationDate"];
         _photoLocation = [aDecoder decodeObjectForKey:@"Location"];
+        
+        _selected = NO;
     }
     return self;
 }
@@ -71,12 +63,11 @@
     return [[self fileName] stringByAppendingString:@"_sm"];
 }
 
-- (id)copyWithZone:(NSZone *)zone
+#pragma mark - Selected
+
+- (void)toggleSelected
 {
-    CJMImage *cjmImage = [[CJMImage allocWithZone: zone] init];
-    
-    //[cjmImage setAccount: accountNumber andBalance: accountBalance];
-    return cjmImage;
+    self.selected = !self.selected;
 }
 
 @end
