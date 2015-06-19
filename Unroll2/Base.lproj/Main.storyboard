@@ -274,16 +274,17 @@
                                 </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="PKx-nw-LUR" appends="YES" id="kGo-Sf-0af"/>
+                                    <outletCollection property="gestureRecognizers" destination="UoA-ua-AfI" appends="YES" id="7KP-zG-01L"/>
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlx-cQ-nGb">
                                 <rect key="frame" x="0.0" y="404" width="600" height="600"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="JjYy" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="upp-GS-1zm">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="upp-GS-1zm">
                                         <rect key="frame" x="8" y="2" width="454" height="29"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="18"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pWS-x4-vhI">
                                         <rect key="frame" x="8" y="33" width="584" height="15"/>
@@ -369,12 +370,14 @@
                         <outlet property="noteSection" destination="rlx-cQ-nGb" id="uT1-tT-pd3"/>
                         <outlet property="noteShiftConstraint" destination="fLI-Ne-Zbt" id="3eB-lR-0bf"/>
                         <outlet property="noteTitle" destination="upp-GS-1zm" id="X3Z-dK-8dH"/>
+                        <outlet property="oneTap" destination="PKx-nw-LUR" id="WDx-Id-La1"/>
                         <outlet property="photoLocAndDate" destination="pWS-x4-vhI" id="uPl-vd-6gF"/>
                         <outlet property="rightConstraint" destination="7Ba-sJ-cgT" id="VPd-Pk-Hbu"/>
                         <outlet property="scrollView" destination="657-po-rB3" id="Cqd-Ns-NfT"/>
                         <outlet property="seeNoteButton" destination="Wdb-G9-he9" id="ab3-dh-JcD"/>
                         <outlet property="textBottomConstraint" destination="FUe-Lg-77e" id="aRP-gR-BmT"/>
                         <outlet property="topConstraint" destination="N7P-wH-oks" id="fl1-Pm-qGm"/>
+                        <outlet property="twoTap" destination="UoA-ua-AfI" id="DC9-vC-nq8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sd8-zB-bQW" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -382,6 +385,12 @@
                     <connections>
                         <action selector="imageViewTapped:" destination="9ae-Ea-iTf" id="AyI-HN-zWY"/>
                         <outlet property="delegate" destination="9ae-Ea-iTf" id="Z0U-fW-0Zl"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="UoA-ua-AfI">
+                    <connections>
+                        <action selector="imageViewDoubleTapped:" destination="9ae-Ea-iTf" id="PIK-Sp-ItI"/>
+                        <outlet property="delegate" destination="9ae-Ea-iTf" id="458-Ax-eON"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

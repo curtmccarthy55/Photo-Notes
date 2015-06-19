@@ -23,6 +23,8 @@
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *rightConstraint;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomConstraint;
 @property (nonatomic, strong) CJMImage *cjmImage;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *oneTap;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *twoTap;
 
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteShiftConstraint;
@@ -61,6 +63,8 @@
     }];
     
     self.editNoteButton.hidden = YES;
+    
+    [self.oneTap requireGestureRecognizerToFail:self.twoTap];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -73,6 +77,7 @@
 
     self.noteTitle.text = _cjmImage.photoTitle;
     self.noteTitle.textColor = [UIColor whiteColor];
+    self.noteTitle.adjustsFontSizeToFitWidth = YES;
     
     self.noteEntry.text = _cjmImage.photoNote;
     self.noteEntry.textColor = [UIColor whiteColor];
@@ -94,6 +99,7 @@
     }
     
     _initialZoomScale = self.scrollView.zoomScale;
+    NSLog(@"_initialZoomScale set to %f", _initialZoomScale);
     _focusIsOnImage = NO;
     
     [self handleNoteSectionAlignment];
@@ -106,6 +112,8 @@
     [super viewDidAppear:animated];
     
     [self updateZoom];
+    
+
 }
 
 - (void)prepareWithAlbumNamed:(NSString *)name andIndex:(NSInteger)index
@@ -208,7 +216,8 @@
     self.lastZoomScale = self.scrollView.zoomScale = minZoom;
 }
 
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
     return self.imageView;
 }
 
@@ -270,6 +279,8 @@
         self.noteTitle.enabled = YES;
         self.noteEntry.editable = YES;
         [self.editNoteButton setTitle:@"Done" forState:UIControlStateNormal];
+        
+
         [self.noteEntry becomeFirstResponder];
     } else {
         self.cjmImage.photoTitle = self.noteTitle.text;
@@ -295,12 +306,12 @@
 - (void)updateForSingleTap
 {
     if (self.viewsVisible == YES) {
-        [UIView animateWithDuration:0.25 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
         self.scrollView.backgroundColor = [UIColor whiteColor];
         self.noteSection.alpha = 1;
         }];
     } else if (self.viewsVisible == NO) {
-        [UIView animateWithDuration:0.25 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
         self.scrollView.backgroundColor = [UIColor blackColor];
         self.noteSection.alpha = 0;
         }];
@@ -317,6 +328,44 @@
     
     [self.delegate toggleFullImageShowForViewController:self];
 }
+
+- (IBAction)imageViewDoubleTapped:(UITapGestureRecognizer *)gestureRecognizer
+{
+    CGFloat scaleDifference = _initialZoomScale / self.scrollView.zoomScale;
+    
+    if (scaleDifference >= 0.99 && scaleDifference <= 1.01) {
+        CGPoint centerPoint = [gestureRecognizer locationInView:self.scrollView];
+        
+        //current content size back to content scale of 1.0f
+        CGSize contentSize;
+        contentSize.width = (self.scrollView.contentSize.width / _initialZoomScale);
+        contentSize.height = (self.scrollView.contentSize.height / _initialZoomScale);
+        
+        //translate the zoom point to relative to the content rect
+        centerPoint.x = (centerPoint.x / self.scrollView.bounds.size.width) * contentSize.width;
+        centerPoint.y = (centerPoint.y / self.scrollView.bounds.size.height) * contentSize.height;
+        
+        //get the size of the region to zoom to
+        CGSize zoomSize;
+        zoomSize.width = self.scrollView.bounds.size.width / (_initialZoomScale * 4.0);
+        zoomSize.height = self.scrollView.bounds.size.height / (_initialZoomScale * 4.0);
+        
+        //offset the zoom rect so the actual zoom point is in the middle of the rectangle
+        CGRect zoomRect;
+        zoomRect.origin.x = centerPoint.x - zoomSize.width / 2.0f;
+        zoomRect.origin.y = centerPoint.y - zoomSize.height / 2.0f;
+        zoomRect.size.width = zoomSize.width;
+        zoomRect.size.height = zoomSize.height;
+        
+        //resize
+        [self.scrollView zoomToRect:zoomRect animated:YES];
+    } else {
+        [UIView animateWithDuration:0.25 animations:^{
+            [self updateZoom];
+        }];
+    }
+}
+
 
 #pragma mark - Button responses
 

@@ -117,13 +117,13 @@
 - (void)toggleViewVisibility
 {
     if (_makeViewsVisible == NO) {
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
         self.navigationController.navigationBar.alpha = 0;
         self.navigationController.toolbar.alpha = 0;
         [self setNeedsStatusBarAppearanceUpdate];
         }];
     } else if (_makeViewsVisible == YES) {
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
         self.navigationController.navigationBar.alpha = 1;
         self.navigationController.toolbar.alpha = 1;
         [self setNeedsStatusBarAppearanceUpdate];
