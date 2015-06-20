@@ -97,7 +97,7 @@
     [self toggleViewVisibility];
 }
 
-#pragma mark navBar and toolbar buttons
+#pragma mark - navBar and toolbar buttons
 
 - (IBAction)currentPhotoOptions:(id)sender
 {
@@ -170,6 +170,8 @@
     }
     //pageview not moving to new image after deletion
 }
+
+#pragma mark - pageViewController Delegate
 
 
 

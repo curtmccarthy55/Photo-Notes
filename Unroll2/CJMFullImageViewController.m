@@ -14,7 +14,7 @@
 
 @import Photos;
 
-@interface CJMFullImageViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate>
+@interface CJMFullImageViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate>
 
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (nonatomic, strong) UIImage *fullImage;
@@ -111,6 +111,8 @@
 {
     [super viewDidAppear:animated];
     
+    NSLog(@"viewDidAppear");
+    
     [self updateZoom];
     
 
@@ -169,7 +171,7 @@
 {
     if (_initialZoomScale < self.scrollView.zoomScale) {
         self.scrollView.scrollEnabled = YES;
-    } else if (_initialZoomScale >= self.scrollView.zoomScale) {
+    } else {
         self.scrollView.scrollEnabled = NO;
     }
     
@@ -214,6 +216,8 @@
     if (minZoom == self.lastZoomScale) minZoom += 0.000001;
     
     self.lastZoomScale = self.scrollView.zoomScale = minZoom;
+    
+    self.scrollView.zoomScale = minZoom -= 0.000001;
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
@@ -330,9 +334,7 @@
 
 - (IBAction)imageViewDoubleTapped:(UITapGestureRecognizer *)gestureRecognizer
 {
-    CGFloat scaleDifference = _initialZoomScale / self.scrollView.zoomScale;
-    
-    if (scaleDifference >= 0.99 && scaleDifference <= 1.01) {
+    if (self.scrollView.zoomScale == _initialZoomScale) {
         CGPoint centerPoint = [gestureRecognizer locationInView:self.scrollView];
         
         //current content size back to content scale of 1.0f
@@ -362,6 +364,7 @@
         [UIView animateWithDuration:0.25 animations:^{
             [self updateZoom];
         }];
+        self.scrollView.scrollEnabled = NO;
     }
 }
 
@@ -445,6 +448,9 @@
     
     [self presentViewController:alertController animated:YES completion:nil];
 }
+
+#pragma mark - Keyboard shift
+
 
 
 @end
