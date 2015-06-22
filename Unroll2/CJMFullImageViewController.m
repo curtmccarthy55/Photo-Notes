@@ -29,6 +29,7 @@
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteShiftConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteSectionHeight;
 
 
 @property (strong, nonatomic) IBOutlet UIView *noteSection;
@@ -102,8 +103,6 @@
     NSLog(@"_initialZoomScale set to %f", _initialZoomScale);
     _focusIsOnImage = NO;
     
-    [self handleNoteSectionAlignment];
-    
     [self updateConstraints];
 }
 
@@ -111,11 +110,8 @@
 {
     [super viewDidAppear:animated];
     
-    NSLog(@"viewDidAppear");
-    
     [self updateZoom];
     
-
 }
 
 - (void)prepareWithAlbumNamed:(NSString *)name andIndex:(NSInteger)index
@@ -142,6 +138,13 @@
     [self updateZoom];
     
     NSLog(@"fullImageViewer disappearing");
+}
+
+#pragma mark - View adjustments
+
+- (void)correctSizeForNoteSection
+{
+    self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
 }
 
 #pragma mark - scrollView handling
@@ -230,9 +233,12 @@
 
 - (IBAction)shiftNote:(id)sender
 {
-    CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
+    [self correctSizeForNoteSection];
     
-    CGFloat shiftConstant = -(self.view.bounds.size.height - topBarsHeight);
+    CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
+    CGFloat bottomBarHeight = self.navigationController.toolbar.frame.size.height;
+    
+    CGFloat shiftConstant = -(self.view.bounds.size.height - topBarsHeight - bottomBarHeight);
     
     if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
         self.noteShiftConstraint.constant = shiftConstant;
@@ -273,7 +279,7 @@
 
 - (void)handleNoteSectionAlignment
 {
-    self.noteShiftConstraint.constant = -(32.0 + self.navigationController.toolbar.frame.size.height);
+    self.noteShiftConstraint.constant = -32.0;
     [self.noteSection setNeedsUpdateConstraints];
 }
 

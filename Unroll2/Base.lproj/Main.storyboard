@@ -281,7 +281,7 @@
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlx-cQ-nGb">
-                                <rect key="frame" x="0.0" y="404" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="460" width="600" height="492"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="upp-GS-1zm">
                                         <rect key="frame" x="8" y="2" width="454" height="29"/>
@@ -324,7 +324,8 @@
                                         </connections>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
-                                        <rect key="frame" x="8" y="53" width="584" height="334"/>
+                                        <rect key="frame" x="8" y="53" width="584" height="411"/>
+                                        <color key="backgroundColor" red="0.0" green="0.50196081399917603" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="18"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -337,7 +338,8 @@
                                 <constraints>
                                     <constraint firstItem="upp-GS-1zm" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" constant="2" id="2W3-3H-u7U"/>
                                     <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="pWS-x4-vhI" secondAttribute="bottom" constant="5" id="6FN-Ha-NcP"/>
-                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="bottom" secondItem="rlx-cQ-nGb" secondAttribute="bottomMargin" constant="-205" id="FUe-Lg-77e"/>
+                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="bottom" secondItem="rlx-cQ-nGb" secondAttribute="bottomMargin" constant="-20" id="FUe-Lg-77e" userLabel="noteEntryBottomConstraint"/>
+                                    <constraint firstAttribute="height" constant="492" id="JG2-5r-Vk9" userLabel="noteSectionHeight"/>
                                     <constraint firstAttribute="trailing" secondItem="Wdb-G9-he9" secondAttribute="trailing" constant="8" id="Jkf-s6-woI"/>
                                     <constraint firstItem="pWS-x4-vhI" firstAttribute="top" secondItem="upp-GS-1zm" secondAttribute="bottom" constant="2" id="MSR-NJ-xSD"/>
                                     <constraint firstItem="pWS-x4-vhI" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="8" id="MeW-Zp-5Y2"/>
@@ -360,8 +362,7 @@
                             <constraint firstAttribute="centerX" secondItem="rlx-cQ-nGb" secondAttribute="centerX" id="YkM-Nt-NKo"/>
                             <constraint firstItem="657-po-rB3" firstAttribute="leading" secondItem="ulg-px-Jgm" secondAttribute="leading" id="bcM-Ia-vJM"/>
                             <constraint firstAttribute="bottom" secondItem="657-po-rB3" secondAttribute="bottom" id="e1a-z9-0uA"/>
-                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="C9P-pQ-slP" secondAttribute="bottom" constant="-88" id="fLI-Ne-Zbt"/>
-                            <constraint firstAttribute="height" secondItem="rlx-cQ-nGb" secondAttribute="height" constant="-108" id="saa-P8-YfG"/>
+                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="C9P-pQ-slP" secondAttribute="top" constant="-32" id="fLI-Ne-Zbt" userLabel="noteShiftConstraint"/>
                             <constraint firstItem="657-po-rB3" firstAttribute="top" secondItem="ulg-px-Jgm" secondAttribute="top" id="wYo-XK-pCq"/>
                         </constraints>
                     </view>
@@ -374,6 +375,7 @@
                         <outlet property="leftConstraint" destination="2aF-os-TrH" id="kMt-rq-Hft"/>
                         <outlet property="noteEntry" destination="c5T-Ao-Wwn" id="I8u-10-JSN"/>
                         <outlet property="noteSection" destination="rlx-cQ-nGb" id="uT1-tT-pd3"/>
+                        <outlet property="noteSectionHeight" destination="JG2-5r-Vk9" id="rRj-z4-H0v"/>
                         <outlet property="noteShiftConstraint" destination="fLI-Ne-Zbt" id="3eB-lR-0bf"/>
                         <outlet property="noteTitle" destination="upp-GS-1zm" id="X3Z-dK-8dH"/>
                         <outlet property="oneTap" destination="PKx-nw-LUR" id="WDx-Id-La1"/>
