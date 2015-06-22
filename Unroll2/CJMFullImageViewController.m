@@ -145,7 +145,7 @@
 
 #pragma mark - View adjustments
 
-- (void)correctSizeForNoteSection
+- (void)fullSizeForNoteSection
 {
     self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
 }
@@ -166,6 +166,8 @@
     }
     
     [self updateZoom];
+    
+    _initialZoomScale = self.scrollView.zoomScale;
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
@@ -180,7 +182,6 @@
     } else {
         self.scrollView.scrollEnabled = NO;
     }
-    
 }
 
 - (void)updateConstraints
@@ -236,7 +237,7 @@
 
 - (IBAction)shiftNote:(id)sender
 {
-    [self correctSizeForNoteSection];
+    [self fullSizeForNoteSection];
     
     CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
     //CGFloat bottomBarHeight = self.navigationController.toolbar.frame.size.height;
