@@ -66,6 +66,8 @@
     self.editNoteButton.hidden = YES;
     
     [self.oneTap requireGestureRecognizerToFail:self.twoTap];
+    
+    NSLog(@"noteSectionHeight is %f", self.noteSectionHeight.constant);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -102,6 +104,8 @@
     _initialZoomScale = self.scrollView.zoomScale;
     NSLog(@"_initialZoomScale set to %f", _initialZoomScale);
     _focusIsOnImage = NO;
+
+    [self handleNoteSectionAlignment];
     
     [self updateConstraints];
 }
@@ -111,7 +115,6 @@
     [super viewDidAppear:animated];
     
     [self updateZoom];
-    
 }
 
 - (void)prepareWithAlbumNamed:(NSString *)name andIndex:(NSInteger)index
@@ -236,9 +239,9 @@
     [self correctSizeForNoteSection];
     
     CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
-    CGFloat bottomBarHeight = self.navigationController.toolbar.frame.size.height;
+    //CGFloat bottomBarHeight = self.navigationController.toolbar.frame.size.height;
     
-    CGFloat shiftConstant = -(self.view.bounds.size.height - topBarsHeight - bottomBarHeight);
+    CGFloat shiftConstant = -(self.view.bounds.size.height - topBarsHeight);
     
     if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
         self.noteShiftConstraint.constant = shiftConstant;
@@ -279,7 +282,7 @@
 
 - (void)handleNoteSectionAlignment
 {
-    self.noteShiftConstraint.constant = -32.0;
+    self.noteShiftConstraint.constant = -(32.0 + self.navigationController.toolbar.frame.size.height);
     [self.noteSection setNeedsUpdateConstraints];
 }
 
