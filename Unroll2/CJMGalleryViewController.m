@@ -484,6 +484,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     //take CJMImages in selected cells in current album (self.album) and copy them to the picked album.
     for (NSIndexPath *itemPath in _selectedCells) {
         CJMImage *imageToTransfer = [_album.albumPhotos objectAtIndex:itemPath.row];
+        [imageToTransfer toggleSelected];
         [album addCJMImage:imageToTransfer];
     }
     
@@ -509,7 +510,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     hudView.type = @"Success";
     
     [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
-    [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.01];
+    [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.2];
     self.navigationController.view.userInteractionEnabled = YES;
 
 }
