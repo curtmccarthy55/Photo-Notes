@@ -94,7 +94,15 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     UICollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"Footer" forIndexPath:indexPath];
     
     UILabel *footerLabel = (UILabel *)[footer viewWithTag:100];
+    if (_album.albumPhotos.count > 1) {
     footerLabel.text = [NSString stringWithFormat:@"%lu Photos", (unsigned long)_album.albumPhotos.count];
+    } else if (_album.albumPhotos.count == 1) {
+        footerLabel.text = @"1 Photo";
+    } else {
+        footerLabel.text = nil;
+    }
+    
+    NSLog(@"footer in section %ld", indexPath.section);
     
     return footer;
 }
@@ -302,8 +310,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [self.collectionView deleteItemsAtIndexPaths:_selectedCells];
         
         [self toggleEditMode:self];
-        
-        [self.collectionView reloadData];
+        NSLog(@"photoAlbum count = %ld", self.album.albumPhotos.count);
+        [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.4];
     }];
     
     //Delete photos without saving to Photos app
@@ -324,8 +332,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [self.collectionView deleteItemsAtIndexPaths:_selectedCells];
         
         [self toggleEditMode:self];
-        
-        [self.collectionView reloadData];
+        [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.4];
         }];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
@@ -502,7 +509,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     hudView.type = @"Success";
     
     [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
-    
+    [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.01];
     self.navigationController.view.userInteractionEnabled = YES;
 
 }
