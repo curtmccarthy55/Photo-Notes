@@ -426,7 +426,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
     
-    dispatch_group_t imageLoadGroup = dispatch_group_create();
+//    dispatch_group_t imageLoadGroup = dispatch_group_create();
     
     for (int i = 0; i < photos.count; i++) {
         
@@ -436,7 +436,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         assetImage.photoLocation = [asset location];
         assetImage.photoCreationDate = [asset creationDate];
         
-        dispatch_group_enter(imageLoadGroup);
+//        dispatch_group_enter(imageLoadGroup);
         [self.imageManager requestImageForAsset:asset
                                      targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight)
                                     contentMode:PHImageContentModeAspectFill
@@ -447,11 +447,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                       {
                                           assetImage.photoImage = result;
                                           [fileSerializer writeObject:result toRelativePath:assetImage.fileName];
-                                          dispatch_group_leave(imageLoadGroup);
+//                                          dispatch_group_leave(imageLoadGroup);
                                       }
                                   }];
         
-        dispatch_group_enter(imageLoadGroup);
+//        dispatch_group_enter(imageLoadGroup);
         [self.imageManager requestImageForAsset:asset
                                      targetSize:[(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]
                                     contentMode:PHImageContentModeAspectFill
@@ -461,7 +461,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                       if(![info[PHImageResultIsDegradedKey] boolValue])
                                       {
                                           [fileSerializer writeObject:result toRelativePath:assetImage.thumbnailFileName];
-                                          dispatch_group_leave(imageLoadGroup);
+//                                          dispatch_group_leave(imageLoadGroup);
                                       }
                                   }];
         
@@ -471,7 +471,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [_album addCJMImage:assetImage];
     }
 
-    dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
+//    dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
         [self dismissViewControllerAnimated:YES completion:nil];
         [[CJMAlbumManager sharedInstance] save];
@@ -479,7 +479,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         NSLog(@"%lu photos added successfully", (unsigned long)self.album.albumPhotos.count);
         
         NSLog(@"There are %lu photos present in the album", (unsigned long)[self.album.albumPhotos count]);
-    });
+//    });
     
     self.navigationController.view.userInteractionEnabled = YES;
     

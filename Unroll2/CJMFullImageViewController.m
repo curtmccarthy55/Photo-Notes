@@ -66,8 +66,6 @@
     self.editNoteButton.hidden = YES;
     
     [self.oneTap requireGestureRecognizerToFail:self.twoTap];
-    
-    NSLog(@"noteSectionHeight is %f", self.noteSectionHeight.constant);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -303,13 +301,13 @@
         [self.noteEntry becomeFirstResponder];
         self.noteEntry.selectedRange = NSMakeRange([self.noteEntry.text length], 0);
     } else {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
         self.cjmImage.photoTitle = self.noteTitle.text;
         self.cjmImage.photoNote = self.noteEntry.text;
         self.noteTitle.enabled = NO;
         self.noteEntry.editable = NO;
         [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
         [self.editNoteButton sizeToFit];
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
         
         [[CJMAlbumManager sharedInstance] save];
     }
@@ -485,17 +483,9 @@
     NSDictionary *info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    NSLog(@"Keyboard height is %f points", kbSize.height);
-    
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
     self.noteEntry.contentInset = contentInsets;
     self.noteEntry.scrollIndicatorInsets = contentInsets;
-    
-//    CGRect aRect = self.view.frame;
-//    aRect.size.height -= kbSize.height;
-//    if (!CGRectContainsPoint(aRect, activeField.frame.origin)) {
-//
-//    }
 }
 
 - (void)keyboardWillBeHidden:(NSNotification *)aNotification
@@ -503,7 +493,6 @@
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     self.noteEntry.contentInset = contentInsets;
     self.noteEntry.scrollIndicatorInsets = contentInsets;
-    NSLog(@"keyboardWillBeHidden called");
 }
 
 
