@@ -17,7 +17,7 @@
 
 - (void)addAlbum:(CJMPhotoAlbum *)album;
 - (void)removeAlbumAtIndex:(NSUInteger)index;
-- (void)replaceAlbumAtIndex:(NSInteger)index withAlbum:(CJMPhotoAlbum *)album;
+- (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex;
 - (BOOL)containsAlbumNamed:(NSString *)name;
 
 - (CJMImage *)albumWithName:(NSString *)name returnImageAtIndex:(NSInteger)index;

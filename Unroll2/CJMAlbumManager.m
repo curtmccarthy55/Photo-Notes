@@ -83,10 +83,13 @@ static CJMAlbumManager *__sharedInstance;
     [self.allAlbumsEdit removeObjectAtIndex:index];
 }
 
-- (void)replaceAlbumAtIndex:(NSInteger)index withAlbum:(CJMPhotoAlbum *)album
+- (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex
 {
-    [self.allAlbumsEdit removeObjectAtIndex:index];
-    [self.allAlbumsEdit insertObject:album atIndex:index];
+    NSLog(@"replaceAlbumAtIndex called");
+    CJMPhotoAlbum *movingAlbum = [self.allAlbumsEdit objectAtIndex:fromIndex];
+    
+    [self.allAlbumsEdit removeObjectAtIndex:fromIndex];
+    [self.allAlbumsEdit insertObject:movingAlbum atIndex:toIndex];
 }
 
 - (BOOL)containsAlbumNamed:(NSString *)name

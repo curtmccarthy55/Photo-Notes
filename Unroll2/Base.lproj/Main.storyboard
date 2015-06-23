@@ -19,7 +19,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="My Albums" id="QE4-93-jxo">
-                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="zk0-Rl-znW"/>
+                        <barButtonItem key="leftBarButtonItem" title="Edit" id="zk0-Rl-znW">
+                            <connections>
+                                <action selector="editTableView:" destination="NO4-kQ-OsT" id="yHa-Jj-eRP"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Reb-LD-ifB">
                             <connections>
                                 <segue destination="EVj-cY-PaK" kind="presentation" identifier="AddAlbum" id="zVD-Ov-2nV"/>
@@ -27,6 +31,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="editButton" destination="zk0-Rl-znW" id="BEt-pL-9iy"/>
                         <segue destination="EVj-cY-PaK" kind="presentation" identifier="EditAlbum" id="a2e-sF-Y6k"/>
                         <segue destination="uLg-8C-qq2" kind="show" identifier="ViewGallery" id="FTW-8o-DJa"/>
                     </connections>

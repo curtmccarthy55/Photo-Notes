@@ -18,6 +18,7 @@
 @interface CJMAListViewController () 
 
 @property (nonatomic, weak) NSArray *albums;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
 
 @end
 
@@ -94,6 +95,7 @@
     [self configureThumbnailForCell:cell forAlbum:album];
     
     cell.accessoryType = UITableViewCellAccessoryDetailButton;
+    cell.showsReorderControl = YES;
     
     return cell;
 }
@@ -121,6 +123,22 @@
 
 
 #pragma mark - Editing the list
+
+- (IBAction)editTableView:(id)sender
+{
+    if ([self.editButton.title isEqual:@"Edit"]) {
+        [self.editButton setTitle:@"Done"];
+        [self.tableView setEditing:YES animated:YES];
+        
+    } else {
+        [self.editButton setTitle:@"Edit"];
+        [self.tableView setEditing:NO animated:YES];
+        
+        [[CJMAlbumManager sharedInstance] save];
+    }
+}
+
+
 //// Override to support conditional editing of the table view.
 //- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
 //    // Return NO if you do not want the specified item to be editable.
@@ -139,19 +157,22 @@
 }
 
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
 
-/*
+// Override to support rearranging the table view.
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
+    [[CJMAlbumManager sharedInstance] replaceAlbumAtIndex:toIndexPath.row withAlbumFromIndex:fromIndexPath.row];
+}
+
+
+
 // Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
     // Return NO if you do not want the item to be re-orderable.
     return YES;
 }
-*/
+
 
 
 #pragma mark - Navigation
