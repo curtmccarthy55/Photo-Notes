@@ -324,7 +324,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [self.collectionView deleteItemsAtIndexPaths:_selectedCells];
         
         [self toggleEditMode:self];
-        NSLog(@"photoAlbum count = %ld", self.album.albumPhotos.count);
+        NSLog(@"photoAlbum count = %ld", (unsigned long)self.album.albumPhotos.count);
         [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.4];
     }];
     

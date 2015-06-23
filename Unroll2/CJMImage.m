@@ -10,8 +10,6 @@
 
 @interface CJMImage ()
 
-
-
 @end
 
 @implementation CJMImage
@@ -29,7 +27,6 @@
         _photoCreationDate = [aDecoder decodeObjectForKey:@"CreationDate"];
         _photoLocation = [aDecoder decodeObjectForKey:@"Location"];
         _isAlbumPreview = [aDecoder decodeBoolForKey:@"AlbumPreview"];
-        
         _selectCoverHidden = YES;
         
         if (!self.isAlbumPreview) {
