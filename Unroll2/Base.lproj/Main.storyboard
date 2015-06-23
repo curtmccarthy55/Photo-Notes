@@ -325,7 +325,6 @@
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
                                         <rect key="frame" x="8" y="53" width="584" height="431"/>
-                                        <color key="backgroundColor" red="0.0" green="0.50196081399917603" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="18"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>

@@ -29,8 +29,6 @@
     fullImageVC.index = _initialIndex;
     fullImageVC.delegate = self;
     
-    NSLog(@"pageViewController didLoad");
-    
     [self setViewControllers:@[fullImageVC]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:NO
@@ -101,7 +99,6 @@
 
 - (IBAction)currentPhotoOptions:(id)sender
 {
-    NSLog(@"photoOptions button pressed");
     CJMFullImageViewController *currentVC = (CJMFullImageViewController *)self.viewControllers[0];
     
     [currentVC showPopUpMenu];

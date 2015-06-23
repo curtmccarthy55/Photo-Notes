@@ -35,6 +35,17 @@ static NSString * const reuseIdentifier = @"GrabCell";
     
 }
 
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    NSInteger section = [self.collectionView numberOfSections] - 1 ;
+    NSInteger item = [self.collectionView numberOfItemsInSection:section] - 1 ;
+    NSIndexPath *lastIndexPath = [NSIndexPath indexPathForItem:item inSection:section] ;
+    [self.collectionView scrollToItemAtIndexPath:lastIndexPath atScrollPosition:(UICollectionViewScrollPositionBottom) animated:YES];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -32,6 +32,7 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *exportButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cameraButton;
 @property (nonatomic, strong) NSArray *selectedCells;
+@property (strong, nonatomic) IBOutlet UIView *noPhotosView;
 
 @end
 
@@ -50,11 +51,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     if (!_imageManager) {
         _imageManager = [[PHCachingImageManager alloc] init];
     }
-    
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Do any additional setup after loading the view.
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -68,8 +64,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.navigationController.navigationBar.alpha = 1;
     self.navigationController.toolbar.alpha = 1;
     
-    [self.collectionView reloadData];
+    if (self.album.albumPhotos.count == 0) {
+        self.noPhotosView.hidden = NO;
+    } else {
+        self.noPhotosView.hidden = YES;
+    }
     
+    [self.collectionView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -102,14 +103,24 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         footerLabel.text = nil;
     }
     
-    NSLog(@"footer in section %ld", indexPath.section);
-    
     return footer;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (self.collectionView.indexPathsForSelectedItems.count > 0) {
+        for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
+            CJMImage *selectedItem = [self.album.albumPhotos objectAtIndex:indexPath.item];
+            selectedItem.selectCoverHidden = YES;
+        }
+    }
 }
 
 #pragma mark - collectionView data source
@@ -122,9 +133,10 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMPhotoCell *cell = (CJMPhotoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    CJMImage *imageForCell = (CJMImage *)[self.album.albumPhotos objectAtIndex:indexPath.item];
+    CJMImage *imageForCell = self.album.albumPhotos[indexPath.row];
     
     [cell updateWithImage:imageForCell];
+    cell.cellSelectCover.hidden = imageForCell.selectCoverHidden;
     
     return cell;
 }
@@ -134,13 +146,15 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.editMode == NO) {
+        CJMImage *selectedImage = [self.album.albumPhotos objectAtIndex:indexPath.item];
+        selectedImage.selectCoverHidden = YES;
         [self shouldPerformSegueWithIdentifier:@"ViewPhoto" sender:nil];
     } else if (self.editMode == YES) {
         [self shouldPerformSegueWithIdentifier:@"ViewPhoto" sender:nil];
         CJMPhotoCell *selectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
         CJMImage *selectedImage = (CJMImage *)[self.album.albumPhotos objectAtIndex:indexPath.row];
-        [selectedImage toggleSelected];
-        selectedCell.cellSelectCover.hidden = selectedImage.selected;
+        selectedImage.selectCoverHidden = NO;
+        selectedCell.cellSelectCover.hidden = selectedImage.selectCoverHidden;
         self.deleteButton.enabled = YES;
         self.exportButton.enabled = YES;
     }
@@ -150,8 +164,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 {
     CJMPhotoCell *deselectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
     CJMImage *deselectedImage = (CJMImage *)[self.album.albumPhotos objectAtIndex:indexPath.row];
-    [deselectedImage toggleSelected];
-    deselectedCell.cellSelectCover.hidden = deselectedImage.selected;
+    deselectedImage.selectCoverHidden = YES;
+    deselectedCell.cellSelectCover.hidden = deselectedImage.selectCoverHidden;
     
     if ([self.collectionView indexPathsForSelectedItems].count == 0) {
         self.deleteButton.enabled = NO;
@@ -168,8 +182,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         CJMPhotoCell *cell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
         CJMImage *imageForCell = (CJMImage *)[self.album.albumPhotos objectAtIndex:indexPath.row];
         
-        [imageForCell toggleSelected];
-        cell.cellSelectCover.hidden = imageForCell.selected;
+        imageForCell.selectCoverHidden = YES;
+        cell.cellSelectCover.hidden = imageForCell.selectCoverHidden;
     }
 }
 
@@ -453,6 +467,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         
         assetImage.photoTitle = @"No Title";
         assetImage.photoNote = @"No Note Entered";
+        assetImage.selectCoverHidden = YES;
         [_album addCJMImage:assetImage];
     }
 
@@ -484,8 +499,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     //take CJMImages in selected cells in current album (self.album) and copy them to the picked album.
     for (NSIndexPath *itemPath in _selectedCells) {
         CJMImage *imageToTransfer = [_album.albumPhotos objectAtIndex:itemPath.row];
-        [imageToTransfer toggleSelected];
+        imageToTransfer.selectCoverHidden = YES;
         [album addCJMImage:imageToTransfer];
+        if (imageToTransfer.isAlbumPreview == YES) {
+            [imageToTransfer setIsAlbumPreview:NO];
+            self.album.albumPreviewImage = nil;
+        }
     }
     
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
@@ -493,6 +512,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [indexSet addIndex:itemPath.row];
     }
     [self.album removeCJMImagesAtIndexes:indexSet];
+    
+    if (self.album.albumPreviewImage == nil && self.album.albumPhotos.count > 0) {
+        [[CJMAlbumManager sharedInstance] albumWithName:self.album.albumTitle
+                              createPreviewFromCJMImage:(CJMImage *)[self.album.albumPhotos objectAtIndex:0]];
+    }
     
     [[CJMAlbumManager sharedInstance] save];
     

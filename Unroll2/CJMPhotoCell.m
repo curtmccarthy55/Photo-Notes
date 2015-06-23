@@ -33,7 +33,7 @@
     [[CJMServices sharedInstance] fetchThumbnailForImage:cjmImage handler:^(UIImage *thumbnail) {
         self.cellImage.image = thumbnail;
     }];
-    self.cellSelectCover.hidden = self.image.selected;
+    //self.cellSelectCover.hidden = self.image.selectCoverHidden;
 }
 
 

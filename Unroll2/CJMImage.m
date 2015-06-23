@@ -8,7 +8,11 @@
 
 #import "CJMImage.h"
 
+@interface CJMImage ()
 
+
+
+@end
 
 @implementation CJMImage
 
@@ -24,8 +28,13 @@
         _photoNote = [aDecoder decodeObjectForKey:@"Note"];
         _photoCreationDate = [aDecoder decodeObjectForKey:@"CreationDate"];
         _photoLocation = [aDecoder decodeObjectForKey:@"Location"];
+        _isAlbumPreview = [aDecoder decodeBoolForKey:@"AlbumPreview"];
         
-        _selected = YES;
+        _selectCoverHidden = YES;
+        
+        if (!self.isAlbumPreview) {
+            self.isAlbumPreview = NO;
+        }
     }
     return self;
 }
@@ -39,6 +48,7 @@
     [aCoder encodeObject:self.photoNote forKey:@"Note"];
     [aCoder encodeObject:self.photoCreationDate forKey:@"CreationDate"];
     [aCoder encodeObject:self.photoLocation forKey:@"Location"];
+    [aCoder encodeBool:self.isAlbumPreview forKey:@"AlbumPreview"];
     
 }
 
@@ -49,7 +59,6 @@
     if (self) {
         _photoID = [NSUUID UUID];
     }
-    _selected = YES;
     return self;
 }
 
@@ -65,9 +74,9 @@
 
 #pragma mark - Selected
 
-- (void)toggleSelected
+- (void)toggleSelectCoverHidden
 {
-    self.selected = !self.selected;
+    self.selectCoverHidden = !self.selectCoverHidden;
 }
 
 @end

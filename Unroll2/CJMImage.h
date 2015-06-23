@@ -26,11 +26,12 @@
 @property (nonatomic, strong) NSString *photoKey;
 @property (nonatomic, readonly) NSString *fileName;
 @property (nonatomic, readonly) NSString *thumbnailFileName;
+@property (nonatomic) BOOL isAlbumPreview;
 
-@property (nonatomic) BOOL selected;
+@property (nonatomic) BOOL selectCoverHidden;
 
 @property (nonatomic, weak) UIImage *photoImage;
 
-- (void)toggleSelected;
+- (void)toggleSelectCoverHidden;
 
 @end

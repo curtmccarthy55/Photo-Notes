@@ -119,6 +119,7 @@ static CJMAlbumManager *__sharedInstance;
 - (void)albumWithName:(NSString *)name createPreviewFromCJMImage:(CJMImage *)image
 {
     CJMPhotoAlbum *album = [self scanForAlbumWithName:name];
+    [image setIsAlbumPreview:YES];
     
     album.albumPreviewImage = image;
 }
