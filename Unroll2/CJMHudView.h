@@ -10,7 +10,7 @@
 
 @interface CJMHudView : UIView
 
-+ (instancetype)hudInView:(UIView *)view animated:(BOOL)animated;
++ (instancetype)hudInView:(UIView *)view withType:(NSString *)type animated:(BOOL)animated;
 - (void)removeHudView:(CJMHudView *)hudView;
 
 @property (nonatomic, strong) NSString *text;

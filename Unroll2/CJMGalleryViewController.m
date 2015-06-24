@@ -64,11 +64,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.navigationController.navigationBar.alpha = 1;
     self.navigationController.toolbar.alpha = 1;
     
-    if (self.album.albumPhotos.count == 0) {
-        self.noPhotosView.hidden = NO;
-    } else {
-        self.noPhotosView.hidden = YES;
-    }
+    [self confirmEditButtonEnabled];
     
     [self.collectionView reloadData];
 }
@@ -78,16 +74,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [super viewDidAppear:animated];
     
     if (self.album.albumPhotos.count == 0) {
-        UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil];
-        
-        [noPhotosAlert addAction:dismissAction];
-        
-        [self presentViewController:noPhotosAlert animated:YES completion:nil];
+//        UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
+//        
+//        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil];
+//        
+//        [noPhotosAlert addAction:dismissAction];
+//        
+//        [self presentViewController:noPhotosAlert animated:YES completion:nil];
     }
-    
-    NSLog(@"Gallery view appeared");
 }
 
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -253,6 +247,23 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
 }
 
+- (void)confirmEditButtonEnabled
+{
+    if (self.album.albumPhotos.count == 0) {
+        self.editButton.enabled = NO;
+        
+        UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil];
+        
+        [noPhotosAlert addAction:dismissAction];
+        
+        [self presentViewController:noPhotosAlert animated:YES completion:nil];
+    } else {
+        self.editButton.enabled = YES;
+    }
+}
+
 - (IBAction)photoGrab:(id)sender
 {
     
@@ -325,6 +336,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         
         [self toggleEditMode:self];
         NSLog(@"photoAlbum count = %ld", (unsigned long)self.album.albumPhotos.count);
+        
+        [self confirmEditButtonEnabled];
+        
         [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.4];
     }];
     
@@ -346,6 +360,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [self.collectionView deleteItemsAtIndexPaths:_selectedCells];
         
         [self toggleEditMode:self];
+        
+        [self confirmEditButtonEnabled];
+        
         [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.4];
         }];
     
@@ -378,10 +395,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
             fullImage = nil;
         }
         
-        CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view animated:YES];
+        CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
+                                           withType:@"Success"
+                                           animated:YES];
         
         hudView.text = @"Done!";
-        hudView.type = @"Success";
         
         [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
         
@@ -475,10 +493,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [self.collectionView reloadData];
         [self dismissViewControllerAnimated:YES completion:nil];
         [[CJMAlbumManager sharedInstance] save];
-        
-        NSLog(@"%lu photos added successfully", (unsigned long)self.album.albumPhotos.count);
-        
-        NSLog(@"There are %lu photos present in the album", (unsigned long)[self.album.albumPhotos count]);
     });
     
     self.navigationController.view.userInteractionEnabled = YES;
@@ -528,10 +542,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
-    CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view animated:YES];
+    [self confirmEditButtonEnabled];
+    
+    CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
+                                       withType:@"Success"
+                                       animated:YES];
     
     hudView.text = @"Done!";
-    hudView.type = @"Success";
     
     [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
     [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.2];
@@ -559,7 +576,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(1, 1, 1, 1);
-    //preparing to check...
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration //resizes collectionView cells per sizeForItemAtIndexPath when user rotates device.

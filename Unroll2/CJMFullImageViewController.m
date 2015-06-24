@@ -162,6 +162,10 @@
 {
     [super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
     
+    if (_focusIsOnImage) {
+        [self imageViewTapped:self];
+    }
+    
     if ([self.seeNoteButton.titleLabel.text isEqual:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
     } else if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
@@ -234,7 +238,6 @@
 {
     return self.imageView;
 }
-
 
 #pragma mark - Buttons and taps
 
@@ -397,10 +400,11 @@
         
         [[CJMAlbumManager sharedInstance] save];
         
-        CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view animated:YES];
+        CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
+                                           withType:@"Success"
+                                           animated:YES];
         
         hudView.text = @"Done!";
-        hudView.type = @"Success";
         
         [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
 
@@ -411,10 +415,11 @@
     UIAlertAction *saveImageAction = [UIAlertAction actionWithTitle:@"Save To Camera Roll" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSave){
         UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
         
-        CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view animated:YES];
+        CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
+                                           withType:@"Success"
+                                           animated:YES];
         
         hudView.text = @"Done!";
-        hudView.type = @"Success";
         
         [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
         

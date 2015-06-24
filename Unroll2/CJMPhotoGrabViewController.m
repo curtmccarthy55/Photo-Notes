@@ -100,11 +100,8 @@ static NSString * const reuseIdentifier = @"GrabCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-
     CJMGrabCell *selectedCell = (CJMGrabCell *)[collectionView cellForItemAtIndexPath:indexPath];
     selectedCell.cellSelectCover.hidden = NO;
-    
-
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -126,10 +123,11 @@ static NSString * const reuseIdentifier = @"GrabCell";
 
 - (IBAction)donePressed:(id)sender
 {
-    CJMHudView *hudView = [CJMHudView hudInView:self.view animated:YES];
+    CJMHudView *hudView = [CJMHudView hudInView:self.view
+                                       withType:@"Pending"
+                                       animated:YES];
     
     hudView.text = @"Importing";
-    hudView.type = @"Pending";
     
     NSArray *selectedItems = [[NSArray alloc] initWithArray:[self.collectionView indexPathsForSelectedItems]];
     

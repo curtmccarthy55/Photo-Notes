@@ -140,7 +140,9 @@
 
 - (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex
 {
-    if ((imageIndex + 1) >= _albumCount) {
+    if (_albumCount - 1 == 0) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else if ((imageIndex + 1) >= _albumCount) {
         CJMFullImageViewController *previousVC = (CJMFullImageViewController *)[self pageViewController:self viewControllerBeforeViewController:currentVC];
         NSLog(@"We need to go to the previous image");
         //previousVC.index = imageIndex;

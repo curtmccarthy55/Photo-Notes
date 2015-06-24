@@ -18,16 +18,20 @@
 }
 */
 
-+ (instancetype)hudInView:(UIView *)view animated:(BOOL)animated
++ (instancetype)hudInView:(UIView *)view withType:(NSString *)type animated:(BOOL)animated
 {
     CJMHudView *hudView = [[CJMHudView alloc] initWithFrame:view.bounds];
+    
+    hudView.type = type;
     
     hudView.opaque = NO;
     
     [view addSubview:hudView];
     view.userInteractionEnabled = NO;
     
+    if ([hudView.type isEqual:@"Success"]) {
     [hudView showAnimated:animated];
+    }
     
     return hudView;
 }
@@ -66,9 +70,6 @@
         activityIndicator.transform = CGAffineTransformMakeScale(1.5, 1.5);
         
         [self addSubview:activityIndicator];
-        
-
-        
         
         [activityIndicator startAnimating];
     }
