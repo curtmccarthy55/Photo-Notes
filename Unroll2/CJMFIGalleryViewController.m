@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.dataSource = self;
     self.makeViewsVisible = YES;
     
@@ -114,16 +114,16 @@
 - (void)toggleViewVisibility
 {
     if (_makeViewsVisible == NO) {
+        [UIApplication sharedApplication].statusBarHidden = YES;
         [UIView animateWithDuration:0.2 animations:^{
         self.navigationController.navigationBar.alpha = 0;
         self.navigationController.toolbar.alpha = 0;
-        [self setNeedsStatusBarAppearanceUpdate];
         }];
     } else if (_makeViewsVisible == YES) {
+        [UIApplication sharedApplication].statusBarHidden = NO;
         [UIView animateWithDuration:0.2 animations:^{
         self.navigationController.navigationBar.alpha = 1;
         self.navigationController.toolbar.alpha = 1;
-        [self setNeedsStatusBarAppearanceUpdate];
         }];
     }
 }
@@ -134,9 +134,6 @@
 {
     self.makeViewsVisible = !self.makeViewsVisible;
     NSLog(@"makeViewsVisible is %@", [NSNumber numberWithBool:self.makeViewsVisible]);
-    
-    //[self pageViewController:self viewControllerBeforeViewController:viewController];
-    //[self pageViewController:self viewControllerAfterViewController:viewController];
     
     [viewController setViewsVisible:self.makeViewsVisible];
 }

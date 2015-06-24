@@ -18,18 +18,20 @@
                             <outlet property="delegate" destination="NO4-kQ-OsT" id="qLo-w4-bMl"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="My Albums" id="QE4-93-jxo">
-                        <barButtonItem key="leftBarButtonItem" title="Edit" id="zk0-Rl-znW">
+                    <toolbarItems>
+                        <barButtonItem title="Edit" id="zk0-Rl-znW">
                             <connections>
                                 <action selector="editTableView:" destination="NO4-kQ-OsT" id="yHa-Jj-eRP"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Reb-LD-ifB">
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="2Cf-0a-pw2"/>
+                        <barButtonItem systemItem="add" id="Reb-LD-ifB">
                             <connections>
                                 <segue destination="EVj-cY-PaK" kind="presentation" identifier="AddAlbum" id="zVD-Ov-2nV"/>
                             </connections>
                         </barButtonItem>
-                    </navigationItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="My Albums" id="QE4-93-jxo"/>
                     <connections>
                         <outlet property="editButton" destination="zk0-Rl-znW" id="BEt-pL-9iy"/>
                         <segue destination="EVj-cY-PaK" kind="presentation" identifier="EditAlbum" id="a2e-sF-Y6k"/>
@@ -191,9 +193,9 @@
                         </connections>
                     </collectionView>
                     <toolbarItems>
-                        <barButtonItem systemItem="camera" id="r9C-xl-G7l">
+                        <barButtonItem title="Select" id="zne-Rb-ioX">
                             <connections>
-                                <action selector="photoGrab:" destination="uLg-8C-qq2" id="jOd-cG-Tvi"/>
+                                <action selector="toggleEditMode:" destination="uLg-8C-qq2" id="xHv-Pj-5gp"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="IDE-TX-idm"/>
@@ -209,9 +211,9 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="vjI-ag-2pA"/>
-                        <barButtonItem title="Select" id="zne-Rb-ioX">
+                        <barButtonItem systemItem="camera" id="r9C-xl-G7l">
                             <connections>
-                                <action selector="toggleEditMode:" destination="uLg-8C-qq2" id="xHv-Pj-5gp"/>
+                                <action selector="photoGrab:" destination="uLg-8C-qq2" id="jOd-cG-Tvi"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
@@ -231,15 +233,15 @@
             <objects>
                 <pageViewController storyboardIdentifier="PageController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" pageSpacing="5" navigationOrientation="horizontal" spineLocation="none" id="auB-ij-Inv" customClass="CJMFIGalleryViewController" sceneMemberID="viewController">
                     <toolbarItems>
-                        <barButtonItem systemItem="action" id="7lk-hn-E42">
-                            <connections>
-                                <action selector="currentPhotoOptions:" destination="auB-ij-Inv" id="xTe-64-4oT"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="ZkF-Mv-9Hq"/>
                         <barButtonItem systemItem="trash" id="5xp-wP-xfs">
                             <connections>
                                 <action selector="deleteCurrentPhoto:" destination="auB-ij-Inv" id="uea-Ch-xWm"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="ZkF-Mv-9Hq"/>
+                        <barButtonItem systemItem="action" id="7lk-hn-E42">
+                            <connections>
+                                <action selector="currentPhotoOptions:" destination="auB-ij-Inv" id="xTe-64-4oT"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
