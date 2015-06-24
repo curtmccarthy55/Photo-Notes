@@ -139,10 +139,6 @@ static NSString * const reuseIdentifier = @"GrabCell";
         
         [_pickedPhotos addObject:asset];
     }
-    
-
-    
-    NSLog(@"There are %lu photos being sent to the album", (unsigned long)_pickedPhotos.count);
     [self.delegate photoGrabViewController:self didFinishSelectingPhotos:[_pickedPhotos copy]];
 }
 
