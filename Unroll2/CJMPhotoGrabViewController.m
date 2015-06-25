@@ -12,7 +12,7 @@
 
 @import Photos;
 
-@interface CJMPhotoGrabViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface CJMPhotoGrabViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) PHFetchResult *fetchResult;
@@ -143,17 +143,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
 }
 
 
-#pragma mark - image picker delegate
 
-#pragma ALERT return here to complete image capture with in app camera.
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    //UIImage *image = (UIImage *)[info objectForKey:UIImagePickerControllerOriginalImage];
-    
-    [self dismissViewControllerAnimated:YES completion: ^{
-        //do something with the image
-    }];
-}
 
 #pragma mark UICollectionViewFlowLayoutDelegate
 

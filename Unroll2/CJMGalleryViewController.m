@@ -428,6 +428,26 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
 }
 
+#pragma mark - image picker delegate
+
+#pragma ALERT return here to complete image capture with in app camera.
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
+    CJMImage *newImage = [[CJMImage alloc] init];
+    CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
+    
+    [fileSerializer writeObject:newPhoto toRelativePath:newImage.fileName];
+    newImage.photoTitle = @"No Title Created     ";
+    newImage.photoNote = @"No note created.  Press Edit to begin editing the title and note sections!";
+    newImage.selectCoverHidden = YES;
+    [_album addCJMImage:newImage];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [[CJMAlbumManager sharedInstance] save];
+}
+
 #pragma mark - CJMPhotoGrabber Delegate
 
 - (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller
