@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <scenes>
-        <!--My Albums-->
+        <!--Photo Note Albums-->
         <scene sceneID="k8A-YM-lsO">
             <objects>
                 <viewController id="Yrr-mU-PSV" sceneMemberID="viewController">
@@ -22,7 +22,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="cjQ-hL-qjD"/>
                         <barButtonItem systemItem="add" id="mhA-yq-BLh"/>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="My Albums" id="ch1-nP-I9a"/>
+                    <navigationItem key="navigationItem" title="Photo Note Albums" id="ch1-nP-I9a"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g5N-iF-DCO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

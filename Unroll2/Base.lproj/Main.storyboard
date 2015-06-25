@@ -5,7 +5,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--My Albums-->
+        <!--Photo Note Albums-->
         <scene sceneID="lJj-hb-zQi">
             <objects>
                 <tableViewController id="NO4-kQ-OsT" customClass="CJMAListViewController" sceneMemberID="viewController">
@@ -31,7 +31,7 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="My Albums" id="QE4-93-jxo"/>
+                    <navigationItem key="navigationItem" title="Photo Note Albums" id="QE4-93-jxo"/>
                     <connections>
                         <outlet property="editButton" destination="zk0-Rl-znW" id="BEt-pL-9iy"/>
                         <segue destination="EVj-cY-PaK" kind="presentation" identifier="EditAlbum" id="a2e-sF-Y6k"/>
