@@ -80,6 +80,10 @@
     self.noteTitle.textColor = [UIColor whiteColor];
     self.noteTitle.adjustsFontSizeToFitWidth = YES;
     
+    if ([self.noteTitle.text isEqual:@"No Title Created     "]) {
+        self.noteTitle.text = @"";
+    }
+    
     self.noteEntry.text = _cjmImage.photoNote;
     self.noteEntry.textColor = [UIColor whiteColor];
     self.noteEntry.font = [UIFont fontWithName:@"Verdana" size:14];
@@ -254,6 +258,7 @@
     if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
         self.noteShiftConstraint.constant = shiftConstant;
         [self.noteSection setNeedsUpdateConstraints];
+        self.noteTitle.text = self.cjmImage.photoTitle;
         
         [UIView animateWithDuration:0.25 animations:^{
             [self.noteSection layoutIfNeeded];
@@ -276,6 +281,9 @@
         [self enableEdit:self];
     }
     [self handleNoteSectionAlignment];
+    if ([self.noteTitle.text isEqual:@"No Title Created     "]) {
+        self.noteTitle.text = @"";
+    }
     
     [UIView animateWithDuration:0.25 animations:^{
         [self.noteSection layoutIfNeeded];

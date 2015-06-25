@@ -483,8 +483,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                       }
                                   }];
         
-        assetImage.photoTitle = @"No Title";
-        assetImage.photoNote = @"No Note Entered";
+        assetImage.photoTitle = @"No Title Created     ";
+        assetImage.photoNote = @"No note created.  Press Edit to begin editing the title and note sections!";
         assetImage.selectCoverHidden = YES;
         [_album addCJMImage:assetImage];
     }

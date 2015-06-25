@@ -11,6 +11,7 @@
 		84401F3F1B3092F100B4FB89 /* CJMHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84401F3E1B3092F100B4FB89 /* CJMHudView.m */; };
 		84470DE41B050DA4008FF178 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 84470DE31B050DA4008FF178 /* no_image.jpg */; };
 		845B90CF1AF42BC300365239 /* CJMFIGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845B90CE1AF42BC300365239 /* CJMFIGalleryViewController.m */; };
+		846870871B3B1F240031787B /* LSStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 846870861B3B1F240031787B /* LSStoryboard.storyboard */; };
 		84A769571ADAE39F00DE6741 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769561ADAE39F00DE6741 /* main.m */; };
 		84A7695A1ADAE39F00DE6741 /* CJMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769591ADAE39F00DE6741 /* CJMAppDelegate.m */; };
 		84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84A7695E1ADAE39F00DE6741 /* Main.storyboard */; };
@@ -52,6 +53,7 @@
 		84470DE31B050DA4008FF178 /* no_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_image.jpg; sourceTree = "<group>"; };
 		845B90CD1AF42BC300365239 /* CJMFIGalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMFIGalleryViewController.h; sourceTree = "<group>"; };
 		845B90CE1AF42BC300365239 /* CJMFIGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMFIGalleryViewController.m; sourceTree = "<group>"; };
+		846870861B3B1F240031787B /* LSStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LSStoryboard.storyboard; sourceTree = "<group>"; };
 		84A769511ADAE39F00DE6741 /* Unroll2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unroll2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A769551ADAE39F00DE6741 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84A769561ADAE39F00DE6741 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 				84C2B94F1ADF4AA00034786C /* CJMServices.m */,
 				84C2B94B1ADF39E60034786C /* CJMFileSerializer.h */,
 				84C2B94C1ADF39E60034786C /* CJMFileSerializer.m */,
+				846870861B3B1F240031787B /* LSStoryboard.storyboard */,
 				84A769611ADAE39F00DE6741 /* Images.xcassets */,
 				84A769551ADAE39F00DE6741 /* Info.plist */,
 				84A769561ADAE39F00DE6741 /* main.m */,
@@ -304,6 +307,7 @@
 				84C2B9381ADB0A580034786C /* CJMAListTableViewCell.xib in Resources */,
 				84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */,
 				84A769651ADAE39F00DE6741 /* LaunchScreen.xib in Resources */,
+				846870871B3B1F240031787B /* LSStoryboard.storyboard in Resources */,
 				84A769621ADAE39F00DE6741 /* Images.xcassets in Resources */,
 				84470DE41B050DA4008FF178 /* no_image.jpg in Resources */,
 			);
