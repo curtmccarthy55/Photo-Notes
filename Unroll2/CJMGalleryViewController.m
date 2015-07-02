@@ -59,30 +59,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [super viewWillAppear:animated];
     
     self.editMode = NO;
-    
     [self toggleEditControls];
-    
     self.navigationController.navigationBar.alpha = 1;
     self.navigationController.toolbar.alpha = 1;
-    
     [self confirmEditButtonEnabled];
     
     [self.collectionView reloadData];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (self.album.albumPhotos.count == 0) {
-//        UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
-//        
-//        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil];
-//        
-//        [noPhotosAlert addAction:dismissAction];
-//        
-//        [self presentViewController:noPhotosAlert animated:YES completion:nil];
-    }
 }
 
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -267,7 +249,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 - (IBAction)photoGrab:(id)sender
 {
-    [PHPhotoLibrary requestAuthorization:nil];
+    __weak CJMGalleryViewController *weakSelf = self;
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
@@ -287,11 +269,20 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }];
     
     UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:@"Choose From Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForLibrary) {
-        if ([PHPhotoLibrary authorizationStatus] != PHAuthorizationStatusAuthorized) {
-            [self dismissViewControllerAnimated:YES completion:nil];
-        } else {
-            [self presentPhotoGrabViewController];
-        }
+        
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
+            if (status != PHAuthorizationStatusAuthorized) {
+                UIAlertController *adjustPrivacyController = [UIAlertController alertControllerWithTitle:@"Denied access to Photos" message:@"You need to give Photo Notes permission to import from your Photo Library.\n\nPlease allow Photo Notes access to your Camera Roll by going to Settings>Privacy>Photos." preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *dismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}];
+                
+                [adjustPrivacyController addAction:dismiss];
+                
+                [self presentViewController:adjustPrivacyController animated:YES completion:nil];
+            } else {
+                [self presentPhotoGrabViewController];
+            }
+        }];
     }];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"

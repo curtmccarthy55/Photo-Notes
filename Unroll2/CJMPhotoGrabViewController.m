@@ -29,12 +29,10 @@ static NSString * const reuseIdentifier = @"GrabCell";
     [super viewDidLoad];
     
     _collectionView.allowsMultipleSelection = YES;
-    
     self.imageManager = [[PHCachingImageManager alloc] init];
     _fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:nil];
     
 }
-
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -45,6 +43,8 @@ static NSString * const reuseIdentifier = @"GrabCell";
     NSIndexPath *lastIndexPath = [NSIndexPath indexPathForItem:item inSection:section];
     [self.collectionView scrollToItemAtIndexPath:lastIndexPath atScrollPosition:(UICollectionViewScrollPositionBottom) animated:YES];
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
