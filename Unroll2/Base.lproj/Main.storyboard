@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="XRF-wX-XIn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="XRF-wX-XIn">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -318,7 +318,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CjO-W7-o96">
-                                        <rect key="frame" x="470" y="0.0" width="50" height="30"/>
+                                        <rect key="frame" x="470" y="3" width="50" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="NYp-ex-wAn"/>
                                         </constraints>
@@ -331,8 +331,17 @@
                                             <action selector="enableEdit:" destination="9ae-Ea-iTf" eventType="touchUpInside" id="U2f-li-eWw"/>
                                         </connections>
                                     </button>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
+                                        <rect key="frame" x="8" y="53" width="584" height="431"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="18"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="9ae-Ea-iTf" id="gmn-6S-9KS"/>
+                                        </connections>
+                                    </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdb-G9-he9">
-                                        <rect key="frame" x="528" y="0.0" width="64" height="30"/>
+                                        <rect key="frame" x="528" y="3" width="64" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="64" id="dJJ-BW-1JK"/>
                                         </constraints>
@@ -345,15 +354,6 @@
                                             <action selector="shiftNote:" destination="9ae-Ea-iTf" eventType="touchUpInside" id="Vm7-DY-YIk"/>
                                         </connections>
                                     </button>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
-                                        <rect key="frame" x="8" y="53" width="584" height="431"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="18"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        <connections>
-                                            <outlet property="delegate" destination="9ae-Ea-iTf" id="gmn-6S-9KS"/>
-                                        </connections>
-                                    </textView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.66000000000000003" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -365,14 +365,14 @@
                                     <constraint firstItem="pWS-x4-vhI" firstAttribute="top" secondItem="upp-GS-1zm" secondAttribute="bottom" constant="2" id="MSR-NJ-xSD"/>
                                     <constraint firstItem="pWS-x4-vhI" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="8" id="MeW-Zp-5Y2"/>
                                     <constraint firstItem="CjO-W7-o96" firstAttribute="leading" secondItem="upp-GS-1zm" secondAttribute="trailing" constant="8" id="ROf-sS-0un"/>
-                                    <constraint firstItem="Wdb-G9-he9" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" id="RZ6-ip-Bqk"/>
+                                    <constraint firstItem="Wdb-G9-he9" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" constant="3" id="RZ6-ip-Bqk"/>
                                     <constraint firstItem="Wdb-G9-he9" firstAttribute="leading" secondItem="CjO-W7-o96" secondAttribute="trailing" constant="8" id="SvX-zi-Pvh"/>
-                                    <constraint firstItem="CjO-W7-o96" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" id="TLB-Ur-6Av"/>
+                                    <constraint firstItem="CjO-W7-o96" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" constant="3" id="TLB-Ur-6Av"/>
                                     <constraint firstAttribute="trailing" secondItem="pWS-x4-vhI" secondAttribute="trailing" constant="8" id="ZVf-rQ-67K"/>
                                     <constraint firstItem="c5T-Ao-Wwn" firstAttribute="leading" secondItem="upp-GS-1zm" secondAttribute="leading" id="ne2-rW-QBK"/>
                                     <constraint firstItem="upp-GS-1zm" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="8" id="ne6-Qb-LeV"/>
                                     <constraint firstItem="c5T-Ao-Wwn" firstAttribute="trailing" secondItem="Wdb-G9-he9" secondAttribute="trailing" id="nfZ-f8-rRl"/>
-                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="CjO-W7-o96" secondAttribute="bottom" constant="23" id="nto-ga-TYy"/>
+                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="CjO-W7-o96" secondAttribute="bottom" constant="20" id="nto-ga-TYy"/>
                                 </constraints>
                             </view>
                         </subviews>

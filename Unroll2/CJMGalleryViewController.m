@@ -16,6 +16,7 @@
 #import "CJMPhotoCell.h"
 #import "CJMImage.h"
 #import "CJMHudView.h"
+#import <dispatch/dispatch.h>
 
 #import "CJMFileSerializer.h"
 
@@ -48,9 +49,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.navigationController.toolbarHidden = NO;
     self.navigationItem.title = self.album.albumTitle;
     
-    if (!_imageManager) {
-        _imageManager = [[PHCachingImageManager alloc] init];
-    }
+//    if (!_imageManager) {
+//        _imageManager = [[PHCachingImageManager alloc] init];
+//    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -266,6 +267,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 - (IBAction)photoGrab:(id)sender
 {
+    [PHPhotoLibrary requestAuthorization:nil];
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
@@ -285,11 +287,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }];
     
     UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:@"Choose From Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForLibrary) {
-        NSString * storyboardName = @"Main";
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
-        CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
-        vc.delegate = self;
-        [self presentViewController:vc animated:YES completion:nil];
+        if ([PHPhotoLibrary authorizationStatus] != PHAuthorizationStatusAuthorized) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            [self presentPhotoGrabViewController];
+        }
     }];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"
@@ -303,14 +305,30 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+- (void)presentPhotoGrabViewController
+{
+    NSString * storyboardName = @"Main";
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
+    vc.delegate = self;
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
 - (IBAction)deleteSelcted:(id)sender
 {
     self.selectedCells = [NSArray arrayWithArray:[self.collectionView indexPathsForSelectedItems]];
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete photos?" message:@"You cannot recover these photos after deleting." preferredStyle:UIAlertControllerStyleActionSheet];
     
-    //Save selected photos to Photos app and then delete
+/* IMPROVING AND ADDING LATER : functionality for mass export and delete on images.
+//TODO: Save selected photos to Photos app and then delete
     UIAlertAction *saveThenDeleteAction = [UIAlertAction actionWithTitle:@"Save to Photos app and then delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete){
+        
+        CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
+                                           withType:@"Pending"
+                                           animated:YES];
+        
+        hudView.text = @"Exporting";
         
         __block UIImage *fullImage = [[UIImage alloc] init];
         
@@ -341,6 +359,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         
         [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.4];
     }];
+ */
     
     //Delete photos without saving to Photos app
     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete photos permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
@@ -367,8 +386,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         }];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
-    
-    [alertController addAction:saveThenDeleteAction];
+
+//    [alertController addAction:saveThenDeleteAction]; IMPROVING AND ADDING LATER : see above **
     [alertController addAction:deleteAction];
     [alertController addAction:cancel];
     
@@ -381,18 +400,20 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Transfer:" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    //Copy selected photos to Camera Roll in the Photos app.
+/* IMPROVING AND ADDING LATER : functionality for mass copy of selected photos
+//TODO: Copy selected photos to Camera Roll in the Photos app.
     UIAlertAction *photosAppExport = [UIAlertAction actionWithTitle:@"Copies of photos to Photos App" style:UIAlertActionStyleDefault handler:^(UIAlertAction *sendToPhotosApp) {
         
         __block UIImage *fullImage = [[UIImage alloc] init];
-        
+
         for (NSIndexPath *itemPath in _selectedCells) {
-            CJMImage *doomedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
-            [[CJMServices sharedInstance] fetchImage:doomedImage handler:^(UIImage *fetchedImage) {
+            CJMImage *copiedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
+            [[CJMServices sharedInstance] fetchImage:copiedImage handler:^(UIImage *fetchedImage) {
                 fullImage = fetchedImage;
             }];
+            //Run this asynchronously?
             UIImageWriteToSavedPhotosAlbum(fullImage, nil, nil, nil);
-            fullImage = nil;
+            //fullImage = nil;
         }
         
         CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
@@ -402,9 +423,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         hudView.text = @"Done!";
         
         [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
+        self.navigationController.view.userInteractionEnabled = YES;
         
         [self toggleEditMode:self];
     }];
+*/
     
     //Copy the selected photos to another album within Photo Notes.
     UIAlertAction *alternateAlbumExport = [UIAlertAction actionWithTitle:@"Photos and notes to alternate album" style:UIAlertActionStyleDefault handler:^(UIAlertAction *sendToAlternateAlbum) {
@@ -420,7 +443,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     //Cancel action
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
     
-    [alertController addAction:photosAppExport];
+//    [alertController addAction:photosAppExport]; IMPROVING AND ADDING LATER : see above **
     [alertController addAction:alternateAlbumExport];
     [alertController addAction:cancel];
     
@@ -463,9 +486,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
+    if (!_imageManager) {
+        _imageManager = [[PHCachingImageManager alloc] init];
+    }
     
     dispatch_group_t imageLoadGroup = dispatch_group_create();
-    
+//    dispatch_group_t myTestDispatch = dispatch_queue_create(); //this line needs to be removed.
     for (int i = 0; i < photos.count; i++) {
         
         CJMImage *assetImage = [[CJMImage alloc] init];
@@ -507,15 +533,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         assetImage.photoNote = @"No note created.  Press Edit to begin editing the title and note sections!";
         assetImage.selectCoverHidden = YES;
         [_album addCJMImage:assetImage];
-    }
-
+        }
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
         [self dismissViewControllerAnimated:YES completion:nil];
         [[CJMAlbumManager sharedInstance] save];
+        self.navigationController.view.userInteractionEnabled = YES;
+
     });
-    
-    self.navigationController.view.userInteractionEnabled = YES;
     
 }
 

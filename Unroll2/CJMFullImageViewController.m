@@ -59,6 +59,7 @@
     
     [self prepareWithAlbumNamed:_albumName andIndex:_index];
     
+    
     [[CJMServices sharedInstance] fetchImage:_cjmImage handler:^(UIImage *fetchedImage) {
         self.fullImage = fetchedImage;
     }];

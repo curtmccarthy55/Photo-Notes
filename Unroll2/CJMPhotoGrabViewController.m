@@ -40,9 +40,9 @@ static NSString * const reuseIdentifier = @"GrabCell";
 {
     [super viewDidAppear:animated];
     
-    NSInteger section = [self.collectionView numberOfSections] - 1 ;
-    NSInteger item = [self.collectionView numberOfItemsInSection:section] - 1 ;
-    NSIndexPath *lastIndexPath = [NSIndexPath indexPathForItem:item inSection:section] ;
+    NSInteger section = [self.collectionView numberOfSections] - 1;
+    NSInteger item = [self.collectionView numberOfItemsInSection:section] - 1;
+    NSIndexPath *lastIndexPath = [NSIndexPath indexPathForItem:item inSection:section];
     [self.collectionView scrollToItemAtIndexPath:lastIndexPath atScrollPosition:(UICollectionViewScrollPositionBottom) animated:YES];
 }
 
