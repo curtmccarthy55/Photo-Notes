@@ -262,9 +262,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
             UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
             mediaUI.sourceType = UIImagePickerControllerSourceTypeCamera;
             mediaUI.allowsEditing = NO;
-            mediaUI.delegate = self;
+            mediaUI.delegate = weakSelf;
             
-            [self presentViewController:mediaUI animated:YES completion:nil];
+            [weakSelf presentViewController:mediaUI animated:YES completion:nil];
         }
     }];
     
@@ -272,15 +272,15 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
             if (status != PHAuthorizationStatusAuthorized) {
-                UIAlertController *adjustPrivacyController = [UIAlertController alertControllerWithTitle:@"Denied access to Photos" message:@"You need to give Photo Notes permission to import from your Photo Library.\n\nPlease allow Photo Notes access to your Camera Roll by going to Settings>Privacy>Photos." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *adjustPrivacyController = [UIAlertController alertControllerWithTitle:@"Denied access to Photos" message:@"You will need to give Photo Notes permission to import from your Photo Library.\n\nPlease allow Photo Notes access to your Camera Roll by going to Settings>Privacy>Photos." preferredStyle:UIAlertControllerStyleAlert];
                 
                 UIAlertAction *dismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}];
                 
                 [adjustPrivacyController addAction:dismiss];
                 
-                [self presentViewController:adjustPrivacyController animated:YES completion:nil];
+                [weakSelf presentViewController:adjustPrivacyController animated:YES completion:nil];
             } else {
-                [self presentPhotoGrabViewController];
+                [weakSelf presentPhotoGrabViewController];
             }
         }];
     }];
@@ -449,10 +449,25 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 {
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
     CJMImage *newImage = [[CJMImage alloc] init];
+    newImage.photoCreationDate = [NSDate date];
+    
+    CGSize cellSize = [(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize];
+    
+    CGFloat scaleDown;
+    
+    if (newPhoto.size.width > newPhoto.size.height) {
+        scaleDown = cellSize.height / newPhoto.size.height;
+    } else {
+        scaleDown = cellSize.width / newPhoto.size.width;
+    }
+
+    UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto withOrientation:newPhoto.imageOrientation];
+    
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
     [fileSerializer writeObject:newPhoto toRelativePath:newImage.fileName];
-    newImage.photoTitle = @"No Title Created     ";
+    [fileSerializer writeObject:thumbnail toRelativePath:newImage.thumbnailFileName];
+    newImage.photoTitle = @"No Title Created ";
     newImage.photoNote = @"No note created.  Press Edit to begin editing the title and note sections!";
     newImage.selectCoverHidden = YES;
     [_album addCJMImage:newImage];
@@ -460,6 +475,35 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self dismissViewControllerAnimated:YES completion:nil];
     
     [[CJMAlbumManager sharedInstance] save];
+}
+
+- (UIImage *)getCenterMaxSquareImageByCroppingImage:(UIImage *)image withOrientation:(UIImageOrientation)imageOrientation
+{
+    CGSize centerSquareSize;
+    double oriImgWid = CGImageGetWidth(image.CGImage);
+    double oriImgHgt = CGImageGetHeight(image.CGImage);
+    NSLog(@"oriImgWid==[%.1f], oriImgHgt==[%.1f]", oriImgWid, oriImgHgt);
+    if(oriImgHgt <= oriImgWid) {
+        centerSquareSize.width = oriImgHgt;
+        centerSquareSize.height = oriImgHgt;
+    }else {
+        centerSquareSize.width = oriImgWid;
+        centerSquareSize.height = oriImgWid;
+    }
+    
+    NSLog(@"squareWid==[%.1f], squareHgt==[%.1f]", centerSquareSize.width, centerSquareSize.height);
+    
+    double x = (oriImgWid - centerSquareSize.width) / 2.0;
+    double y = (oriImgHgt - centerSquareSize.height) / 2.0;
+    NSLog(@"x==[%.1f], x==[%.1f]", x, y);
+    
+    CGRect cropRect = CGRectMake(x, y, centerSquareSize.height, centerSquareSize.width);
+    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
+    
+    UIImage *cropped = [UIImage imageWithCGImage:imageRef scale:0.0 orientation:imageOrientation];
+    CGImageRelease(imageRef);
+    
+    return cropped;
 }
 
 #pragma mark - CJMPhotoGrabber Delegate
