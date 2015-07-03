@@ -537,23 +537,29 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                       {
                                           assetImage.photoImage = result;
                                           [fileSerializer writeObject:result toRelativePath:assetImage.fileName];
+                                          
+                                          //Test lines
+                                          UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:result withOrientation:result.imageOrientation];
+                                          [fileSerializer writeObject:thumbnail toRelativePath:assetImage.thumbnailFileName];
+                                          
                                           dispatch_group_leave(imageLoadGroup);
                                       }
                                   }];
         
-        dispatch_group_enter(imageLoadGroup);
-        [self.imageManager requestImageForAsset:asset
-                                     targetSize:[(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]
-                                    contentMode:PHImageContentModeAspectFill
-                                        options:nil
-                                  resultHandler:^(UIImage *result, NSDictionary *info) {
-                                      
-                                      if(![info[PHImageResultIsDegradedKey] boolValue])
-                                      {
-                                          [fileSerializer writeObject:result toRelativePath:assetImage.thumbnailFileName];
-                                          dispatch_group_leave(imageLoadGroup);
-                                      }
-                                  }];
+//        dispatch_group_enter(imageLoadGroup);
+//        [self.imageManager requestImageForAsset:asset
+//                                     targetSize:[(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]
+//                                    contentMode:PHImageContentModeAspectFill
+//                                        options:nil
+//                                  resultHandler:^(UIImage *result, NSDictionary *info) {
+//                                      
+//                                      if(![info[PHImageResultIsDegradedKey] boolValue])
+//                                      {
+//                                          NSLog(@"image thumbnail size is %f by %f", result.size.width, result.size.height);
+//                                          [fileSerializer writeObject:result toRelativePath:assetImage.thumbnailFileName];
+//                                          dispatch_group_leave(imageLoadGroup);
+//                                      }
+//                                  }];
         
         assetImage.photoTitle = @"No Title Created ";
         assetImage.photoNote = @"No note created.  Press Edit to begin editing the title and note sections!";

@@ -32,6 +32,7 @@
     self.image = cjmImage;
     [[CJMServices sharedInstance] fetchThumbnailForImage:cjmImage handler:^(UIImage *thumbnail) {
         self.cellImage.image = thumbnail;
+        NSLog(@"image address is %@", thumbnail);
     }];
     //self.cellSelectCover.hidden = self.image.selectCoverHidden;
 }

@@ -130,9 +130,10 @@
 {
     if ([[CJMAlbumManager sharedInstance] containsAlbumNamed:name] && ![self.albumToEdit.albumTitle isEqualToString:name]) {
         UIAlertController *nameExistsAlert = [UIAlertController alertControllerWithTitle:@"Duplicate Album Name!" message:@"You have already created an album with this name." preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {} ];
+        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Ok"
+                                                                style:UIAlertActionStyleCancel
+                                                              handler:^(UIAlertAction *action) {} ];
         [nameExistsAlert addAction:dismissAction];
-        
         [self presentViewController:nameExistsAlert animated:YES completion:nil];
         return YES;
     } else {
