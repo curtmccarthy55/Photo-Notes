@@ -31,12 +31,10 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteSectionHeight;
 
-
 @property (strong, nonatomic) IBOutlet UIView *noteSection;
 @property (strong, nonatomic) IBOutlet UITextField *noteTitle;
 @property (strong, nonatomic) IBOutlet UITextView *noteEntry;
 @property (strong, nonatomic) IBOutlet UILabel *photoLocAndDate;
-
 
 @property (strong, nonatomic) IBOutlet UIButton *seeNoteButton;
 @property (strong, nonatomic) IBOutlet UIButton *editNoteButton;
@@ -81,7 +79,7 @@
     self.noteTitle.textColor = [UIColor whiteColor];
     self.noteTitle.adjustsFontSizeToFitWidth = YES;
     
-    if ([self.noteTitle.text isEqual:@"No Title Created     "]) {
+    if ([self.noteTitle.text isEqual:@"No Title Created "]) {
         self.noteTitle.text = @"";
     }
     
@@ -144,11 +142,6 @@
     [self updateZoom];
     
     NSLog(@"fullImageViewer disappearing");
-}
-
-- (void)dealloc
-{
-
 }
 
 #pragma mark - View adjustments
@@ -282,7 +275,7 @@
         [self enableEdit:self];
     }
     [self handleNoteSectionAlignment];
-    if ([self.noteTitle.text isEqual:@"No Title Created     "]) {
+    if ([self.noteTitle.text isEqual:@"No Title Created "]) {
         self.noteTitle.text = @"";
     }
     
@@ -450,7 +443,7 @@
                                              message:@"You cannot recover this photo after deleting."
                                       preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *saveToPhotosAndDelete = [UIAlertAction actionWithTitle:@"Save to Photos app and then delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete) {
+    UIAlertAction *saveToPhotosAndDelete = [UIAlertAction actionWithTitle:@"Save To Camera Roll And Then Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete) {
             UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
             [[CJMServices sharedInstance] deleteImage:self.cjmImage];
             [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
@@ -460,7 +453,7 @@
             [self.delegate viewController:self deletedImageAtIndex:self.index];
     }];
     
-    UIAlertAction *deletePhoto = [UIAlertAction actionWithTitle:@"Delete permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
+    UIAlertAction *deletePhoto = [UIAlertAction actionWithTitle:@"Delete Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
             [[CJMServices sharedInstance] deleteImage:self.cjmImage];
             [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
         
@@ -497,7 +490,7 @@
     NSDictionary *info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height - 20, 0.0);
     self.noteEntry.contentInset = contentInsets;
     self.noteEntry.scrollIndicatorInsets = contentInsets;
 }

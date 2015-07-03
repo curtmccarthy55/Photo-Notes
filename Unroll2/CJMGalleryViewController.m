@@ -48,10 +48,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     self.navigationController.toolbarHidden = NO;
     self.navigationItem.title = self.album.albumTitle;
-    
-//    if (!_imageManager) {
-//        _imageManager = [[PHCachingImageManager alloc] init];
-//    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -158,7 +154,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
         CJMPhotoCell *cell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
         CJMImage *imageForCell = (CJMImage *)[self.album.albumPhotos objectAtIndex:indexPath.row];
-        
         imageForCell.selectCoverHidden = YES;
         cell.cellSelectCover.hidden = imageForCell.selectCoverHidden;
     }
@@ -170,9 +165,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 {
     if ([segue.identifier isEqualToString:@"ViewPhoto"]) {
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-        
         CJMFIGalleryViewController *vc = (CJMFIGalleryViewController *)segue.destinationViewController;
-        //vc.album = _album;
         vc.albumName = _album.albumTitle;
         vc.albumCount = _album.albumPhotos.count;
         vc.initialIndex = indexPath.item;
@@ -353,7 +346,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
  */
     
     //Delete photos without saving to Photos app
-    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete photos permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete Photos Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
        
         for (NSIndexPath *itemPath in _selectedCells) {
             CJMImage *doomedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
@@ -421,7 +414,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 */
     
     //Copy the selected photos to another album within Photo Notes.
-    UIAlertAction *alternateAlbumExport = [UIAlertAction actionWithTitle:@"Photos and notes to alternate album" style:UIAlertActionStyleDefault handler:^(UIAlertAction *sendToAlternateAlbum) {
+    UIAlertAction *alternateAlbumExport = [UIAlertAction actionWithTitle:@"Photos And Notes To Alternate Album" style:UIAlertActionStyleDefault handler:^(UIAlertAction *sendToAlternateAlbum) {
         NSString * storyboardName = @"Main";
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
         UINavigationController *vc = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"AListPickerViewController"];
@@ -444,7 +437,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 #pragma mark - image picker delegate
 
-#pragma ALERT return here to complete image capture with in app camera.
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
@@ -526,7 +518,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
     
     dispatch_group_t imageLoadGroup = dispatch_group_create();
-//    dispatch_group_t myTestDispatch = dispatch_queue_create(); //this line needs to be removed.
     for (int i = 0; i < photos.count; i++) {
         
         CJMImage *assetImage = [[CJMImage alloc] init];
@@ -564,7 +555,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                       }
                                   }];
         
-        assetImage.photoTitle = @"No Title Created     ";
+        assetImage.photoTitle = @"No Title Created ";
         assetImage.photoNote = @"No note created.  Press Edit to begin editing the title and note sections!";
         assetImage.selectCoverHidden = YES;
         [_album addCJMImage:assetImage];
