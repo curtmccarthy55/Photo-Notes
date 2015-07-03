@@ -96,6 +96,9 @@
     if (!self.albumToEdit) {
     
     NSString *name = self.nameField.text;
+    if ([self confirmNameNonDuplicate:name]) {
+        return;
+    };
     NSString *note = self.noteField.text;
     
     CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:name andNote:note];
@@ -104,6 +107,9 @@
     } else {
         if ([self.navigationItem.rightBarButtonItem.title isEqual:@"Done"]) {
             
+        if ([self confirmNameNonDuplicate:self.nameField.text]) {
+            return;
+        };
         self.albumToEdit.albumTitle = self.nameField.text;
         self.albumToEdit.albumNote = self.noteField.text;
         
@@ -117,6 +123,20 @@
             [self.noteField becomeFirstResponder];
             self.navigationItem.rightBarButtonItem.title = @"Done";
         }
+    }
+}
+
+- (BOOL)confirmNameNonDuplicate:(NSString *)name
+{
+    if ([[CJMAlbumManager sharedInstance] containsAlbumNamed:name] && ![self.albumToEdit.albumTitle isEqualToString:name]) {
+        UIAlertController *nameExistsAlert = [UIAlertController alertControllerWithTitle:@"Duplicate Album Name!" message:@"You have already created an album with this name." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {} ];
+        [nameExistsAlert addAction:dismissAction];
+        
+        [self presentViewController:nameExistsAlert animated:YES completion:nil];
+        return YES;
+    } else {
+        return NO;
     }
 }
 
