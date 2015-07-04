@@ -453,14 +453,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         scaleDown = cellSize.width / newPhoto.size.width;
     }
 
-    UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto withOrientation:newPhoto.imageOrientation];
+    UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto withOrientation:newPhoto.imageOrientation andShrinkToSize:[(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]];
     
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
     [fileSerializer writeObject:newPhoto toRelativePath:newImage.fileName];
     [fileSerializer writeObject:thumbnail toRelativePath:newImage.thumbnailFileName];
     newImage.photoTitle = @"No Title Created ";
-    newImage.photoNote = @"No note created.  Press Edit to begin editing the title and note sections!";
+    newImage.photoNote = @"Tap Edit to change the title and note!";
     newImage.selectCoverHidden = YES;
     [_album addCJMImage:newImage];
     
@@ -469,33 +469,39 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [[CJMAlbumManager sharedInstance] save];
 }
 
-- (UIImage *)getCenterMaxSquareImageByCroppingImage:(UIImage *)image withOrientation:(UIImageOrientation)imageOrientation
+#pragma mark - Thumbnail Creation Code
+
+//Holy Grail of of thumbnail creation.  Well... Holy Dixie Cup may be more appropriate.
+- (UIImage *)getCenterMaxSquareImageByCroppingImage:(UIImage *)image withOrientation:(UIImageOrientation)imageOrientation andShrinkToSize:(CGSize)newSize
 {
+    //Get crop bounds
     CGSize centerSquareSize;
-    double oriImgWid = CGImageGetWidth(image.CGImage);
-    double oriImgHgt = CGImageGetHeight(image.CGImage);
-    NSLog(@"oriImgWid==[%.1f], oriImgHgt==[%.1f]", oriImgWid, oriImgHgt);
-    if(oriImgHgt <= oriImgWid) {
-        centerSquareSize.width = oriImgHgt;
-        centerSquareSize.height = oriImgHgt;
-    }else {
-        centerSquareSize.width = oriImgWid;
-        centerSquareSize.height = oriImgWid;
+    double originalImageWidth = CGImageGetWidth(image.CGImage);
+    double originalImageHeight = CGImageGetHeight(image.CGImage);
+    if (originalImageHeight <= originalImageWidth) {
+        centerSquareSize.width = originalImageHeight;
+        centerSquareSize.height = originalImageHeight;
+    } else {
+        centerSquareSize.width = originalImageWidth;
+        centerSquareSize.height = originalImageWidth;
     }
+    //Determine crop origin
+    double x = (originalImageWidth - centerSquareSize.width) / 2.0;
+    double y = (originalImageHeight - centerSquareSize.height) / 2.0;
     
-    NSLog(@"squareWid==[%.1f], squareHgt==[%.1f]", centerSquareSize.width, centerSquareSize.height);
-    
-    double x = (oriImgWid - centerSquareSize.width) / 2.0;
-    double y = (oriImgHgt - centerSquareSize.height) / 2.0;
-    NSLog(@"x==[%.1f], x==[%.1f]", x, y);
-    
+    //Crop and create CGImageRef.  This is where an improvement likely lies.
     CGRect cropRect = CGRectMake(x, y, centerSquareSize.height, centerSquareSize.width);
     CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
-    
     UIImage *cropped = [UIImage imageWithCGImage:imageRef scale:0.0 orientation:imageOrientation];
-    CGImageRelease(imageRef);
     
-    return cropped;
+    //Scale the image down to the smaller file size and return
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [cropped drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    CGImageRelease(imageRef);
+    return newImage;
+
 }
 
 #pragma mark - CJMPhotoGrabber Delegate
@@ -538,9 +544,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                           assetImage.photoImage = result;
                                           [fileSerializer writeObject:result toRelativePath:assetImage.fileName];
                                           
-                                          //Test lines
-                                          UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:result withOrientation:result.imageOrientation];
-                                          [fileSerializer writeObject:thumbnail toRelativePath:assetImage.thumbnailFileName];
+                                          //Compression code
+                                          UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:result withOrientation:result.imageOrientation andShrinkToSize:[(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]];
+                                          [fileSerializer writeObject:thumbnail
+                                                       toRelativePath:assetImage.thumbnailFileName];
+                                          
                                           
                                           dispatch_group_leave(imageLoadGroup);
                                       }
@@ -562,7 +570,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 //                                  }];
         
         assetImage.photoTitle = @"No Title Created ";
-        assetImage.photoNote = @"No note created.  Press Edit to begin editing the title and note sections!";
+        assetImage.photoNote = @"Tap Edit to change the title and note!";
         assetImage.selectCoverHidden = YES;
         [_album addCJMImage:assetImage];
         }
