@@ -268,7 +268,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UQn-i9-gPd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3115" y="1017"/>
+            <point key="canvasLocation" x="3819" y="1017"/>
         </scene>
         <!--Full Image View Controller-->
         <scene sceneID="PdM-rG-10i">
@@ -305,7 +305,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlx-cQ-nGb">
                                 <rect key="frame" x="0.0" y="416" width="600" height="492"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="upp-GS-1zm">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Title" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="upp-GS-1zm">
                                         <rect key="frame" x="8" y="2" width="454" height="29"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="18"/>
@@ -428,7 +428,7 @@
         <!--Select Photos-->
         <scene sceneID="1wi-Ff-VJa">
             <objects>
-                <viewController storyboardIdentifier="PhotoGrabViewController" id="6po-Ut-l1R" customClass="CJMPhotoGrabViewController" sceneMemberID="viewController">
+                <viewController id="6po-Ut-l1R" customClass="CJMPhotoGrabViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="SFB-Hb-e8D"/>
                         <viewControllerLayoutGuide type="bottom" id="Mpg-aF-ZE2"/>
@@ -541,7 +541,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4d7-gt-o0N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1714" y="1017"/>
+            <point key="canvasLocation" x="2428" y="1017"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ndF-DM-kDb">
@@ -598,7 +598,25 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bhy-Q1-uDp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2428" y="1017"/>
+            <point key="canvasLocation" x="3115" y="1017"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Fa9-Uw-fSI">
+            <objects>
+                <navigationController storyboardIdentifier="PhotoGrabViewController" automaticallyAdjustsScrollViewInsets="NO" id="yea-hL-UUa" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="dVm-At-Hmg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="6po-Ut-l1R" kind="relationship" relationship="rootViewController" id="YbT-sb-TfV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eum-hx-FuB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1714" y="1017"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

@@ -32,7 +32,6 @@
     self.image = cjmImage;
     [[CJMServices sharedInstance] fetchThumbnailForImage:cjmImage handler:^(UIImage *thumbnail) {
         self.cellImage.image = thumbnail;
-        NSLog(@"thumbnail is %f by %f", thumbnail.size.width, thumbnail.size.height);
     }];
 }
 

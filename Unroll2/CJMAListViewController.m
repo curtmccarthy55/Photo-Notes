@@ -17,7 +17,6 @@
 
 @interface CJMAListViewController () 
 
-@property (nonatomic, weak) NSArray *albums;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
 
 @end

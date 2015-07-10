@@ -16,13 +16,14 @@
 #import "CJMPhotoCell.h"
 #import "CJMImage.h"
 #import "CJMHudView.h"
+#import "CJMFileSerializer.h"
 #import <dispatch/dispatch.h>
 
-#import "CJMFileSerializer.h"
+#define CellSize [(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]
 
 @import Photos;
 
-@interface CJMGalleryViewController () <CJMAListPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface CJMGalleryViewController () <CJMAListPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource>
 //UICollectionViewDelegateFlowLayout is a sub-protocol of UICollectionViewDelegate, so there's no need to list both.
 
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
@@ -45,11 +46,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.navigationController.toolbarHidden = NO;
     self.navigationItem.title = self.album.albumTitle;
 }
 
+//Make sure nav bars and associated controls are visible whenever the scene appears.
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -63,13 +64,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self.collectionView reloadData];
 }
 
+//Add photo count footer to gallery.
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"Footer" forIndexPath:indexPath];
     
     UILabel *footerLabel = (UILabel *)[footer viewWithTag:100];
     if (_album.albumPhotos.count > 1) {
-    footerLabel.text = [NSString stringWithFormat:@"%lu Photos", (unsigned long)_album.albumPhotos.count];
+        footerLabel.text = [NSString stringWithFormat:@"%lu Photos", (unsigned long)_album.albumPhotos.count];
     } else if (_album.albumPhotos.count == 1) {
         footerLabel.text = @"1 Photo";
     } else {
@@ -79,11 +81,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     return footer;
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
+//If any cells are selected when exiting the scene, set their cellSelectCover back to hidden.
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -103,6 +106,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     return [self.album.albumPhotos count];
 }
 
+//Add thumbnail to image and, if it's currently selected for editing, reveal it's cellSelectCover.
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMPhotoCell *cell = (CJMPhotoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
@@ -116,6 +120,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 #pragma mark - collectionView delegate
 
+//If in editing mode, mark cell as selected and reveal cellCover and enable delete/transfer buttons.
+//Otherwise, segue to full image.
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.editMode == NO) {
@@ -133,6 +139,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
 }
 
+//Hide cellSelectCover and, if this was the last selected cell, disable the delete/transfer buttons.
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMPhotoCell *deselectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
@@ -146,7 +153,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
 }
 
-
+//For all currently selected cells, switch their selected status to NO and hide cellSelectCovers.
 - (void)clearCellSelections
 {
     for (NSIndexPath *indexPath in [self.collectionView indexPathsForSelectedItems])
@@ -161,6 +168,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 #pragma mark - Navigation
 
+//Set up for segue to FullImageView.
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"ViewPhoto"]) {
@@ -172,12 +180,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
 }
 
+//Make navTitle = current album title.
 - (void)setAlbum:(CJMPhotoAlbum *)album
 {
     _album = album;
     self.navigationItem.title = album.albumTitle;
 }
 
+//Used to prevent FullImageView segue if currently in edit mode (multiple cells can be selected).
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
     if (self.editMode == YES) {
@@ -189,6 +199,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 #pragma mark - NavBar items
 
+//Switch to determine edit conditions.
 - (IBAction)toggleEditMode:(id)sender
 {
     if ([self.editButton.title isEqualToString:@"Select"]) {
@@ -206,6 +217,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
 }
 
+//Changing navBar buttons based on current edit status.
 - (void)toggleEditControls
 {
     if (self.editMode == YES) {
@@ -223,15 +235,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
 }
 
+//Updates for scene if no photos are in the album.
 - (void)confirmEditButtonEnabled
 {
     if (self.album.albumPhotos.count == 0) {
         self.editButton.enabled = NO;
         
         UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
-        
         UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil];
-        
         [noPhotosAlert addAction:dismissAction];
         
         [self presentViewController:noPhotosAlert animated:YES completion:nil];
@@ -240,14 +251,16 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
 }
 
+//Acquire photo library permission and provide paths to user camera and photo library for photo import.
 - (IBAction)photoGrab:(id)sender
 {
-    __weak CJMGalleryViewController *weakSelf = self;
+    //__weak CJMGalleryViewController *weakSelf = self;
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
-    //find a way to delay camera permission request to after user presses camera button
+    
+    //Access camera
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForCamera) {
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
             return;
@@ -255,12 +268,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
             UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
             mediaUI.sourceType = UIImagePickerControllerSourceTypeCamera;
             mediaUI.allowsEditing = NO;
-            mediaUI.delegate = weakSelf;
+            mediaUI.delegate = self;
             
-            [weakSelf presentViewController:mediaUI animated:YES completion:nil];
+            [self presentViewController:mediaUI animated:YES completion:nil];
         }
     }];
     
+    //Access photo library
     UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:@"Choose From Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForLibrary) {
         
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
@@ -271,13 +285,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                 
                 [adjustPrivacyController addAction:dismiss];
                 
-                [weakSelf presentViewController:adjustPrivacyController animated:YES completion:nil];
+                [self presentViewController:adjustPrivacyController animated:YES completion:nil];
             } else {
-                [weakSelf presentPhotoGrabViewController];
+                [self presentPhotoGrabViewController];
             }
         }];
     }];
     
+    //Adds a cancel button
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"
                                                      style:UIAlertActionStyleCancel
                                                    handler:^(UIAlertAction *actionCancel) {}];
@@ -289,15 +304,18 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+//Method to present users photo library
 - (void)presentPhotoGrabViewController
 {
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
-    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
+    UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
+    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
     vc.delegate = self;
-    [self presentViewController:vc animated:YES completion:nil];
+    [self presentViewController:navigationVC animated:YES completion:nil];
 }
 
+//Mass delete options
 - (IBAction)deleteSelcted:(id)sender
 {
     self.selectedCells = [NSArray arrayWithArray:[self.collectionView indexPathsForSelectedItems]];
@@ -378,6 +396,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+//Mass transfer options
 - (IBAction)exportSelected:(id)sender
 {
     self.selectedCells = [NSArray arrayWithArray:[self.collectionView indexPathsForSelectedItems]];
@@ -415,7 +434,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     //Copy the selected photos to another album within Photo Notes.
     UIAlertAction *alternateAlbumExport = [UIAlertAction actionWithTitle:@"Photos And Notes To Alternate Album" style:UIAlertActionStyleDefault handler:^(UIAlertAction *sendToAlternateAlbum) {
-        NSString * storyboardName = @"Main";
+        NSString *storyboardName = @"Main";
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
         UINavigationController *vc = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"AListPickerViewController"];
         CJMAListPickerViewController *aListPickerVC = (CJMAListPickerViewController *)[vc topViewController];
@@ -437,23 +456,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 #pragma mark - image picker delegate
 
+//Converting photo captured by in-app camera to CJMImage.
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
     CJMImage *newImage = [[CJMImage alloc] init];
     newImage.photoCreationDate = [NSDate date];
-    
-    CGSize cellSize = [(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize];
-    
-    CGFloat scaleDown;
-    
-    if (newPhoto.size.width > newPhoto.size.height) {
-        scaleDown = cellSize.height / newPhoto.size.height;
-    } else {
-        scaleDown = cellSize.width / newPhoto.size.width;
-    }
 
-    UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto withOrientation:newPhoto.imageOrientation andShrinkToSize:[(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]];
+    UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:CellSize];
     
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
@@ -472,7 +482,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 #pragma mark - Thumbnail Creation Code
 
 //Holy Grail of of thumbnail creation.  Well... Holy Dixie Cup may be more appropriate.
-- (UIImage *)getCenterMaxSquareImageByCroppingImage:(UIImage *)image withOrientation:(UIImageOrientation)imageOrientation andShrinkToSize:(CGSize)newSize
+//Takes full UIImage and compresses to thumbnail with size ~100KB.
+- (UIImage *)getCenterMaxSquareImageByCroppingImage:(UIImage *)image andShrinkToSize:(CGSize)newSize
 {
     //Get crop bounds
     CGSize centerSquareSize;
@@ -492,7 +503,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     //Crop and create CGImageRef.  This is where an improvement likely lies.
     CGRect cropRect = CGRectMake(x, y, centerSquareSize.height, centerSquareSize.width);
     CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
-    UIImage *cropped = [UIImage imageWithCGImage:imageRef scale:0.0 orientation:imageOrientation];
+    UIImage *cropped = [UIImage imageWithCGImage:imageRef scale:0.0 orientation:image.imageOrientation];
     
     //Scale the image down to the smaller file size and return
     UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
@@ -511,11 +522,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+//iterate through array of selected photos, convert them to CJMImages, and add to the current album.  (uses PhotoKit)
 - (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos
 {
     NSLog(@"%lu photos received by the gallery", (unsigned long)photos.count);
     
-
     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
@@ -545,7 +556,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                           [fileSerializer writeObject:result toRelativePath:assetImage.fileName];
                                           
                                           //Compression code
-                                          UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:result withOrientation:result.imageOrientation andShrinkToSize:[(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]];
+                                          UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:result
+                                                                     andShrinkToSize:CellSize];
                                           [fileSerializer writeObject:thumbnail
                                                        toRelativePath:assetImage.thumbnailFileName];
                                           
@@ -554,26 +566,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                       }
                                   }];
         
-//        dispatch_group_enter(imageLoadGroup);
-//        [self.imageManager requestImageForAsset:asset
-//                                     targetSize:[(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]
-//                                    contentMode:PHImageContentModeAspectFill
-//                                        options:nil
-//                                  resultHandler:^(UIImage *result, NSDictionary *info) {
-//                                      
-//                                      if(![info[PHImageResultIsDegradedKey] boolValue])
-//                                      {
-//                                          NSLog(@"image thumbnail size is %f by %f", result.size.width, result.size.height);
-//                                          [fileSerializer writeObject:result toRelativePath:assetImage.thumbnailFileName];
-//                                          dispatch_group_leave(imageLoadGroup);
-//                                      }
-//                                  }];
-        
         assetImage.photoTitle = @"No Title Created ";
         assetImage.photoNote = @"Tap Edit to change the title and note!";
         assetImage.selectCoverHidden = YES;
         [_album addCJMImage:assetImage];
-        }
+//        asset = nil;
+//        assetImage = nil;
+    }
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -586,6 +585,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 #pragma mark - CJMAListPicker Delegate
 
+//Dismiss list of albums to transfer photos to and deselect previously selected photos.
 - (void)aListPickerViewControllerDidCancel:(CJMAListPickerViewController *)controller
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -593,9 +593,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self toggleEditMode:self];
 }
 
+//take CJMImages in selected cells in current album (self.album) and transfer them to the picked album.
 - (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album
 {
-    //take CJMImages in selected cells in current album (self.album) and copy them to the picked album.
     for (NSIndexPath *itemPath in _selectedCells) {
         CJMImage *imageToTransfer = [_album.albumPhotos objectAtIndex:itemPath.row];
         imageToTransfer.selectCoverHidden = YES;
@@ -618,34 +618,27 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
     
     [[CJMAlbumManager sharedInstance] save];
-    
     [self.collectionView deleteItemsAtIndexPaths:_selectedCells];
-    
     [self toggleEditMode:self];
-    
     [self.collectionView reloadData];
-    
     [self dismissViewControllerAnimated:YES completion:nil];
-    
     [self confirmEditButtonEnabled];
     
+    //Presents and dismisses HUD confirming action complete.
     CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
                                        withType:@"Success"
                                        animated:YES];
-    
     hudView.text = @"Done!";
-    
     [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
     [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.2];
     self.navigationController.view.userInteractionEnabled = YES;
-
 }
 
 #pragma mark - collectionViewFlowLayout Delegate
 
+//Establishes cell size based on device screen size.  4 cells across in portrait, 5 cells across in landscape.
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
         CGFloat viewWidth = lroundf(collectionView.frame.size.width);
         int cellWidth = (viewWidth/5) - 2;
@@ -654,7 +647,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         CGFloat viewWidth = lroundf(collectionView.frame.size.width);
         int cellWidth = (viewWidth/4) - 2;
         return CGSizeMake(cellWidth, cellWidth);
-        
     }
 }
 

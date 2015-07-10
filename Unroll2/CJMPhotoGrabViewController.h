@@ -23,6 +23,5 @@
 @interface CJMPhotoGrabViewController : UIViewController
 
 @property (nonatomic, weak) id <CJMPhotoGrabViewControllerDelegate> delegate;
-@property (nonatomic, copy) NSMutableArray *pickedPhotos;
 
 @end

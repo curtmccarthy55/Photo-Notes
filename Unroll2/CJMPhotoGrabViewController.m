@@ -12,7 +12,7 @@
 
 @import Photos;
 
-@interface CJMPhotoGrabViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate>
+@interface CJMPhotoGrabViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) PHFetchResult *fetchResult;
@@ -28,12 +28,13 @@ static NSString * const reuseIdentifier = @"GrabCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _collectionView.allowsMultipleSelection = YES;
+    self.collectionView.allowsMultipleSelection = YES;
     self.imageManager = [[PHCachingImageManager alloc] init];
-    _fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:nil];
+    self.fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:nil];
     
 }
 
+//Scroll to most recent photos in library (bottom of collectionView)
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -46,32 +47,31 @@ static NSString * const reuseIdentifier = @"GrabCell";
 
 
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-
 
 #pragma mark - collection view data source
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     NSInteger count = [self.fetchResult count];
-    
-    NSLog(@"%ld Photos", (long)count);
-    
     return count;
 }
+
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMGrabCell *cell = (CJMGrabCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-    if ([collectionView.indexPathsForSelectedItems containsObject:indexPath]) {
-        [collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-        cell.cellSelectCover.hidden = NO;
-    } else {
-        cell.cellSelectCover.hidden = YES;
+    cell.cellSelectCover.hidden = YES;
+    
+    if (collectionView.indexPathsForSelectedItems.count > 0) {
+        if ([collectionView.indexPathsForSelectedItems containsObject:indexPath]) {
+            [collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            cell.cellSelectCover.hidden = NO;
+        }
     }
     
     // Increment the cell's tag
@@ -116,34 +116,25 @@ static NSString * const reuseIdentifier = @"GrabCell";
 
 - (IBAction)cancelPressed:(id)sender
 {
-    self.pickedPhotos = nil;
-    
     [self.delegate photoGrabViewControllerDidCancel:self];
 }
 
 - (IBAction)donePressed:(id)sender
 {
-    CJMHudView *hudView = [CJMHudView hudInView:self.view
-                                       withType:@"Pending"
-                                       animated:YES];
-    
+    CJMHudView *hudView = [CJMHudView hudInView:self.view withType:@"Pending" animated:YES];
     hudView.text = @"Importing";
     
     NSArray *selectedItems = [[NSArray alloc] initWithArray:[self.collectionView indexPathsForSelectedItems]];
     
-    _pickedPhotos = [[NSMutableArray alloc] init];
+    NSMutableArray *pickedPhotos = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < selectedItems.count; i++) {
         NSIndexPath *indexPath = [selectedItems objectAtIndex:i];
         PHAsset *asset = _fetchResult[indexPath.item];
-        
-        [_pickedPhotos addObject:asset];
+        [pickedPhotos addObject:asset];
     }
-    [self.delegate photoGrabViewController:self didFinishSelectingPhotos:[_pickedPhotos copy]];
+    [self.delegate photoGrabViewController:self didFinishSelectingPhotos:[pickedPhotos copy]];
 }
-
-
-
 
 #pragma mark UICollectionViewFlowLayoutDelegate
 
@@ -170,7 +161,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration //resizes collectionView cells per sizeForItemAtIndexPath when user rotates device.
 {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    //[self.collectionView.collectionViewLayout invalidateLayout];
+    [self.collectionView.collectionViewLayout invalidateLayout];
     
 }
 

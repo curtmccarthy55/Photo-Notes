@@ -13,7 +13,7 @@
 
 @interface CJMGalleryViewController : UICollectionViewController <CJMPhotoGrabViewControllerDelegate>
 
-@property (nonatomic, strong) CJMPhotoAlbum *album;
+@property (nonatomic, weak) CJMPhotoAlbum *album;  //changed from strong to weak
 
 
 @end
