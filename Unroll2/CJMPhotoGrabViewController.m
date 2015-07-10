@@ -34,6 +34,20 @@ static NSString * const reuseIdentifier = @"GrabCell";
     
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(cancelPressed)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                              style:UIBarButtonItemStyleDone
+                                                                             target:self
+                                                                             action:@selector(donePressed)];
+}
+
 //Scroll to most recent photos in library (bottom of collectionView)
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -114,12 +128,12 @@ static NSString * const reuseIdentifier = @"GrabCell";
 
 #pragma mark - Actions
 
-- (IBAction)cancelPressed:(id)sender
+- (void)cancelPressed
 {
     [self.delegate photoGrabViewControllerDidCancel:self];
 }
 
-- (IBAction)donePressed:(id)sender
+- (void)donePressed
 {
     CJMHudView *hudView = [CJMHudView hudInView:self.view withType:@"Pending" animated:YES];
     hudView.text = @"Importing";

@@ -311,6 +311,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
     CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
+    vc.title = @"Select Photos";
     vc.delegate = self;
     [self presentViewController:navigationVC animated:YES completion:nil];
 }
@@ -439,6 +440,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         UINavigationController *vc = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"AListPickerViewController"];
         CJMAListPickerViewController *aListPickerVC = (CJMAListPickerViewController *)[vc topViewController];
         aListPickerVC.delegate = self;
+        aListPickerVC.title = @"Select Destination";
         [self presentViewController:vc animated:YES completion:nil];
 
     }];

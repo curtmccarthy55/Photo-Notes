@@ -425,7 +425,7 @@
             </objects>
             <point key="canvasLocation" x="3115" y="340"/>
         </scene>
-        <!--Select Photos-->
+        <!--Photo Grab View Controller-->
         <scene sceneID="1wi-Ff-VJa">
             <objects>
                 <viewController id="6po-Ut-l1R" customClass="CJMPhotoGrabViewController" sceneMemberID="viewController">
@@ -437,25 +437,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9b5-cm-Tt8">
-                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
-                                <items>
-                                    <navigationItem title="Select Photos" id="pRP-QJ-lTy">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="VhG-u1-Sx9">
-                                            <connections>
-                                                <action selector="cancelPressed:" destination="6po-Ut-l1R" id="aRe-AP-thV"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="bEH-h1-5Cb">
-                                            <connections>
-                                                <action selector="donePressed:" destination="6po-Ut-l1R" id="IpR-ah-KIp"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="36u-2c-g1I">
-                                <rect key="frame" x="0.0" y="63" width="600" height="537"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="9dK-LP-zyX">
                                     <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -475,7 +458,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Zve-Hz-QM0">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Zve-Hz-QM0">
                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                 </imageView>
                                                 <view hidden="YES" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="MXn-Gj-aj7">
@@ -513,28 +496,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="height" secondItem="36u-2c-g1I" secondAttribute="height" constant="63" id="1Zu-HJ-2JV"/>
+                            <constraint firstAttribute="height" secondItem="36u-2c-g1I" secondAttribute="height" id="1Zu-HJ-2JV"/>
                             <constraint firstItem="36u-2c-g1I" firstAttribute="bottom" secondItem="Mpg-aF-ZE2" secondAttribute="top" id="B6F-lu-vY2"/>
-                            <constraint firstItem="9b5-cm-Tt8" firstAttribute="trailing" secondItem="36u-2c-g1I" secondAttribute="trailing" id="DmC-tr-ELK"/>
-                            <constraint firstItem="36u-2c-g1I" firstAttribute="top" secondItem="9b5-cm-Tt8" secondAttribute="bottom" constant="-1" id="UMc-4n-tmX"/>
                             <constraint firstAttribute="width" secondItem="36u-2c-g1I" secondAttribute="width" id="Uvg-Zc-Uy8"/>
-                            <constraint firstItem="9b5-cm-Tt8" firstAttribute="top" secondItem="SFB-Hb-e8D" secondAttribute="bottom" id="eTd-h7-Pqb"/>
                             <constraint firstItem="36u-2c-g1I" firstAttribute="leading" secondItem="OBw-hS-hva" secondAttribute="leading" id="rpc-1q-UGU"/>
-                            <constraint firstItem="9b5-cm-Tt8" firstAttribute="leading" secondItem="36u-2c-g1I" secondAttribute="leading" id="sJX-hF-eCc"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Select Photos" id="hlx-XW-BAT">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="0kn-PZ-lzg">
-                            <connections>
-                                <action selector="cancelPressed:" destination="6po-Ut-l1R" id="r6A-PN-8zy"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="eyJ-Ob-lLr">
-                            <connections>
-                                <action selector="donePressed:" destination="6po-Ut-l1R" id="Eb4-MS-2aq"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="hlx-XW-BAT"/>
                     <connections>
                         <outlet property="collectionView" destination="36u-2c-g1I" id="akP-gf-8wo"/>
                     </connections>
