@@ -124,8 +124,6 @@ static NSString * const reuseIdentifier = @"GrabCell";
     selectedCell.cellSelectCover.hidden = YES;
 }
 
-
-
 #pragma mark - Actions
 
 - (void)cancelPressed
@@ -154,7 +152,6 @@ static NSString * const reuseIdentifier = @"GrabCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
         CGFloat viewWidth = lroundf(collectionView.frame.size.width);
         int cellWidth = (viewWidth/5) - 2;
@@ -163,7 +160,6 @@ static NSString * const reuseIdentifier = @"GrabCell";
         CGFloat viewWidth = lroundf(collectionView.frame.size.width);
         int cellWidth = (viewWidth/4) - 2;
         return CGSizeMake(cellWidth, cellWidth);
-        
     }
 }
 

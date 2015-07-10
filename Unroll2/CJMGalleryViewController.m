@@ -572,8 +572,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         assetImage.photoNote = @"Tap Edit to change the title and note!";
         assetImage.selectCoverHidden = YES;
         [_album addCJMImage:assetImage];
-//        asset = nil;
-//        assetImage = nil;
     }
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
