@@ -12,7 +12,6 @@
 @interface CJMFIGalleryViewController : UIPageViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate, CJMFullImageViewControllerDelegate>
 
 @property (nonatomic) NSInteger initialIndex;
-//@property (nonatomic, strong) CJMPhotoAlbum *album;
 @property (nonatomic, strong) NSString *albumName;
 @property (nonatomic, strong) UIPageViewController *pageViewController;
 @property (nonatomic) NSInteger albumCount;

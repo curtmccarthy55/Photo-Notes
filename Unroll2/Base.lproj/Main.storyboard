@@ -2,6 +2,8 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="XRF-wX-XIn">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -293,9 +295,9 @@
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="21o-UG-qC7" firstAttribute="leading" secondItem="657-po-rB3" secondAttribute="leading" constant="250" id="2aF-os-TrH"/>
-                                    <constraint firstAttribute="trailing" secondItem="21o-UG-qC7" secondAttribute="trailing" constant="-1" id="7Ba-sJ-cgT"/>
+                                    <constraint firstAttribute="trailing" secondItem="21o-UG-qC7" secondAttribute="trailing" constant="250" id="7Ba-sJ-cgT"/>
                                     <constraint firstItem="21o-UG-qC7" firstAttribute="top" secondItem="657-po-rB3" secondAttribute="top" constant="250" id="N7P-wH-oks"/>
-                                    <constraint firstAttribute="bottom" secondItem="21o-UG-qC7" secondAttribute="bottom" constant="-1" id="OoQ-hw-nfe"/>
+                                    <constraint firstAttribute="bottom" secondItem="21o-UG-qC7" secondAttribute="bottom" constant="142" id="OoQ-hw-nfe"/>
                                 </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="PKx-nw-LUR" appends="YES" id="kGo-Sf-0af"/>
@@ -306,19 +308,16 @@
                                 <rect key="frame" x="0.0" y="416" width="600" height="492"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Title" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="upp-GS-1zm">
-                                        <rect key="frame" x="8" y="2" width="454" height="29"/>
+                                        <rect key="frame" x="8" y="2" width="454" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="SZX-Pl-8R1"/>
+                                        </constraints>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="18"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pWS-x4-vhI">
-                                        <rect key="frame" x="8" y="33" width="584" height="15"/>
-                                        <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="12"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CjO-W7-o96">
-                                        <rect key="frame" x="470" y="3" width="50" height="30"/>
+                                        <rect key="frame" x="470" y="3" width="50" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="NYp-ex-wAn"/>
                                         </constraints>
@@ -332,7 +331,7 @@
                                         </connections>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
-                                        <rect key="frame" x="8" y="53" width="584" height="431"/>
+                                        <rect key="frame" x="8" y="58" width="584" height="431"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="18"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -341,9 +340,9 @@
                                         </connections>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdb-G9-he9">
-                                        <rect key="frame" x="528" y="3" width="64" height="30"/>
+                                        <rect key="frame" x="528" y="3" width="64" height="44"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="64" id="dJJ-BW-1JK"/>
+                                            <constraint firstAttribute="width" constant="64" id="3tX-x4-1ay"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="See Note">
@@ -354,25 +353,33 @@
                                             <action selector="shiftNote:" destination="9ae-Ea-iTf" eventType="touchUpInside" id="Vm7-DY-YIk"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pWS-x4-vhI">
+                                        <rect key="frame" x="8" y="42" width="584" height="15"/>
+                                        <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="12"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.66000000000000003" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="upp-GS-1zm" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" constant="2" id="2W3-3H-u7U"/>
-                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="pWS-x4-vhI" secondAttribute="bottom" constant="5" id="6FN-Ha-NcP"/>
-                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="bottom" secondItem="rlx-cQ-nGb" secondAttribute="bottomMargin" id="FUe-Lg-77e" userLabel="noteEntryBottomConstraint"/>
+                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="pWS-x4-vhI" secondAttribute="bottom" constant="1" id="6FN-Ha-NcP"/>
+                                    <constraint firstItem="Wdb-G9-he9" firstAttribute="trailing" secondItem="c5T-Ao-Wwn" secondAttribute="trailing" id="9xC-8Y-k9Z"/>
+                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="bottom" secondItem="rlx-cQ-nGb" secondAttribute="bottomMargin" constant="5" id="FUe-Lg-77e" userLabel="noteEntryBottomConstraint"/>
+                                    <constraint firstItem="Wdb-G9-he9" firstAttribute="firstBaseline" secondItem="CjO-W7-o96" secondAttribute="baseline" id="G8h-pc-Kyo"/>
                                     <constraint firstAttribute="height" constant="492" id="JG2-5r-Vk9" userLabel="noteSectionHeight"/>
-                                    <constraint firstAttribute="trailing" secondItem="Wdb-G9-he9" secondAttribute="trailing" constant="8" id="Jkf-s6-woI"/>
-                                    <constraint firstItem="pWS-x4-vhI" firstAttribute="top" secondItem="upp-GS-1zm" secondAttribute="bottom" constant="2" id="MSR-NJ-xSD"/>
+                                    <constraint firstItem="Wdb-G9-he9" firstAttribute="trailing" secondItem="pWS-x4-vhI" secondAttribute="trailing" id="Jn7-Bd-l8e"/>
+                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="upp-GS-1zm" secondAttribute="bottom" constant="12" id="Kci-yy-wfH"/>
                                     <constraint firstItem="pWS-x4-vhI" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="8" id="MeW-Zp-5Y2"/>
-                                    <constraint firstItem="CjO-W7-o96" firstAttribute="leading" secondItem="upp-GS-1zm" secondAttribute="trailing" constant="8" id="ROf-sS-0un"/>
-                                    <constraint firstItem="Wdb-G9-he9" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" constant="3" id="RZ6-ip-Bqk"/>
-                                    <constraint firstItem="Wdb-G9-he9" firstAttribute="leading" secondItem="CjO-W7-o96" secondAttribute="trailing" constant="8" id="SvX-zi-Pvh"/>
+                                    <constraint firstItem="Wdb-G9-he9" firstAttribute="baseline" secondItem="CjO-W7-o96" secondAttribute="firstBaseline" id="N29-yD-Eqq"/>
+                                    <constraint firstItem="upp-GS-1zm" firstAttribute="leading" secondItem="c5T-Ao-Wwn" secondAttribute="leading" id="PtI-FN-HiL"/>
                                     <constraint firstItem="CjO-W7-o96" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" constant="3" id="TLB-Ur-6Av"/>
                                     <constraint firstAttribute="trailing" secondItem="pWS-x4-vhI" secondAttribute="trailing" constant="8" id="ZVf-rQ-67K"/>
-                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="leading" secondItem="upp-GS-1zm" secondAttribute="leading" id="ne2-rW-QBK"/>
-                                    <constraint firstItem="upp-GS-1zm" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="8" id="ne6-Qb-LeV"/>
-                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="trailing" secondItem="Wdb-G9-he9" secondAttribute="trailing" id="nfZ-f8-rRl"/>
-                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="CjO-W7-o96" secondAttribute="bottom" constant="20" id="nto-ga-TYy"/>
+                                    <constraint firstItem="upp-GS-1zm" firstAttribute="leading" secondItem="pWS-x4-vhI" secondAttribute="leading" id="cJF-kB-lQ1"/>
+                                    <constraint firstItem="CjO-W7-o96" firstAttribute="leading" secondItem="upp-GS-1zm" secondAttribute="trailing" constant="8" symbolic="YES" id="idl-sT-KKx"/>
+                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="CjO-W7-o96" secondAttribute="bottom" constant="11" id="nto-ga-TYy"/>
+                                    <constraint firstItem="upp-GS-1zm" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" constant="2" id="qPZ-Op-yYT"/>
+                                    <constraint firstItem="Wdb-G9-he9" firstAttribute="top" secondItem="CjO-W7-o96" secondAttribute="top" id="u60-SJ-rA0"/>
+                                    <constraint firstItem="Wdb-G9-he9" firstAttribute="leading" secondItem="CjO-W7-o96" secondAttribute="trailing" constant="8" symbolic="YES" id="uFF-0s-Lki"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -446,7 +453,7 @@
                                     <inset key="sectionInset" minX="1" minY="1" maxX="1" maxY="1"/>
                                 </collectionViewFlowLayout>
                                 <view key="backgroundView" contentMode="scaleToFill" id="iFH-AQ-hrz">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="537"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>

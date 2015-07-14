@@ -142,6 +142,7 @@
 
 #pragma mark - View adjustments
 
+//Sets the note section height equal to the space between the toolbar and navbar
 - (void)fullSizeForNoteSection
 {
     self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
@@ -235,17 +236,18 @@
 
 #pragma mark - Buttons and taps
 
+//first button press: Slide the note section up so it touches the bottom of the navbar
+//second button press: Slide the note section back down to just above the toolbar
 - (IBAction)shiftNote:(id)sender
 {
     [self fullSizeForNoteSection];
-    NSLog(@"noteSectionHeight is %f", self.noteSectionHeight.constant);
     
     CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
-    //CGFloat bottomBarHeight = self.navigationController.toolbar.frame.size.height;
     
     CGFloat shiftConstant = -(self.view.bounds.size.height - topBarsHeight);
     
     if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
+//lengthens the constraint between the noteSection top and toolbar top; responsible for view shift.
         self.noteShiftConstraint.constant = shiftConstant;
         [self.noteSection setNeedsUpdateConstraints];
         self.noteTitle.text = self.cjmImage.photoTitle;
@@ -286,9 +288,10 @@
     }];
 }
 
+//Places the note section 32 points above the toolbar.
 - (void)handleNoteSectionAlignment
 {
-    self.noteShiftConstraint.constant = -(32.0 + self.navigationController.toolbar.frame.size.height);
+    self.noteShiftConstraint.constant = -(44.0 + self.navigationController.toolbar.frame.size.height);
     [self.noteSection setNeedsUpdateConstraints];
 }
 
