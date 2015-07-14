@@ -20,12 +20,12 @@
 
 @implementation CJMPhotoCell
 
-#pragma ALERT Check to see if this method is even necessary.  I don't believe it's called anywhere.
-- (void)setThumbnailImage:(UIImage *)thumbnailImage
-{
-    _thumbnailImage = thumbnailImage;
-    self.cellImage.image = thumbnailImage;
-}
+//#pragma ALERT Check to see if this method is even necessary.  I don't believe it's called anywhere.
+//- (void)setThumbnailImage:(UIImage *)thumbnailImage
+//{
+//    _thumbnailImage = thumbnailImage;
+//    self.cellImage.image = thumbnailImage;
+//}
 
 - (void)updateWithImage:(CJMImage *)cjmImage
 {

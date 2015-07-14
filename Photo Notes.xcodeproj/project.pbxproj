@@ -30,6 +30,7 @@
 		84C2B9501ADF4AA00034786C /* CJMServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B94F1ADF4AA00034786C /* CJMServices.m */; };
 		84C2B9951AE42E040034786C /* CJMPhotoGrabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */; };
 		84C2B9981AE441CE0034786C /* CJMPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9971AE441CE0034786C /* CJMPhotoCell.m */; };
+		84DC68F61B52B085000A2480 /* CJMCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DC68F51B52B085000A2480 /* CJMCache.m */; };
 		84F1FDAD1AEAF57A0092D424 /* CJMFullImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1FDAC1AEAF57A0092D424 /* CJMFullImageViewController.m */; };
 		84F1FDAF1AEBF8510092D424 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F1FDAE1AEBF8510092D424 /* CoreLocation.framework */; };
 		84F1FDB21AEF21A60092D424 /* CJMGrabCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1FDB11AEF21A60092D424 /* CJMGrabCell.m */; };
@@ -88,6 +89,8 @@
 		84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMPhotoGrabViewController.m; sourceTree = "<group>"; };
 		84C2B9961AE441CE0034786C /* CJMPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPhotoCell.h; sourceTree = "<group>"; };
 		84C2B9971AE441CE0034786C /* CJMPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMPhotoCell.m; sourceTree = "<group>"; };
+		84DC68F41B52B085000A2480 /* CJMCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMCache.h; sourceTree = "<group>"; };
+		84DC68F51B52B085000A2480 /* CJMCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMCache.m; sourceTree = "<group>"; };
 		84F1FDAB1AEAF57A0092D424 /* CJMFullImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMFullImageViewController.h; sourceTree = "<group>"; };
 		84F1FDAC1AEAF57A0092D424 /* CJMFullImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMFullImageViewController.m; sourceTree = "<group>"; };
 		84F1FDAE1AEBF8510092D424 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -182,6 +185,8 @@
 				84F1FDAC1AEAF57A0092D424 /* CJMFullImageViewController.m */,
 				84401F3D1B3092F100B4FB89 /* CJMHudView.h */,
 				84401F3E1B3092F100B4FB89 /* CJMHudView.m */,
+				84DC68F41B52B085000A2480 /* CJMCache.h */,
+				84DC68F51B52B085000A2480 /* CJMCache.m */,
 				845B92211AF94C9C00365239 /* Data Objects */,
 				845B92201AF94BC400365239 /* Cells */,
 				84A769541ADAE39F00DE6741 /* Supporting Files */,
@@ -340,6 +345,7 @@
 				845B90CF1AF42BC300365239 /* CJMFIGalleryViewController.m in Sources */,
 				84C2B9471ADC51280034786C /* CJMADetailViewController.m in Sources */,
 				84C2B9501ADF4AA00034786C /* CJMServices.m in Sources */,
+				84DC68F61B52B085000A2480 /* CJMCache.m in Sources */,
 				84C2B93E1ADB38880034786C /* CJMPhotoAlbum.m in Sources */,
 				84C2B9371ADB0A580034786C /* CJMAListTableViewCell.m in Sources */,
 				84A7695A1ADAE39F00DE6741 /* CJMAppDelegate.m in Sources */,

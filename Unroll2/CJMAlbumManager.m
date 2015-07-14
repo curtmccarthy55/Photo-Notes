@@ -29,6 +29,7 @@ static CJMAlbumManager *__sharedInstance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         __sharedInstance = [CJMAlbumManager new];
+        NSLog(@"cjmAlbumManager created");
     });
     
     return __sharedInstance;
@@ -39,8 +40,28 @@ static CJMAlbumManager *__sharedInstance;
     self = [super init];
     if (self) {
         _fileSerializer = [CJMFileSerializer new];
+        [self registerDefaults];
+        [self handleFirstTime];
+        NSLog(@"AlbumManager init called");
     }
     return self;
+}
+
+- (void)handleFirstTime
+{
+    BOOL firstTime = [[NSUserDefaults standardUserDefaults] boolForKey:@"FirstTime"];
+    
+    if (firstTime) {
+        CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"My Photo Notes" andNote:@"Press Edit to customize the name and note sections."];
+        
+        [self.allAlbumsEdit addObject:album];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FirstTime"];
+    }
+}
+
+- (void)registerDefaults
+{
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"FirstTime" : @YES }];
 }
 
 #pragma mark - Content

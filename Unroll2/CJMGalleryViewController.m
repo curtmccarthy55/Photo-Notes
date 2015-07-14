@@ -113,6 +113,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     CJMImage *imageForCell = self.album.albumPhotos[indexPath.row];
     
     [cell updateWithImage:imageForCell];
+    
     cell.cellSelectCover.hidden = imageForCell.selectCoverHidden;
     
     return cell;
@@ -538,7 +539,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     dispatch_group_t imageLoadGroup = dispatch_group_create();
     for (int i = 0; i < photos.count; i++) {
-        
+        @autoreleasepool {
         CJMImage *assetImage = [[CJMImage alloc] init];
         PHAsset *asset = (PHAsset *)photos[i];
         
@@ -572,6 +573,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         assetImage.photoNote = @"Tap Edit to change the title and note!";
         assetImage.selectCoverHidden = YES;
         [_album addCJMImage:assetImage];
+        }
     }
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];

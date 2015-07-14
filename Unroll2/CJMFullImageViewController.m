@@ -57,7 +57,6 @@
     
     [self prepareWithAlbumNamed:_albumName andIndex:_index];
     
-    
     [[CJMServices sharedInstance] fetchImage:_cjmImage handler:^(UIImage *fetchedImage) {
         self.fullImage = fetchedImage;
     }];
@@ -103,7 +102,6 @@
     }
     
     _initialZoomScale = self.scrollView.zoomScale;
-    NSLog(@"_initialZoomScale set to %f", _initialZoomScale);
     _focusIsOnImage = NO;
 
     [self handleNoteSectionAlignment];
@@ -140,8 +138,6 @@
     }
     
     [self updateZoom];
-    
-    NSLog(@"fullImageViewer disappearing");
 }
 
 #pragma mark - View adjustments

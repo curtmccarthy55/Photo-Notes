@@ -10,12 +10,13 @@
 #import "CJMPhotoAlbum.h"
 #import "CJMImage.h"
 #import "CJMFileSerializer.h"
+#import "CJMCache.h"
 
 static CJMServices *__sharedInstance;
 
 @interface CJMServices()
 
-@property (nonatomic) NSCache *cache;
+@property (nonatomic) CJMCache *cache;
 @property (nonatomic) CJMFileSerializer *fileSerializer;
 @end
 
@@ -38,7 +39,7 @@ static CJMServices *__sharedInstance;
     if(self)
     {
         //initialize anything neccessary
-        _cache = [[NSCache alloc] init];
+        _cache = [[CJMCache alloc] init];
         _fileSerializer = [[CJMFileSerializer alloc] init];
     }
     return self;
@@ -48,19 +49,17 @@ static CJMServices *__sharedInstance;
 
 - (void)fetchimageWithName:(NSString *)name handler:(CJMImageCompletionHandler)handler
 {
-    if([self.cache objectForKey:name])
+    if([self.cache objectForKey:name]) {
         handler([self.cache objectForKey:name]);
-    else
-    {
+    } else {
         UIImage *returnImage = [self.fileSerializer readObjectFromRelativePath:name];
         if(returnImage) {
             [self.cache setObject:returnImage forKey:name];
-        }
-        else {
-            returnImage = [UIImage imageNamed:@"No Image"];
-        }
-        if(handler)
-            handler(returnImage);
+    } else {
+        returnImage = [UIImage imageNamed:@"No Image"];
+    }
+    if(handler)
+        handler(returnImage);
     }
 }
 

@@ -59,14 +59,14 @@
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(CJMFullImageViewController *)currentImageVC
 {
     NSInteger previousIndex = currentImageVC.index - 1;
-    NSLog(@"Creating previous VC. makeViewsVisible == %@", [NSNumber numberWithBool:self.makeViewsVisible]);
+    NSLog(@"Creating previous VC.");
     return [self fullImageViewControllerForIndex:previousIndex];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(CJMFullImageViewController *)currentImageVC
 {
     NSInteger nextIndex = currentImageVC.index + 1;
-    NSLog(@"Creating next VC. makeViewsVisible == %@", [NSNumber numberWithBool:self.makeViewsVisible]);
+    NSLog(@"Creating next VC.");
     return [self fullImageViewControllerForIndex:nextIndex];
 }
 
@@ -80,6 +80,8 @@
     fullImageController.albumName = _albumName;
     fullImageController.delegate = self;
     [fullImageController setViewsVisible:_makeViewsVisible];
+        
+    NSLog(@"fullImageViewControllerForIndex called.");
         
     return fullImageController;
     }
