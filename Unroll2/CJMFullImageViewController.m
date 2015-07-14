@@ -81,6 +81,8 @@
     if ([self.noteTitle.text isEqual:@"No Title Created "]) {
         self.noteTitle.text = @"";
     }
+//Shifts title up to make it level with noteSection buttons.
+    self.noteTitle.layer.sublayerTransform = CATransform3DMakeTranslation(0, -3, 0);
     
     self.noteEntry.text = _cjmImage.photoNote;
     self.noteEntry.textColor = [UIColor whiteColor];
