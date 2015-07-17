@@ -46,6 +46,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
                                                                               style:UIBarButtonItemStyleDone
                                                                              target:self
                                                                              action:@selector(donePressed)];
+    self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 //Scroll to most recent photos in library (bottom of collectionView)
@@ -116,12 +117,18 @@ static NSString * const reuseIdentifier = @"GrabCell";
 {
     CJMGrabCell *selectedCell = (CJMGrabCell *)[collectionView cellForItemAtIndexPath:indexPath];
     selectedCell.cellSelectCover.hidden = NO;
+    if (!self.navigationItem.rightBarButtonItem.enabled) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMGrabCell *selectedCell = (CJMGrabCell *)[collectionView cellForItemAtIndexPath:indexPath];
     selectedCell.cellSelectCover.hidden = YES;
+    if ([self.collectionView indexPathsForSelectedItems].count == 0) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
 }
 
 #pragma mark - Actions

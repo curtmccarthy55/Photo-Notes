@@ -33,6 +33,7 @@
     [[CJMServices sharedInstance] fetchThumbnailForImage:cjmImage handler:^(UIImage *thumbnail) {
         self.cellImage.image = thumbnail;
     }];
+
 }
 
 

@@ -7,13 +7,16 @@
 //
 
 
-#import <Foundation/Foundation.h>
+@import UIKit;
 
 @interface CJMFileSerializer : NSObject
 
 - (BOOL)writeObject:(id)data toRelativePath:(NSString *)path;
-- (void)deleteImageWithFileName:(NSString *)fileName;
-
 - (id)readObjectFromRelativePath:(NSString *)path;
+
+- (BOOL)writeImage:(UIImage *)image toRelativePath:(NSString *)path;
+- (UIImage *)readImageFromRelativePath:(NSString *)path;
+
+- (void)deleteImageWithFileName:(NSString *)fileName;
 
 @end

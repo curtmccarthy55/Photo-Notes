@@ -97,9 +97,11 @@ static CJMAlbumManager *__sharedInstance;
 {
     CJMPhotoAlbum *doomedAlbum = [self.allAlbumsEdit objectAtIndex:index];
     
-    for (CJMImage *cjmImage in doomedAlbum.albumPhotos) {
-    [[CJMServices sharedInstance] deleteImage:cjmImage];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (CJMImage *cjmImage in doomedAlbum.albumPhotos) {
+        [[CJMServices sharedInstance] deleteImage:cjmImage];
+        }
+    });
     
     [self.allAlbumsEdit removeObjectAtIndex:index];
 }

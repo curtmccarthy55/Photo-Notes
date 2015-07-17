@@ -12,12 +12,16 @@
 #import "CJMFileSerializer.h"
 #import "CJMCache.h"
 
+#import "mach/mach.h"
+
 static CJMServices *__sharedInstance;
 
 @interface CJMServices()
 
 @property (nonatomic) CJMCache *cache;
 @property (nonatomic) CJMFileSerializer *fileSerializer;
+@property (nonatomic) NSTimer *debug_memoryReportingTimer;
+
 @end
 
 @implementation CJMServices
@@ -38,7 +42,6 @@ static CJMServices *__sharedInstance;
     self = [super init];
     if(self)
     {
-        //initialize anything neccessary
         _cache = [[CJMCache alloc] init];
         _fileSerializer = [[CJMFileSerializer alloc] init];
     }
@@ -47,19 +50,26 @@ static CJMServices *__sharedInstance;
 
 # pragma mark - Internal
 
-- (void)fetchimageWithName:(NSString *)name handler:(CJMImageCompletionHandler)handler
+- (void)fetchimageWithName:(NSString *)name asData:(BOOL)asData handler:(CJMImageCompletionHandler)handler
 {
-    if([self.cache objectForKey:name]) {
+    if([self.cache objectForKey:name])
         handler([self.cache objectForKey:name]);
-    } else {
-        UIImage *returnImage = [self.fileSerializer readObjectFromRelativePath:name];
+    else
+    {
+        UIImage *returnImage = nil;
+        if(asData) {
+            returnImage = [self.fileSerializer readImageFromRelativePath:name];
+        } else {
+            returnImage = [self.fileSerializer readObjectFromRelativePath:name];
+        }
+        
         if(returnImage) {
             [self.cache setObject:returnImage forKey:name];
-    } else {
-        returnImage = [UIImage imageNamed:@"No Image"];
-    }
-    if(handler)
-        handler(returnImage);
+        } else {
+            returnImage = [UIImage imageNamed:@"No Image"];
+        }
+        if(handler)
+            handler(returnImage);
     }
 }
 
@@ -88,12 +98,12 @@ static CJMServices *__sharedInstance;
 
 - (void)fetchImage:(CJMImage *)image handler:(CJMImageCompletionHandler)handler
 {
-    return [self fetchimageWithName:image.fileName handler:handler];
+    return [self fetchimageWithName:image.fileName asData:YES handler:handler];
 }
 
 - (void)fetchThumbnailForImage:(CJMImage *)image handler:(CJMImageCompletionHandler)handler
 {
-    return [self fetchimageWithName:image.thumbnailFileName handler:handler];
+    return [self fetchimageWithName:image.thumbnailFileName asData:NO handler:handler];
 }
 
 - (BOOL)saveApplicationData
@@ -101,5 +111,78 @@ static CJMServices *__sharedInstance;
     BOOL savedAlbums = [[CJMAlbumManager sharedInstance] save];
     return savedAlbums; 
 }
+
+@end
+
+@implementation CJMServices (Debugging)
+
+- (void)beginReportingMemoryToConsoleWithInterval:(NSTimeInterval)interval
+{
+    if(self.debug_memoryReportingTimer)
+        [self endReportingMemoryToConsole];
+        
+    [self memoryReportingTic];//call the first time
+    
+    self.debug_memoryReportingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(memoryReportingTic) userInfo:nil repeats:YES];
+}
+
+- (void)endReportingMemoryToConsole
+{
+    [self.debug_memoryReportingTimer invalidate];
+    self.debug_memoryReportingTimer = nil;
+}
+
+# pragma mark - Memory
+
+- (void)memoryReportingTic
+{
+    [self reportMemoryToConsoleWithReferrer:@"Memory Report Loop"];
+}
+
+#ifdef DEBUG
+- (void)reportMemoryToConsoleWithReferrer:(NSString *)referrer
+{
+    struct task_basic_info kerBasicInfo;
+    mach_msg_type_number_t kerBasicSize = sizeof(kerBasicInfo);
+    kern_return_t kerBasic = task_info(mach_task_self(),
+                                       TASK_BASIC_INFO,
+                                       (task_info_t)&kerBasicInfo,
+                                       &kerBasicSize);
+    
+    struct task_kernelmemory_info kerMemInfo;
+    mach_msg_type_number_t kerMemSize = sizeof(kerMemInfo);
+    kern_return_t kerMem = task_info(mach_task_self(),
+                                     TASK_KERNELMEMORY_INFO,
+                                     (task_info_t)&kerMemInfo,
+                                     &kerMemSize);
+    
+    if(kerBasic == KERN_SUCCESS && kerMem == KERN_SUCCESS)
+        NSLog(@"∆•∆ %@ : \n\
+                 resident_size: %.2f MB virtual_size: %.2f MB\n\
+                 private alloc: %.2f MB free: %.2f MB\n\
+                 shared alloc: %.2f MB free: %.2f MB",
+                 referrer, (float)kerBasicInfo.resident_size/(1024.f*1024.f), (float)kerBasicInfo.virtual_size/(1024.f*1024.f),
+                 (float)kerMemInfo.total_palloc/(1024.f*1024.f), (float)kerMemInfo.total_pfree/(1024.f*1024.f),
+                 (float)kerMemInfo.total_salloc/(1024.f*1024.f), (float)kerMemInfo.total_sfree/(1024.f*1024.f));
+    else
+        NSLog(@"∆•∆ %@ : Error with task_info(): %s", referrer, mach_error_string(kerBasic));
+}
+#else
+//if not in debug mode, lets collect less information & by default not print to console, print to crash reporting framework if there is one
+- (void)reportMemoryToConsoleWithReferrer:(NSString *)referrer
+{
+//    struct task_basic_info info;
+//    mach_msg_type_number_t size = sizeof(info);
+//    kern_return_t kerr = task_info(mach_task_self(),
+//                                   TASK_BASIC_INFO,
+//                                   (task_info_t)&info,
+//                                   &size);
+//    
+//    if(kerr == KERN_SUCCESS)
+//        NSLog(@"∆•∆ %@ : resident_size: %.2f MB virtual_size: %.2f mb", referrer, (float)info.resident_size/(1024.f*1024.f), (float)info.virtual_size/(1024.f*1024.f));
+//    else
+//        NSLog(@"∆•∆ %@ : Error with task_info(): %s", referrer, mach_error_string(kerr));
+}
+#endif
 
 @end

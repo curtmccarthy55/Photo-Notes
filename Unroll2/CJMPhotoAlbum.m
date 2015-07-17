@@ -73,6 +73,13 @@
     [_albumEditablePhotos removeObject:image];
 }
 
+- (void)addMultipleCJMImages:(NSArray *)newImages
+{
+    NSArray *sortedNewImages = [newImages sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"photoCreationDate" ascending:YES]]];
+    
+    [_albumEditablePhotos addObjectsFromArray:sortedNewImages];
+}
+
 - (void)removeCJMImagesAtIndexes:(NSIndexSet *)indexSet
 {
     [self.albumEditablePhotos removeObjectsAtIndexes:indexSet];

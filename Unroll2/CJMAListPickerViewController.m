@@ -126,7 +126,17 @@
 
 - (void)donePressed
 {
-    [self.delegate aListPickerViewController:self didFinishPickingAlbum:_selectedAlbum];
+    if ([_selectedAlbum.albumTitle isEqual:self.currentAlbumName]) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Choose Alternate Album" message:@"The selected Photo Notes are already in this album.\n  Please choose a different album." preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) { }];
+        
+        [alertController addAction:dismissAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    } else {
+        [self.delegate aListPickerViewController:self didFinishPickingAlbum:_selectedAlbum];
+    }
 }
 
 

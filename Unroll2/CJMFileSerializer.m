@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Bluewraith. All rights reserved.
 //
 
+@import UIKit;
 #import "CJMFileSerializer.h"
 
 @implementation CJMFileSerializer
@@ -21,9 +22,24 @@
     return object;
 }
 
+- (UIImage *)readImageFromRelativePath:(NSString *)path
+{
+    id data = [self readObjectFromRelativePath:path];
+    if(data)
+        return [[UIImage alloc] initWithData:data];
+    else
+        return nil;
+}
+
 - (BOOL)writeObject:(id)data toRelativePath:(NSString *)path
 {
     return [NSKeyedArchiver archiveRootObject:data toFile:[self absolutePathFromRelativePath:path]];
+}
+
+- (BOOL)writeImage:(UIImage *)image toRelativePath:(NSString *)path
+{
+    //this method is just to maintain API balance with readImageFromRelativePath
+    return [self writeObject:image toRelativePath:path];
 }
 
 - (void)deleteImageWithFileName:(NSString *)fileName

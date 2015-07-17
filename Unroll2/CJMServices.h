@@ -12,8 +12,6 @@
 @class CJMImage;
 
 typedef void (^CJMCompletionHandler)(NSArray *albums);
-
-//a variable called CJMImageCompletionHandler that takes a UIImage argument and returns nothing.
 typedef void (^CJMImageCompletionHandler)(UIImage *image);
 
 @interface CJMServices : NSObject
@@ -26,5 +24,14 @@ typedef void (^CJMImageCompletionHandler)(UIImage *image);
 - (void)deleteImage:(CJMImage *)userImage;
 
 - (BOOL)saveApplicationData;
+
+@end
+
+@interface CJMServices (Debugging)
+
+- (void)beginReportingMemoryToConsoleWithInterval:(NSTimeInterval)interval;
+- (void)endReportingMemoryToConsole;
+
+- (void)reportMemoryToConsoleWithReferrer:(NSString *)referrer;
 
 @end

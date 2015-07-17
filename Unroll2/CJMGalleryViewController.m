@@ -442,6 +442,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         CJMAListPickerViewController *aListPickerVC = (CJMAListPickerViewController *)[vc topViewController];
         aListPickerVC.delegate = self;
         aListPickerVC.title = @"Select Destination";
+        aListPickerVC.currentAlbumName = self.album.albumTitle;
         [self presentViewController:vc animated:YES completion:nil];
 
     }];
@@ -528,8 +529,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 //iterate through array of selected photos, convert them to CJMImages, and add to the current album.  (uses PhotoKit)
 - (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos
 {
-    NSLog(@"%lu photos received by the gallery", (unsigned long)photos.count);
-    
+    NSMutableArray *newImages = [[NSMutableArray alloc] init];
     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
@@ -537,52 +537,93 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         _imageManager = [[PHCachingImageManager alloc] init];
     }
     
+    __block NSInteger counter = [photos count];
+    
     dispatch_group_t imageLoadGroup = dispatch_group_create();
-    for (int i = 0; i < photos.count; i++) {
-        @autoreleasepool {
+    for (int i = 0; i < photos.count; i++)
+    {
         CJMImage *assetImage = [[CJMImage alloc] init];
         PHAsset *asset = (PHAsset *)photos[i];
         
         assetImage.photoLocation = [asset location];
         assetImage.photoCreationDate = [asset creationDate];
         
+        PHImageRequestOptions *options = [PHImageRequestOptions new];
+        options.networkAccessAllowed = YES;
+        options.version = PHImageRequestOptionsVersionCurrent;
+        
         dispatch_group_enter(imageLoadGroup);
-        [self.imageManager requestImageForAsset:asset
-                                     targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight)
-                                    contentMode:PHImageContentModeAspectFill
-                                        options:nil
-                                  resultHandler:^(UIImage *result, NSDictionary *info) {
-                                      
-                                      if(![info[PHImageResultIsDegradedKey] boolValue])
-                                      {
-                                          assetImage.photoImage = result;
-                                          [fileSerializer writeObject:result toRelativePath:assetImage.fileName];
+        @autoreleasepool {
+            [self.imageManager requestImageDataForAsset:asset
+                                                options:options
+                                          resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+                                              
+                                              counter--;
+                                              if(![info[PHImageResultIsDegradedKey] boolValue])
+                                              {
+                                                  [fileSerializer writeObject:imageData toRelativePath:assetImage.fileName];
+                                                  dispatch_group_leave(imageLoadGroup);
+                                              }
+                                              
+                                          }];
+        }
+        
+        dispatch_group_enter(imageLoadGroup);
+        @autoreleasepool {
+            [self.imageManager requestImageForAsset:asset
+                                         targetSize:[(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]
+                                        contentMode:PHImageContentModeAspectFill
+                                            options:nil
+                                      resultHandler:^(UIImage *result, NSDictionary *info) {
+                                          //if ([info[phimageresult]])
                                           
-                                          //Compression code
-                                          UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:result
-                                                                     andShrinkToSize:CellSize];
-                                          [fileSerializer writeObject:thumbnail
-                                                       toRelativePath:assetImage.thumbnailFileName];
                                           
-                                          
-                                          dispatch_group_leave(imageLoadGroup);
-                                      }
-                                  }];
+                                          if(![info[PHImageResultIsDegradedKey] boolValue])
+                                          {
+                                              [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
+                                              NSLog(@"result is %@", info);
+                                              dispatch_group_leave(imageLoadGroup);
+                                          }
+                                      }];
+        }
+//        dispatch_group_enter(imageLoadGroup);
+//        @autoreleasepool {
+//            [self.imageManager requestImageDataForAsset:asset
+//                                                options:options
+//                                          resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+//
+//                                              UIImage *result = [UIImage imageWithData:imageData];
+//                                              
+//                                              //Compression code
+//                                              UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:result
+//                                                                         andShrinkToSize:CellSize];
+//                                              [fileSerializer writeImage:thumbnail toRelativePath:assetImage.thumbnailFileName];
+//                                              
+//                                              NSLog(@"thumbnail description: %@", thumbnail);
+//                                              
+//                                              NSLog(@"••••• count remaining: %@", @(counter));
+//                                              dispatch_group_leave(imageLoadGroup);
+//                                      }];
+//        }
         
         assetImage.photoTitle = @"No Title Created ";
         assetImage.photoNote = @"Tap Edit to change the title and note!";
         assetImage.selectCoverHidden = YES;
-        [_album addCJMImage:assetImage];
-        }
+        
+        [newImages addObject:assetImage];
+//        [_album addCJMImage:assetImage];
     }
+//    NSArray *sortedNewImages = [newImages sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"photoCreationDate" ascending:YES]]];
+    [_album addMultipleCJMImages:newImages];
+
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
         [self dismissViewControllerAnimated:YES completion:nil];
         [[CJMAlbumManager sharedInstance] save];
         self.navigationController.view.userInteractionEnabled = YES;
-
+        
+        NSLog(@"••••• FIN");
     });
-    
 }
 
 #pragma mark - CJMAListPicker Delegate
@@ -598,15 +639,19 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 //take CJMImages in selected cells in current album (self.album) and transfer them to the picked album.
 - (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album
 {
+    NSMutableArray *transferringImages = [NSMutableArray new];
+    
     for (NSIndexPath *itemPath in _selectedCells) {
         CJMImage *imageToTransfer = [_album.albumPhotos objectAtIndex:itemPath.row];
         imageToTransfer.selectCoverHidden = YES;
-        [album addCJMImage:imageToTransfer];
         if (imageToTransfer.isAlbumPreview == YES) {
             [imageToTransfer setIsAlbumPreview:NO];
             self.album.albumPreviewImage = nil;
         }
+        [transferringImages addObject:imageToTransfer];
     }
+    
+    [album addMultipleCJMImages:transferringImages];
     
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     for (NSIndexPath *itemPath in _selectedCells) {
