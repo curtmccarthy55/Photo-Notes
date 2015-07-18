@@ -480,18 +480,18 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
+    NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
     CJMImage *newImage = [[CJMImage alloc] init];
-    newImage.photoCreationDate = [NSDate date];
-
     UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:CellSize];
     
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
-    [fileSerializer writeObject:newPhoto toRelativePath:newImage.fileName];
-    [fileSerializer writeObject:thumbnail toRelativePath:newImage.thumbnailFileName];
-    newImage.photoTitle = @"No Title Created ";
-    newImage.photoNote = @"Tap Edit to change the title and note!";
-    newImage.selectCoverHidden = YES;
+    [fileSerializer writeObject:newPhotoData toRelativePath:newImage.fileName];
+    [fileSerializer writeImage:thumbnail toRelativePath:newImage.thumbnailFileName];
+
+    [self setInitialValuesForCJMImage:newImage];
+    newImage.photoCreationDate = [NSDate date];
+    newImage.thumbnailNeedsRedraw = NO;
     [_album addCJMImage:newImage];
     
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -499,7 +499,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [[CJMAlbumManager sharedInstance] save];
 }
 
-#pragma mark - Thumbnail Creation Code
+#pragma mark - CJMImage prep code
 
 //Holy Grail of of thumbnail creation.  Well... Holy Dixie Cup may be more appropriate.
 //Takes full UIImage and compresses to thumbnail with size ~100KB.
@@ -535,6 +535,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 }
 
+- (void)setInitialValuesForCJMImage:(CJMImage *)cjmImage
+{
+    cjmImage.photoTitle = @"No Title Created ";
+    cjmImage.photoNote = @"Tap Edit to change the title and note!";
+    cjmImage.selectCoverHidden = YES;
+}
+
 #pragma mark - CJMPhotoGrabber Delegate
 
 - (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller
@@ -561,9 +568,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     {
         __block CJMImage *assetImage = [[CJMImage alloc] init];
         PHAsset *asset = (PHAsset *)photos[i];
-        
-        assetImage.photoLocation = [asset location];
-        assetImage.photoCreationDate = [asset creationDate];
         
         PHImageRequestOptions *options = [PHImageRequestOptions new];
         options.networkAccessAllowed = YES;
@@ -592,30 +596,30 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                         contentMode:PHImageContentModeAspectFill
                                             options:nil
                                       resultHandler:^(UIImage *result, NSDictionary *info) {
-                                          if ([[info valueForKey:@"PHImageResultDeliveredImageFormatKey"]  isEqual: @4031]) {
-                                              assetImage.thumbnailNeedsRedraw = YES;
-                                              dispatch_group_leave(imageLoadGroup);
-                                          } else {
+//                                          if ([[info valueForKey:@"PHImageResultDeliveredImageFormatKey"]  isEqual: @4031]) {
+//                                              assetImage.thumbnailNeedsRedraw = YES;
+//                                              NSLog(@"result is %@", info);
+//                                              dispatch_group_leave(imageLoadGroup);
+//                                          } else {
                                               if(![info[PHImageResultIsDegradedKey] boolValue])
                                               {
                                                   [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
-                                                  NSLog(@"result is %@", info);
+                                                  NSLog(@"result is %@.\n mediaType is %ld; mediaSubtype is %lu", info, asset.pixelHeight, asset.pixelWidth);
                                                   assetImage.thumbnailNeedsRedraw = NO;
                                                   
                                                   dispatch_group_leave(imageLoadGroup);
                                               }
-                                          }
+//                                          }
                                       }];
         }
-        
-        assetImage.photoTitle = @"No Title Created ";
-        assetImage.photoNote = @"Tap Edit to change the title and note!";
-        assetImage.selectCoverHidden = YES;
+//4031 is PNG, 3314 is PHAssetThumbnail
+        [self setInitialValuesForCJMImage:assetImage];
+        assetImage.photoLocation = [asset location];
+        assetImage.photoCreationDate = [asset creationDate];
         
         [newImages addObject:assetImage];
-//        [_album addCJMImage:assetImage];
     }
-//    NSArray *sortedNewImages = [newImages sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"photoCreationDate" ascending:YES]]];
+
     [_album addMultipleCJMImages:newImages];
 
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
