@@ -27,6 +27,7 @@
 @property (nonatomic, readonly) NSString *fileName;
 @property (nonatomic, readonly) NSString *thumbnailFileName;
 @property (nonatomic) BOOL isAlbumPreview;
+@property (nonatomic) BOOL thumbnailNeedsRedraw;
 
 @property (nonatomic) BOOL selectCoverHidden;
 

@@ -27,6 +27,7 @@
         _photoCreationDate = [aDecoder decodeObjectForKey:@"CreationDate"];
         _photoLocation = [aDecoder decodeObjectForKey:@"Location"];
         _isAlbumPreview = [aDecoder decodeBoolForKey:@"AlbumPreview"];
+        _thumbnailNeedsRedraw = [aDecoder decodeBoolForKey:@"ThumbnailNeedsRedraw"];
         _selectCoverHidden = YES;
         
         if (!self.isAlbumPreview) {
@@ -46,6 +47,7 @@
     [aCoder encodeObject:self.photoCreationDate forKey:@"CreationDate"];
     [aCoder encodeObject:self.photoLocation forKey:@"Location"];
     [aCoder encodeBool:self.isAlbumPreview forKey:@"AlbumPreview"];
+    [aCoder encodeBool:self.thumbnailNeedsRedraw forKey:@"ThumbnailNeedsRedraw"];
     
 }
 

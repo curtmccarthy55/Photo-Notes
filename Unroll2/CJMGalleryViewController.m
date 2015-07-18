@@ -112,7 +112,21 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     CJMPhotoCell *cell = (CJMPhotoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     CJMImage *imageForCell = self.album.albumPhotos[indexPath.row];
     
+    if (!imageForCell.thumbnailNeedsRedraw) {
     [cell updateWithImage:imageForCell];
+    } else {
+        CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
+        __block UIImage *tempFullImage = [[UIImage alloc] init];
+        [[CJMServices sharedInstance] fetchImage:imageForCell handler:^(UIImage *fetchedImage) {
+            tempFullImage = fetchedImage;
+        }];
+        UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:tempFullImage andShrinkToSize:CellSize];
+        imageForCell.thumbnailNeedsRedraw = NO;
+        [fileSerializer writeImage:thumbnail toRelativePath:imageForCell.thumbnailFileName];
+        [cell updateWithImage:imageForCell];
+        NSLog(@"a thumbnail was redrawn");
+        [[CJMAlbumManager sharedInstance] save];
+    }
     
     cell.cellSelectCover.hidden = imageForCell.selectCoverHidden;
     
@@ -324,8 +338,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete photos?" message:@"You cannot recover these photos after deleting." preferredStyle:UIAlertControllerStyleActionSheet];
     
-/* IMPROVING AND ADDING LATER : functionality for mass export and delete on images.
+// IMPROVING AND ADDING LATER : functionality for mass export and delete on images.
 //TODO: Save selected photos to Photos app and then delete
+    /*
     UIAlertAction *saveThenDeleteAction = [UIAlertAction actionWithTitle:@"Save to Photos app and then delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete){
         
         CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
@@ -391,7 +406,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
 
-//    [alertController addAction:saveThenDeleteAction]; IMPROVING AND ADDING LATER : see above **
+//    [alertController addAction:saveThenDeleteAction];
     [alertController addAction:deleteAction];
     [alertController addAction:cancel];
     
@@ -405,21 +420,22 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Transfer:" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-/* IMPROVING AND ADDING LATER : functionality for mass copy of selected photos
+// IMPROVING AND ADDING LATER : functionality for mass copy of selected photos
 //TODO: Copy selected photos to Camera Roll in the Photos app.
+    /*
     UIAlertAction *photosAppExport = [UIAlertAction actionWithTitle:@"Copies of photos to Photos App" style:UIAlertActionStyleDefault handler:^(UIAlertAction *sendToPhotosApp) {
-        
-        __block UIImage *fullImage = [[UIImage alloc] init];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            __block UIImage *fullImage = [[UIImage alloc] init];
 
-        for (NSIndexPath *itemPath in _selectedCells) {
-            CJMImage *copiedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
-            [[CJMServices sharedInstance] fetchImage:copiedImage handler:^(UIImage *fetchedImage) {
-                fullImage = fetchedImage;
-            }];
-            //Run this asynchronously?
-            UIImageWriteToSavedPhotosAlbum(fullImage, nil, nil, nil);
-            //fullImage = nil;
-        }
+            for (NSIndexPath *itemPath in _selectedCells) {
+                CJMImage *copiedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
+                [[CJMServices sharedInstance] fetchImage:copiedImage handler:^(UIImage *fetchedImage) {
+                    fullImage = fetchedImage;
+                }];
+                UIImageWriteToSavedPhotosAlbum(fullImage, nil, nil, nil);
+
+            }
+        });
         
         CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
                                            withType:@"Success"
@@ -450,7 +466,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     //Cancel action
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
     
-//    [alertController addAction:photosAppExport]; IMPROVING AND ADDING LATER : see above **
+//    [alertController addAction:photosAppExport];
     [alertController addAction:alternateAlbumExport];
     [alertController addAction:cancel];
     
@@ -538,11 +554,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
     
     __block NSInteger counter = [photos count];
+//    __weak CJMGalleryViewController *weakSelf = self;
     
     dispatch_group_t imageLoadGroup = dispatch_group_create();
     for (int i = 0; i < photos.count; i++)
     {
-        CJMImage *assetImage = [[CJMImage alloc] init];
+        __block CJMImage *assetImage = [[CJMImage alloc] init];
         PHAsset *asset = (PHAsset *)photos[i];
         
         assetImage.photoLocation = [asset location];
@@ -575,36 +592,21 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                         contentMode:PHImageContentModeAspectFill
                                             options:nil
                                       resultHandler:^(UIImage *result, NSDictionary *info) {
-                                          //if ([info[phimageresult]])
-                                          
-                                          
-                                          if(![info[PHImageResultIsDegradedKey] boolValue])
-                                          {
-                                              [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
-                                              NSLog(@"result is %@", info);
+                                          if ([[info valueForKey:@"PHImageResultDeliveredImageFormatKey"]  isEqual: @4031]) {
+                                              assetImage.thumbnailNeedsRedraw = YES;
                                               dispatch_group_leave(imageLoadGroup);
+                                          } else {
+                                              if(![info[PHImageResultIsDegradedKey] boolValue])
+                                              {
+                                                  [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
+                                                  NSLog(@"result is %@", info);
+                                                  assetImage.thumbnailNeedsRedraw = NO;
+                                                  
+                                                  dispatch_group_leave(imageLoadGroup);
+                                              }
                                           }
                                       }];
         }
-//        dispatch_group_enter(imageLoadGroup);
-//        @autoreleasepool {
-//            [self.imageManager requestImageDataForAsset:asset
-//                                                options:options
-//                                          resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-//
-//                                              UIImage *result = [UIImage imageWithData:imageData];
-//                                              
-//                                              //Compression code
-//                                              UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:result
-//                                                                         andShrinkToSize:CellSize];
-//                                              [fileSerializer writeImage:thumbnail toRelativePath:assetImage.thumbnailFileName];
-//                                              
-//                                              NSLog(@"thumbnail description: %@", thumbnail);
-//                                              
-//                                              NSLog(@"••••• count remaining: %@", @(counter));
-//                                              dispatch_group_leave(imageLoadGroup);
-//                                      }];
-//        }
         
         assetImage.photoTitle = @"No Title Created ";
         assetImage.photoNote = @"Tap Edit to change the title and note!";
