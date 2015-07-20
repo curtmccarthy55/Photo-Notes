@@ -86,6 +86,17 @@ static CJMServices *__sharedInstance;
     [self.fileSerializer deleteImageWithFileName:userImage.fileName];
 }
 
+- (void)removeImageFromCache:(CJMImage *)image
+{
+    if ([self.cache objectForKey:image.fileName]) {
+        [self.cache removeObjectForKey:image.fileName];
+    }
+    
+    if ([self.cache objectForKey:image.thumbnailFileName]) {
+        [self.cache removeObjectForKey:image.thumbnailFileName];
+    }
+}
+
 # pragma mark - Interface
 
 - (void)fetchUserAlbums:(CJMCompletionHandler)handler

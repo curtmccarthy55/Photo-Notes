@@ -22,6 +22,7 @@ typedef void (^CJMImageCompletionHandler)(UIImage *image);
 - (void)fetchImage:(CJMImage *)image handler:(CJMImageCompletionHandler)handler;
 - (void)fetchThumbnailForImage:(CJMImage *)image handler:(CJMImageCompletionHandler)handler;
 - (void)deleteImage:(CJMImage *)userImage;
+- (void)removeImageFromCache:(CJMImage *)image;
 
 - (BOOL)saveApplicationData;
 

@@ -14,7 +14,7 @@
 
 @import Photos;
 
-@interface CJMFullImageViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate>
+@interface CJMFullImageViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (nonatomic, strong) UIImage *fullImage;
@@ -60,6 +60,7 @@
     [[CJMServices sharedInstance] fetchImage:_cjmImage handler:^(UIImage *fetchedImage) {
         self.fullImage = fetchedImage;
     }];
+    NSLog(@"fullImage is %@", self.fullImage);
     
     self.editNoteButton.hidden = YES;
     
@@ -85,6 +86,7 @@
     self.noteTitle.layer.sublayerTransform = CATransform3DMakeTranslation(0, -3, 0);
     
     self.noteEntry.text = _cjmImage.photoNote;
+    self.noteEntry.selectable = NO;
     self.noteEntry.textColor = [UIColor whiteColor];
     self.noteEntry.font = [UIFont fontWithName:@"Verdana" size:14];
     
@@ -303,14 +305,18 @@
         [self registerForKeyboardNotifications];
         self.noteTitle.enabled = YES;
         self.noteEntry.editable = YES;
+        self.noteEntry.selectable = YES;
         [self.editNoteButton setTitle:@"Done" forState:UIControlStateNormal];
         [self.noteEntry becomeFirstResponder];
         self.noteEntry.selectedRange = NSMakeRange([self.noteEntry.text length], 0);
     } else {
+        [self confirmTextFieldNotBlank];
+        [self confirmTextViewNotBlank];
         self.cjmImage.photoTitle = self.noteTitle.text;
         self.cjmImage.photoNote = self.noteEntry.text;
         self.noteTitle.enabled = NO;
         self.noteEntry.editable = NO;
+        self.noteEntry.selectable = NO;
         [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
         [self.editNoteButton sizeToFit];
         [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -470,6 +476,37 @@
     [alertController addAction:cancel];
     
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+#pragma mark - TextView Delegate
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqual:@"Tap Edit to change the title and note!"]) {
+        textView.text = @"";
+    }
+}
+
+- (void)confirmTextViewNotBlank
+{
+    if ([self.noteEntry.text length] == 0) {
+        self.noteEntry.text = @"Tap Edit to change the title and note!";
+    }
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if ([textField.text isEqual:@"No Title Created "]) {
+        textField.text = @"";
+    }
+    return YES;
+}
+
+- (void)confirmTextFieldNotBlank
+{
+    if (self.noteTitle.text == nil) {
+        self.noteTitle.text = @"No Title Created ";
+    }
 }
 
 #pragma mark - Keyboard shift

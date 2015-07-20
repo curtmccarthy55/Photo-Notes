@@ -112,9 +112,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     CJMPhotoCell *cell = (CJMPhotoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     CJMImage *imageForCell = self.album.albumPhotos[indexPath.row];
     
-    if (!imageForCell.thumbnailNeedsRedraw) {
     [cell updateWithImage:imageForCell];
-    } else {
+    
+    if (imageForCell.thumbnailNeedsRedraw) {
         CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
         __block UIImage *tempFullImage = [[UIImage alloc] init];
         [[CJMServices sharedInstance] fetchImage:imageForCell handler:^(UIImage *fetchedImage) {
@@ -592,30 +592,25 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         dispatch_group_enter(imageLoadGroup);
         @autoreleasepool {
             [self.imageManager requestImageForAsset:asset
-                                         targetSize:[(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]
+                                         targetSize:CellSize
                                         contentMode:PHImageContentModeAspectFill
-                                            options:nil
+                                            options:options
                                       resultHandler:^(UIImage *result, NSDictionary *info) {
-//                                          if ([[info valueForKey:@"PHImageResultDeliveredImageFormatKey"]  isEqual: @4031]) {
-//                                              assetImage.thumbnailNeedsRedraw = YES;
-//                                              NSLog(@"result is %@", info);
-//                                              dispatch_group_leave(imageLoadGroup);
-//                                          } else {
                                               if(![info[PHImageResultIsDegradedKey] boolValue])
                                               {
                                                   [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
-                                                  NSLog(@"result is %@.\n mediaType is %ld; mediaSubtype is %lu", info, asset.pixelHeight, asset.pixelWidth);
+                                                  NSLog(@"result is %@", result);
                                                   assetImage.thumbnailNeedsRedraw = NO;
                                                   
                                                   dispatch_group_leave(imageLoadGroup);
                                               }
-//                                          }
-                                      }];
+                                                                                              }];
         }
 //4031 is PNG, 3314 is PHAssetThumbnail
         [self setInitialValuesForCJMImage:assetImage];
         assetImage.photoLocation = [asset location];
         assetImage.photoCreationDate = [asset creationDate];
+        NSLog(@"assetImage thumbnailFilePath appends: %@", assetImage.thumbnailFileName);
         
         [newImages addObject:assetImage];
     }
@@ -631,6 +626,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         NSLog(@"••••• FIN");
     });
 }
+
+
 
 #pragma mark - CJMAListPicker Delegate
 

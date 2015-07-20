@@ -20,18 +20,18 @@
 
 @implementation CJMPhotoCell
 
-//#pragma ALERT Check to see if this method is even necessary.  I don't believe it's called anywhere.
-//- (void)setThumbnailImage:(UIImage *)thumbnailImage
-//{
-//    _thumbnailImage = thumbnailImage;
-//    self.cellImage.image = thumbnailImage;
-//}
-
 - (void)updateWithImage:(CJMImage *)cjmImage
 {
     self.image = cjmImage;
     [[CJMServices sharedInstance] fetchThumbnailForImage:cjmImage handler:^(UIImage *thumbnail) {
-        self.cellImage.image = thumbnail;
+        NSLog(@"thumnail.width = %f", thumbnail.size.width);
+        if (thumbnail.size.width == 0) {
+            cjmImage.thumbnailNeedsRedraw = YES;
+            [[CJMServices sharedInstance] removeImageFromCache:cjmImage];
+            NSLog(@"redrawing thumbnail");
+        } else {
+            self.cellImage.image = thumbnail;
+        }
     }];
 
 }
