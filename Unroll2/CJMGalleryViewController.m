@@ -599,18 +599,16 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                               if(![info[PHImageResultIsDegradedKey] boolValue])
                                               {
                                                   [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
-                                                  NSLog(@"result is %@", result);
                                                   assetImage.thumbnailNeedsRedraw = NO;
                                                   
                                                   dispatch_group_leave(imageLoadGroup);
                                               }
                                                                                               }];
         }
-//4031 is PNG, 3314 is PHAssetThumbnail
+        
         [self setInitialValuesForCJMImage:assetImage];
-        assetImage.photoLocation = [asset location];
+//        assetImage.photoLocation = [asset location];
         assetImage.photoCreationDate = [asset creationDate];
-        NSLog(@"assetImage thumbnailFilePath appends: %@", assetImage.thumbnailFileName);
         
         [newImages addObject:assetImage];
     }

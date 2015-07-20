@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <CoreLocation/CoreLocation.h>
+//#import <CoreLocation/CoreLocation.h>
 
 @interface CJMImage : NSObject <NSCoding>
 
@@ -20,7 +20,7 @@
 @property (nonatomic, strong) NSString *photoTitle;
 @property (nonatomic, strong) NSString *photoNote;
 @property (nonatomic, strong) NSDate *photoCreationDate;
-@property (nonatomic, strong) CLLocation *photoLocation;
+//@property (nonatomic, strong) CLLocation *photoLocation;
 @property (nonatomic) BOOL *photoPrivacy;
 @property (nonatomic) NSUUID *photoID;
 @property (nonatomic, strong) NSString *photoKey;

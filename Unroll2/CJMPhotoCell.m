@@ -24,7 +24,6 @@
 {
     self.image = cjmImage;
     [[CJMServices sharedInstance] fetchThumbnailForImage:cjmImage handler:^(UIImage *thumbnail) {
-        NSLog(@"thumnail.width = %f", thumbnail.size.width);
         if (thumbnail.size.width == 0) {
             cjmImage.thumbnailNeedsRedraw = YES;
             [[CJMServices sharedInstance] removeImageFromCache:cjmImage];

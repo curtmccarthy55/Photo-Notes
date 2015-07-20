@@ -25,7 +25,7 @@
         _photoTitle = [aDecoder decodeObjectForKey:@"Title"];
         _photoNote = [aDecoder decodeObjectForKey:@"Note"];
         _photoCreationDate = [aDecoder decodeObjectForKey:@"CreationDate"];
-        _photoLocation = [aDecoder decodeObjectForKey:@"Location"];
+        //_photoLocation = [aDecoder decodeObjectForKey:@"Location"];
         _isAlbumPreview = [aDecoder decodeBoolForKey:@"AlbumPreview"];
         _thumbnailNeedsRedraw = [aDecoder decodeBoolForKey:@"ThumbnailNeedsRedraw"];
         _selectCoverHidden = YES;
@@ -45,7 +45,7 @@
     [aCoder encodeObject:self.photoTitle forKey:@"Title"];
     [aCoder encodeObject:self.photoNote forKey:@"Note"];
     [aCoder encodeObject:self.photoCreationDate forKey:@"CreationDate"];
-    [aCoder encodeObject:self.photoLocation forKey:@"Location"];
+    //[aCoder encodeObject:self.photoLocation forKey:@"Location"];
     [aCoder encodeBool:self.isAlbumPreview forKey:@"AlbumPreview"];
     [aCoder encodeBool:self.thumbnailNeedsRedraw forKey:@"ThumbnailNeedsRedraw"];
     

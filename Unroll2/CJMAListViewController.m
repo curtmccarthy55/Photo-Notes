@@ -42,7 +42,22 @@
     [super viewWillAppear:animated];
     
     [self.tableView reloadData];
+    
+    [self noAlbumsPopUp];
 }
+
+- (void)noAlbumsPopUp
+{
+    dispatch_time_t waitTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC));
+    if ([[CJMAlbumManager sharedInstance] allAlbums].count == 0) {
+        dispatch_after(waitTime, dispatch_get_main_queue(), ^{
+            [self.navigationItem setPrompt:@"Tap + below to create a new Photo Notes album!"];
+        });
+    } else {
+        [self.navigationItem setPrompt:nil];
+    }
+}
+
 
 #pragma mark - tableView data source
 
@@ -144,6 +159,8 @@
     [[CJMAlbumManager sharedInstance] save];
     
     [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    
+    [self noAlbumsPopUp];
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath

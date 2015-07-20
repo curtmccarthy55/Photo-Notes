@@ -478,7 +478,7 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
-#pragma mark - TextView Delegate
+#pragma mark - TextView and TextField Delegate
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
@@ -494,17 +494,16 @@
     }
 }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+- (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     if ([textField.text isEqual:@"No Title Created "]) {
         textField.text = @"";
     }
-    return YES;
 }
 
 - (void)confirmTextFieldNotBlank
 {
-    if (self.noteTitle.text == nil) {
+    if ([self.noteTitle.text length] == 0) {
         self.noteTitle.text = @"No Title Created ";
     }
 }
