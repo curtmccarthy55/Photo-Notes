@@ -616,6 +616,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [_album addMultipleCJMImages:newImages];
 
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
+        self.navigationController.view.userInteractionEnabled = YES;
         [self.collectionView reloadData];
         [self dismissViewControllerAnimated:YES completion:nil];
         [[CJMAlbumManager sharedInstance] save];
