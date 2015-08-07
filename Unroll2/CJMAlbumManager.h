@@ -19,11 +19,9 @@
 - (void)removeAlbumAtIndex:(NSUInteger)index;
 - (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex;
 - (BOOL)containsAlbumNamed:(NSString *)name;
-
 - (CJMImage *)albumWithName:(NSString *)name returnImageAtIndex:(NSInteger)index;
 - (void)albumWithName:(NSString *)albumName removeImageWithUUID:(NSString *)fileName;
 - (void)albumWithName:(NSString *)name createPreviewFromCJMImage:(CJMImage *)image;
-
 - (BOOL)save;
 
 @end

@@ -14,7 +14,6 @@
 @protocol CJMAListPickerDelegate <NSObject>
 
 - (void)aListPickerViewControllerDidCancel:(CJMAListPickerViewController *)controller;
-
 - (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album;
 
 @end

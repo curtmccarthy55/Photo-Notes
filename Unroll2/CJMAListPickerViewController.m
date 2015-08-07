@@ -21,12 +21,12 @@
 {
     CJMPhotoAlbum *_selectedAlbum;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     UINib *nib = [UINib nibWithNibName:@"CJMAListTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CJMAListCellIdentifier];
-    
     self.tableView.rowHeight = 80;
 }
 
@@ -46,17 +46,28 @@
     
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [[[CJMAlbumManager sharedInstance] allAlbums] count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CJMAListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CJMAListCellIdentifier forIndexPath:indexPath];
+    
+    CJMPhotoAlbum *album = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
+    
+    [self configureTextForCell:cell withAlbum:album];
+    [self configureThumbnailForCell:cell forAlbum:album];
+    
+    return cell;
 }
 
 - (void)configureTextForCell:(CJMAListTableViewCell *)cell withAlbum:(CJMPhotoAlbum *)album
@@ -91,22 +102,10 @@
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    CJMAListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CJMAListCellIdentifier forIndexPath:indexPath];
-    
-    CJMPhotoAlbum *album = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
-    
-    [self configureTextForCell:cell withAlbum:album];
-    [self configureThumbnailForCell:cell forAlbum:album];
-    
-    return cell;
-}
-
+//replaces blank rows with blank space in the tableView
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{  //replaces blank rows with blank space in the tableView
+{
     UIView *view = [[UIView alloc] init];
-    
     return view;
 }
 
@@ -124,6 +123,7 @@
     [self.delegate aListPickerViewControllerDidCancel:self];
 }
 
+//If user picks the current album, display an alert.  Otherwise, move photos to new album.
 - (void)donePressed
 {
     if ([_selectedAlbum.albumTitle isEqual:self.currentAlbumName]) {

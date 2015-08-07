@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "CJMImage.h"
 @import Photos;
 
 @class CJMPhotoGrabViewController;
@@ -15,7 +14,6 @@
 @protocol CJMPhotoGrabViewControllerDelegate <NSObject>
 
 - (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller;
-
 - (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos;
 
 @end

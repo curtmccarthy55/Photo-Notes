@@ -17,7 +17,7 @@ static CJMAlbumManager *__sharedInstance;
 
 @interface CJMAlbumManager ()
 
-@property (nonatomic) NSMutableOrderedSet *allAlbumsEdit; //a set contains unique objects and can't be added more than once
+@property (nonatomic) NSMutableOrderedSet *allAlbumsEdit;
 @property (nonatomic) CJMFileSerializer *fileSerializer;
 
 @end
@@ -29,9 +29,7 @@ static CJMAlbumManager *__sharedInstance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         __sharedInstance = [CJMAlbumManager new];
-        NSLog(@"cjmAlbumManager created");
     });
-    
     return __sharedInstance;
 }
 
@@ -42,7 +40,6 @@ static CJMAlbumManager *__sharedInstance;
         _fileSerializer = [CJMFileSerializer new];
         [self registerDefaults];
         [self handleFirstTime];
-        NSLog(@"AlbumManager init called");
     }
     return self;
 }
@@ -80,8 +77,9 @@ static CJMAlbumManager *__sharedInstance;
         NSOrderedSet *set = [self.fileSerializer readObjectFromRelativePath:CJMAlbumFileName];
         _allAlbumsEdit = [NSMutableOrderedSet new];
         
-        if(set)
+        if (set) {
             [_allAlbumsEdit addObjectsFromArray:[set array]];
+        }
     }
     return _allAlbumsEdit;
 }
@@ -108,9 +106,7 @@ static CJMAlbumManager *__sharedInstance;
 
 - (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex
 {
-    NSLog(@"replaceAlbumAtIndex called");
     CJMPhotoAlbum *movingAlbum = [self.allAlbumsEdit objectAtIndex:fromIndex];
-    
     [self.allAlbumsEdit removeObjectAtIndex:fromIndex];
     [self.allAlbumsEdit insertObject:movingAlbum atIndex:toIndex];
 }

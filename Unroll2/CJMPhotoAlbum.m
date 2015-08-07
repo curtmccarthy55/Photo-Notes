@@ -41,7 +41,6 @@
     [aCoder encodeObject:self.albumNote forKey:@"Note"];
     [aCoder encodeObject:self.albumEditablePhotos forKey:@"AlbumPhotos"];
     [aCoder encodeObject:self.albumPreviewImage forKey:@"PreviewImage"];
-    //[aCoder encodeObject:self.internalImages forKey:@"Images"];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder

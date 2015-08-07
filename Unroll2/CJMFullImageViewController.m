@@ -56,14 +56,11 @@
     [super viewDidLoad];
     
     [self prepareWithAlbumNamed:_albumName andIndex:_index];
-    
     [[CJMServices sharedInstance] fetchImage:_cjmImage handler:^(UIImage *fetchedImage) {
         self.fullImage = fetchedImage;
     }];
-    NSLog(@"fullImage is %@", self.fullImage);
     
     self.editNoteButton.hidden = YES;
-    
     [self.oneTap requireGestureRecognizerToFail:self.twoTap];
 }
 
@@ -82,48 +79,44 @@
     if ([self.noteTitle.text isEqual:@"No Title Created "]) {
         self.noteTitle.text = @"";
     }
-//Shifts title up to make it level with noteSection buttons.
-    self.noteTitle.layer.sublayerTransform = CATransform3DMakeTranslation(0, -3, 0);
     
+    //Transform shifts title up to make it level with noteSection buttons.
+    self.noteTitle.layer.sublayerTransform = CATransform3DMakeTranslation(0, -3, 0);
     self.noteEntry.text = _cjmImage.photoNote;
     self.noteEntry.selectable = NO;
     self.noteEntry.textColor = [UIColor whiteColor];
     self.noteEntry.font = [UIFont fontWithName:@"Verdana" size:14];
-    
     [self.noteEntry setAlpha:0.0];
     [self.photoLocAndDate setAlpha:0.0];
     
-    
     if (self.cjmImage.photoCreationDate == nil) {
+        
         self.photoLocAndDate.hidden = YES;
+        
     } else {
+        
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateStyle:NSDateFormatterFullStyle];
         [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
-        
         self.photoLocAndDate.hidden = NO;
         self.photoLocAndDate.text = [NSString stringWithFormat:@"Photo taken %@", [dateFormatter stringFromDate:self.cjmImage.photoCreationDate]];
+        
     }
-    
     _initialZoomScale = self.scrollView.zoomScale;
     _focusIsOnImage = NO;
-
     [self handleNoteSectionAlignment];
-    
     [self updateConstraints];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
     [self updateZoom];
 }
 
 - (void)prepareWithAlbumNamed:(NSString *)name andIndex:(NSInteger)index
 {
     CJMImage *image = [[CJMAlbumManager sharedInstance] albumWithName:name returnImageAtIndex:index];
-    
     _index = index;
     _cjmImage = image;
 }
@@ -229,7 +222,6 @@
     if (minZoom == self.lastZoomScale) minZoom += 0.000001;
     
     self.lastZoomScale = self.scrollView.zoomScale = minZoom;
-    
     self.scrollView.zoomScale = minZoom -= 0.000001;
 }
 
@@ -292,13 +284,14 @@
     }];
 }
 
-//Places the note section 32 points above the toolbar.
+//Places the note section 44 points above the toolbar.
 - (void)handleNoteSectionAlignment
 {
     self.noteShiftConstraint.constant = -(44.0 + self.navigationController.toolbar.frame.size.height);
     [self.noteSection setNeedsUpdateConstraints];
 }
 
+//Enables editing the note and title sections
 - (IBAction)enableEdit:(id)sender
 {
     if ([self.editNoteButton.titleLabel.text isEqual:@"Edit"]) {
@@ -328,9 +321,7 @@
 - (void)setViewsVisible:(BOOL)viewsVisible
 {
     _viewsVisible = viewsVisible;
-    
     [self updateForSingleTap];
-    
 }
 
 - (void)updateForSingleTap
@@ -359,6 +350,7 @@
     [self.delegate toggleFullImageShowForViewController:self];
 }
 
+//double tap to zoom in/zoom out
 - (IBAction)imageViewDoubleTapped:(UITapGestureRecognizer *)gestureRecognizer
 {
     if (self.scrollView.zoomScale == _initialZoomScale) {
@@ -418,7 +410,6 @@
         [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
 
         self.navigationController.view.userInteractionEnabled = YES;
-        NSLog(@"Save called from popUpMenu");
     }];
     
     UIAlertAction *saveImageAction = [UIAlertAction actionWithTitle:@"Save To Camera Roll" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSave){
@@ -510,6 +501,7 @@
 
 #pragma mark - Keyboard shift
 
+//Below methods make sure the note section isn't covered by the keyboard.
 - (void)registerForKeyboardNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self

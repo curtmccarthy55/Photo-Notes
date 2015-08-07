@@ -49,24 +49,23 @@
     
     NSString *filePath = [self absolutePathFromRelativePath:fileName];
     NSString *thumbnailFilePath = [filePath stringByAppendingString:@"_sm"];
-    
     NSError *error;
     
     BOOL fullImageSuccess = [fileManager removeItemAtPath:filePath error:&error];
     
     if (fullImageSuccess) {
-        NSLog(@"Full image file deleted successfully!");
+//        NSLog(@"Full image file deleted successfully!");
     } else {
-        NSLog(@"Could not delete full image file: %@", [error localizedDescription]);
+//        NSLog(@"Could not delete full image file: %@", [error localizedDescription]);
     }
     
     BOOL thumbnailSuccess = [fileManager removeItemAtPath:thumbnailFilePath
                                                     error:&error];
     
     if (thumbnailSuccess) {
-        NSLog(@"Thumbnail deleted successfully!");
+//        NSLog(@"Thumbnail deleted successfully!");
     } else {
-        NSLog(@"Could not delete thumbnail file: %@", [error localizedDescription]);
+//        NSLog(@"Could not delete thumbnail file: %@", [error localizedDescription]);
     }
     
 }
@@ -76,7 +75,7 @@
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths firstObject];
-    //NSLog(@"%@ *****", documentsDirectory);
+
     return documentsDirectory;
 }
 

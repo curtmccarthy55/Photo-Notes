@@ -175,7 +175,8 @@ static NSString * const reuseIdentifier = @"GrabCell";
     return UIEdgeInsetsMake(1, 1, 1, 1);
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration //resizes collectionView cells per sizeForItemAtIndexPath when user rotates device.
+//resizes collectionView cells per sizeForItemAtIndexPath when user rotates device.
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     [self.collectionView.collectionViewLayout invalidateLayout];

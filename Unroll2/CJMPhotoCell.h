@@ -13,7 +13,6 @@
 
 @interface CJMPhotoCell : UICollectionViewCell
 
-
 @property (strong, nonatomic) IBOutlet UIView *cellSelectCover;
 @property (nonatomic, readonly) CJMImage *image;
 

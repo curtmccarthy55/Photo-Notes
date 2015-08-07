@@ -24,10 +24,11 @@
 {
     self.image = cjmImage;
     [[CJMServices sharedInstance] fetchThumbnailForImage:cjmImage handler:^(UIImage *thumbnail) {
+        //if thumbnail not properly captured during import, create one
         if (thumbnail.size.width == 0) {
             cjmImage.thumbnailNeedsRedraw = YES;
             [[CJMServices sharedInstance] removeImageFromCache:cjmImage];
-            NSLog(@"redrawing thumbnail");
+//            NSLog(@"redrawing thumbnail");
         } else {
             self.cellImage.image = thumbnail;
         }

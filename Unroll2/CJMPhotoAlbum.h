@@ -20,11 +20,8 @@
 @property (nonatomic, strong) NSArray *albumPhotos;
 @property (nonatomic, strong) CJMImage *albumPreviewImage;
 
-
 - (instancetype)initWithName:(NSString *)name andNote:(NSString *)note;
 - (instancetype)initWithName:(NSString *)name;
-//- (void)addAsset:(PHAsset *)asset;
-//- (void)addAssetsFromArray:(NSArray *)array;
 - (void)addCJMImage:(CJMImage *)image;
 - (void)removeCJMImage:(CJMImage *)image;
 - (void)addMultipleCJMImages:(NSArray *)newImages;

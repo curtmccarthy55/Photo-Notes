@@ -15,8 +15,6 @@
 @property (nonatomic) NSString *name;
 @property (nonatomic) BOOL local;
 
-//- (instancetype)initWithName:(NSString *)name;
-
 @property (nonatomic, strong) NSString *photoTitle;
 @property (nonatomic, strong) NSString *photoNote;
 @property (nonatomic, strong) NSDate *photoCreationDate;

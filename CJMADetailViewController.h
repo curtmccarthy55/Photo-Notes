@@ -14,9 +14,7 @@
 @protocol CJMADetailViewControllerDelegate <NSObject>
 
 - (void)albumDetailViewControllerDidCancel:(CJMADetailViewController *)controller;
-
 - (void)albumDetailViewController:(CJMADetailViewController *)controller didFinishAddingAlbum:(CJMPhotoAlbum *)album;
-
 - (void)albumDetailViewController:(CJMADetailViewController *)controller didFinishEditingAlbum:(CJMPhotoAlbum *)album;
 
 @end

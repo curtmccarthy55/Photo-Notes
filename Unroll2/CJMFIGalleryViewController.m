@@ -42,7 +42,7 @@
 
 - (void)dealloc
 {
-    NSLog(@"PageVC deallocated!");
+//    NSLog(@"PageVC deallocated!");
 }
 
 -(BOOL)prefersStatusBarHidden
@@ -59,14 +59,14 @@
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(CJMFullImageViewController *)currentImageVC
 {
     NSInteger previousIndex = currentImageVC.index - 1;
-    NSLog(@"Creating previous VC.");
+//    NSLog(@"Creating previous VC.");
     return [self fullImageViewControllerForIndex:previousIndex];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(CJMFullImageViewController *)currentImageVC
 {
     NSInteger nextIndex = currentImageVC.index + 1;
-    NSLog(@"Creating next VC.");
+//    NSLog(@"Creating next VC.");
     return [self fullImageViewControllerForIndex:nextIndex];
 }
 
@@ -81,7 +81,7 @@
     fullImageController.delegate = self;
     [fullImageController setViewsVisible:_makeViewsVisible];
         
-    NSLog(@"fullImageViewControllerForIndex called.");
+//    NSLog(@"fullImageViewControllerForIndex called.");
         
     return fullImageController;
     }
@@ -135,19 +135,19 @@
 - (void)toggleFullImageShowForViewController:(CJMFullImageViewController *)viewController
 {
     self.makeViewsVisible = !self.makeViewsVisible;
-    NSLog(@"makeViewsVisible is %@", [NSNumber numberWithBool:self.makeViewsVisible]);
-    
     [viewController setViewsVisible:self.makeViewsVisible];
 }
 
+//deletes the currently displayed image and updates screen based on position in album
 - (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex
 {
     if (_albumCount - 1 == 0) {
+        
         [self.navigationController popViewControllerAnimated:YES];
+        
     } else if ((imageIndex + 1) >= _albumCount) {
+        
         CJMFullImageViewController *previousVC = (CJMFullImageViewController *)[self pageViewController:self viewControllerBeforeViewController:currentVC];
-        NSLog(@"We need to go to the previous image");
-        //previousVC.index = imageIndex;
         self.albumCount -= 1;
         
         [self setViewControllers:@[previousVC]
@@ -155,8 +155,8 @@
                                            animated:YES
                                          completion:nil];
     } else {
+        
         CJMFullImageViewController *nextVC = (CJMFullImageViewController *)[self pageViewController:self viewControllerAfterViewController:currentVC];
-    NSLog(@"%@", nextVC);
         nextVC.index = imageIndex;
         self.albumCount -= 1;
     
@@ -164,13 +164,7 @@
                        direction:UIPageViewControllerNavigationDirectionForward
                         animated:YES
                       completion:NULL];
-    
     }
-    //pageview not moving to new image after deletion
 }
-
-#pragma mark - pageViewController Delegate
-
-
 
 @end

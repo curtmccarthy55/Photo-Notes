@@ -13,10 +13,8 @@
 
 - (BOOL)writeObject:(id)data toRelativePath:(NSString *)path;
 - (id)readObjectFromRelativePath:(NSString *)path;
-
 - (BOOL)writeImage:(UIImage *)image toRelativePath:(NSString *)path;
 - (UIImage *)readImageFromRelativePath:(NSString *)path;
-
 - (void)deleteImageWithFileName:(NSString *)fileName;
 
 @end

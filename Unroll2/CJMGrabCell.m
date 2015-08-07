@@ -10,8 +10,6 @@
 
 @interface CJMGrabCell ()
 
-
-
 @end
 
 @implementation CJMGrabCell

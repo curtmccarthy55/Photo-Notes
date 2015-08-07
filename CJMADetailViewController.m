@@ -19,17 +19,13 @@
 {
 //    NSString *_note;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //self.navigationItem.title = self.album.albumTitle;
-    
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard:)];
-    
     gestureRecognizer.cancelsTouchesInView = NO;
     [self.tableView addGestureRecognizer:gestureRecognizer];
-
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -52,7 +48,6 @@
         
         self.nameField.text = self.albumToEdit.albumTitle;
         self.noteField.text = self.albumToEdit.albumNote;
-        
         self.nameField.enabled = NO;
         self.noteField.editable = NO;
         
@@ -78,7 +73,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - NavBar Button Actions
@@ -87,23 +81,20 @@
 {
     [self.nameField resignFirstResponder];
     [self.noteField resignFirstResponder];
-    
     [self.delegate albumDetailViewControllerDidCancel:self];
 }
 
 - (void)donePressed
 {
     if (!self.albumToEdit) {
-    
-    NSString *name = self.nameField.text;
-    if ([self confirmNameNonDuplicate:name]) {
-        return;
-    };
-    NSString *note = self.noteField.text;
-    
-    CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:name andNote:note];
-    
-    [self.delegate albumDetailViewController:self didFinishAddingAlbum:album];
+        NSString *name = self.nameField.text;
+        if ([self confirmNameNonDuplicate:name]) {
+            return;
+        };
+        NSString *note = self.noteField.text;
+        CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:name andNote:note];
+        
+        [self.delegate albumDetailViewController:self didFinishAddingAlbum:album];
     } else {
         if ([self.navigationItem.rightBarButtonItem.title isEqual:@"Done"]) {
             
@@ -127,7 +118,7 @@
 }
 
 - (BOOL)confirmNameNonDuplicate:(NSString *)name
-{
+{//prevent the user from making an album with the same name as another album
     if ([[CJMAlbumManager sharedInstance] containsAlbumNamed:name] && ![self.albumToEdit.albumTitle isEqualToString:name]) {
         UIAlertController *nameExistsAlert = [UIAlertController alertControllerWithTitle:@"Duplicate Album Name!" message:@"You have already created an album with this name." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Ok"
@@ -146,7 +137,6 @@
 - (void)hideKeyboard:(UIGestureRecognizer *)gestureRecognizer
 {
     CGPoint point = [gestureRecognizer locationInView:self.tableView];
-    
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
     if (indexPath == nil) {
@@ -158,7 +148,6 @@
     } else {
         [self.nameField resignFirstResponder];
     }
-    
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
