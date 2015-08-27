@@ -168,33 +168,33 @@ static CJMServices *__sharedInstance;
                                      &kerMemSize);
     
     if(kerBasic == KERN_SUCCESS && kerMem == KERN_SUCCESS) {
-/*        NSLog(@"∆•∆ %@ : \n\
+       NSLog(@"∆•∆ %@ : \n\
                  resident_size: %.2f MB virtual_size: %.2f MB\n\
                  private alloc: %.2f MB free: %.2f MB\n\
                  shared alloc: %.2f MB free: %.2f MB",
                  referrer, (float)kerBasicInfo.resident_size/(1024.f*1024.f), (float)kerBasicInfo.virtual_size/(1024.f*1024.f),
                  (float)kerMemInfo.total_palloc/(1024.f*1024.f), (float)kerMemInfo.total_pfree/(1024.f*1024.f),
                  (float)kerMemInfo.total_salloc/(1024.f*1024.f), (float)kerMemInfo.total_sfree/(1024.f*1024.f));
- */
+ 
     } else {
-//        NSLog(@"∆•∆ %@ : Error with task_info(): %s", referrer, mach_error_string(kerBasic));
+        NSLog(@"∆•∆ %@ : Error with task_info(): %s", referrer, mach_error_string(kerBasic));
     }
 }
 #else
 //if not in debug mode, lets collect less information & by default not print to console, print to crash reporting framework
 - (void)reportMemoryToConsoleWithReferrer:(NSString *)referrer
 {
-//    struct task_basic_info info;
-//    mach_msg_type_number_t size = sizeof(info);
-//    kern_return_t kerr = task_info(mach_task_self(),
-//                                   TASK_BASIC_INFO,
-//                                   (task_info_t)&info,
-//                                   &size);
-//    
-//    if(kerr == KERN_SUCCESS)
-//        NSLog(@"∆•∆ %@ : resident_size: %.2f MB virtual_size: %.2f mb", referrer, (float)info.resident_size/(1024.f*1024.f), (float)info.virtual_size/(1024.f*1024.f));
-//    else
-//        NSLog(@"∆•∆ %@ : Error with task_info(): %s", referrer, mach_error_string(kerr));
+    struct task_basic_info info;
+    mach_msg_type_number_t size = sizeof(info);
+    kern_return_t kerr = task_info(mach_task_self(),
+                                   TASK_BASIC_INFO,
+                                   (task_info_t)&info,
+                                   &size);
+    
+    if(kerr == KERN_SUCCESS)
+        NSLog(@"∆•∆ %@ : resident_size: %.2f MB virtual_size: %.2f mb", referrer, (float)info.resident_size/(1024.f*1024.f), (float)info.virtual_size/(1024.f*1024.f));
+    else
+        NSLog(@"∆•∆ %@ : Error with task_info(): %s", referrer, mach_error_string(kerr));
 }
 #endif
 
