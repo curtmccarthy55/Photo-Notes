@@ -11,6 +11,7 @@
 @implementation CJMAListTableViewCell
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
     // Initialization code
 }
 

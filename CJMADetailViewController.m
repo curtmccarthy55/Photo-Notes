@@ -12,6 +12,8 @@
 
 @interface CJMADetailViewController () <UIImagePickerControllerDelegate, UITextFieldDelegate>
 
+@property (weak, nonatomic) IBOutlet UITextField *nameField;
+@property (weak, nonatomic) IBOutlet UITextView *noteField;
 
 @end
 
@@ -30,11 +32,9 @@
     [self.tableView addGestureRecognizer:gestureRecognizer];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
-    if (self.albumToEdit == nil) {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:self
@@ -43,34 +43,17 @@
                                                                               style:UIBarButtonItemStyleDone
                                                                              target:self
                                                                              action:@selector(donePressed)];
-        
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    
+    if (self.albumToEdit == nil) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
     } else if (self.albumToEdit != nil) {
-        
         self.nameField.text = self.albumToEdit.albumTitle;
         self.noteField.text = self.albumToEdit.albumNote;
-        self.nameField.enabled = NO;
-        self.noteField.editable = NO;
-        
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
-                                                                                 style:UIBarButtonItemStylePlain
-                                                                                target:self
-                                                                                action:@selector(cancelPressed)];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit"
-                                                                                  style:UIBarButtonItemStyleDone
-                                                                                 target:self
-                                                                                 action:@selector(donePressed)];
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:YES];
-    
-    if (self.albumToEdit == nil) {
     [self.nameField becomeFirstResponder];
-    };
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,15 +62,13 @@
 
 #pragma mark - NavBar Button Actions
 
-- (void)cancelPressed
-{
+- (void)cancelPressed {
     [self.nameField resignFirstResponder];
     [self.noteField resignFirstResponder];
     [self.delegate albumDetailViewControllerDidCancel:self];
 }
 
-- (void)donePressed
-{
+- (void)donePressed {
     if (!self.albumToEdit) {
         NSString *name = self.nameField.text;
         if ([self confirmNameNonDuplicate:name]) {
@@ -98,24 +79,23 @@
         
         [self.delegate albumDetailViewController:self didFinishAddingAlbum:album];
     } else {
-        if ([self.navigationItem.rightBarButtonItem.title isEqual:@"Done"]) {
+//        if ([self.navigationItem.rightBarButtonItem.title isEqual:@"Done"]) {
+            if ([self confirmNameNonDuplicate:self.nameField.text]) {
+                return;
+            };
+            self.albumToEdit.albumTitle = self.nameField.text;
+            self.albumToEdit.albumNote = self.noteField.text;
             
-        if ([self confirmNameNonDuplicate:self.nameField.text]) {
-            return;
-        };
-        self.albumToEdit.albumTitle = self.nameField.text;
-        self.albumToEdit.albumNote = self.noteField.text;
-        
-        [self.nameField resignFirstResponder];
-        [self.noteField resignFirstResponder];
-        
-        [self.delegate albumDetailViewController:self didFinishEditingAlbum:self.albumToEdit];
-        } else if ([self.navigationItem.rightBarButtonItem.title isEqual:@"Edit"]) {
-            self.nameField.enabled = YES;
-            self.noteField.editable = YES;
-            [self.noteField becomeFirstResponder];
-            self.navigationItem.rightBarButtonItem.title = @"Done";
-        }
+            [self.nameField resignFirstResponder];
+            [self.noteField resignFirstResponder];
+            
+            [self.delegate albumDetailViewController:self didFinishEditingAlbum:self.albumToEdit];
+//        } else if ([self.navigationItem.rightBarButtonItem.title isEqual:@"Edit"]) {
+//            self.nameField.enabled = YES;
+//            self.noteField.editable = YES;
+//            [self.noteField becomeFirstResponder];
+//            self.navigationItem.rightBarButtonItem.title = @"Done";
+//        }
     }
 }
 

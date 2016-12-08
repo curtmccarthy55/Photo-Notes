@@ -9,15 +9,17 @@
 #import "CJMAListViewController.h"
 #import "CJMGalleryViewController.h"
 #import "CJMAListTableViewCell.h"
+#import "CJMPopoverViewController.h"
 #import "CJMAlbumManager.h"
 #import "CJMPhotoAlbum.h"
 #import "CJMServices.h"
 
 #define CJMAListCellIdentifier @"AlbumCell"
 
-@interface CJMAListViewController () 
+@interface CJMAListViewController () <UIPopoverPresentationControllerDelegate, CJMPopoverDelegate>
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
+@property (nonatomic) BOOL popoverPresent;
 
 @end
 
@@ -51,6 +53,18 @@
         });
     } else {
         [self.navigationItem setPrompt:nil];
+    }
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (self.popoverPresent) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        self.popoverPresent = NO;
     }
 }
 
@@ -105,15 +119,39 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {//replaces blank rows with blank space in the tableView
-    UIView *view = [[UIView alloc] init];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1.0, 1.0)];
     return view;
 }
+
+                          
 
 #pragma mark - tableView delegate methods
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSegueWithIdentifier:@"EditAlbum" sender:[tableView cellForRowAtIndexPath:indexPath]];
+//    [self performSegueWithIdentifier:@"EditAlbum" sender:[tableView cellForRowAtIndexPath:indexPath]];
+    
+    //cjm 12/07
+    NSString *sbName = @"Main";
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:sbName bundle:nil];
+    CJMPopoverViewController *popVC = (CJMPopoverViewController *)[sb instantiateViewControllerWithIdentifier:@"CJMPopover"];
+    CJMPhotoAlbum *album = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
+    popVC.name = album.albumTitle;
+    popVC.note = album.albumNote;
+    popVC.indexPath = indexPath;
+    popVC.delegate = self;
+    
+    popVC.modalPresentationStyle = UIModalPresentationPopover;
+    UIPopoverPresentationController *popController = popVC.popoverPresentationController;
+    popController.delegate = self;
+    popController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    popController.sourceView = cell;
+    popController.sourceRect = CGRectMake(cell.bounds.size.width - 33.0, cell.bounds.size.height / 2.0, 1.0, 1.0);
+    
+    self.popoverPresent = YES;
+    [self presentViewController:popVC animated:YES completion:nil];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -207,6 +245,21 @@
     [self.tableView reloadData];
     [[CJMAlbumManager sharedInstance] save];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Popover Delegates
+
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller traitCollection:(UITraitCollection *)traitCollection {
+    return UIModalPresentationNone;
+}
+
+- (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+    self.popoverPresent = NO;
+}
+
+- (void)editTappedForIndexPath:(NSIndexPath *)indexPath {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self performSegueWithIdentifier:@"EditAlbum" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
 }
 
 @end

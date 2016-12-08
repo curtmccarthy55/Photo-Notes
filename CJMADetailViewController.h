@@ -22,8 +22,6 @@
 @interface CJMADetailViewController : UITableViewController
 
 @property (nonatomic, strong) CJMPhotoAlbum *albumToEdit;
-@property (weak, nonatomic) IBOutlet UITextField *nameField;
-@property (weak, nonatomic) IBOutlet UITextView *noteField;
 @property (nonatomic, weak) id <CJMADetailViewControllerDelegate> delegate;
 
 @end

@@ -46,6 +46,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [super viewDidLoad];
     self.navigationController.toolbarHidden = NO;
     self.navigationItem.title = self.album.albumTitle;
+    self.navigationItem.backBarButtonItem.title = @"Albums";
 }
 
 //Make sure nav bars and associated controls are visible whenever the gallery appears.
@@ -290,7 +291,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
             if (status != PHAuthorizationStatusAuthorized) {
-                UIAlertController *adjustPrivacyController = [UIAlertController alertControllerWithTitle:@"Denied access to Photos" message:@"You will need to give Photo Notes permission to import from your Photo Library.\n\nPlease allow Photo Notes access to your Camera Roll by going to Settings>Privacy>Photos." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *adjustPrivacyController = [UIAlertController alertControllerWithTitle:@"Denied access to Photos" message:@"You will need to give Photo Notes permission to import from your Photo Library.\n\nPlease allow Photo Notes access to your Photo Library by going to Settings>Privacy>Photos." preferredStyle:UIAlertControllerStyleAlert];
                 
                 UIAlertAction *dismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}];
                 
@@ -317,6 +318,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 //Present users photo library
 - (void)presentPhotoGrabViewController
 {
+    //cjm 12/07
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];

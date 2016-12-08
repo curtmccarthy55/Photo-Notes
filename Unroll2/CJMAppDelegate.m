@@ -27,6 +27,7 @@
     [[CJMServices sharedInstance] beginReportingMemoryToConsoleWithInterval:5.f];
 #endif
 
+    
     return YES;
 }
 
