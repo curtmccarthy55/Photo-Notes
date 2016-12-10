@@ -287,8 +287,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }];
     
     //Access photo library
-    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:@"Choose From Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForLibrary) {
-        
+    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:@"Choose From Library"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction *actionForLibrary){
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
             if (status != PHAuthorizationStatusAuthorized) {
                 UIAlertController *adjustPrivacyController = [UIAlertController alertControllerWithTitle:@"Denied access to Photos" message:@"You will need to give Photo Notes permission to import from your Photo Library.\n\nPlease allow Photo Notes access to your Photo Library by going to Settings>Privacy>Photos." preferredStyle:UIAlertControllerStyleAlert];
@@ -318,12 +319,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 //Present users photo library
 - (void)presentPhotoGrabViewController
 {
-    //cjm 12/07
+    //cjm 12/10
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
     CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
-    vc.title = @"Select Photos";
     vc.delegate = self;
     [self presentViewController:navigationVC animated:YES completion:nil];
 }

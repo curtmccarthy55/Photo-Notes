@@ -43,7 +43,11 @@
     newFrame.size = CGSizeMake(fmaxf(newSize.width, fixedWidth), newSize.height - 10.0);
     self.textView.frame = newFrame;
     
-    CGFloat height = self.lblName.bounds.size.height + self.textView.bounds.size.height + 24.0;
+    NSDictionary *dic = @{ NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0] };
+    CGFloat titleSize = [self.name boundingRectWithSize:CGSizeMake((SCREEN_WIDTH * 0.75 - 60.0), 2000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil].size.height;
+    CGFloat txtViewHeight = self.textView.bounds.size.height;
+    CGFloat height = titleSize + txtViewHeight + 24.0;
+    
     if (height > SCREEN_WIDTH) {
         [self.textView setScrollEnabled:YES];
         self.preferredContentSize = CGSizeMake(SCREEN_WIDTH * 0.75, SCREEN_WIDTH);

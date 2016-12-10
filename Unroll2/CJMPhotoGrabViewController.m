@@ -31,7 +31,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
     self.collectionView.allowsMultipleSelection = YES;
     self.imageManager = [[PHCachingImageManager alloc] init];
     self.fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:nil];
-    
+    self.navigationItem.title = @"Select Photos";
 }
 
 - (void)viewWillAppear:(BOOL)animated

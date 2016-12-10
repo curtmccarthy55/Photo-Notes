@@ -140,8 +140,8 @@
 #pragma mark - View adjustments
 
 //Sets the note section height equal to the space between the toolbar and navbar
-- (void)fullSizeForNoteSection
-{
+- (void)fullSizeForNoteSection {
+    
     self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
 }
 
@@ -234,8 +234,7 @@
 
 //first button press: Slide the note section up so it touches the bottom of the navbar
 //second button press: Slide the note section back down to just above the toolbar
-- (IBAction)shiftNote:(id)sender
-{
+- (IBAction)shiftNote:(id)sender {
     [self fullSizeForNoteSection];
     
     CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
@@ -287,7 +286,7 @@
 //Places the note section 44 points above the toolbar.
 - (void)handleNoteSectionAlignment
 {
-    self.noteShiftConstraint.constant = -(44.0 + self.navigationController.toolbar.frame.size.height);
+    self.noteShiftConstraint.constant = -44.0;/*-(44.0 + self.navigationController.toolbar.frame.size.height);*/
     [self.noteSection setNeedsUpdateConstraints];
 }
 

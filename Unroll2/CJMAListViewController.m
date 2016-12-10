@@ -145,6 +145,7 @@
     UIPopoverPresentationController *popController = popVC.popoverPresentationController;
     popController.delegate = self;
     popController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    [popController setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.67]];
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     popController.sourceView = cell;
