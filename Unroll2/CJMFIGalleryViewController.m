@@ -29,6 +29,8 @@
     fullImageVC.index = _initialIndex;
     fullImageVC.delegate = self;
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(favoriteImage)];
+    
     [self setViewControllers:@[fullImageVC]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:NO
@@ -98,6 +100,10 @@
 }
 
 #pragma mark - navBar and toolbar buttons
+
+- (void)favoriteImage {
+    
+}
 
 - (IBAction)currentPhotoOptions:(id)sender
 {

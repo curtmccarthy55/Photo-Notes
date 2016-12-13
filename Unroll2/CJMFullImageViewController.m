@@ -286,7 +286,7 @@
 //Places the note section 44 points above the toolbar.
 - (void)handleNoteSectionAlignment
 {
-    self.noteShiftConstraint.constant = -44.0;/*-(44.0 + self.navigationController.toolbar.frame.size.height);*/
+    self.noteShiftConstraint.constant = -44.0;
     [self.noteSection setNeedsUpdateConstraints];
 }
 

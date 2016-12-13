@@ -142,7 +142,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -158,6 +158,8 @@
         [self.nameField becomeFirstResponder];
     } else if (indexPath.section == 1) {
         [self.noteField becomeFirstResponder];
+    } else if (indexPath.section == 2) {
+        //cjm 12/13
     }
 }
 
