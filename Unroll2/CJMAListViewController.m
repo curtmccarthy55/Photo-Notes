@@ -39,8 +39,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.tableView reloadData];
     [self noAlbumsPopUp];
+    [self.tableView reloadData];
 }
 
 
@@ -71,7 +71,7 @@
 #pragma mark - tableView data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+{ 
     return [[CJMAlbumManager sharedInstance] allAlbums].count;
 }
 

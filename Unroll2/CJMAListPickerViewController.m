@@ -15,12 +15,11 @@
 
 @interface CJMAListPickerViewController ()
 
+@property (nonatomic, strong) CJMPhotoAlbum *selectedAlbum;
+
 @end
 
 @implementation CJMAListPickerViewController
-{
-    CJMPhotoAlbum *_selectedAlbum;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -113,7 +112,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    _selectedAlbum = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
+    self.selectedAlbum = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
 }
 
 #pragma mark - Buttons actions
@@ -126,7 +125,7 @@
 //If user picks the current album, display an alert.  Otherwise, move photos to new album.
 - (void)donePressed
 {
-    if ([_selectedAlbum.albumTitle isEqual:self.currentAlbumName]) {
+    if ([self.selectedAlbum.albumTitle isEqual:self.currentAlbumName]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Choose Alternate Album" message:@"The selected Photo Notes are already in this album.\n  Please choose a different album." preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) { }];
@@ -135,7 +134,7 @@
         
         [self presentViewController:alertController animated:YES completion:nil];
     } else {
-        [self.delegate aListPickerViewController:self didFinishPickingAlbum:_selectedAlbum];
+        [self.delegate aListPickerViewController:self didFinishPickingAlbum:self.selectedAlbum];
     }
 }
 

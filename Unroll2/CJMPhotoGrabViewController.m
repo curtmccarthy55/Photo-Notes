@@ -149,7 +149,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
     
     for (int i = 0; i < selectedItems.count; i++) {
         NSIndexPath *indexPath = [selectedItems objectAtIndex:i];
-        PHAsset *asset = _fetchResult[indexPath.item];
+        PHAsset *asset = self.fetchResult[indexPath.item];
         [pickedPhotos addObject:asset];
     }
     [self.delegate photoGrabViewController:self didFinishSelectingPhotos:[pickedPhotos copy]];

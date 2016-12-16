@@ -72,14 +72,14 @@
 
 - (CJMFullImageViewController *)fullImageViewControllerForIndex:(NSInteger)index
 {
-    if (index >= _albumCount || index < 0) {
+    if (index >= self.albumCount || index < 0) {
         return nil;
     } else {
     CJMFullImageViewController *fullImageController = [self.storyboard instantiateViewControllerWithIdentifier:@"FullImageVC"];
     fullImageController.index = index;
-    fullImageController.albumName = _albumName;
+    fullImageController.albumName = self.albumName;
     fullImageController.delegate = self;
-    [fullImageController setViewsVisible:_makeViewsVisible];
+    [fullImageController setViewsVisible:self.makeViewsVisible];
         
 //    NSLog(@"fullImageViewControllerForIndex called.");
         
@@ -124,13 +124,13 @@
 
 - (void)toggleViewVisibility
 {
-    if (_makeViewsVisible == NO) {
+    if (self.makeViewsVisible == NO) {
         [UIApplication sharedApplication].statusBarHidden = YES;
         [UIView animateWithDuration:0.2 animations:^{
         self.navigationController.navigationBar.alpha = 0;
         self.navigationController.toolbar.alpha = 0;
         }];
-    } else if (_makeViewsVisible == YES) {
+    } else if (self.makeViewsVisible == YES) {
         [UIApplication sharedApplication].statusBarHidden = NO;
         [UIView animateWithDuration:0.2 animations:^{
         self.navigationController.navigationBar.alpha = 1;
@@ -150,11 +150,11 @@
 //deletes the currently displayed image and updates screen based on position in album
 - (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex
 {
-    if (_albumCount - 1 == 0) {
+    if (self.albumCount - 1 == 0) {
         
         [self.navigationController popViewControllerAnimated:YES];
         
-    } else if ((imageIndex + 1) >= _albumCount) {
+    } else if ((imageIndex + 1) >= self.albumCount) {
         
         CJMFullImageViewController *previousVC = (CJMFullImageViewController *)[self pageViewController:self viewControllerBeforeViewController:currentVC];
         self.albumCount -= 1;

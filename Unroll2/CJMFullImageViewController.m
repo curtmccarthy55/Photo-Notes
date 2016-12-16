@@ -40,14 +40,17 @@
 @property (strong, nonatomic) IBOutlet UIButton *editNoteButton;
 
 @property (nonatomic) CGFloat lastZoomScale;
+@property (nonatomic) float initialZoomScale;
+@property (nonatomic) BOOL focusIsOnImage;
 
 @end
 
 @implementation CJMFullImageViewController
-{
-    float _initialZoomScale;
-    BOOL _focusIsOnImage;
-}
+// cjm replacing with properties
+//{
+//    float _initialZoomScale;
+//    BOOL _focusIsOnImage;
+//}
 
 #pragma mark - View preparation and display
 
@@ -55,8 +58,8 @@
 {
     [super viewDidLoad];
     
-    [self prepareWithAlbumNamed:_albumName andIndex:_index];
-    [[CJMServices sharedInstance] fetchImage:_cjmImage handler:^(UIImage *fetchedImage) {
+    [self prepareWithAlbumNamed:self.albumName andIndex:self.index];
+    [[CJMServices sharedInstance] fetchImage:self.cjmImage handler:^(UIImage *fetchedImage) {
         self.fullImage = fetchedImage;
     }];
     
@@ -68,11 +71,11 @@
 {
     [super viewWillAppear:animated];
     
-    self.imageView.image = _fullImage;
+    self.imageView.image = self.fullImage;
     self.scrollView.delegate = self;
     [self updateZoom];
 
-    self.noteTitle.text = _cjmImage.photoTitle;
+    self.noteTitle.text = self.cjmImage.photoTitle;
     self.noteTitle.textColor = [UIColor whiteColor];
     self.noteTitle.adjustsFontSizeToFitWidth = YES;
     
@@ -82,7 +85,7 @@
     
     //Transform shifts title up to make it level with noteSection buttons.
     self.noteTitle.layer.sublayerTransform = CATransform3DMakeTranslation(0, -3, 0);
-    self.noteEntry.text = _cjmImage.photoNote;
+    self.noteEntry.text = self.cjmImage.photoNote;
     self.noteEntry.selectable = NO;
     self.noteEntry.textColor = [UIColor whiteColor];
     self.noteEntry.font = [UIFont fontWithName:@"Verdana" size:14];
@@ -102,8 +105,8 @@
         self.photoLocAndDate.text = [NSString stringWithFormat:@"Photo taken %@", [dateFormatter stringFromDate:self.cjmImage.photoCreationDate]];
         
     }
-    _initialZoomScale = self.scrollView.zoomScale;
-    _focusIsOnImage = NO;
+    self.initialZoomScale = self.scrollView.zoomScale;
+    self.focusIsOnImage = NO;
     [self handleNoteSectionAlignment];
     [self updateConstraints];
 }
@@ -117,8 +120,8 @@
 - (void)prepareWithAlbumNamed:(NSString *)name andIndex:(NSInteger)index
 {
     CJMImage *image = [[CJMAlbumManager sharedInstance] albumWithName:name returnImageAtIndex:index];
-    _index = index;
-    _cjmImage = image;
+    self.index = index;
+    self.cjmImage = image;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -130,7 +133,7 @@
         [self handleNoteSectionDismissal];
     }
     
-    if (_focusIsOnImage) {
+    if (self.focusIsOnImage) {
         [self imageViewTapped:self];
     }
     
@@ -154,7 +157,7 @@
 {
     [super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
     
-    if (_focusIsOnImage) {
+    if (self.focusIsOnImage) {
         [self imageViewTapped:self];
     }
     
@@ -166,7 +169,7 @@
     
     [self updateZoom];
     
-    _initialZoomScale = self.scrollView.zoomScale;
+    self.initialZoomScale = self.scrollView.zoomScale;
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
@@ -176,7 +179,7 @@
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
 {
-    if (_initialZoomScale < self.scrollView.zoomScale) {
+    if (self.initialZoomScale < self.scrollView.zoomScale) {
         self.scrollView.scrollEnabled = YES;
     } else {
         self.scrollView.scrollEnabled = NO;
@@ -340,10 +343,10 @@
 
 - (IBAction)imageViewTapped:(id)sender
 {
-    if (!_focusIsOnImage) {
-        _focusIsOnImage = YES;
+    if (!self.focusIsOnImage) {
+        self.focusIsOnImage = YES;
     } else {
-        _focusIsOnImage = NO;
+        self.focusIsOnImage = NO;
     }
     
     [self.delegate toggleFullImageShowForViewController:self];
@@ -352,13 +355,13 @@
 //double tap to zoom in/zoom out
 - (IBAction)imageViewDoubleTapped:(UITapGestureRecognizer *)gestureRecognizer
 {
-    if (self.scrollView.zoomScale == _initialZoomScale) {
+    if (self.scrollView.zoomScale == self.initialZoomScale) {
         CGPoint centerPoint = [gestureRecognizer locationInView:self.scrollView];
         
         //current content size back to content scale of 1.0f
         CGSize contentSize;
-        contentSize.width = (self.scrollView.contentSize.width / _initialZoomScale);
-        contentSize.height = (self.scrollView.contentSize.height / _initialZoomScale);
+        contentSize.width = (self.scrollView.contentSize.width / self.initialZoomScale);
+        contentSize.height = (self.scrollView.contentSize.height / self.initialZoomScale);
         
         //translate the zoom point to relative to the content rect
         centerPoint.x = (centerPoint.x / self.scrollView.bounds.size.width) * contentSize.width;
@@ -366,8 +369,8 @@
         
         //get the size of the region to zoom to
         CGSize zoomSize;
-        zoomSize.width = self.scrollView.bounds.size.width / (_initialZoomScale * 4.0);
-        zoomSize.height = self.scrollView.bounds.size.height / (_initialZoomScale * 4.0);
+        zoomSize.width = self.scrollView.bounds.size.width / (self.initialZoomScale * 4.0);
+        zoomSize.height = self.scrollView.bounds.size.height / (self.initialZoomScale * 4.0);
         
         //offset the zoom rect so the actual zoom point is in the middle of the rectangle
         CGRect zoomRect;

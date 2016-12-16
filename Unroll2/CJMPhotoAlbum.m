@@ -23,9 +23,9 @@
     self = [super init];
     
     if (self) {
-        _albumTitle = name;
-        _albumNote = note;
-        _albumEditablePhotos = [[NSMutableOrderedSet alloc] init];
+        self.albumTitle = name;
+        self.albumNote = note;
+        self.albumEditablePhotos = [[NSMutableOrderedSet alloc] init];
     }
     return self;
 }
@@ -47,10 +47,10 @@
 {
     self = [super init];
     if (self) {
-        _albumTitle = [coder decodeObjectForKey:@"Title"];
-        _albumNote = [coder decodeObjectForKey:@"Note"];
-        _albumEditablePhotos = [coder decodeObjectForKey:@"AlbumPhotos"];
-        _albumPreviewImage = [coder decodeObjectForKey:@"PreviewImage"];
+        self.albumTitle = [coder decodeObjectForKey:@"Title"];
+        self.albumNote = [coder decodeObjectForKey:@"Note"];
+        self.albumEditablePhotos = [coder decodeObjectForKey:@"AlbumPhotos"];
+        self.albumPreviewImage = [coder decodeObjectForKey:@"PreviewImage"];
     }
     return self;
 }
@@ -64,19 +64,19 @@
 
 - (void)addCJMImage:(CJMImage *)image
 {
-    [_albumEditablePhotos addObject:image];
+    [self.albumEditablePhotos addObject:image];
 }
 
 - (void)removeCJMImage:(CJMImage *)image
 {
-    [_albumEditablePhotos removeObject:image];
+    [self.albumEditablePhotos removeObject:image];
 }
 
 - (void)addMultipleCJMImages:(NSArray *)newImages
 {
     NSArray *sortedNewImages = [newImages sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"photoCreationDate" ascending:YES]]];
     
-    [_albumEditablePhotos addObjectsFromArray:sortedNewImages];
+    [self.albumEditablePhotos addObjectsFromArray:sortedNewImages];
 }
 
 - (void)removeCJMImagesAtIndexes:(NSIndexSet *)indexSet

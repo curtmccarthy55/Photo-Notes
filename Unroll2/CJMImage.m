@@ -19,16 +19,16 @@
     self = [self init];
     if(self)
     {
-        _name = [aDecoder decodeObjectForKey:@"Name"];
-        _local = [aDecoder decodeBoolForKey:@"Local"];
-        _photoID = [aDecoder decodeObjectForKey:@"photoID"];
-        _photoTitle = [aDecoder decodeObjectForKey:@"Title"];
-        _photoNote = [aDecoder decodeObjectForKey:@"Note"];
-        _photoCreationDate = [aDecoder decodeObjectForKey:@"CreationDate"];
-        //_photoLocation = [aDecoder decodeObjectForKey:@"Location"];
-        _isAlbumPreview = [aDecoder decodeBoolForKey:@"AlbumPreview"];
-        _thumbnailNeedsRedraw = [aDecoder decodeBoolForKey:@"ThumbnailNeedsRedraw"];
-        _selectCoverHidden = YES;
+        self.name = [aDecoder decodeObjectForKey:@"Name"];
+        self.local = [aDecoder decodeBoolForKey:@"Local"];
+        self.photoID = [aDecoder decodeObjectForKey:@"photoID"];
+        self.photoTitle = [aDecoder decodeObjectForKey:@"Title"];
+        self.photoNote = [aDecoder decodeObjectForKey:@"Note"];
+        self.photoCreationDate = [aDecoder decodeObjectForKey:@"CreationDate"];
+        //self.photoLocation = [aDecoder decodeObjectForKey:@"Location"];
+        self.isAlbumPreview = [aDecoder decodeBoolForKey:@"AlbumPreview"];
+        self.thumbnailNeedsRedraw = [aDecoder decodeBoolForKey:@"ThumbnailNeedsRedraw"];
+        self.selectCoverHidden = YES;
         
         if (!self.isAlbumPreview) {
             self.isAlbumPreview = NO;
@@ -56,7 +56,7 @@
     self = [super init];
     
     if (self) {
-        _photoID = [NSUUID UUID];
+        self.photoID = [NSUUID UUID];
     }
     return self;
 }

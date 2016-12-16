@@ -69,9 +69,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     UICollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"Footer" forIndexPath:indexPath];
     
     UILabel *footerLabel = (UILabel *)[footer viewWithTag:100];
-    if (_album.albumPhotos.count > 1) {
-        footerLabel.text = [NSString stringWithFormat:@"%lu Photos", (unsigned long)_album.albumPhotos.count];
-    } else if (_album.albumPhotos.count == 1) {
+    if (self.album.albumPhotos.count > 1) {
+        footerLabel.text = [NSString stringWithFormat:@"%lu Photos", (unsigned long)self.album.albumPhotos.count];
+    } else if (self.album.albumPhotos.count == 1) {
         footerLabel.text = @"1 Photo";
     } else {
         footerLabel.text = nil;
@@ -190,8 +190,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     if ([segue.identifier isEqualToString:@"ViewPhoto"]) {
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
         CJMFIGalleryViewController *vc = (CJMFIGalleryViewController *)segue.destinationViewController;
-        vc.albumName = _album.albumTitle;
-        vc.albumCount = _album.albumPhotos.count;
+        vc.albumName = self.album.albumTitle;
+        vc.albumCount = self.album.albumPhotos.count;
         vc.initialIndex = indexPath.item;
     }
 }
@@ -380,19 +380,19 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     //Delete photos without saving to Photos app
     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete Photos Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
        
-        for (NSIndexPath *itemPath in _selectedCells) {
-            CJMImage *doomedImage = [_album.albumPhotos objectAtIndex:itemPath.row];
+        for (NSIndexPath *itemPath in self.selectedCells) {
+            CJMImage *doomedImage = [self.album.albumPhotos objectAtIndex:itemPath.row];
             [[CJMServices sharedInstance] deleteImage:doomedImage];
         }
         NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-        for (NSIndexPath *itemPath in _selectedCells) {
+        for (NSIndexPath *itemPath in self.selectedCells) {
             [indexSet addIndex:itemPath.row];
         }
         [self.album removeCJMImagesAtIndexes:indexSet];
         
         [[CJMAlbumManager sharedInstance] save];
         
-        [self.collectionView deleteItemsAtIndexPaths:_selectedCells];
+        [self.collectionView deleteItemsAtIndexPaths:self.selectedCells];
         
         [self toggleEditMode:self];
         
@@ -489,7 +489,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self setInitialValuesForCJMImage:newImage];
     newImage.photoCreationDate = [NSDate date];
     newImage.thumbnailNeedsRedraw = NO;
-    [_album addCJMImage:newImage];
+    [self.album addCJMImage:newImage];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
@@ -554,8 +554,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
-    if (!_imageManager) {
-        _imageManager = [[PHCachingImageManager alloc] init];
+    if (!self.imageManager) {
+        self.imageManager = [[PHCachingImageManager alloc] init];
     }
     
     __block NSInteger counter = [photos count];
@@ -611,7 +611,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [newImages addObject:assetImage];
     }
 
-    [_album addMultipleCJMImages:newImages];
+    [self.album addMultipleCJMImages:newImages];
 
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
         self.navigationController.view.userInteractionEnabled = YES;
@@ -640,8 +640,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 {
     NSMutableArray *transferringImages = [NSMutableArray new];
     
-    for (NSIndexPath *itemPath in _selectedCells) {
-        CJMImage *imageToTransfer = [_album.albumPhotos objectAtIndex:itemPath.row];
+    for (NSIndexPath *itemPath in self.selectedCells) {
+        CJMImage *imageToTransfer = [self.album.albumPhotos objectAtIndex:itemPath.row];
         imageToTransfer.selectCoverHidden = YES;
         if (imageToTransfer.isAlbumPreview == YES) {
             [imageToTransfer setIsAlbumPreview:NO];
@@ -653,7 +653,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [album addMultipleCJMImages:transferringImages];
     
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-    for (NSIndexPath *itemPath in _selectedCells) {
+    for (NSIndexPath *itemPath in self.selectedCells) {
         [indexSet addIndex:itemPath.row];
     }
     [self.album removeCJMImagesAtIndexes:indexSet];
@@ -664,7 +664,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
     
     [[CJMAlbumManager sharedInstance] save];
-    [self.collectionView deleteItemsAtIndexPaths:_selectedCells];
+    [self.collectionView deleteItemsAtIndexPaths:self.selectedCells];
     [self toggleEditMode:self];
     [self.collectionView reloadData];
     [self dismissViewControllerAnimated:YES completion:nil];

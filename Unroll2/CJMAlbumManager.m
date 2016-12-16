@@ -17,7 +17,7 @@ static CJMAlbumManager *__sharedInstance;
 
 @interface CJMAlbumManager ()
 
-@property (nonatomic) NSMutableOrderedSet *allAlbumsEdit;
+@property (nonatomic, strong) NSMutableOrderedSet *allAlbumsEdit;
 @property (nonatomic) CJMFileSerializer *fileSerializer;
 
 @end
@@ -71,17 +71,17 @@ static CJMAlbumManager *__sharedInstance;
 
 - (NSMutableOrderedSet *)allAlbumsEdit
 {
-    if(!self.allAlbumsEdit)
+    if(!_allAlbumsEdit)
     {
         //lazy load from disk
         NSOrderedSet *set = [self.fileSerializer readObjectFromRelativePath:CJMAlbumFileName];
-        self.allAlbumsEdit = [NSMutableOrderedSet new];
+        _allAlbumsEdit = [NSMutableOrderedSet new];
         
         if (set) {
-            [self.allAlbumsEdit addObjectsFromArray:[set array]];
+            [_allAlbumsEdit addObjectsFromArray:[set array]];
         }
     }
-    return self.allAlbumsEdit;
+    return _allAlbumsEdit;
 }
 
 #pragma mark - Content management
