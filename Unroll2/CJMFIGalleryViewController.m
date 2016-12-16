@@ -25,11 +25,9 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     CJMFullImageViewController *fullImageVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"FullImageVC"];
-    fullImageVC.albumName = _albumName;
-    fullImageVC.index = _initialIndex;
+    fullImageVC.albumName = self.albumName;
+    fullImageVC.index = self.initialIndex;
     fullImageVC.delegate = self;
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(favoriteImage)];
     
     [self setViewControllers:@[fullImageVC]
                    direction:UIPageViewControllerNavigationDirectionForward
@@ -101,9 +99,14 @@
 
 #pragma mark - navBar and toolbar buttons
 
-- (void)favoriteImage {
-    
+- (IBAction)favoriteImage:(UIBarButtonItem *)sender {
+    if ([sender.image isEqual:[UIImage imageNamed:@"WhiteStarEmpty"]]) {
+        [sender setImage:[UIImage imageNamed:@"WhiteStarFull"]];
+    } else {
+        [sender setImage:[UIImage imageNamed:@"WhiteStarEmpty"]];
+    }
 }
+
 
 - (IBAction)currentPhotoOptions:(id)sender
 {

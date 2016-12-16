@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XRF-wX-XIn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XRF-wX-XIn">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -65,10 +65,10 @@
                             <tableViewSection headerTitle="Album Name" id="TNv-4k-r0a">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="6JI-tl-K7e">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="56" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6JI-tl-K7e" id="2ZV-kC-dIT">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="fAh-XQ-A0r">
@@ -94,10 +94,10 @@
                             <tableViewSection headerTitle="Album Note" id="0YC-l6-llA">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="200" id="euC-Be-1sv">
-                                        <rect key="frame" x="0.0" y="147.5" width="375" height="200"/>
+                                        <rect key="frame" x="0.0" y="149" width="375" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="euC-Be-1sv" id="9bV-4I-mUg">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="199.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="199"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tP9-kT-QRy">
@@ -122,10 +122,10 @@
                             <tableViewSection headerTitle="Album Thumbnail" id="GY9-S2-O8d">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="X8U-V9-mLG">
-                                        <rect key="frame" x="0.0" y="395.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="398" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="X8U-V9-mLG" id="uyr-gs-6yL">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hec-aF-qhw">
@@ -354,20 +354,26 @@
                 <pageViewController storyboardIdentifier="PageController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" pageSpacing="5" navigationOrientation="horizontal" spineLocation="none" id="auB-ij-Inv" customClass="CJMFIGalleryViewController" sceneMemberID="viewController">
                     <toolbarItems>
                         <barButtonItem systemItem="trash" id="5xp-wP-xfs">
+                            <inset key="imageInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <connections>
                                 <action selector="deleteCurrentPhoto:" destination="auB-ij-Inv" id="uea-Ch-xWm"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="ZkF-Mv-9Hq"/>
+                        <barButtonItem image="WhiteStarEmpty" id="dVh-8w-BxO">
+                            <connections>
+                                <action selector="favoriteImage:" destination="auB-ij-Inv" id="08o-mm-j4w"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="xk4-2H-M6l"/>
                         <barButtonItem systemItem="action" id="7lk-hn-E42">
+                            <inset key="imageInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
                             <connections>
                                 <action selector="currentPhotoOptions:" destination="auB-ij-Inv" id="xTe-64-4oT"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" id="ySI-BV-izL">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="plm-9j-ZOK"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="ySI-BV-izL"/>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5N9-aI-gXV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -556,7 +562,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3324" y="340"/>
+            <point key="canvasLocation" x="3324" y="339.58020989505252"/>
         </scene>
         <!--Import Photos-->
         <scene sceneID="1wi-Ff-VJa">
@@ -756,6 +762,9 @@
             <point key="canvasLocation" x="990" y="1012"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="WhiteStarEmpty" width="44" height="44"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="zVD-Ov-2nV"/>
     </inferredMetricsTieBreakers>

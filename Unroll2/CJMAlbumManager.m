@@ -37,7 +37,7 @@ static CJMAlbumManager *__sharedInstance;
 {
     self = [super init];
     if (self) {
-        _fileSerializer = [CJMFileSerializer new];
+        self.fileSerializer = [CJMFileSerializer new];
         [self registerDefaults];
         [self handleFirstTime];
     }
@@ -71,17 +71,17 @@ static CJMAlbumManager *__sharedInstance;
 
 - (NSMutableOrderedSet *)allAlbumsEdit
 {
-    if(!_allAlbumsEdit)
+    if(!self.allAlbumsEdit)
     {
         //lazy load from disk
         NSOrderedSet *set = [self.fileSerializer readObjectFromRelativePath:CJMAlbumFileName];
-        _allAlbumsEdit = [NSMutableOrderedSet new];
+        self.allAlbumsEdit = [NSMutableOrderedSet new];
         
         if (set) {
-            [_allAlbumsEdit addObjectsFromArray:[set array]];
+            [self.allAlbumsEdit addObjectsFromArray:[set array]];
         }
     }
-    return _allAlbumsEdit;
+    return self.allAlbumsEdit;
 }
 
 #pragma mark - Content management
@@ -127,7 +127,7 @@ static CJMAlbumManager *__sharedInstance;
 {
     CJMPhotoAlbum *foundAlbum;
     
-    for (CJMPhotoAlbum *album in _allAlbumsEdit) {
+    for (CJMPhotoAlbum *album in self.allAlbumsEdit) {
         if ([album.albumTitle isEqualToString:name]) {
             foundAlbum = album;
             break;
