@@ -54,8 +54,7 @@
 
 #pragma mark - View preparation and display
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self prepareWithAlbumNamed:self.albumName andIndex:self.index];
@@ -67,8 +66,7 @@
     [self.oneTap requireGestureRecognizerToFail:self.twoTap];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     self.imageView.image = self.fullImage;
@@ -93,17 +91,13 @@
     [self.photoLocAndDate setAlpha:0.0];
     
     if (self.cjmImage.photoCreationDate == nil) {
-        
         self.photoLocAndDate.hidden = YES;
-        
     } else {
-        
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateStyle:NSDateFormatterFullStyle];
         [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
         self.photoLocAndDate.hidden = NO;
         self.photoLocAndDate.text = [NSString stringWithFormat:@"Photo taken %@", [dateFormatter stringFromDate:self.cjmImage.photoCreationDate]];
-        
     }
     self.initialZoomScale = self.scrollView.zoomScale;
     self.focusIsOnImage = NO;
@@ -241,17 +235,15 @@
     [self fullSizeForNoteSection];
     
     CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
-    
-    CGFloat shiftConstant = -(self.view.bounds.size.height - topBarsHeight);
+    CGFloat shiftConstant = -(self.view.bounds.size.height - 44 - topBarsHeight);
     
     if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
-//lengthens the constraint between the noteSection top and toolbar top; responsible for view shift.
         self.noteShiftConstraint.constant = shiftConstant;
         [self.noteSection setNeedsUpdateConstraints];
         self.noteTitle.text = self.cjmImage.photoTitle;
         
         [UIView animateWithDuration:0.25 animations:^{
-            [self.noteSection layoutIfNeeded];
+            [self.noteSection.superview layoutIfNeeded];
             
             self.editNoteButton.hidden = NO;
             [self.seeNoteButton setTitle:@"Dismiss" forState:UIControlStateNormal];
@@ -276,7 +268,7 @@
     }
     
     [UIView animateWithDuration:0.25 animations:^{
-        [self.noteSection layoutIfNeeded];
+        [self.noteSection.superview layoutIfNeeded];
         self.editNoteButton.hidden = YES;
         
         [self.seeNoteButton setTitle:@"See Note" forState:UIControlStateNormal];
@@ -330,13 +322,13 @@
 {
     if (self.viewsVisible == YES) {
         [UIView animateWithDuration:0.2 animations:^{
-        self.scrollView.backgroundColor = [UIColor whiteColor];
-        self.noteSection.alpha = 1;
+            self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+            self.noteSection.alpha = 1;
         }];
     } else if (self.viewsVisible == NO) {
         [UIView animateWithDuration:0.2 animations:^{
-        self.scrollView.backgroundColor = [UIColor blackColor];
-        self.noteSection.alpha = 0;
+            self.scrollView.backgroundColor = [UIColor blackColor];
+            self.noteSection.alpha = 0;
         }];
     }
 }

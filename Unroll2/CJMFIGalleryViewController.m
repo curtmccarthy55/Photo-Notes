@@ -81,11 +81,8 @@
     fullImageController.delegate = self;
     [fullImageController setViewsVisible:self.makeViewsVisible];
         
-//    NSLog(@"fullImageViewControllerForIndex called.");
-        
     return fullImageController;
     }
-    
 }
 
 #pragma mark - navBar and toolbar visibility

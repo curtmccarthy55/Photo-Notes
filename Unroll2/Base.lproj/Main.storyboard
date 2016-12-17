@@ -233,7 +233,7 @@
         <scene sceneID="Aeb-Yn-XIE">
             <objects>
                 <collectionViewController id="uLg-8C-qq2" customClass="CJMGalleryViewController" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" id="9nl-h9-yxM">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" id="9nl-h9-yxM">
                         <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -351,7 +351,7 @@
         <!--Gallery View Controller-->
         <scene sceneID="p0c-Zt-0qb">
             <objects>
-                <pageViewController storyboardIdentifier="PageController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" pageSpacing="5" navigationOrientation="horizontal" spineLocation="none" id="auB-ij-Inv" customClass="CJMFIGalleryViewController" sceneMemberID="viewController">
+                <pageViewController storyboardIdentifier="PageController" autoresizesArchivedViewToFullSize="NO" extendedLayoutIncludesOpaqueBars="YES" transitionStyle="scroll" pageSpacing="5" navigationOrientation="horizontal" spineLocation="none" id="auB-ij-Inv" customClass="CJMFIGalleryViewController" sceneMemberID="viewController">
                     <toolbarItems>
                         <barButtonItem systemItem="trash" id="5xp-wP-xfs">
                             <inset key="imageInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -407,11 +407,11 @@
                         <viewControllerLayoutGuide type="bottom" id="C9P-pQ-slP"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ulg-px-Jgm">
-                        <rect key="frame" x="0.0" y="64" width="375" height="559"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.5" maximumZoomScale="1.5" translatesAutoresizingMaskIntoConstraints="NO" id="657-po-rB3">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="100" placeholderIntrinsicHeight="100" translatesAutoresizingMaskIntoConstraints="NO" id="21o-UG-qC7">
                                         <rect key="frame" x="250" y="250" width="100" height="100"/>
@@ -432,7 +432,7 @@
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlx-cQ-nGb">
-                                <rect key="frame" x="0.0" y="515" width="375" height="492"/>
+                                <rect key="frame" x="0.0" y="579" width="375" height="492"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Title" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="upp-GS-1zm">
                                         <rect key="frame" x="8" y="2" width="229" height="44"/>
@@ -522,11 +522,10 @@
                             <constraint firstAttribute="centerX" secondItem="rlx-cQ-nGb" secondAttribute="centerX" id="YkM-Nt-NKo"/>
                             <constraint firstItem="657-po-rB3" firstAttribute="leading" secondItem="ulg-px-Jgm" secondAttribute="leading" id="bcM-Ia-vJM"/>
                             <constraint firstAttribute="bottom" secondItem="657-po-rB3" secondAttribute="bottom" id="e1a-z9-0uA"/>
-                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="C9P-pQ-slP" secondAttribute="bottom" constant="-44" id="fLI-Ne-Zbt" userLabel="noteShiftConstraint"/>
+                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="C9P-pQ-slP" secondAttribute="top" constant="-44" id="fLI-Ne-Zbt" userLabel="noteShiftConstraint"/>
                             <constraint firstItem="657-po-rB3" firstAttribute="top" secondItem="ulg-px-Jgm" secondAttribute="top" id="wYo-XK-pCq"/>
                         </constraints>
                     </view>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="bottomConstraint" destination="OoQ-hw-nfe" id="zev-GL-fh4"/>
