@@ -82,11 +82,10 @@
     }
     
     //Transform shifts title up to make it level with noteSection buttons.
-    self.noteTitle.layer.sublayerTransform = CATransform3DMakeTranslation(0, -3, 0);
+//    self.noteTitle.layer.sublayerTransform = CATransform3DMakeTranslation(0, -3, 0);
     self.noteEntry.text = self.cjmImage.photoNote;
     self.noteEntry.selectable = NO;
     self.noteEntry.textColor = [UIColor whiteColor];
-    self.noteEntry.font = [UIFont fontWithName:@"Verdana" size:14];
     [self.noteEntry setAlpha:0.0];
     [self.photoLocAndDate setAlpha:0.0];
     
