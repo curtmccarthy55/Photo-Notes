@@ -137,9 +137,12 @@
 #pragma mark - View adjustments
 
 //Sets the note section height equal to the space between the toolbar and navbar
-- (void)fullSizeForNoteSection {
-    
-    self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
+- (void)fullSizeForNoteSection { //cjm shiftNote method
+    if (self.viewsVisible == YES) {
+        self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
+    } else if (self.viewsVisible == NO) {
+        self.noteSectionHeight.constant = self.view.frame.size.height;
+    }
 }
 
 #pragma mark - scrollView handling
@@ -231,11 +234,16 @@
 
 //first button press: Slide the note section up so it touches the bottom of the navbar
 //second button press: Slide the note section back down to just above the toolbar
-- (IBAction)shiftNote:(id)sender {
+- (IBAction)shiftNote:(id)sender { //cjm shiftNote method
     [self fullSizeForNoteSection];
     
-    CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
-    CGFloat shiftConstant = -(self.view.bounds.size.height - 44 - topBarsHeight);
+    CGFloat shiftConstant;
+    if (self.viewsVisible == YES) {
+        CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
+        shiftConstant = -(self.view.bounds.size.height - 44 - topBarsHeight);
+    } else {
+        shiftConstant = -(self.view.bounds.size.height - 44);
+    }
     
     if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
         self.noteShiftConstraint.constant = shiftConstant;
@@ -251,14 +259,12 @@
             [self.noteEntry setAlpha:1.0];
             [self.photoLocAndDate setAlpha:1.0];
         }];
-
     } else {
         [self handleNoteSectionDismissal];
     }
 }
 
-- (void)handleNoteSectionDismissal
-{
+- (void)handleNoteSectionDismissal { //cjm shiftNote method
     if ([self.editNoteButton.titleLabel.text isEqual:@"Done"]) {
         [self enableEdit:self];
     }
@@ -278,10 +284,12 @@
     }];
 }
 
-//Places the note section 44 points above the toolbar.
-- (void)handleNoteSectionAlignment
-{
-    self.noteShiftConstraint.constant = -44.0;
+- (void)handleNoteSectionAlignment { //cjm shiftNote method
+    if (self.viewsVisible)
+        self.noteShiftConstraint.constant = -44.0;
+    else
+        self.noteShiftConstraint.constant = 0;
+    
     [self.noteSection setNeedsUpdateConstraints];
 }
 
@@ -318,17 +326,19 @@
     [self updateForSingleTap];
 }
 
-- (void)updateForSingleTap
-{
+- (void)updateForSingleTap {
     if (self.viewsVisible == YES) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-            self.noteSection.alpha = 1;
+            //cjm full screen note section
+            self.noteShiftConstraint.constant = -44.0;
+//            self.noteSection.alpha = 1;
         }];
     } else if (self.viewsVisible == NO) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor blackColor];
-            self.noteSection.alpha = 0;
+            self.noteShiftConstraint.constant = 0;
+//            self.noteSection.alpha = 0;
         }];
     }
 }

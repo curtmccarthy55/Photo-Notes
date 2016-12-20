@@ -279,6 +279,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         } else {
             UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
             mediaUI.sourceType = UIImagePickerControllerSourceTypeCamera;
+//cjm multiple pictures            mediaUI.showsCameraControls = NO;
             mediaUI.allowsEditing = NO;
             mediaUI.delegate = self;
             

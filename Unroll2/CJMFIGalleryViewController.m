@@ -24,10 +24,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    CJMFullImageViewController *fullImageVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"FullImageVC"];
-    fullImageVC.albumName = self.albumName;
-    fullImageVC.index = self.initialIndex;
-    fullImageVC.delegate = self;
+    CJMFullImageViewController *fullImageVC = [self fullImageViewControllerForIndex:self.initialIndex];
     
     [self setViewControllers:@[fullImageVC]
                    direction:UIPageViewControllerNavigationDirectionForward
@@ -124,14 +121,14 @@
     if (self.makeViewsVisible == NO) {
         [UIApplication sharedApplication].statusBarHidden = YES;
         [UIView animateWithDuration:0.2 animations:^{
-        self.navigationController.navigationBar.alpha = 0;
-        self.navigationController.toolbar.alpha = 0;
+            self.navigationController.navigationBar.alpha = 0;
+            self.navigationController.toolbar.alpha = 0;
         }];
     } else if (self.makeViewsVisible == YES) {
         [UIApplication sharedApplication].statusBarHidden = NO;
         [UIView animateWithDuration:0.2 animations:^{
-        self.navigationController.navigationBar.alpha = 1;
-        self.navigationController.toolbar.alpha = 1;
+            self.navigationController.navigationBar.alpha = 1;
+            self.navigationController.toolbar.alpha = 1;
         }];
     }
 }
