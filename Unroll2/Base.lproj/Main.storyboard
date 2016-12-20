@@ -126,8 +126,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hec-aF-qhw">
-                                                    <rect key="frame" x="0.0" y="4" width="600" height="191"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hec-aF-qhw">
+                                                    <rect key="frame" x="0.0" y="4" width="375" height="35.5"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -373,6 +373,9 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="ySI-BV-izL"/>
+                    <connections>
+                        <outlet property="barButtonFavorite" destination="dVh-8w-BxO" id="Rte-at-o0Y"/>
+                    </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5N9-aI-gXV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -451,6 +454,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CjO-W7-o96">
                                                         <rect key="frame" x="254" y="0.0" width="30" height="44"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                                        <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-1"/>
                                                         <state key="normal" title="Edit">
                                                             <color key="titleColor" red="0.033163357990000003" green="0.76567830839999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -462,6 +466,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdb-G9-he9">
                                                         <rect key="frame" x="296" y="0.0" width="63" height="44"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                                        <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-1"/>
                                                         <state key="normal" title="See Note">
                                                             <color key="titleColor" red="0.033163357988047593" green="0.76567830841233397" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

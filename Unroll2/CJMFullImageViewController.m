@@ -42,6 +42,7 @@
 @property (nonatomic) CGFloat lastZoomScale;
 @property (nonatomic) float initialZoomScale;
 @property (nonatomic) BOOL focusIsOnImage;
+@property (nonatomic) BOOL favoriteDidChange;
 
 @end
 
@@ -72,6 +73,7 @@
     self.imageView.image = self.fullImage;
     self.scrollView.delegate = self;
     [self updateZoom];
+    self.favoriteDidChange = NO;
 
     self.noteTitle.text = self.cjmImage.photoTitle;
     self.noteTitle.textColor = [UIColor whiteColor];
@@ -102,6 +104,9 @@
     self.focusIsOnImage = NO;
     [self handleNoteSectionAlignment];
     [self updateConstraints];
+    
+    
+    [self.delegate photoIsFavorited:self.cjmImage.photoFavorited]; //cjm favorites ImageVC -> PageVC
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -110,17 +115,20 @@
     [self updateZoom];
 }
 
-- (void)prepareWithAlbumNamed:(NSString *)name andIndex:(NSInteger)index
-{
+- (void)prepareWithAlbumNamed:(NSString *)name andIndex:(NSInteger)index {
     CJMImage *image = [[CJMAlbumManager sharedInstance] albumWithName:name returnImageAtIndex:index];
     self.index = index;
     self.cjmImage = image;
+    self.imageIsFavorite = image.photoFavorited; //cjm favorites ImageVC set up
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
+    if (self.favoriteDidChange) { //cjm favorites ImageVC set up/save
+        [[CJMAlbumManager sharedInstance] save];
+    }
     //if note section is visible and the user swipes to the next page, slide the section out with animation.
     if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
@@ -470,6 +478,11 @@
     [alertController addAction:cancel];
     
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)actionFavorite:(BOOL)userFavorited { //cjm favorites PageVC -> ImageVC
+    self.cjmImage.photoFavorited = userFavorited;
+    self.favoriteDidChange = YES;
 }
 
 #pragma mark - TextView and TextField Delegate

@@ -14,11 +14,9 @@
 
 @implementation CJMImage
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [self init];
-    if(self)
-    {
+    if(self) {
         self.name = [aDecoder decodeObjectForKey:@"Name"];
         self.local = [aDecoder decodeBoolForKey:@"Local"];
         self.photoID = [aDecoder decodeObjectForKey:@"photoID"];
@@ -28,17 +26,19 @@
         //self.photoLocation = [aDecoder decodeObjectForKey:@"Location"];
         self.isAlbumPreview = [aDecoder decodeBoolForKey:@"AlbumPreview"];
         self.thumbnailNeedsRedraw = [aDecoder decodeBoolForKey:@"ThumbnailNeedsRedraw"];
+        self.photoFavorited = [aDecoder decodeBoolForKey:@"Favorited"]; //cjm favorites
         self.selectCoverHidden = YES;
         
-        if (!self.isAlbumPreview) {
+        if (!self.isAlbumPreview)
             self.isAlbumPreview = NO;
-        }
+        
+        if (!self.photoFavorited)
+            self.photoFavorited = NO;
     }
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
+- (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:self.name forKey:@"Name"];
     [aCoder encodeBool:self.local forKey:@"Local"];
     [aCoder encodeObject:self.photoID forKey:@"photoID"];
@@ -48,11 +48,10 @@
     //[aCoder encodeObject:self.photoLocation forKey:@"Location"];
     [aCoder encodeBool:self.isAlbumPreview forKey:@"AlbumPreview"];
     [aCoder encodeBool:self.thumbnailNeedsRedraw forKey:@"ThumbnailNeedsRedraw"];
-    
+    [aCoder encodeBool:self.photoFavorited forKey:@"Favorited"]; //cjm favorites
 }
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     
     if (self) {
@@ -61,20 +60,17 @@
     return self;
 }
 
-- (NSString *)fileName
-{
+- (NSString *)fileName {
     return [self.photoID UUIDString];
 }
 
-- (NSString *)thumbnailFileName
-{
+- (NSString *)thumbnailFileName {
     return [[self fileName] stringByAppendingString:@"_sm"];
 }
 
 #pragma mark - Selected
 
-- (void)toggleSelectCoverHidden
-{
+- (void)toggleSelectCoverHidden {
     self.selectCoverHidden = !self.selectCoverHidden;
 }
 

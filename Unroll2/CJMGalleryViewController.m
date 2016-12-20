@@ -534,11 +534,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //should move this to CJMImage's initializer
-- (void)setInitialValuesForCJMImage:(CJMImage *)cjmImage
-{
+- (void)setInitialValuesForCJMImage:(CJMImage *)cjmImage {
     cjmImage.photoTitle = @"No Title Created ";
     cjmImage.photoNote = @"Tap Edit to change the title and note!";
     cjmImage.selectCoverHidden = YES;
+    cjmImage.photoFavorited = NO; //cjm favorites ImageVC set up
 }
 
 #pragma mark - CJMPhotoGrabber Delegate

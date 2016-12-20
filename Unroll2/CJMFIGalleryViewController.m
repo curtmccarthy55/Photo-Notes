@@ -11,6 +11,7 @@
 @interface CJMFIGalleryViewController ()
 
 @property (nonatomic) BOOL makeViewsVisible;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonFavorite;
 
 @end
 
@@ -21,11 +22,9 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.dataSource = self;
     self.makeViewsVisible = YES;
-    
     self.view.backgroundColor = [UIColor whiteColor];
     
     CJMFullImageViewController *fullImageVC = [self fullImageViewControllerForIndex:self.initialIndex];
-    
     [self setViewControllers:@[fullImageVC]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:NO
@@ -37,13 +36,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
 //    NSLog(@"PageVC deallocated!");
 }
 
--(BOOL)prefersStatusBarHidden
-{
+-(BOOL)prefersStatusBarHidden {
     if (self.navigationController.navigationBar.hidden == NO) {
         return NO;
     } else {
@@ -53,22 +50,19 @@
 
 #pragma mark UIPageViewControllerDataSource
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(CJMFullImageViewController *)currentImageVC
-{
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(CJMFullImageViewController *)currentImageVC {
     NSInteger previousIndex = currentImageVC.index - 1;
 //    NSLog(@"Creating previous VC.");
     return [self fullImageViewControllerForIndex:previousIndex];
 }
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(CJMFullImageViewController *)currentImageVC
-{
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(CJMFullImageViewController *)currentImageVC {
     NSInteger nextIndex = currentImageVC.index + 1;
 //    NSLog(@"Creating next VC.");
     return [self fullImageViewControllerForIndex:nextIndex];
 }
 
-- (CJMFullImageViewController *)fullImageViewControllerForIndex:(NSInteger)index
-{
+- (CJMFullImageViewController *)fullImageViewControllerForIndex:(NSInteger)index {
     if (index >= self.albumCount || index < 0) {
         return nil;
     } else {
@@ -84,40 +78,39 @@
 
 #pragma mark - navBar and toolbar visibility
 
-- (void)setMakeViewsVisible:(BOOL)makeViewsVisible
-{
+- (void)setMakeViewsVisible:(BOOL)makeViewsVisible {
     _makeViewsVisible = makeViewsVisible;
-
     [self toggleViewVisibility];
 }
 
 #pragma mark - navBar and toolbar buttons
 
-- (IBAction)favoriteImage:(UIBarButtonItem *)sender {
+- (IBAction)favoriteImage:(UIBarButtonItem *)sender { //cjm favorites PageVC -> ImageVC
+    CJMFullImageViewController *currentVC = (CJMFullImageViewController *)self.viewControllers[0];
+    
     if ([sender.image isEqual:[UIImage imageNamed:@"WhiteStarEmpty"]]) {
         [sender setImage:[UIImage imageNamed:@"WhiteStarFull"]];
+        [currentVC actionFavorite:YES];
     } else {
         [sender setImage:[UIImage imageNamed:@"WhiteStarEmpty"]];
+        [currentVC actionFavorite:NO];
     }
 }
 
 
-- (IBAction)currentPhotoOptions:(id)sender
-{
+- (IBAction)currentPhotoOptions:(id)sender {
     CJMFullImageViewController *currentVC = (CJMFullImageViewController *)self.viewControllers[0];
     
     [currentVC showPopUpMenu];
 }
 
-- (IBAction)deleteCurrentPhoto:(id)sender
-{
+- (IBAction)deleteCurrentPhoto:(id)sender {
     CJMFullImageViewController *currentVC = (CJMFullImageViewController *)self.viewControllers[0];
     
     [currentVC confirmImageDelete];
 }
 
-- (void)toggleViewVisibility
-{
+- (void)toggleViewVisibility {
     if (self.makeViewsVisible == NO) {
         [UIApplication sharedApplication].statusBarHidden = YES;
         [UIView animateWithDuration:0.2 animations:^{
@@ -135,21 +128,16 @@
 
 #pragma mark - CJMFullImageVC Delegate Methods
 
-- (void)toggleFullImageShowForViewController:(CJMFullImageViewController *)viewController
-{
+- (void)toggleFullImageShowForViewController:(CJMFullImageViewController *)viewController {
     self.makeViewsVisible = !self.makeViewsVisible;
     [viewController setViewsVisible:self.makeViewsVisible];
 }
 
 //deletes the currently displayed image and updates screen based on position in album
-- (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex
-{
+- (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex {
     if (self.albumCount - 1 == 0) {
-        
         [self.navigationController popViewControllerAnimated:YES];
-        
     } else if ((imageIndex + 1) >= self.albumCount) {
-        
         CJMFullImageViewController *previousVC = (CJMFullImageViewController *)[self pageViewController:self viewControllerBeforeViewController:currentVC];
         self.albumCount -= 1;
         
@@ -158,7 +146,6 @@
                                            animated:YES
                                          completion:nil];
     } else {
-        
         CJMFullImageViewController *nextVC = (CJMFullImageViewController *)[self pageViewController:self viewControllerAfterViewController:currentVC];
         nextVC.index = imageIndex;
         self.albumCount -= 1;
@@ -167,6 +154,18 @@
                        direction:UIPageViewControllerNavigationDirectionForward
                         animated:YES
                       completion:NULL];
+    }
+}
+
+- (void)viewController:(CJMFullImageViewController *)currentVC favoritedImageAtIndex:(NSInteger)imageIndex {
+    
+}
+
+- (void)photoIsFavorited:(BOOL)isFavorited { //cjm favorites ImageVC -> PageVC
+    if (!isFavorited) {
+        [self.barButtonFavorite setImage:[UIImage imageNamed:@"WhiteStarEmpty"]];
+    } else {
+        [self.barButtonFavorite setImage:[UIImage imageNamed:@"WhiteStarFull"]];
     }
 }
 
