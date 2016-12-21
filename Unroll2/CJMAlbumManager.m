@@ -18,6 +18,7 @@ static CJMAlbumManager *__sharedInstance;
 @interface CJMAlbumManager ()
 
 @property (nonatomic, strong) NSMutableOrderedSet *allAlbumsEdit;
+@property (nonatomic, strong) CJMPhotoAlbum *favAlbumEdit; //cjm favorites album
 @property (nonatomic) CJMFileSerializer *fileSerializer;
 
 @end
@@ -84,11 +85,39 @@ static CJMAlbumManager *__sharedInstance;
     return _allAlbumsEdit;
 }
 
+- (CJMPhotoAlbum *)favPhotosAlbum {
+    CJMPhotoAlbum *albumCopy = self.favAlbumEdit;
+    return albumCopy; //cjm favorites album copy issue?
+}
+
+- (CJMPhotoAlbum *)favAlbumEdit { //cjm favorites album
+    if (!_favAlbumEdit) {
+        /*CJMPhotoAlbum *favAlbum = [self.fileSerializer get any saved favAlbumEdit from the disk];*/ //cjm favorites album
+        CJMPhotoAlbum *favAlbum = [self scanForAlbumWithName:@"Favorites"];
+        _favAlbumEdit = [CJMPhotoAlbum new];
+        
+        if (favAlbum) {
+            _favAlbumEdit = favAlbum;
+        } else {
+            CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"Favorites" andNote:@"Your favorite Photo Notes coalesced in one spot.  \n\nNote: Changes made here will apply to the Photo Notes in their original albums as well"];
+            _favAlbumEdit = album;
+            [self addAlbum:album];
+        }
+    }
+    
+    return _favAlbumEdit;
+}
+
+
+
 #pragma mark - Content management
 
-- (void)addAlbum:(CJMPhotoAlbum *)album
-{
-    [self.allAlbumsEdit addObject:album];
+- (void)addAlbum:(CJMPhotoAlbum *)album {
+    if ([album.albumTitle isEqualToString:@"Favorites"]) { //cjm favorites album
+        [self.allAlbumsEdit insertObject:self.favPhotosAlbum atIndex:0];
+    } else {
+        [self.allAlbumsEdit addObject:album];
+    }
 }
 
 - (void)removeAlbumAtIndex:(NSUInteger)index
@@ -123,10 +152,8 @@ static CJMAlbumManager *__sharedInstance;
     return exists;
 }
 
-- (CJMPhotoAlbum *)scanForAlbumWithName:(NSString *)name
-{
+- (CJMPhotoAlbum *)scanForAlbumWithName:(NSString *)name {
     CJMPhotoAlbum *foundAlbum;
-    
     for (CJMPhotoAlbum *album in self.allAlbumsEdit) {
         if ([album.albumTitle isEqualToString:name]) {
             foundAlbum = album;

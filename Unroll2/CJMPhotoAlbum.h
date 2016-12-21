@@ -12,7 +12,7 @@
 
 @class PHAsset;
 
-@interface CJMPhotoAlbum : NSObject <NSCoding>
+@interface CJMPhotoAlbum : NSObject <NSCoding, NSCopying>
 
 @property (nonatomic, strong) NSString *albumTitle;
 @property (nonatomic, strong) NSString *albumNote;

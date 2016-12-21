@@ -12,6 +12,7 @@
 @interface CJMAlbumManager : NSObject
 
 @property (nonatomic, readonly) NSArray *allAlbums;
+@property (nonatomic, readonly) CJMPhotoAlbum *favPhotosAlbum; //cjm favorites album
 
 + (instancetype)sharedInstance;
 

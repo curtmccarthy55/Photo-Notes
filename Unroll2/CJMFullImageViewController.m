@@ -126,8 +126,19 @@
 {
     [super viewWillDisappear:animated];
     
-    if (self.favoriteDidChange) { //cjm favorites ImageVC set up/save
-        [[CJMAlbumManager sharedInstance] save];
+    if (self.favoriteDidChange) {
+        if ([CJMAlbumManager sharedInstance].favPhotosAlbum == nil) { //cjm favorites adding new photos to [CJMAlbumManager sharedInstance].favPhotosAlbum
+            CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"Favorites" andNote:@"Your favorite Photo Notes coalesced in one spot.  \n\nNote: Changes made here will apply to the Photo Notes in their original albums as well"];
+            [[CJMAlbumManager sharedInstance] addAlbum:album];
+        }
+        
+        if (self.cjmImage.photoFavorited == NO) { //cjm favorites adding new photos to [CJMAlbumManager sharedInstance].favPhotosAlbum
+            [[CJMAlbumManager sharedInstance].favPhotosAlbum removeCJMImage:self.cjmImage];
+        } else {
+            [[CJMAlbumManager sharedInstance].favPhotosAlbum addCJMImage:self.cjmImage];
+        }
+        
+        [[CJMAlbumManager sharedInstance] save]; //cjm favorites ImageVC set up/save
     }
     //if note section is visible and the user swipes to the next page, slide the section out with animation.
     if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {

@@ -55,6 +55,19 @@
     return self;
 }
 
+- (CJMPhotoAlbum *)copyWithZone:(NSZone *)zone { //CJM 02/09
+    CJMPhotoAlbum *albumCopy = [[CJMPhotoAlbum allocWithZone:zone] init];
+    
+    albumCopy.albumTitle = self.albumTitle ? [NSString stringWithString:self.albumTitle] : nil;
+    albumCopy.albumNote = self.albumNote ? [NSString stringWithString:self.albumNote] : nil;
+    albumCopy.albumPhotos = self.albumPhotos;
+    albumCopy.albumPreviewImage = self.albumPreviewImage ? self.albumPreviewImage : nil;
+    albumCopy.albumEditablePhotos = self.albumEditablePhotos ? self.albumEditablePhotos : nil;
+    albumCopy.privateAlbum = self.privateAlbum;
+    
+    return albumCopy;
+}
+
 #pragma mark - Content management
 
 - (NSArray *)albumPhotos
