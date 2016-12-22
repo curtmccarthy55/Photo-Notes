@@ -50,16 +50,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Make sure nav bars and associated controls are visible whenever the gallery appears.
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     self.editMode = NO;
     [self toggleEditControls];
     self.navigationController.navigationBar.alpha = 1;
     self.navigationController.toolbar.alpha = 1;
     [self confirmEditButtonEnabled];
-    
     [self.collectionView reloadData];
 }
 
@@ -248,16 +245,16 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
 }
 
-- (void)confirmEditButtonEnabled
-{
+- (void)confirmEditButtonEnabled {
     if (self.album.albumPhotos.count == 0) {
         self.editButton.enabled = NO;
-        
-        UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil];
-        [noPhotosAlert addAction:dismissAction];
-        
-        [self presentViewController:noPhotosAlert animated:YES completion:nil];
+        if (![self.album.albumTitle isEqualToString:@"Favorites"]){
+            UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil];
+            [noPhotosAlert addAction:dismissAction];
+            
+            [self presentViewController:noPhotosAlert animated:YES completion:nil];
+        }
     } else {
         self.editButton.enabled = YES;
     }

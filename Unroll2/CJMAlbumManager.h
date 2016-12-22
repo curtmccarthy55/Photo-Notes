@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CJMPhotoAlbum.h"
 
-@interface CJMAlbumManager : NSObject
+@interface CJMAlbumManager : NSObject <CJMPhotoAlbumDelegate>
 
 @property (nonatomic, readonly) NSArray *allAlbums;
 @property (nonatomic, readonly) CJMPhotoAlbum *favPhotosAlbum; //cjm favorites album

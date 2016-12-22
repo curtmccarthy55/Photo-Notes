@@ -45,14 +45,12 @@ static CJMAlbumManager *__sharedInstance;
     return self;
 }
 
-- (void)handleFirstTime
-{
+- (void)handleFirstTime {
     BOOL firstTime = [[NSUserDefaults standardUserDefaults] boolForKey:@"FirstTime"];
     
     if (firstTime) {
         CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"My Photo Notes" andNote:@"Press Edit to customize the name and note sections."];
-        
-        [self.allAlbumsEdit addObject:album];
+        [self addAlbum:album];
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FirstTime"];
     }
 }
@@ -87,12 +85,12 @@ static CJMAlbumManager *__sharedInstance;
 
 - (CJMPhotoAlbum *)favPhotosAlbum {
     CJMPhotoAlbum *albumCopy = self.favAlbumEdit;
+    NSLog(@"*cjm* self.favAlbumEdit == %@, albumCopy == %@", self.favAlbumEdit, albumCopy);
     return albumCopy; //cjm favorites album copy issue?
 }
 
 - (CJMPhotoAlbum *)favAlbumEdit { //cjm favorites album
     if (!_favAlbumEdit) {
-        /*CJMPhotoAlbum *favAlbum = [self.fileSerializer get any saved favAlbumEdit from the disk];*/ //cjm favorites album
         CJMPhotoAlbum *favAlbum = [self scanForAlbumWithName:@"Favorites"];
         _favAlbumEdit = [CJMPhotoAlbum new];
         
@@ -101,10 +99,9 @@ static CJMAlbumManager *__sharedInstance;
         } else {
             CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"Favorites" andNote:@"Your favorite Photo Notes coalesced in one spot.  \n\nNote: Changes made here will apply to the Photo Notes in their original albums as well"];
             _favAlbumEdit = album;
-            [self addAlbum:album];
         }
+        _favAlbumEdit.delegate = self;
     }
-    
     return _favAlbumEdit;
 }
 
@@ -114,14 +111,14 @@ static CJMAlbumManager *__sharedInstance;
 
 - (void)addAlbum:(CJMPhotoAlbum *)album {
     if ([album.albumTitle isEqualToString:@"Favorites"]) { //cjm favorites album
-        [self.allAlbumsEdit insertObject:self.favPhotosAlbum atIndex:0];
+        [self.allAlbumsEdit insertObject:self.favAlbumEdit atIndex:0];
     } else {
         [self.allAlbumsEdit addObject:album];
     }
+    [self save];
 }
 
-- (void)removeAlbumAtIndex:(NSUInteger)index
-{
+- (void)removeAlbumAtIndex:(NSUInteger)index {
     CJMPhotoAlbum *doomedAlbum = [self.allAlbumsEdit objectAtIndex:index];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -131,6 +128,7 @@ static CJMAlbumManager *__sharedInstance;
     });
     
     [self.allAlbumsEdit removeObjectAtIndex:index];
+    [self save];
 }
 
 - (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex
@@ -193,6 +191,19 @@ static CJMAlbumManager *__sharedInstance;
         if ([cjmImage.fileName isEqualToString:fileName]) {
             [shrinkingAlbum removeCJMImage:cjmImage];
             break;
+        }
+    }
+}
+
+#pragma mark - PhotoAlbum Delegate
+
+- (void)checkFavoriteCount {
+    NSLog(@"*cjm* checkFavoriteCount called");
+    if (self.favPhotosAlbum.albumPhotos.count < 1) {
+        [self.allAlbumsEdit removeObject:self.favAlbumEdit];
+    } else if (self.favPhotosAlbum.albumPhotos.count == 1) {
+        if (![self.allAlbumsEdit containsObject:self.favAlbumEdit]) {
+            [self addAlbum:self.favAlbumEdit];
         }
     }
 }

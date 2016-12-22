@@ -75,14 +75,18 @@
     return [_albumEditablePhotos array];
 }
 
-- (void)addCJMImage:(CJMImage *)image
-{
+- (void)addCJMImage:(CJMImage *)image { //cjm favorites add
     [self.albumEditablePhotos addObject:image];
+    if ([self.albumTitle isEqualToString:@"Favorites"]) {
+        [self.delegate checkFavoriteCount];
+    }
 }
 
-- (void)removeCJMImage:(CJMImage *)image
-{
+- (void)removeCJMImage:(CJMImage *)image {
     [self.albumEditablePhotos removeObject:image];
+    if ([self.albumTitle isEqualToString:@"Favorites"]) {
+        [self.delegate checkFavoriteCount];
+    }
 }
 
 - (void)addMultipleCJMImages:(NSArray *)newImages

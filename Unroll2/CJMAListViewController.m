@@ -36,11 +36,19 @@
     self.tableView.rowHeight = 80;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self noAlbumsPopUp];
+//    [self handleEmptyFavorites];
     [self.tableView reloadData];
+}
+
+- (void)handleEmptyFavorites {
+    if ([CJMAlbumManager sharedInstance].favPhotosAlbum != nil) {
+        if ([CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos.count < 1) {
+            [[CJMAlbumManager sharedInstance] removeAlbumAtIndex:0];
+        }
+    }
 }
 
 
@@ -75,8 +83,7 @@
     return [[CJMAlbumManager sharedInstance] allAlbums].count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CJMAListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CJMAListCellIdentifier forIndexPath:indexPath];
     
     CJMPhotoAlbum *album = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
@@ -168,6 +175,7 @@
         
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         CJMPhotoAlbum *sentAlbum = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
+        sentAlbum.delegate = [CJMAlbumManager sharedInstance];
         CJMGalleryViewController *galleryVC = (CJMGalleryViewController *)segue.destinationViewController;
         galleryVC.album = sentAlbum;
         

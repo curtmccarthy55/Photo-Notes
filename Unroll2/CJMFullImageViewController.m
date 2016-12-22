@@ -42,7 +42,7 @@
 @property (nonatomic) CGFloat lastZoomScale;
 @property (nonatomic) float initialZoomScale;
 @property (nonatomic) BOOL focusIsOnImage;
-@property (nonatomic) BOOL favoriteDidChange;
+@property (nonatomic) BOOL favoriteChanged;
 
 @end
 
@@ -73,7 +73,8 @@
     self.imageView.image = self.fullImage;
     self.scrollView.delegate = self;
     [self updateZoom];
-    self.favoriteDidChange = NO;
+    self.favoriteChanged = self.cjmImage.photoFavorited;
+    NSLog(@"*cjm* self.favoriteChanged == %@, self.cjmImage.photoFavorited == %@", [NSNumber numberWithBool:self.favoriteChanged], [NSNumber numberWithBool:self.cjmImage.photoFavorited]);
 
     self.noteTitle.text = self.cjmImage.photoTitle;
     self.noteTitle.textColor = [UIColor whiteColor];
@@ -125,21 +126,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    if (self.favoriteDidChange) {
-        if ([CJMAlbumManager sharedInstance].favPhotosAlbum == nil) { //cjm favorites adding new photos to [CJMAlbumManager sharedInstance].favPhotosAlbum
-            CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"Favorites" andNote:@"Your favorite Photo Notes coalesced in one spot.  \n\nNote: Changes made here will apply to the Photo Notes in their original albums as well"];
-            [[CJMAlbumManager sharedInstance] addAlbum:album];
-        }
-        
-        if (self.cjmImage.photoFavorited == NO) { //cjm favorites adding new photos to [CJMAlbumManager sharedInstance].favPhotosAlbum
-            [[CJMAlbumManager sharedInstance].favPhotosAlbum removeCJMImage:self.cjmImage];
-        } else {
-            [[CJMAlbumManager sharedInstance].favPhotosAlbum addCJMImage:self.cjmImage];
-        }
-        
-        [[CJMAlbumManager sharedInstance] save]; //cjm favorites ImageVC set up/save
-    }
     //if note section is visible and the user swipes to the next page, slide the section out with animation.
     if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
@@ -150,6 +136,27 @@
     }
     
     [self updateZoom];
+    
+    if (self.favoriteChanged != self.cjmImage.photoFavorited) {
+        [self handleFavoriteDidChange];
+    }
+}
+
+- (void)handleFavoriteDidChange {
+    if (self.favoriteChanged == NO) { //cjm favorites adding new photos to [CJMAlbumManager sharedInstance].favPhotosAlbum
+        self.cjmImage.photoFavorited = NO;
+        [[CJMAlbumManager sharedInstance].favPhotosAlbum removeCJMImage:self.cjmImage];
+    } else {
+        self.cjmImage.photoFavorited = YES;
+        [[CJMAlbumManager sharedInstance].favPhotosAlbum addCJMImage:self.cjmImage];
+    }
+    
+    [[CJMAlbumManager sharedInstance] save]; //cjm favorites ImageVC set up/save
+    
+    if ([self.albumName isEqualToString:@"Favorites"] && [[CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos count] < 1){
+        NSArray *array = [self.navigationController viewControllers];
+        [self.navigationController popToViewController:[array objectAtIndex:0] animated:YES];
+    }
 }
 
 #pragma mark - View adjustments
@@ -492,8 +499,7 @@
 }
 
 - (void)actionFavorite:(BOOL)userFavorited { //cjm favorites PageVC -> ImageVC
-    self.cjmImage.photoFavorited = userFavorited;
-    self.favoriteDidChange = YES;
+    self.favoriteChanged = userFavorited;
 }
 
 #pragma mark - TextView and TextField Delegate

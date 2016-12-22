@@ -15,7 +15,6 @@
 
 - (id)readObjectFromRelativePath:(NSString *)path {
     NSString *absolutePath = [self absolutePathFromRelativePath:path];
-    NSLog(@"*cjm* absolutePath == %@", absolutePath);
     id object = nil;
     if ([[NSFileManager defaultManager] fileExistsAtPath:absolutePath]) {
         object = [NSKeyedUnarchiver unarchiveObjectWithFile:absolutePath];
@@ -34,7 +33,6 @@
 
 - (BOOL)writeObject:(id)data toRelativePath:(NSString *)path {
     //cjm favorites album [CJMAlbumManager save] calls [fileSerializer writeObject:allAlbumsEdit toRelativePath:@"Unroll.plist"]
-    NSLog(@"*cjm* data class is %@", [data class]);
     return [NSKeyedArchiver archiveRootObject:data toFile:[self absolutePathFromRelativePath:path]];
 }
 

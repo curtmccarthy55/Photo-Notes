@@ -12,6 +12,12 @@
 
 @class PHAsset;
 
+@protocol CJMPhotoAlbumDelegate <NSObject>
+
+- (void)checkFavoriteCount;
+
+@end
+
 @interface CJMPhotoAlbum : NSObject <NSCoding, NSCopying>
 
 @property (nonatomic, strong) NSString *albumTitle;
@@ -19,6 +25,7 @@
 @property (nonatomic) BOOL privateAlbum;
 @property (nonatomic, strong) NSArray *albumPhotos;
 @property (nonatomic, strong) CJMImage *albumPreviewImage;
+@property (nonatomic, weak) id <CJMPhotoAlbumDelegate> delegate;
 
 - (instancetype)initWithName:(NSString *)name andNote:(NSString *)note;
 - (instancetype)initWithName:(NSString *)name;
