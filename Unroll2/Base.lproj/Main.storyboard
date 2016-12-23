@@ -223,6 +223,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="67"/>
                     <connections>
+                        <outlet property="btnEdit" destination="1KJ-0Y-CbB" id="qmL-yq-w2w"/>
                         <outlet property="lblName" destination="Mh0-Hf-3Oq" id="a90-aZ-V4M"/>
                         <outlet property="textView" destination="LvU-oV-Mvv" id="Sak-AK-87r"/>
                     </connections>

@@ -28,6 +28,7 @@
 @property (nonatomic) BOOL thumbnailNeedsRedraw;
 @property (nonatomic) BOOL selectCoverHidden;
 @property (nonatomic, weak) UIImage *photoImage;
+@property (nonatomic, strong) NSString *originalAlbum;
 
 @property (nonatomic) BOOL photoFavorited;
 

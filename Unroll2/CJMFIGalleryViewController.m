@@ -157,10 +157,6 @@
     }
 }
 
-- (void)viewController:(CJMFullImageViewController *)currentVC favoritedImageAtIndex:(NSInteger)imageIndex {
-    
-}
-
 - (void)photoIsFavorited:(BOOL)isFavorited { //cjm favorites ImageVC -> PageVC
     if (!isFavorited) {
         [self.barButtonFavorite setImage:[UIImage imageNamed:@"WhiteStarEmpty"]];

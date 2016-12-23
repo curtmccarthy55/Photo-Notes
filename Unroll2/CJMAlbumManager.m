@@ -85,7 +85,6 @@ static CJMAlbumManager *__sharedInstance;
 
 - (CJMPhotoAlbum *)favPhotosAlbum {
     CJMPhotoAlbum *albumCopy = self.favAlbumEdit;
-    NSLog(@"*cjm* self.favAlbumEdit == %@, albumCopy == %@", self.favAlbumEdit, albumCopy);
     return albumCopy; //cjm favorites album copy issue?
 }
 
@@ -183,8 +182,7 @@ static CJMAlbumManager *__sharedInstance;
     }
 }
 
-- (void)albumWithName:(NSString *)albumName removeImageWithUUID:(NSString *)fileName
-{
+- (void)albumWithName:(NSString *)albumName removeImageWithUUID:(NSString *)fileName{
     CJMPhotoAlbum *shrinkingAlbum = [self scanForAlbumWithName:albumName];
     
     for (CJMImage *cjmImage in shrinkingAlbum.albumPhotos) {

@@ -58,6 +58,10 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.navigationController.toolbar.alpha = 1;
     [self confirmEditButtonEnabled];
     [self.collectionView reloadData];
+    
+    if ([self.album.albumTitle isEqualToString:@"Favorites"] && [[CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos count] < 1){
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 //Add photo count footer to gallery.
@@ -536,6 +540,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     cjmImage.photoNote = @"Tap Edit to change the title and note!";
     cjmImage.selectCoverHidden = YES;
     cjmImage.photoFavorited = NO; //cjm favorites ImageVC set up
+    cjmImage.originalAlbum = self.album.albumTitle;
 }
 
 #pragma mark - CJMPhotoGrabber Delegate

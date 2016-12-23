@@ -145,10 +145,13 @@
 - (void)handleFavoriteDidChange {
     if (self.favoriteChanged == NO) { //cjm favorites adding new photos to [CJMAlbumManager sharedInstance].favPhotosAlbum
         self.cjmImage.photoFavorited = NO;
-        [[CJMAlbumManager sharedInstance].favPhotosAlbum removeCJMImage:self.cjmImage];
+        [[CJMAlbumManager sharedInstance].favPhotosAlbum removeCJMImage:self.cjmImage]; //cjm 12/23
     } else {
         self.cjmImage.photoFavorited = YES;
         [[CJMAlbumManager sharedInstance].favPhotosAlbum addCJMImage:self.cjmImage];
+        if (!self.cjmImage.originalAlbum && ![self.albumName isEqualToString:@"Favorites"]) {
+            self.cjmImage.originalAlbum = self.albumName;
+        }
     }
     
     [[CJMAlbumManager sharedInstance] save]; //cjm favorites ImageVC set up/save
@@ -464,35 +467,48 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (void)confirmImageDelete
-{
+- (void)confirmImageDelete {
+    BOOL albumIsFavorites = [self.albumName isEqualToString:@"Favorites"];
+    NSString *message = albumIsFavorites ? @"Delete from all albums or unfavorite?" : @"You cannot recover this photo after deleting";
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete Photo?"
-                                             message:@"You cannot recover this photo after deleting."
+                                             message:message
                                       preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction *saveToPhotosAndDelete = [UIAlertAction actionWithTitle:@"Save To Camera Roll And Then Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete) {
-            UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
-            [[CJMServices sharedInstance] deleteImage:self.cjmImage];
-            [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
-        
-            [[CJMAlbumManager sharedInstance] save];
-        
-            [self.delegate viewController:self deletedImageAtIndex:self.index];
+        UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
+        [[CJMServices sharedInstance] deleteImage:self.cjmImage];
+        [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
+        if (albumIsFavorites)
+            [[CJMAlbumManager sharedInstance] albumWithName:self.cjmImage.originalAlbum removeImageWithUUID:self.cjmImage.fileName];
+    
+        [[CJMAlbumManager sharedInstance] save];
+    
+        [self.delegate viewController:self deletedImageAtIndex:self.index];
     }];
     
     UIAlertAction *deletePhoto = [UIAlertAction actionWithTitle:@"Delete Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
-            [[CJMServices sharedInstance] deleteImage:self.cjmImage];
-            [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
-        
-            [[CJMAlbumManager sharedInstance] save];
-        
-            [self.delegate viewController:self deletedImageAtIndex:self.index];
+        [[CJMServices sharedInstance] deleteImage:self.cjmImage];
+        [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
+        if (albumIsFavorites)
+            [[CJMAlbumManager sharedInstance] albumWithName:self.cjmImage.originalAlbum removeImageWithUUID:self.cjmImage.fileName];
+    
+        [[CJMAlbumManager sharedInstance] save];
+        [self.delegate viewController:self deletedImageAtIndex:self.index];
+    }];
+    
+    UIAlertAction *unfavoritePhoto = [UIAlertAction actionWithTitle:@"Unfavorite and Remove" style:UIAlertActionStyleDefault handler:^(UIAlertAction *unfavAction) {
+        self.favoriteChanged = NO;
+        [self.delegate photoIsFavorited:NO];
+        [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
+        [self.delegate viewController:self deletedImageAtIndex:self.index];
     }];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
     
     [alertController addAction:saveToPhotosAndDelete];
     [alertController addAction:deletePhoto];
+    if (albumIsFavorites) 
+        [alertController addAction:unfavoritePhoto];
     [alertController addAction:cancel];
     
     [self presentViewController:alertController animated:YES completion:nil];
@@ -500,6 +516,11 @@
 
 - (void)actionFavorite:(BOOL)userFavorited { //cjm favorites PageVC -> ImageVC
     self.favoriteChanged = userFavorited;
+    
+    if ([self.albumName isEqualToString:@"Favorites"]) {
+        [self handleFavoriteDidChange];
+        [self.delegate viewController:self deletedImageAtIndex:self.index];
+    }
 }
 
 #pragma mark - TextView and TextField Delegate

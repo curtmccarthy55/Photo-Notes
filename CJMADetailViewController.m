@@ -99,9 +99,16 @@
     }
 }
 
-- (BOOL)confirmNameNonDuplicate:(NSString *)name
-{//prevent the user from making an album with the same name as another album
-    if ([[CJMAlbumManager sharedInstance] containsAlbumNamed:name] && ![self.albumToEdit.albumTitle isEqualToString:name]) {
+- (BOOL)confirmNameNonDuplicate:(NSString *)name {//prevent the user from making an album with the same name as another album or using "Favorites"
+    if ([name isEqualToString:@"Favorites"]) {
+        UIAlertController *favoritesAlert = [UIAlertController alertControllerWithTitle:@"Cannot Use \"Favorites\"" message:@"The album name \"Favorites\" is reserved for when you favorite existing Photo Notes." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Ok"
+                                                                style:UIAlertActionStyleCancel
+                                                              handler:^(UIAlertAction *action) {} ];
+        [favoritesAlert addAction:dismissAction];
+        [self presentViewController:favoritesAlert animated:YES completion:nil];
+        return YES;
+    } else if ([[CJMAlbumManager sharedInstance] containsAlbumNamed:name] && ![self.albumToEdit.albumTitle isEqualToString:name]) {
         UIAlertController *nameExistsAlert = [UIAlertController alertControllerWithTitle:@"Duplicate Album Name!" message:@"You have already created an album with this name." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Ok"
                                                                 style:UIAlertActionStyleCancel

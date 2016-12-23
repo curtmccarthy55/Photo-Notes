@@ -13,6 +13,7 @@
 @interface CJMPopoverViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *lblName;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UIButton *btnEdit;
 
 @end
 
@@ -36,7 +37,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    if ([self.name isEqualToString:@"Favorites"]) {
+        [self.btnEdit setHidden:YES];
+    }
     CGFloat fixedWidth = SCREEN_WIDTH * 0.75;
     CGSize newSize = [self.textView sizeThatFits:CGSizeMake(fixedWidth, MAXFLOAT)];
     CGRect newFrame = self.textView.frame;

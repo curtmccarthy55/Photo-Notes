@@ -39,16 +39,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self noAlbumsPopUp];
-//    [self handleEmptyFavorites];
     [self.tableView reloadData];
-}
-
-- (void)handleEmptyFavorites {
-    if ([CJMAlbumManager sharedInstance].favPhotosAlbum != nil) {
-        if ([CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos.count < 1) {
-            [[CJMAlbumManager sharedInstance] removeAlbumAtIndex:0];
-        }
-    }
 }
 
 
