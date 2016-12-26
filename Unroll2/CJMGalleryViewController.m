@@ -381,15 +381,18 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     //Delete photos without saving to Photos app
     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete Photos Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
-       
         for (NSIndexPath *itemPath in self.selectedCells) {
             CJMImage *doomedImage = [self.album.albumPhotos objectAtIndex:itemPath.row];
+            if (doomedImage.photoFavorited) {
+                [[CJMAlbumManager sharedInstance].favPhotosAlbum removeCJMImage:doomedImage];
+            }
             [[CJMServices sharedInstance] deleteImage:doomedImage];
         }
         NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
         for (NSIndexPath *itemPath in self.selectedCells) {
             [indexSet addIndex:itemPath.row];
         }
+//        [[CJMAlbumManager sharedInstance].favPhotosAlbum removeCJMImagesAtIndexes:indexSet];
         [self.album removeCJMImagesAtIndexes:indexSet];
         
         [[CJMAlbumManager sharedInstance] save];

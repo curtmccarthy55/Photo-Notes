@@ -84,7 +84,7 @@
 
 - (void)removeCJMImage:(CJMImage *)image {
     [self.albumEditablePhotos removeObject:image];
-    if ([self.albumTitle isEqualToString:@"Favorites"]) {
+    if ([self.albumTitle isEqualToString:@"Favorites"] && self.albumPhotos.count < 2) {
         [self.delegate checkFavoriteCount];
     }
 }

@@ -162,10 +162,15 @@ static CJMAlbumManager *__sharedInstance;
 
 #pragma mark - Requests to album manager
 
-- (void)albumWithName:(NSString *)name createPreviewFromCJMImage:(CJMImage *)image
-{
+- (void)albumWithName:(NSString *)name createPreviewFromCJMImage:(CJMImage *)image {
     CJMPhotoAlbum *album = [self scanForAlbumWithName:name];
-    [image setIsAlbumPreview:YES];
+    if (album == self.favPhotosAlbum) {
+        [album.albumPreviewImage setIsFavoritePreview:NO];
+        [image setIsFavoritePreview:YES];
+    } else {
+        [album.albumPreviewImage setIsAlbumPreview:NO];
+        [image setIsAlbumPreview:YES];
+    }
     
     album.albumPreviewImage = image;
 }

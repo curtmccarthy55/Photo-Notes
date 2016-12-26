@@ -146,6 +146,10 @@
     if (self.favoriteChanged == NO) { //cjm favorites adding new photos to [CJMAlbumManager sharedInstance].favPhotosAlbum
         self.cjmImage.photoFavorited = NO;
         [[CJMAlbumManager sharedInstance].favPhotosAlbum removeCJMImage:self.cjmImage]; //cjm 12/23
+        if (self.cjmImage.isFavoritePreview && [CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos.count > 0) {
+            CJMImage *newThumImage = [CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos[0];
+            [[CJMAlbumManager sharedInstance] albumWithName:@"Favorites" createPreviewFromCJMImage:newThumImage];
+        }
     } else {
         self.cjmImage.photoFavorited = YES;
         [[CJMAlbumManager sharedInstance].favPhotosAlbum addCJMImage:self.cjmImage];
@@ -422,23 +426,19 @@
 
 #pragma mark - Button responses
 
-- (void)showPopUpMenu
-{
+- (void)showPopUpMenu {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                          message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction *setPreviewImage = [UIAlertAction actionWithTitle:@"Use For Album List Thumbnail" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForPreview) {
         [[CJMAlbumManager sharedInstance] albumWithName:self.albumName
                          createPreviewFromCJMImage:self.cjmImage];
-        
         [[CJMAlbumManager sharedInstance] save];
         
         CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
                                            withType:@"Success"
                                            animated:YES];
-        
         hudView.text = @"Done!";
-        
         [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
 
         self.navigationController.view.userInteractionEnabled = YES;
@@ -476,6 +476,8 @@
     
     UIAlertAction *saveToPhotosAndDelete = [UIAlertAction actionWithTitle:@"Save To Camera Roll And Then Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete) {
         UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
+        self.favoriteChanged = NO;
+        [self.delegate photoIsFavorited:NO];
         [[CJMServices sharedInstance] deleteImage:self.cjmImage];
         [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
         if (albumIsFavorites)
@@ -487,6 +489,9 @@
     }];
     
     UIAlertAction *deletePhoto = [UIAlertAction actionWithTitle:@"Delete Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
+        self.favoriteChanged = NO;
+        [self.delegate photoIsFavorited:NO];
+        
         [[CJMServices sharedInstance] deleteImage:self.cjmImage];
         [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
         if (albumIsFavorites)

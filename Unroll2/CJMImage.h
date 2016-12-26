@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-//#import <CoreLocation/CoreLocation.h>
+//#import <CoreLocation/CoreLocation.h
 
 @interface CJMImage : NSObject <NSCoding>
 
@@ -25,6 +25,7 @@
 @property (nonatomic, readonly) NSString *fileName;
 @property (nonatomic, readonly) NSString *thumbnailFileName;
 @property (nonatomic) BOOL isAlbumPreview;
+@property (nonatomic) BOOL isFavoritePreview;
 @property (nonatomic) BOOL thumbnailNeedsRedraw;
 @property (nonatomic) BOOL selectCoverHidden;
 @property (nonatomic, weak) UIImage *photoImage;

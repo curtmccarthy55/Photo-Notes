@@ -25,6 +25,7 @@
         self.photoCreationDate = [aDecoder decodeObjectForKey:@"CreationDate"];
         //self.photoLocation = [aDecoder decodeObjectForKey:@"Location"];
         self.isAlbumPreview = [aDecoder decodeBoolForKey:@"AlbumPreview"];
+        self.isFavoritePreview = [aDecoder decodeBoolForKey:@"FavoritePreview"];
         self.thumbnailNeedsRedraw = [aDecoder decodeBoolForKey:@"ThumbnailNeedsRedraw"];
         self.photoFavorited = [aDecoder decodeBoolForKey:@"Favorited"]; //cjm favorites
         self.selectCoverHidden = YES;
@@ -32,6 +33,9 @@
         
         if (!self.isAlbumPreview)
             self.isAlbumPreview = NO;
+        
+        if (!self.isFavoritePreview)
+            self.isFavoritePreview = NO;
         
         if (!self.photoFavorited)
             self.photoFavorited = NO;
@@ -48,6 +52,7 @@
     [aCoder encodeObject:self.photoCreationDate forKey:@"CreationDate"];
     //[aCoder encodeObject:self.photoLocation forKey:@"Location"];
     [aCoder encodeBool:self.isAlbumPreview forKey:@"AlbumPreview"];
+    [aCoder encodeBool:self.isFavoritePreview forKey:@"FavoritePreview"];
     [aCoder encodeBool:self.thumbnailNeedsRedraw forKey:@"ThumbnailNeedsRedraw"];
     [aCoder encodeBool:self.photoFavorited forKey:@"Favorited"]; //cjm favorites
     [aCoder encodeObject:self.originalAlbum forKey:@"OriginalAlbum"];
