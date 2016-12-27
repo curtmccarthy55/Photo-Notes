@@ -147,12 +147,17 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance].allAlbums objectAtIndex:indexPath.row];
-    if ([album.albumTitle isEqualToString:@"Favorites"]) 
-        return;
-    [[CJMAlbumManager sharedInstance] removeAlbumAtIndex:indexPath.row];
-    [[CJMAlbumManager sharedInstance] save];
-    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    [self noAlbumsPopUp];
+    if ([album.albumTitle isEqualToString:@"Favorites"]) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot delete the Favorites album" message:@"Removal of the favorites album is handled automatically when no Photo Notes are favorited." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {} ];
+        [alert addAction:actionDismiss];
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        [[CJMAlbumManager sharedInstance] removeAlbumAtIndex:indexPath.row];
+        [[CJMAlbumManager sharedInstance] save];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self noAlbumsPopUp];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath

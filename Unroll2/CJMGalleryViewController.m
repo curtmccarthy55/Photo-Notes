@@ -381,30 +381,20 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     //Delete photos without saving to Photos app
     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete Photos Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
+        NSMutableArray *doomedArray = [NSMutableArray new];
         for (NSIndexPath *itemPath in self.selectedCells) {
             CJMImage *doomedImage = [self.album.albumPhotos objectAtIndex:itemPath.row];
-            if (doomedImage.photoFavorited) {
-                [[CJMAlbumManager sharedInstance].favPhotosAlbum removeCJMImage:doomedImage];
-            }
-            [[CJMServices sharedInstance] deleteImage:doomedImage];
+            [doomedArray addObject:doomedImage];
         }
-        NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-        for (NSIndexPath *itemPath in self.selectedCells) {
-            [indexSet addIndex:itemPath.row];
-        }
-//        [[CJMAlbumManager sharedInstance].favPhotosAlbum removeCJMImagesAtIndexes:indexSet];
-        [self.album removeCJMImagesAtIndexes:indexSet];
-        
+        [[CJMAlbumManager sharedInstance] albumWithName:self.album.albumTitle
+                                               deleteImages:doomedArray];
         [[CJMAlbumManager sharedInstance] save];
-        
         [self.collectionView deleteItemsAtIndexPaths:self.selectedCells];
-        
         [self toggleEditMode:self];
-        
         [self confirmEditButtonEnabled];
-        
         [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.4];
-        }];
+    }];
+
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
 

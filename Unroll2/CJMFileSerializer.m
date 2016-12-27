@@ -42,8 +42,7 @@
     return [self writeObject:image toRelativePath:path];
 }
 
-- (void)deleteImageWithFileName:(NSString *)fileName
-{
+- (void)deleteImageWithFileName:(NSString *)fileName {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     NSString *filePath = [self absolutePathFromRelativePath:fileName];

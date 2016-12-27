@@ -197,11 +197,28 @@ static CJMAlbumManager *__sharedInstance;
         }
     }
 }
+//  cjm 12/27: removes then deletes the array of passed CJMImages from the original and favorites albums.
+- (void)albumWithName:(NSString *)albumName deleteImages:(NSArray *)images {
+    CJMPhotoAlbum *album = [self scanForAlbumWithName:albumName];
+    for (CJMImage *doomedImage in images) {
+        if (doomedImage.photoFavorited) {
+            if (![album.albumTitle isEqualToString:@"Favorites"]) {
+                [self.favPhotosAlbum removeCJMImage:doomedImage];
+                [album removeCJMImage:doomedImage];
+            } else {
+                [self albumWithName:doomedImage.originalAlbum removeImageWithUUID:doomedImage.fileName];
+                [album removeCJMImage:doomedImage];
+            }
+        } else {
+            [album removeCJMImage:doomedImage];
+        }
+        [[CJMServices sharedInstance] deleteImage:doomedImage];
+    }
+}
 
 #pragma mark - PhotoAlbum Delegate
 
 - (void)checkFavoriteCount {
-    NSLog(@"*cjm* checkFavoriteCount called");
     if (self.favPhotosAlbum.albumPhotos.count < 1) {
         [self.allAlbumsEdit removeObject:self.favAlbumEdit];
     } else if (self.favPhotosAlbum.albumPhotos.count == 1) {
