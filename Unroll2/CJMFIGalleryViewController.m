@@ -128,8 +128,9 @@
 
 #pragma mark - CJMFullImageVC Delegate Methods
 
-- (void)toggleFullImageShowForViewController:(CJMFullImageViewController *)viewController {
-    self.makeViewsVisible = !self.makeViewsVisible;
+- (void)toggleFullImageShow:(BOOL)yesOrNo forViewController:(CJMFullImageViewController *)viewController {
+//    self.makeViewsVisible = !self.makeViewsVisible;
+    self.makeViewsVisible = !yesOrNo; //cjm 12/30 viewsVisible
     [viewController setViewsVisible:self.makeViewsVisible];
 }
 

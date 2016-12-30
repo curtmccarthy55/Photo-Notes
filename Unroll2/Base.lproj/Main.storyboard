@@ -31,17 +31,22 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="0Wj-Ry-7YY"/>
-                        <barButtonItem title="QuickNote" id="qsQ-ZU-jQf"/>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="2Cf-0a-pw2"/>
-                        <barButtonItem systemItem="add" id="Reb-LD-ifB">
+                        <barButtonItem title="QuickNote" id="qsQ-ZU-jQf">
+                            <connections>
+                                <action selector="actionQuicknote:" destination="NO4-kQ-OsT" id="nhK-9D-esi"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="rt5-SI-mbi"/>
+                        <barButtonItem systemItem="camera" id="igR-0V-lHp"/>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="Photo Notes Albums" id="QE4-93-jxo">
+                        <barButtonItem key="backBarButtonItem" title="Albums" id="L1L-3p-ckW"/>
+                        <barButtonItem key="leftBarButtonItem" title="Settings" id="N5S-FN-s6G"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Reb-LD-ifB">
                             <connections>
                                 <segue destination="EVj-cY-PaK" kind="presentation" identifier="AddAlbum" id="zVD-Ov-2nV"/>
                             </connections>
                         </barButtonItem>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" title="Photo Notes Albums" id="QE4-93-jxo">
-                        <barButtonItem key="backBarButtonItem" title="Albums" id="L1L-3p-ckW"/>
-                        <barButtonItem key="rightBarButtonItem" title="Settings" id="N5S-FN-s6G"/>
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>

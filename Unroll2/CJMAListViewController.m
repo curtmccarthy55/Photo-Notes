@@ -13,6 +13,7 @@
 #import "CJMAlbumManager.h"
 #import "CJMPhotoAlbum.h"
 #import "CJMServices.h"
+#import "CJMFullImageViewController.h"
 
 #define CJMAListCellIdentifier @"AlbumCell"
 
@@ -129,6 +130,18 @@
     [self performSegueWithIdentifier:@"ViewGallery" sender:[tableView cellForRowAtIndexPath:indexPath]];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+#pragma mark - QuickNotes
+
+- (IBAction)actionQuicknote:(id)sender {
+    NSString *sbName = @"Main";
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:sbName bundle:nil];
+    CJMFullImageViewController *vc = [sb instantiateViewControllerWithIdentifier:@"FullImageVC"];
+    
+//    [vc setModalPresentationStyle:UIModalPresentationFullScreen];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 
 #pragma mark - Editing the list
 

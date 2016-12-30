@@ -47,16 +47,15 @@
 @end
 
 @implementation CJMFullImageViewController
-// cjm replacing with properties
-//{
-//    float _initialZoomScale;
-//    BOOL _focusIsOnImage;
-//}
 
 #pragma mark - View preparation and display
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (self.albumName == nil) { //cjm 12/30
+        self.albumName = @"Favorites";
+        self.index = 0;
+    }
     [self prepareWithAlbumNamed:self.albumName andIndex:self.index];
     [[CJMServices sharedInstance] fetchImage:self.cjmImage handler:^(UIImage *fetchedImage) {
         self.fullImage = fetchedImage;
@@ -101,10 +100,10 @@
         self.photoLocAndDate.text = [NSString stringWithFormat:@"Photo taken %@", [dateFormatter stringFromDate:self.cjmImage.photoCreationDate]];
     }
     self.initialZoomScale = self.scrollView.zoomScale;
-    self.focusIsOnImage = NO;
+//cjm 12/30    self.focusIsOnImage = NO;
+    self.viewsVisible = YES;
     [self handleNoteSectionAlignment];
     [self updateConstraints];
-    
     
     [self.delegate photoIsFavorited:self.cjmImage.photoFavorited]; //cjm favorites ImageVC -> PageVC
 }
@@ -130,9 +129,14 @@
         [self handleNoteSectionDismissal];
     }
     
-    if (self.focusIsOnImage) {
+    //cjm 12/30
+    if (!self.viewsVisible) {
         [self imageViewTapped:self];
     }
+    
+//    if (self.focusIsOnImage) {
+//        [self imageViewTapped:self];
+//    }
     
     [self updateZoom];
     
@@ -181,13 +185,17 @@
 // Update zoom scale and constraints
 // It will also animate because willAnimateRotationToInterfaceOrientation
 // is called from within an animation block
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
-{
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
     [super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
     
-    if (self.focusIsOnImage) {
+    //cjm 12/30
+    if (!self.viewsVisible) {
         [self imageViewTapped:self];
     }
+    
+//    if (self.focusIsOnImage) {
+//        [self imageViewTapped:self];
+//    }
     
     if ([self.seeNoteButton.titleLabel.text isEqual:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
@@ -325,9 +333,10 @@
 }
 
 //Enables editing the note and title sections
-- (IBAction)enableEdit:(id)sender
-{
-    if ([self.editNoteButton.titleLabel.text isEqual:@"Edit"]) {
+- (IBAction)enableEdit:(id)sender {
+    if ([self.editNoteButton.titleLabel.text isEqualToString:@"Hide"]) {
+        [self.noteSection setHidden:YES];
+    } else if ([self.editNoteButton.titleLabel.text isEqual:@"Edit"]) {
         [self registerForKeyboardNotifications];
         self.noteTitle.enabled = YES;
         self.noteEntry.editable = YES;
@@ -351,8 +360,7 @@
     }
 }
 
-- (void)setViewsVisible:(BOOL)viewsVisible
-{
+- (void)setViewsVisible:(BOOL)viewsVisible {
     _viewsVisible = viewsVisible;
     [self updateForSingleTap];
 }
@@ -361,28 +369,24 @@
     if (self.viewsVisible == YES) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-            //cjm full screen note section
             self.noteShiftConstraint.constant = -44.0;
-//            self.noteSection.alpha = 1;
+            [self.noteSection setHidden:NO];
+            [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:YES];
         }];
     } else if (self.viewsVisible == NO) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor blackColor];
             self.noteShiftConstraint.constant = 0;
-//            self.noteSection.alpha = 0;
+            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:NO];
         }];
     }
 }
 
-- (IBAction)imageViewTapped:(id)sender
-{
-    if (!self.focusIsOnImage) {
-        self.focusIsOnImage = YES;
-    } else {
-        self.focusIsOnImage = NO;
-    }
-    
-    [self.delegate toggleFullImageShowForViewController:self];
+- (IBAction)imageViewTapped:(id)sender {
+    //cjm 12/30 viewsVisible. this is the first method called when the user taps once on the UIScrollView.
+    [self.delegate toggleFullImageShow:self.viewsVisible forViewController:self];
 }
 
 //double tap to zoom in/zoom out

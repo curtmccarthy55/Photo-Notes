@@ -324,9 +324,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Present users photo library
-- (void)presentPhotoGrabViewController
-{
-    //cjm 12/10
+- (void)presentPhotoGrabViewController {
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
@@ -336,8 +334,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Mass delete options
-- (IBAction)deleteSelcted:(id)sender
-{
+- (IBAction)deleteSelcted:(id)sender {
     self.selectedCells = [NSArray arrayWithArray:[self.collectionView indexPathsForSelectedItems]];
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete photos?" message:@"You cannot recover these photos after deleting." preferredStyle:UIAlertControllerStyleActionSheet];

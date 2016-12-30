@@ -13,7 +13,7 @@
 
 @protocol CJMFullImageViewControllerDelegate <NSObject>
 
-- (void)toggleFullImageShowForViewController:(CJMFullImageViewController *)viewController;
+- (void)toggleFullImageShow:(BOOL)yesOrNo forViewController:(CJMFullImageViewController *)viewController;
 - (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex;
 - (void)photoIsFavorited:(BOOL)isFavorited; //cjm favorites ImageVC -> PageVC
 
