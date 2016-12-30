@@ -45,17 +45,27 @@ static CJMAlbumManager *__sharedInstance;
 
 - (void)handleFirstTime {
     BOOL firstTime = [[NSUserDefaults standardUserDefaults] boolForKey:@"FirstTime"];
+    BOOL favorites = [[NSUserDefaults standardUserDefaults] boolForKey:@"FavoritesReserved"];
+    NSLog(@"*cjm* self.allAlbumsEdit == %@; self.favAlbumsEdit == %@", self.allAlbumsEdit, self.favAlbumEdit);
     
     if (firstTime) {
-        CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"My Photo Notes" andNote:@"Press Edit to customize the name and note sections."];
+        CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"My Photo Notes" andNote:@"Tap Edit to customize the name and note sections."];
         [self addAlbum:album];
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FirstTime"];
+    }
+    if (!favorites) {
+        if ([self containsAlbumNamed:@"Favorites"]) {
+            CJMPhotoAlbum *userFavorites = [self scanForAlbumWithName:@"Favorites"];
+            [userFavorites setAlbumTitle:@"My Favorites"];
+            [self save];
+        }
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FavoritesReserved"];
     }
 }
 
 - (void)registerDefaults
 {
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"FirstTime" : @YES }];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"FirstTime" : @YES , @"FavoritesReserved" : @NO }];
 }
 
 #pragma mark - Content

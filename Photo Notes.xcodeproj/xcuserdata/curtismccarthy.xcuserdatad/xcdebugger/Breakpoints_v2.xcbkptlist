@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504759043.698216"
+            timestampString = "504831833.681125"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
             landmarkName = "-favPhotosAlbum"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504759043.698216"
+            timestampString = "504831833.681125"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
             landmarkName = "-favAlbumEdit"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,7 +90,7 @@
                   moduleName = "Unroll2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/curtismccarthy/Documents/Programming/My%20Xcode/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/CJMGalleryViewController.m"
-                  timestampString = "504814849.996582"
+                  timestampString = "504831903.479705"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "387"
@@ -105,7 +105,7 @@
                   moduleName = "Unroll2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/curtismccarthy/Documents/Programming/My%20Xcode/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/CJMGalleryViewController.m"
-                  timestampString = "504814849.998595"
+                  timestampString = "504831903.483024"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "387"
@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504760479.517476"
+            timestampString = "504831833.681125"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
             landmarkName = "-albumWithName:deleteImages:"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504759043.698216"
+            timestampString = "504831833.681125"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
             landmarkName = "-removeAlbumAtIndex:"
             landmarkType = "7">
          </BreakpointContent>
@@ -154,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504760479.517476"
+            timestampString = "504831833.681125"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "130"
-            endingLineNumber = "130"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
             landmarkName = "-removeAlbumAtIndex:"
             landmarkType = "7">
          </BreakpointContent>
@@ -186,12 +186,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMFIGalleryViewController.m"
-            timestampString = "504814824.837036"
+            timestampString = "504814890.642859"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
-            landmarkName = "-setMakeViewsVisible:"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "-toggleFullImageShow:forViewController:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -201,13 +201,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Unroll2/CJMFIGalleryViewController.m"
-            timestampString = "504814890.642859"
+            filePath = "Unroll2/CJMAlbumManager.m"
+            timestampString = "504831601.592839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "-toggleFullImageShow:forViewController:"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "-handleFirstTime"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
