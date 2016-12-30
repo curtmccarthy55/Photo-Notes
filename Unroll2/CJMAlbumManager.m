@@ -25,8 +25,7 @@ static CJMAlbumManager *__sharedInstance;
 
 @implementation CJMAlbumManager
 
-+ (instancetype)sharedInstance
-{
++ (instancetype)sharedInstance {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         __sharedInstance = [CJMAlbumManager new];
@@ -34,8 +33,7 @@ static CJMAlbumManager *__sharedInstance;
     return __sharedInstance;
 }
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     if (self) {
         self.fileSerializer = [CJMFileSerializer new];
@@ -119,26 +117,26 @@ static CJMAlbumManager *__sharedInstance;
 
 - (void)removeAlbumAtIndex:(NSUInteger)index {
     CJMPhotoAlbum *doomedAlbum = [self.allAlbumsEdit objectAtIndex:index];
+    [self albumWithName:doomedAlbum.albumTitle deleteImages:doomedAlbum.albumPhotos];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        for (CJMImage *cjmImage in doomedAlbum.albumPhotos) {
-        [[CJMServices sharedInstance] deleteImage:cjmImage];
-        }
-    });
+    //pre cjm 12/27 testing
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        for (CJMImage *cjmImage in doomedAlbum.albumPhotos) {
+//        [[CJMServices sharedInstance] deleteImage:cjmImage];
+//        }
+//    });
     
-    [self.allAlbumsEdit removeObjectAtIndex:index];
-    [self save];
+    [self.allAlbumsEdit removeObject:doomedAlbum];
+    [self checkFavoriteCount];
 }
 
-- (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex
-{
+- (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex {
     CJMPhotoAlbum *movingAlbum = [self.allAlbumsEdit objectAtIndex:fromIndex];
     [self.allAlbumsEdit removeObjectAtIndex:fromIndex];
     [self.allAlbumsEdit insertObject:movingAlbum atIndex:toIndex];
 }
 
-- (BOOL)containsAlbumNamed:(NSString *)name
-{
+- (BOOL)containsAlbumNamed:(NSString *)name {
     __block BOOL exists = NO;
     
     [self.allAlbumsEdit enumerateObjectsUsingBlock:^(CJMPhotoAlbum *obj, NSUInteger idx, BOOL *stop) {
@@ -175,9 +173,7 @@ static CJMAlbumManager *__sharedInstance;
     album.albumPreviewImage = image;
 }
 
-- (CJMImage *)albumWithName:(NSString *)name returnImageAtIndex:(NSInteger)index
-{
-    
+- (CJMImage *)albumWithName:(NSString *)name returnImageAtIndex:(NSInteger)index {
     CJMPhotoAlbum *album = [self scanForAlbumWithName:name];
     
     if (album.albumPhotos.count < index + 1) {
@@ -187,7 +183,7 @@ static CJMAlbumManager *__sharedInstance;
     }
 }
 
-- (void)albumWithName:(NSString *)albumName removeImageWithUUID:(NSString *)fileName{
+- (void)albumWithName:(NSString *)albumName removeImageWithUUID:(NSString *)fileName {
     CJMPhotoAlbum *shrinkingAlbum = [self scanForAlbumWithName:albumName];
     
     for (CJMImage *cjmImage in shrinkingAlbum.albumPhotos) {
@@ -197,10 +193,12 @@ static CJMAlbumManager *__sharedInstance;
         }
     }
 }
-//  cjm 12/27: removes then deletes the array of passed CJMImages from the original and favorites albums.
+
+//  cjm 12/27: removes each CJMImage in the images array from the original and favorites albums, then deletes the CJMImage from the disk.
 - (void)albumWithName:(NSString *)albumName deleteImages:(NSArray *)images {
     CJMPhotoAlbum *album = [self scanForAlbumWithName:albumName];
     for (CJMImage *doomedImage in images) {
+        [[CJMServices sharedInstance] deleteImage:doomedImage];
         if (doomedImage.photoFavorited) {
             if (![album.albumTitle isEqualToString:@"Favorites"]) {
                 [self.favPhotosAlbum removeCJMImage:doomedImage];
@@ -212,7 +210,6 @@ static CJMAlbumManager *__sharedInstance;
         } else {
             [album removeCJMImage:doomedImage];
         }
-        [[CJMServices sharedInstance] deleteImage:doomedImage];
     }
 }
 
@@ -230,8 +227,7 @@ static CJMAlbumManager *__sharedInstance;
 
 #pragma mark - Album saving
 
-- (BOOL)save
-{
+- (BOOL)save {
     return [self.fileSerializer writeObject:self.allAlbumsEdit toRelativePath:CJMAlbumFileName];
 }
 

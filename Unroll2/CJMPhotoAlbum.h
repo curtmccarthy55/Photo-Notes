@@ -29,6 +29,7 @@
 
 - (instancetype)initWithName:(NSString *)name andNote:(NSString *)note;
 - (instancetype)initWithName:(NSString *)name;
+
 - (void)addCJMImage:(CJMImage *)image;
 - (void)removeCJMImage:(CJMImage *)image;
 - (void)addMultipleCJMImages:(NSArray *)newImages;

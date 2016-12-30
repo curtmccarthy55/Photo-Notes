@@ -73,8 +73,7 @@ static CJMServices *__sharedInstance;
     }
 }
 
-- (void)deleteImage:(CJMImage *)userImage
-{
+- (void)deleteImage:(CJMImage *)userImage {
     if ([self.cache objectForKey:userImage.fileName]) {
         [self.cache removeObjectForKey:userImage.fileName];
     }

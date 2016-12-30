@@ -388,7 +388,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         }
         [[CJMAlbumManager sharedInstance] albumWithName:self.album.albumTitle
                                                deleteImages:doomedArray];
+        [[CJMAlbumManager sharedInstance] checkFavoriteCount];
         [[CJMAlbumManager sharedInstance] save];
+        if (self.album.albumPhotos.count < 1) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
         [self.collectionView deleteItemsAtIndexPaths:self.selectedCells];
         [self toggleEditMode:self];
         [self confirmEditButtonEnabled];
@@ -451,11 +455,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         aListPickerVC.delegate = self;
         aListPickerVC.title = @"Select Destination";
         aListPickerVC.currentAlbumName = self.album.albumTitle;
-        [self presentViewController:vc animated:YES completion:nil];
-
+        [self presentViewController:vc animated:YES completion:nil]; //cjm 12/30
     }];
     
-    //Cancel action
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
     
 //    [alertController addAction:photosAppExport];
@@ -625,15 +627,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 #pragma mark - CJMAListPicker Delegate
 
 //Dismiss list of albums to transfer photos to and deselect previously selected photos.
-- (void)aListPickerViewControllerDidCancel:(CJMAListPickerViewController *)controller
-{
+- (void)aListPickerViewControllerDidCancel:(CJMAListPickerViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self toggleEditMode:self];
 }
 
 //take CJMImages in selected cells in current album and transfer them to the picked album.
-- (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album
-{
+- (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album {
     NSMutableArray *transferringImages = [NSMutableArray new];
     
     for (NSIndexPath *itemPath in self.selectedCells) {
@@ -660,6 +660,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
     
     [[CJMAlbumManager sharedInstance] save];
+    if (self.album.albumPhotos.count < 1) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     [self.collectionView deleteItemsAtIndexPaths:self.selectedCells];
     [self toggleEditMode:self];
     [self.collectionView reloadData];

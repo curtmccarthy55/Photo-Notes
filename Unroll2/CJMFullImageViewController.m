@@ -57,7 +57,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self prepareWithAlbumNamed:self.albumName andIndex:self.index];
     [[CJMServices sharedInstance] fetchImage:self.cjmImage handler:^(UIImage *fetchedImage) {
         self.fullImage = fetchedImage;
@@ -157,7 +156,7 @@
             self.cjmImage.originalAlbum = self.albumName;
         }
     }
-    
+    [[CJMAlbumManager sharedInstance] checkFavoriteCount];
     [[CJMAlbumManager sharedInstance] save]; //cjm favorites ImageVC set up/save
     
     if ([self.albumName isEqualToString:@"Favorites"] && [[CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos count] < 1){
@@ -482,7 +481,8 @@
         [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
         if (albumIsFavorites)
             [[CJMAlbumManager sharedInstance] albumWithName:self.cjmImage.originalAlbum removeImageWithUUID:self.cjmImage.fileName];
-    
+        
+        [[CJMAlbumManager sharedInstance] checkFavoriteCount];
         [[CJMAlbumManager sharedInstance] save];
     
         [self.delegate viewController:self deletedImageAtIndex:self.index];
@@ -497,6 +497,7 @@
         if (albumIsFavorites)
             [[CJMAlbumManager sharedInstance] albumWithName:self.cjmImage.originalAlbum removeImageWithUUID:self.cjmImage.fileName];
     
+        [[CJMAlbumManager sharedInstance] checkFavoriteCount];
         [[CJMAlbumManager sharedInstance] save];
         [self.delegate viewController:self deletedImageAtIndex:self.index];
     }];

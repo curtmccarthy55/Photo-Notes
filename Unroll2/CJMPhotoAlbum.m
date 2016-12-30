@@ -70,8 +70,7 @@
 
 #pragma mark - Content management
 
-- (NSArray *)albumPhotos
-{
+- (NSArray *)albumPhotos {
     return [_albumEditablePhotos array];
 }
 
@@ -84,20 +83,15 @@
 
 - (void)removeCJMImage:(CJMImage *)image {
     [self.albumEditablePhotos removeObject:image];
-    if ([self.albumTitle isEqualToString:@"Favorites"] && self.albumPhotos.count < 2) {
-        [self.delegate checkFavoriteCount];
-    }
 }
 
-- (void)addMultipleCJMImages:(NSArray *)newImages
-{
+- (void)addMultipleCJMImages:(NSArray *)newImages {
     NSArray *sortedNewImages = [newImages sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"photoCreationDate" ascending:YES]]];
     
     [self.albumEditablePhotos addObjectsFromArray:sortedNewImages];
 }
 
-- (void)removeCJMImagesAtIndexes:(NSIndexSet *)indexSet
-{
+- (void)removeCJMImagesAtIndexes:(NSIndexSet *)indexSet {
     [self.albumEditablePhotos removeObjectsAtIndexes:indexSet];
 }
 

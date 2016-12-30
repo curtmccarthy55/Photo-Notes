@@ -153,9 +153,17 @@
         [alert addAction:actionDismiss];
         [self presentViewController:alert animated:YES completion:nil];
     } else {
+        NSUInteger favInt = [[CJMAlbumManager sharedInstance].allAlbums indexOfObject:[CJMAlbumManager sharedInstance].favPhotosAlbum];
+        NSIndexPath *favPath = [NSIndexPath indexPathForRow:favInt inSection:0];
+        BOOL favoritesActive = [CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos.count > 0 ? YES : NO;
         [[CJMAlbumManager sharedInstance] removeAlbumAtIndex:indexPath.row];
         [[CJMAlbumManager sharedInstance] save];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        if ([CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos.count < 1 && favoritesActive) {
+            [tableView deleteRowsAtIndexPaths:@[indexPath, favPath] withRowAnimation:UITableViewRowAnimationFade];
+        } else {
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        [tableView reloadData];
         [self noAlbumsPopUp];
     }
 }

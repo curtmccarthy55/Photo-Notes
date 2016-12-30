@@ -28,6 +28,8 @@
     
     if (album.albumPhotos.count == 0) {
         cell.cellAlbumCount.text = @"No Photos";
+    } else if (album.albumPhotos.count == 1) {
+        cell.cellAlbumCount.text = @"1 Photo";
     } else {
         cell.cellAlbumCount.text = [NSString stringWithFormat:@"%lu Photos", (unsigned long)album.albumPhotos.count];
     }
