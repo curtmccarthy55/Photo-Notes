@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMFullImageViewController.m"
-            timestampString = "504828746.282885"
+            timestampString = "504830059.983539"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "499"
-            endingLineNumber = "499"
+            startingLineNumber = "505"
+            endingLineNumber = "505"
             landmarkName = "-confirmImageDelete"
             landmarkType = "7">
          </BreakpointContent>

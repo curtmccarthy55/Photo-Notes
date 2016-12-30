@@ -294,6 +294,7 @@
             
             self.editNoteButton.hidden = NO;
             [self.seeNoteButton setTitle:@"Dismiss" forState:UIControlStateNormal];
+            [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
             
             [self.noteEntry setAlpha:1.0];
             [self.photoLocAndDate setAlpha:1.0];
@@ -314,7 +315,12 @@
     
     [UIView animateWithDuration:0.25 animations:^{
         [self.noteSection.superview layoutIfNeeded];
-        self.editNoteButton.hidden = YES;
+        if (!self.viewsVisible) {
+            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:NO];
+        }else {
+            self.editNoteButton.hidden = YES;
+        }
         
         [self.seeNoteButton setTitle:@"See Note" forState:UIControlStateNormal];
         
