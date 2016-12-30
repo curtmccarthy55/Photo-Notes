@@ -90,12 +90,12 @@
                   moduleName = "Unroll2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/curtismccarthy/Documents/Programming/My%20Xcode/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/CJMGalleryViewController.m"
-                  timestampString = "504831903.479705"
+                  timestampString = "504832799.56228"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "387"
                   endingLineNumber = "387"
-                  offsetFromSymbolStart = "132">
+                  offsetFromSymbolStart = "140">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -105,12 +105,12 @@
                   moduleName = "Unroll2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/curtismccarthy/Documents/Programming/My%20Xcode/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/CJMGalleryViewController.m"
-                  timestampString = "504831903.483024"
+                  timestampString = "504832799.564781"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "387"
                   endingLineNumber = "387"
-                  offsetFromSymbolStart = "140">
+                  offsetFromSymbolStart = "156">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -192,22 +192,6 @@
             startingLineNumber = "133"
             endingLineNumber = "133"
             landmarkName = "-toggleFullImageShow:forViewController:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504831601.592839"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "-handleFirstTime"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

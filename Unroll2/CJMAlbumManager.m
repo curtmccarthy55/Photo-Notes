@@ -46,7 +46,6 @@ static CJMAlbumManager *__sharedInstance;
 - (void)handleFirstTime {
     BOOL firstTime = [[NSUserDefaults standardUserDefaults] boolForKey:@"FirstTime"];
     BOOL favorites = [[NSUserDefaults standardUserDefaults] boolForKey:@"FavoritesReserved"];
-    NSLog(@"*cjm* self.allAlbumsEdit == %@; self.favAlbumsEdit == %@", self.allAlbumsEdit, self.favAlbumEdit);
     
     if (firstTime) {
         CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"My Photo Notes" andNote:@"Tap Edit to customize the name and note sections."];
