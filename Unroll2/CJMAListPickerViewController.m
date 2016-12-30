@@ -128,8 +128,7 @@
 
 #pragma mark - Buttons actions
 
-- (void)cancelPressed
-{
+- (void)cancelPressed {
     [self.delegate aListPickerViewControllerDidCancel:self];
 }
 

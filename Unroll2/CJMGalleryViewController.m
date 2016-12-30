@@ -59,8 +59,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self confirmEditButtonEnabled];
     [self.collectionView reloadData];
     
-    if ([self.album.albumTitle isEqualToString:@"Favorites"] && [[CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos count] < 1){
-        [self.navigationController popViewControllerAnimated:YES];
+    if ([self.album.albumTitle isEqualToString:@"Favorites"]) {
+        [self.cameraButton setEnabled:NO];
+        if ([[CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos count] < 1) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -241,7 +244,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         self.exportButton.title = @"Transfer";
         self.exportButton.enabled = NO;
     } else {
-        self.cameraButton.enabled = YES;
+        if (![self.album.albumTitle isEqualToString:@"Favorites"])
+            self.cameraButton.enabled = YES;
+        
         self.deleteButton.title = nil;
         self.deleteButton.enabled = NO;
         self.exportButton.title = nil;
