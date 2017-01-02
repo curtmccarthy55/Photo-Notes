@@ -27,6 +27,7 @@
 @property (nonatomic, weak) id <CJMFullImageViewControllerDelegate> delegate;
 @property (nonatomic) BOOL viewsVisible;
 @property (nonatomic) BOOL imageIsFavorite;//cjm favorites ImageVC set up
+@property (nonatomic) BOOL isQuickNote;
 
 - (void)showPopUpMenu;
 - (void)confirmImageDelete;

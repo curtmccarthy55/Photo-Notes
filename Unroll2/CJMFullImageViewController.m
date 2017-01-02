@@ -173,7 +173,9 @@
 
 //Sets the note section height equal to the space between the toolbar and navbar
 - (void)fullSizeForNoteSection { //cjm shiftNote method
-    if (self.viewsVisible == YES) {
+    if (self.isQuickNote) {
+        self.noteSectionHeight.constant = (self.view.frame.size.height);
+    } else if (self.viewsVisible == YES) {
         self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
     } else if (self.viewsVisible == NO) {
         self.noteSectionHeight.constant = self.view.frame.size.height;
@@ -271,13 +273,20 @@
 
 #pragma mark - Buttons and taps
 
+- (IBAction)dismissQuickNote:(id)sender {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 //first button press: Slide the note section up so it touches the bottom of the navbar
 //second button press: Slide the note section back down to just above the toolbar
 - (IBAction)shiftNote:(id)sender { //cjm shiftNote method
     [self fullSizeForNoteSection];
     
     CGFloat shiftConstant;
-    if (self.viewsVisible == YES) {
+    if (self.isQuickNote) {
+        shiftConstant = -(self.view.bounds.size.height);
+    } else if (self.viewsVisible == YES) {
         CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
         shiftConstant = -(self.view.bounds.size.height - 44 - topBarsHeight);
     } else {
@@ -392,7 +401,15 @@
 
 - (IBAction)imageViewTapped:(id)sender {
     //cjm 12/30 viewsVisible. this is the first method called when the user taps once on the UIScrollView.
-    [self.delegate toggleFullImageShow:self.viewsVisible forViewController:self];
+    if (self.isQuickNote) {
+        if (self.navigationController.navigationBar.isHidden == YES) {
+            [self.navigationController.navigationBar setHidden:NO];
+        } else {
+            [self.navigationController.navigationBar setHidden:YES];
+        }
+    } else {
+        [self.delegate toggleFullImageShow:self.viewsVisible forViewController:self];
+    }
 }
 
 //double tap to zoom in/zoom out

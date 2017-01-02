@@ -135,16 +135,13 @@
 #pragma mark - QuickNotes
 
 - (IBAction)actionQuicknote:(id)sender {
-//    NSString *sbName = @"Main";
-//    UIStoryboard *sb = [UIStoryboard storyboardWithName:sbName bundle:nil];
     CJMFullImageViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"FullImageVC"];
     vc.index = 0;
     vc.albumName = @"Favorites";
     vc.delegate = self;
-    [self.navigationController.toolbar setHidden:YES];
+    vc.isQuickNote = YES;
+//    [self.navigationController.toolbar setHidden:YES];
     [vc setViewsVisible:NO];
-//    [vc setModalPresentationStyle:UIModalPresentationFullScreen];
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)photoIsFavorited:(BOOL)isFavorited {
@@ -194,8 +191,7 @@
     }
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
     [[CJMAlbumManager sharedInstance] replaceAlbumAtIndex:toIndexPath.row withAlbumFromIndex:fromIndexPath.row];
 }
 
@@ -204,15 +200,12 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"ViewGallery"]) {
-        
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         CJMPhotoAlbum *sentAlbum = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
         sentAlbum.delegate = [CJMAlbumManager sharedInstance];
         CJMGalleryViewController *galleryVC = (CJMGalleryViewController *)segue.destinationViewController;
         galleryVC.album = sentAlbum;
-        
     } else if ([segue.identifier isEqualToString:@"EditAlbum"]) {
-        
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         CJMPhotoAlbum *sentAlbum = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
         UINavigationController *navigationController = segue.destinationViewController;
@@ -220,13 +213,20 @@
         detailVC.albumToEdit = sentAlbum;
         detailVC.title = @"Album Info";
         detailVC.delegate = self;
-        
     } else if ([segue.identifier isEqualToString:@"AddAlbum"]) {
-        
         UINavigationController *navigationController = segue.destinationViewController;
         CJMADetailViewController *detailVC = navigationController.viewControllers[0];
         detailVC.title = @"Create Album";
         detailVC.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"ShowQuickNote"]) {
+        UINavigationController *nav = segue.destinationViewController;
+        CJMFullImageViewController *vc = nav.viewControllers[0];
+        vc.index = 0;
+        vc.albumName = @"Favorites";
+        vc.delegate = self;
+        vc.isQuickNote = YES;
+        //    [self.navigationController.toolbar setHidden:YES];
+        [vc setViewsVisible:NO];
     }
 }
 

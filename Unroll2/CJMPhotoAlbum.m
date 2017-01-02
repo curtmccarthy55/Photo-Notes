@@ -55,6 +55,10 @@
     return self;
 }
 
+- (NSString *)description {
+    return  [NSString stringWithFormat:@"CJMPhotoAlbum with name:%@, memAddres:%p, and photoCount:%lu", self.albumTitle, self, self.albumPhotos.count];
+}
+
 - (CJMPhotoAlbum *)copyWithZone:(NSZone *)zone { //CJM 02/09
     CJMPhotoAlbum *albumCopy = [[CJMPhotoAlbum allocWithZone:zone] init];
     

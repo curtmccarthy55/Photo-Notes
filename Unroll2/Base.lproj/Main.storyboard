@@ -33,7 +33,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="0Wj-Ry-7YY"/>
                         <barButtonItem title="QuickNote" id="qsQ-ZU-jQf">
                             <connections>
-                                <action selector="actionQuicknote:" destination="NO4-kQ-OsT" id="nhK-9D-esi"/>
+                                <segue destination="Oy1-bg-qji" kind="presentation" identifier="ShowQuickNote" id="Of8-SX-qwO"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="rt5-SI-mbi"/>
@@ -140,7 +140,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UEJ-PL-hae" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2609" y="-351"/>
+            <point key="canvasLocation" x="2585" y="-351"/>
         </scene>
         <!--Popover View Controller-->
         <scene sceneID="L8e-gh-bBZ">
@@ -431,9 +431,9 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UQn-i9-gPd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3324" y="1012"/>
+            <point key="canvasLocation" x="3348" y="1803"/>
         </scene>
-        <!--Full Image View Controller-->
+        <!--QuickNote-->
         <scene sceneID="PdM-rG-10i">
             <objects>
                 <viewController storyboardIdentifier="FullImageVC" id="9ae-Ea-iTf" customClass="CJMFullImageViewController" sceneMemberID="viewController">
@@ -442,24 +442,24 @@
                         <viewControllerLayoutGuide type="bottom" id="C9P-pQ-slP"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ulg-px-Jgm">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.5" maximumZoomScale="1.5" translatesAutoresizingMaskIntoConstraints="NO" id="657-po-rB3">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="100" placeholderIntrinsicHeight="100" translatesAutoresizingMaskIntoConstraints="NO" id="21o-UG-qC7">
-                                        <rect key="frame" x="250" y="250" width="100" height="100"/>
+                                        <rect key="frame" x="137" y="251" width="100" height="100"/>
                                         <gestureRecognizers/>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstItem="21o-UG-qC7" firstAttribute="leading" secondItem="657-po-rB3" secondAttribute="leading" constant="250" id="2aF-os-TrH"/>
-                                    <constraint firstAttribute="trailing" secondItem="21o-UG-qC7" secondAttribute="trailing" constant="250" id="7Ba-sJ-cgT"/>
-                                    <constraint firstItem="21o-UG-qC7" firstAttribute="top" secondItem="657-po-rB3" secondAttribute="top" constant="250" id="N7P-wH-oks"/>
-                                    <constraint firstAttribute="bottom" secondItem="21o-UG-qC7" secondAttribute="bottom" constant="142" id="OoQ-hw-nfe"/>
+                                    <constraint firstItem="21o-UG-qC7" firstAttribute="leading" secondItem="657-po-rB3" secondAttribute="leading" constant="137" id="2aF-os-TrH"/>
+                                    <constraint firstAttribute="trailing" secondItem="21o-UG-qC7" secondAttribute="trailing" constant="138" id="7Ba-sJ-cgT"/>
+                                    <constraint firstItem="21o-UG-qC7" firstAttribute="top" secondItem="657-po-rB3" secondAttribute="top" constant="251" id="N7P-wH-oks"/>
+                                    <constraint firstAttribute="bottom" secondItem="21o-UG-qC7" secondAttribute="bottom" constant="252" id="OoQ-hw-nfe"/>
                                 </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="PKx-nw-LUR" appends="YES" id="kGo-Sf-0af"/>
@@ -467,7 +467,7 @@
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlx-cQ-nGb">
-                                <rect key="frame" x="0.0" y="623" width="375" height="492"/>
+                                <rect key="frame" x="0.0" y="559" width="375" height="492"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="INM-E8-0PE">
                                         <rect key="frame" x="8" y="0.0" width="359" height="62"/>
@@ -562,6 +562,13 @@
                             <constraint firstItem="657-po-rB3" firstAttribute="top" secondItem="ulg-px-Jgm" secondAttribute="top" id="wYo-XK-pCq"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="QuickNote" id="cGA-pY-28h">
+                        <barButtonItem key="leftBarButtonItem" title="Dismiss" id="7e3-kP-14n">
+                            <connections>
+                                <action selector="dismissQuickNote:" destination="9ae-Ea-iTf" id="JtZ-TA-E2S"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="bottomConstraint" destination="OoQ-hw-nfe" id="zev-GL-fh4"/>
                         <outlet property="editNoteButton" destination="CjO-W7-o96" id="yb1-1L-yiW"/>
@@ -595,7 +602,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3324" y="339.58020989505252"/>
+            <point key="canvasLocation" x="2585" y="1099"/>
         </scene>
         <!--Import Photos-->
         <scene sceneID="1wi-Ff-VJa">
@@ -693,7 +700,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4d7-gt-o0N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1714" y="1012"/>
+            <point key="canvasLocation" x="1793" y="1803"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ndF-DM-kDb">
@@ -769,7 +776,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eum-hx-FuB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="990" y="1012"/>
+            <point key="canvasLocation" x="990" y="1803"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bhl-Zh-MbQ">
@@ -792,7 +799,30 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XSH-Sh-n4J" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2585" y="1012"/>
+            <point key="canvasLocation" x="2609" y="1803"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="9Ip-5p-Gq2">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Oy1-bg-qji" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="M1T-6M-Ndd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.2363378931" green="0.50007843730000001" blue="0.76112388959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="9ae-Ea-iTf" kind="relationship" relationship="rootViewController" id="cWR-4H-SL8"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PZb-KX-byW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1894" y="1099"/>
         </scene>
     </scenes>
     <resources>

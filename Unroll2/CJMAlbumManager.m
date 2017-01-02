@@ -46,6 +46,7 @@ static CJMAlbumManager *__sharedInstance;
 - (void)handleFirstTime {
     BOOL firstTime = [[NSUserDefaults standardUserDefaults] boolForKey:@"FirstTime"];
     BOOL favorites = [[NSUserDefaults standardUserDefaults] boolForKey:@"FavoritesReserved"];
+    BOOL quickNote = [[NSUserDefaults standardUserDefaults] boolForKey:@"QuickNoteMade"];
     
     if (firstTime) {
         CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"My Photo Notes" andNote:@"Tap Edit to customize the name and note sections."];
@@ -60,25 +61,34 @@ static CJMAlbumManager *__sharedInstance;
         }
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FavoritesReserved"];
     }
+    if (!quickNote) {
+        CJMPhotoAlbum *quickNoteAlbum = [[CJMPhotoAlbum alloc] initWithName:@"CJMQuickNote"];
+        [self addAlbum:quickNoteAlbum];
+        [self save];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QuickNoteMade"];
+    }
 }
 
-- (void)registerDefaults
-{
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"FirstTime" : @YES , @"FavoritesReserved" : @NO }];
+- (void)registerDefaults {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"FirstTime" : @YES , @"FavoritesReserved" : @NO , @"QuickNoteMade" : @NO }];
 }
 
 #pragma mark - Content
 
-- (NSArray *)allAlbums
-{
-    return [self.allAlbumsEdit array];
+- (NSArray *)allAlbums { //cjm 01/02
+    NSMutableArray *fullArray = [NSMutableArray arrayWithArray:[self.allAlbumsEdit array]];
+    [fullArray removeObject:[self scanForAlbumWithName:@"CJMQuickNote"]];
+    NSArray *newArray = [NSArray arrayWithArray:fullArray];
+    
+    NSLog(@"*cjm* newArray == %@, allAlbumsEdit == %@", newArray, self.allAlbumsEdit);
+    
+    return newArray;
+//    return [self.allAlbumsEdit array];
 }
 
 
-- (NSMutableOrderedSet *)allAlbumsEdit
-{
-    if(!_allAlbumsEdit)
-    {
+- (NSMutableOrderedSet *)allAlbumsEdit {
+    if(!_allAlbumsEdit) {
         //lazy load from disk
         NSOrderedSet *set = [self.fileSerializer readObjectFromRelativePath:CJMAlbumFileName];
         _allAlbumsEdit = [NSMutableOrderedSet new];
@@ -90,12 +100,26 @@ static CJMAlbumManager *__sharedInstance;
     return _allAlbumsEdit;
 }
 
-- (CJMPhotoAlbum *)favPhotosAlbum {
-    CJMPhotoAlbum *albumCopy = self.favAlbumEdit;
-    return albumCopy; //cjm favorites album copy issue?
+- (CJMImage *)userQuickNote {
+    CJMPhotoAlbum *album = [self scanForAlbumWithName:@"CJMQuickNote"];
+    if (!album) {
+        album = [[CJMPhotoAlbum alloc] initWithName:@"CJMQuickNote"];
+        [self addAlbum:album];
+    }
+    CJMImage *image = [album.albumPhotos objectAtIndex:0];
+    if (!image) {
+        image = [self.favPhotosAlbum.albumPhotos objectAtIndex:0];
+    }
+    
+    return image;
 }
 
-- (CJMPhotoAlbum *)favAlbumEdit { //cjm favorites album
+- (CJMPhotoAlbum *)favPhotosAlbum {
+    CJMPhotoAlbum *albumCopy = self.favAlbumEdit;
+    return albumCopy;
+}
+
+- (CJMPhotoAlbum *)favAlbumEdit {
     if (!_favAlbumEdit) {
         CJMPhotoAlbum *favAlbum = [self scanForAlbumWithName:@"Favorites"];
         _favAlbumEdit = [CJMPhotoAlbum new];
@@ -116,7 +140,7 @@ static CJMAlbumManager *__sharedInstance;
 #pragma mark - Content management
 
 - (void)addAlbum:(CJMPhotoAlbum *)album {
-    if ([album.albumTitle isEqualToString:@"Favorites"]) { //cjm favorites album
+    if ([album.albumTitle isEqualToString:@"Favorites"]) {
         [self.allAlbumsEdit insertObject:self.favAlbumEdit atIndex:0];
     } else {
         [self.allAlbumsEdit addObject:album];

@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504831833.681125"
+            timestampString = "505083828.352804"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "-favPhotosAlbum"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504831833.681125"
+            timestampString = "505083828.352804"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
             landmarkName = "-favAlbumEdit"
             landmarkType = "7">
          </BreakpointContent>
@@ -38,15 +38,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMFullImageViewController.m"
-            timestampString = "504997962.035376"
+            timestampString = "505016573.631117"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "509"
-            endingLineNumber = "509"
+            startingLineNumber = "526"
+            endingLineNumber = "526"
             landmarkName = "-confirmImageDelete"
             landmarkType = "7">
          </BreakpointContent>
@@ -65,52 +65,20 @@
             endingLineNumber = "390"
             landmarkName = "-deleteSelcted:"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__42-[CJMGalleryViewController deleteSelcted:]_block_invoke"
-                  moduleName = "Unroll2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/curtismccarthy/Documents/Programming/My%20Xcode/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/CJMGalleryViewController.m"
-                  timestampString = "505010499.255859"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "390"
-                  endingLineNumber = "390"
-                  offsetFromSymbolStart = "140">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__42-[CJMGalleryViewController deleteSelcted:]_block_invoke"
-                  moduleName = "Unroll2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/curtismccarthy/Documents/Programming/My%20Xcode/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/CJMGalleryViewController.m"
-                  timestampString = "505010499.257512"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "390"
-                  endingLineNumber = "390"
-                  offsetFromSymbolStart = "156">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504831833.681125"
+            timestampString = "505083828.352804"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "208"
-            endingLineNumber = "208"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "-albumWithName:deleteImages:"
             landmarkType = "7">
          </BreakpointContent>
@@ -118,39 +86,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504831833.681125"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "129"
-            endingLineNumber = "129"
-            landmarkName = "-removeAlbumAtIndex:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Unroll2/CJMAlbumManager.m"
-            timestampString = "504831833.681125"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
-            landmarkName = "-removeAlbumAtIndex:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMAListPickerViewController.m"
@@ -170,12 +106,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/CJMFullImageViewController.m"
-            timestampString = "504836113.016052"
+            timestampString = "505016039.427659"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "375"
-            endingLineNumber = "375"
+            startingLineNumber = "384"
+            endingLineNumber = "384"
             landmarkName = "-updateForSingleTap"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Unroll2/CJMFullImageViewController.m"
+            timestampString = "505015941.887258"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "284"
+            endingLineNumber = "284"
+            landmarkName = "-shiftNote:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
