@@ -270,8 +270,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Acquire photo library permission and provide paths to user camera and photo library for photo import.
-- (IBAction)photoGrab:(id)sender
-{
+- (IBAction)photoGrab:(id)sender {
     //__weak CJMGalleryViewController *weakSelf = self;
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
@@ -319,6 +318,10 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [alertController addAction:cameraAction];
     [alertController addAction:libraryAction];
     [alertController addAction:cancel];
+    
+    alertController.popoverPresentationController.barButtonItem = self.cameraButton;
+    [alertController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionDown];
+    alertController.popoverPresentationController.sourceView = self.view;
     
     [self presentViewController:alertController animated:YES completion:nil];
 }
@@ -408,6 +411,10 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [alertController addAction:deleteAction];
     [alertController addAction:cancel];
     
+    alertController.popoverPresentationController.barButtonItem = self.deleteButton;
+    alertController.popoverPresentationController.sourceView = self.view;
+    [alertController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionDown];
+    
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
@@ -465,6 +472,10 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 //    [alertController addAction:photosAppExport];
     [alertController addAction:alternateAlbumExport];
     [alertController addAction:cancel];
+    
+    alertController.popoverPresentationController.barButtonItem = self.exportButton;
+    [alertController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionDown];
+    alertController.popoverPresentationController.sourceView = self.view;
     
     [self presentViewController:alertController animated:YES completion:nil];
     

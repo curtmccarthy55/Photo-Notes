@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 #import "CJMADetailViewController.h"
+#import "CJMFullImageViewController.h"
 
-@interface CJMAListViewController : UITableViewController <CJMADetailViewControllerDelegate>
+@interface CJMAListViewController : UITableViewController <CJMADetailViewControllerDelegate, CJMFullImageViewControllerDelegate>
 
 @end

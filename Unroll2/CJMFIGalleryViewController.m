@@ -12,6 +12,8 @@
 
 @property (nonatomic) BOOL makeViewsVisible;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonFavorite;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonOptions;
+
 
 @end
 

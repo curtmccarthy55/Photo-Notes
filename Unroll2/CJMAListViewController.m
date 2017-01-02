@@ -13,7 +13,7 @@
 #import "CJMAlbumManager.h"
 #import "CJMPhotoAlbum.h"
 #import "CJMServices.h"
-#import "CJMFullImageViewController.h"
+
 
 #define CJMAListCellIdentifier @"AlbumCell"
 
@@ -39,6 +39,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController.toolbar setHidden:NO];
     [self noAlbumsPopUp];
     [self.tableView reloadData];
 }
@@ -134,12 +135,24 @@
 #pragma mark - QuickNotes
 
 - (IBAction)actionQuicknote:(id)sender {
-    NSString *sbName = @"Main";
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:sbName bundle:nil];
-    CJMFullImageViewController *vc = [sb instantiateViewControllerWithIdentifier:@"FullImageVC"];
-    
+//    NSString *sbName = @"Main";
+//    UIStoryboard *sb = [UIStoryboard storyboardWithName:sbName bundle:nil];
+    CJMFullImageViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"FullImageVC"];
+    vc.index = 0;
+    vc.albumName = @"Favorites";
+    vc.delegate = self;
+    [self.navigationController.toolbar setHidden:YES];
+    [vc setViewsVisible:NO];
 //    [vc setModalPresentationStyle:UIModalPresentationFullScreen];
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)photoIsFavorited:(BOOL)isFavorited {
+    
+}
+
+- (void)toggleFullImageShow:(BOOL)yesOrNo forViewController:(CJMFullImageViewController *)viewController {
+    
 }
 
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2lF-3b-uEJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2lF-3b-uEJ">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -24,10 +24,15 @@
                     </view>
                     <toolbarItems>
                         <barButtonItem systemItem="edit" id="sQU-q8-17W"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="r4l-Pr-Qqo"/>
+                        <barButtonItem title="QuickNote" id="4hE-Ee-Eoi"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="cjQ-hL-qjD"/>
-                        <barButtonItem systemItem="add" id="mhA-yq-BLh"/>
+                        <barButtonItem systemItem="camera" id="mhA-yq-BLh"/>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="Photo Notes Albums" id="ch1-nP-I9a"/>
+                    <navigationItem key="navigationItem" title="Photo Notes Albums" id="ch1-nP-I9a">
+                        <barButtonItem key="leftBarButtonItem" image="FatGear" id="yJN-an-krL"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="OvU-ot-A7m"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g5N-iF-DCO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -39,7 +44,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="2lF-3b-uEJ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="aUn-2s-LEt">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="aUn-2s-LEt">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -64,4 +69,7 @@
             <point key="canvasLocation" x="1192" y="259"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="FatGear" width="22" height="22"/>
+    </resources>
 </document>

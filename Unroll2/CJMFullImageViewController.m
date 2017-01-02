@@ -473,6 +473,10 @@
     [alertController addAction:setPreviewImage];
     [alertController addAction:cancelAction];
     
+    alertController.popoverPresentationController.sourceRect = CGRectMake(self.view.frame.size.width - 27.0, self.view.frame.size.height - 40.0, 1.0, 1.0);
+    [alertController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionDown];
+    alertController.popoverPresentationController.sourceView = self.view;
+    
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
@@ -526,6 +530,10 @@
     if (albumIsFavorites) 
         [alertController addAction:unfavoritePhoto];
     [alertController addAction:cancel];
+    
+    alertController.popoverPresentationController.sourceRect = CGRectMake(26.0, self.view.frame.size.height - 40.0, 1.0, 1.0);
+    [alertController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionDown];
+    alertController.popoverPresentationController.sourceView = self.view;
     
     [self presentViewController:alertController animated:YES completion:nil];
 }

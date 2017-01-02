@@ -40,22 +40,22 @@
     if ([self.name isEqualToString:@"Favorites"]) {
         [self.btnEdit setHidden:YES];
     }
-    CGFloat fixedWidth = SCREEN_WIDTH * 0.75;
+    CGFloat fixedWidth = /*SCREEN_WIDTH * 0.75*/300;
     CGSize newSize = [self.textView sizeThatFits:CGSizeMake(fixedWidth, MAXFLOAT)];
     CGRect newFrame = self.textView.frame;
     newFrame.size = CGSizeMake(fmaxf(newSize.width, fixedWidth), newSize.height - 10.0);
     self.textView.frame = newFrame;
     
     NSDictionary *dic = @{ NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0] };
-    CGFloat titleSize = [self.name boundingRectWithSize:CGSizeMake((SCREEN_WIDTH * 0.75 - 60.0), 2000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil].size.height;
+    CGFloat titleSize = [self.name boundingRectWithSize:CGSizeMake((/*SCREEN_WIDTH * 0.75*/300 - 60.0), 2000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil].size.height;
     CGFloat txtViewHeight = self.textView.bounds.size.height;
     CGFloat height = titleSize + txtViewHeight + 24.0;
     
-    if (height > SCREEN_WIDTH) {
+    if (height > /*SCREEN_WIDTH*/300) {
         [self.textView setScrollEnabled:YES];
-        self.preferredContentSize = CGSizeMake(SCREEN_WIDTH * 0.75, SCREEN_WIDTH);
+        self.preferredContentSize = CGSizeMake(/*SCREEN_WIDTH * 0.75*/300, /*SCREEN_WIDTH*/330);
     } else {
-        self.preferredContentSize = CGSizeMake(SCREEN_WIDTH * 0.75, height);
+        self.preferredContentSize = CGSizeMake(/*SCREEN_WIDTH * 0.75*/300, height);
     }
 }
 
