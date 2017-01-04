@@ -123,7 +123,7 @@ static CJMAlbumManager *__sharedInstance;
         if (favAlbum) {
             _favAlbumEdit = favAlbum;
         } else {
-            CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"Favorites" andNote:@"Your favorite Photo Notes coalesced in one spot.  \n\nNote: Changes made here will apply to the Photo Notes in their original albums as well"];
+            CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"Favorites" andNote:@"Your favorite Photo Notes coalesced in one spot.  \n\nNote: Changes made here will apply to the Photo Notes in their original albums as well."];
             _favAlbumEdit = album;
         }
         _favAlbumEdit.delegate = self;
@@ -138,6 +138,8 @@ static CJMAlbumManager *__sharedInstance;
 - (void)addAlbum:(CJMPhotoAlbum *)album {
     if ([album.albumTitle isEqualToString:@"Favorites"]) {
         [self.allAlbumsEdit insertObject:self.favAlbumEdit atIndex:0];
+    } else if ([album.albumTitle isEqualToString:@"CJMQuickNote"]) {
+        [self.allAlbumsEdit insertObject:album atIndex:self.allAlbumsEdit.count];
     } else {
         [self.allAlbumsEdit addObject:album];
     }
@@ -159,15 +161,18 @@ static CJMAlbumManager *__sharedInstance;
     [self checkFavoriteCount];
 }
 
-- (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex {
-    CJMPhotoAlbum *movingAlbum = [self.allAlbumsEdit objectAtIndex:fromIndex];
-    [self.allAlbumsEdit removeObjectAtIndex:fromIndex];
+- (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex { //cjm 01/04
+    CJMPhotoAlbum *uQN = [self userQuickNote];
+    [self.allAlbumsEdit removeObject:uQN];
+    [self.allAlbumsEdit insertObject:uQN atIndex:self.allAlbumsEdit.count];
+    
+    CJMPhotoAlbum *movingAlbum = [self.allAlbums objectAtIndex:fromIndex];
+    [self.allAlbumsEdit removeObject:movingAlbum];
     [self.allAlbumsEdit insertObject:movingAlbum atIndex:toIndex];
 }
 
 - (BOOL)containsAlbumNamed:(NSString *)name {
     __block BOOL exists = NO;
-    
     [self.allAlbumsEdit enumerateObjectsUsingBlock:^(CJMPhotoAlbum *obj, NSUInteger idx, BOOL *stop) {
         *stop = [[obj albumTitle] isEqualToString:name];
         exists = *stop;

@@ -108,8 +108,7 @@
     [self.delegate photoIsFavorited:self.cjmImage.photoFavorited]; //cjm favorites ImageVC -> PageVC
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self updateZoom];
 }
@@ -121,22 +120,14 @@
     self.imageIsFavorite = image.photoFavorited; //cjm favorites ImageVC set up
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    //if note section is visible and the user swipes to the next page, slide the section out with animation.
     if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
     }
-    
-    //cjm 12/30
     if (!self.viewsVisible) {
         [self imageViewTapped:self];
     }
-    
-//    if (self.focusIsOnImage) {
-//        [self imageViewTapped:self];
-//    }
     
     [self updateZoom];
     
