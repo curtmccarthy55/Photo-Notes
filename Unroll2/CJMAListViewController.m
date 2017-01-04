@@ -219,10 +219,11 @@
         detailVC.title = @"Create Album";
         detailVC.delegate = self;
     } else if ([segue.identifier isEqualToString:@"ShowQuickNote"]) {
+        CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance] userQuickNote];
         UINavigationController *nav = segue.destinationViewController;
         CJMFullImageViewController *vc = nav.viewControllers[0];
         vc.index = 0;
-        vc.albumName = @"Favorites";
+        vc.albumName = album.albumTitle;
         vc.delegate = self;
         vc.isQuickNote = YES;
         //    [self.navigationController.toolbar setHidden:YES];

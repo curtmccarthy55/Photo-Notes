@@ -16,7 +16,7 @@
 @interface CJMAListPickerViewController ()
 
 @property (nonatomic, strong) CJMPhotoAlbum *selectedAlbum;
-@property (nonatomic, strong) NSMutableArray *nonFavAlbums;
+@property (nonatomic, strong) NSMutableArray *transferAlbums;
 
 @end
 
@@ -29,11 +29,11 @@
     [self.tableView registerNib:nib forCellReuseIdentifier:CJMAListCellIdentifier];
     self.tableView.rowHeight = 80;
     
-    self.nonFavAlbums = [NSMutableArray new];
+    self.transferAlbums = [NSMutableArray new];
     NSArray *albumArray = [[CJMAlbumManager sharedInstance].allAlbums copy];
     for (CJMPhotoAlbum *album in albumArray) {
-        if (![album.albumTitle isEqualToString:@"Favorites"]) {
-            [self.nonFavAlbums addObject:album];
+        if (![album.albumTitle isEqualToString:@"Favorites"] && ![album.albumTitle isEqualToString:@"CJMQuickNote"]) {
+            [self.transferAlbums addObject:album];
         }
     }
 }
@@ -64,14 +64,14 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 //    return [[[CJMAlbumManager sharedInstance] allAlbums] count] - 1;
-    return self.nonFavAlbums.count;
+    return self.transferAlbums.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CJMAListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CJMAListCellIdentifier forIndexPath:indexPath];
     
 //    CJMPhotoAlbum *album = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
-    CJMPhotoAlbum *album = [self.nonFavAlbums objectAtIndex:indexPath.row];
+    CJMPhotoAlbum *album = [self.transferAlbums objectAtIndex:indexPath.row];
     
     [cell configureTextForCell:cell withAlbum:album];
     [cell configureThumbnailForCell:cell forAlbum:album];
@@ -123,7 +123,7 @@
 #pragma mark - tableView delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.selectedAlbum = [self.nonFavAlbums objectAtIndex:indexPath.row];
+    self.selectedAlbum = [self.transferAlbums objectAtIndex:indexPath.row];
 }
 
 #pragma mark - Buttons actions

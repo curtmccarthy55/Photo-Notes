@@ -61,8 +61,8 @@ static CJMAlbumManager *__sharedInstance;
         }
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FavoritesReserved"];
     }
-    if (!quickNote) {
-        CJMPhotoAlbum *quickNoteAlbum = [[CJMPhotoAlbum alloc] initWithName:@"CJMQuickNote"];
+    if (!quickNote) { //cjm 01/03
+        CJMPhotoAlbum *quickNoteAlbum = [self userQuickNote];
         [self addAlbum:quickNoteAlbum];
         [self save];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QuickNoteMade"];
@@ -79,8 +79,6 @@ static CJMAlbumManager *__sharedInstance;
     NSMutableArray *fullArray = [NSMutableArray arrayWithArray:[self.allAlbumsEdit array]];
     [fullArray removeObject:[self scanForAlbumWithName:@"CJMQuickNote"]];
     NSArray *newArray = [NSArray arrayWithArray:fullArray];
-    
-    NSLog(@"*cjm* newArray == %@, allAlbumsEdit == %@", newArray, self.allAlbumsEdit);
     
     return newArray;
 //    return [self.allAlbumsEdit array];
@@ -100,18 +98,16 @@ static CJMAlbumManager *__sharedInstance;
     return _allAlbumsEdit;
 }
 
-- (CJMImage *)userQuickNote {
+- (CJMPhotoAlbum *)userQuickNote { //cjm 01/03
     CJMPhotoAlbum *album = [self scanForAlbumWithName:@"CJMQuickNote"];
     if (!album) {
         album = [[CJMPhotoAlbum alloc] initWithName:@"CJMQuickNote"];
         [self addAlbum:album];
     }
-    CJMImage *image = [album.albumPhotos objectAtIndex:0];
-    if (!image) {
-        image = [self.favPhotosAlbum.albumPhotos objectAtIndex:0];
-    }
     
-    return image;
+    NSLog(@"*cjm* allAlbums == %@, allAlbumsEdit == %@", self.allAlbums, self.allAlbumsEdit);
+    
+    return album;
 }
 
 - (CJMPhotoAlbum *)favPhotosAlbum {

@@ -24,6 +24,7 @@
 - (void)albumWithName:(NSString *)albumName removeImageWithUUID:(NSString *)fileName;
 - (void)albumWithName:(NSString *)name createPreviewFromCJMImage:(CJMImage *)image;
 - (void)albumWithName:(NSString *)albumName deleteImages:(NSArray *)images;
+- (CJMPhotoAlbum *)userQuickNote;
 
 - (BOOL)save;
 

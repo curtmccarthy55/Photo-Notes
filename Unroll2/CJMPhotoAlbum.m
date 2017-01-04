@@ -18,8 +18,7 @@
 
 @implementation CJMPhotoAlbum
 
-- (instancetype)initWithName:(NSString *)name andNote:(NSString *)note
-{
+- (instancetype)initWithName:(NSString *)name andNote:(NSString *)note {
     self = [super init];
     
     if (self) {
@@ -30,21 +29,18 @@
     return self;
 }
 
-- (instancetype)initWithName:(NSString *)name
-{
+- (instancetype)initWithName:(NSString *)name {
     return [self initWithName:name andNote:@""];
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
+- (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:self.albumTitle forKey:@"Title"];
     [aCoder encodeObject:self.albumNote forKey:@"Note"];
     [aCoder encodeObject:self.albumEditablePhotos forKey:@"AlbumPhotos"];
     [aCoder encodeObject:self.albumPreviewImage forKey:@"PreviewImage"];
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super init];
     if (self) {
         self.albumTitle = [coder decodeObjectForKey:@"Title"];
@@ -56,10 +52,10 @@
 }
 
 - (NSString *)description {
-    return  [NSString stringWithFormat:@"CJMPhotoAlbum with name:%@, memAddres:%p, and photoCount:%lu", self.albumTitle, self, self.albumPhotos.count];
+    return  [NSString stringWithFormat:@"CJMPhotoAlbum with name:%@, memAddress:%p, and photoCount:%lu", self.albumTitle, self, self.albumPhotos.count];
 }
 
-- (CJMPhotoAlbum *)copyWithZone:(NSZone *)zone { //CJM 02/09
+- (CJMPhotoAlbum *)copyWithZone:(NSZone *)zone { 
     CJMPhotoAlbum *albumCopy = [[CJMPhotoAlbum allocWithZone:zone] init];
     
     albumCopy.albumTitle = self.albumTitle ? [NSString stringWithString:self.albumTitle] : nil;
@@ -75,7 +71,7 @@
 #pragma mark - Content management
 
 - (NSArray *)albumPhotos {
-    return [_albumEditablePhotos array];
+    return [self.albumEditablePhotos array];
 }
 
 - (void)addCJMImage:(CJMImage *)image { //cjm favorites add
