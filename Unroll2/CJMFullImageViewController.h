@@ -28,6 +28,7 @@
 @property (nonatomic) BOOL viewsVisible;
 @property (nonatomic) BOOL imageIsFavorite;//cjm favorites ImageVC set up
 @property (nonatomic) BOOL isQuickNote;
+@property (nonatomic) CGFloat noteOpacity;
 
 - (void)showPopUpMenu;
 - (void)confirmImageDelete;

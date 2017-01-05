@@ -16,6 +16,10 @@
 @interface CJMSettingsViewController ()
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *btnDone;
+@property (weak, nonatomic) IBOutlet UISlider *sldOpacity;
+@property (weak, nonatomic) IBOutlet UIView *noteView;
+@property (weak, nonatomic) IBOutlet UITextField *lblOpacity;
+@property (nonatomic) CGFloat finalVal;
 
 @property (nonatomic, strong) PHFetchResult *fetchResult;
 @property (strong) PHCachingImageManager *imageManager;
@@ -28,11 +32,19 @@
     [super viewDidLoad];
     
     [self.btnDone setEnabled:NO];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    NSNumber *currentOpacity = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
+    CGFloat opacity = currentOpacity.floatValue ? currentOpacity.floatValue : 0.75;
+    [self.noteView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:opacity]];
+    [self.lblOpacity setText:[NSString stringWithFormat:@"%.f%%", roundf(opacity * 100)]];
+    [self.sldOpacity setValue:(opacity * 100.0) animated:NO];
+    
+    UITableViewCell *cell = self.tableView.visibleCells[0];
+    NSLog(@"*cjm* cell.accessoryView.width == %f", cell.accessoryView.frame.size.width);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -42,6 +54,15 @@
 
 #pragma mark - Buttons
 
+- (IBAction)doneAction:(id)sender {
+    NSNumber *opacity = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
+    if (opacity.floatValue != self.sldOpacity.value) {
+        NSNumber *newOpac = [NSNumber numberWithFloat:(self.sldOpacity.value / 100)];
+        [[NSUserDefaults standardUserDefaults] setValue:newOpac forKey:@"noteOpacity"];
+    }
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (IBAction)cancelAction:(id)sender {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -50,20 +71,65 @@
     NSLog(@"*cjm* direct user to twitter.com/beDevCurt");
 }
 
+#pragma mark - Opacity Slider
+
+//- (void)viewDidLoad {
+//    [super viewDidLoad];
+//    float zoomVal = appSharedData.planZoom * 10.0;
+//    float roundedVal = roundf(zoomVal);
+//    float finalVal = roundedVal * 10.0;
+//
+//    [self.lblZoomScale setText:[NSString stringWithFormat:@"%.f%%", roundf(finalVal)]];
+//    [self.zoomSlider setValue:appSharedData.planZoom animated:NO];
+//}
+//
+//- (IBAction)btnApplyAction:(id)sender {
+//    appSharedData.planZoom = self.finalVal;
+//    NSNumber *userZoom = [NSNumber numberWithFloat:appSharedData.planZoom];
+//    [userDefaults setValue:userZoom forKey:@"iOS Zoom"];
+//    [self.delegate reloadViewToShowPlanChanges];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//}
+//
+- (IBAction)slider:(UISlider*)sender {
+    float oVal = sender.value;
+    [self.lblOpacity setText:[NSString stringWithFormat:@"%.f%%", roundf(oVal)]];
+    [self.noteView setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:(oVal / 100)]];
+    [self.lblOpacity setAlpha:1.0];
+    
+    if (self.btnDone.enabled == NO) {
+        [self.btnDone setEnabled:YES];
+    }
+    
+//    float zoomVal = self.sldOpacity.value * 10.0; //75%
+//    float roundedVal = roundf(zoomVal);
+//    self.finalVal = roundedVal / 10.0;
+//    float textVal = roundedVal * 10.0;
+//    [self.sldOpacity setValue:self.finalVal animated:NO];
+//    [self.noteView setAlpha:zoomVal];
+//    [self.lblOpacity setText:[NSString stringWithFormat:@"%.f%%", roundf(textVal)]];
+}
+
+
 #pragma mark - CJMPhotoGrabber Methods and Delegate
 
 - (void)presentPhotoGrabViewController {
-    NSString * storyboardName = @"Main";
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
-    UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
-    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
+//    NSString * storyboardName = @"Main";
+//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+//    UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
+//    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
+    
+    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
     vc.delegate = self;
-    [self presentViewController:navigationVC animated:YES completion:nil];
+    
+    [self.navigationController pushViewController:vc animated:YES];
+//    [self presentViewController:navigationVC animated:YES completion:nil];
 }
 
-- (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller
-{
+- (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 //iterate through array of selected photos, convert them to CJMImages, and add to the current album.
@@ -122,6 +188,32 @@
         [[CJMAlbumManager sharedInstance] save];
         self.navigationController.view.userInteractionEnabled = YES;
     });
+}
+
+- (void)photosFromLibrary {
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
+        if (status != PHAuthorizationStatusAuthorized) {
+            UIAlertController *adjustPrivacyController = [UIAlertController alertControllerWithTitle:@"Denied access to Photos" message:@"You will need to give Photo Notes permission to import from your Photo Library.\n\nPlease allow Photo Notes access to your Photo Library by going to Settings>Privacy>Photos." preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *dismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}];
+            
+            [adjustPrivacyController addAction:dismiss];
+            
+            [self presentViewController:adjustPrivacyController animated:YES completion:nil];
+        } else {
+            [self presentPhotoGrabViewController];
+        }
+    }];
+}
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        
+    } else if (indexPath.section == 1) {
+        [self photosFromLibrary];
+    }
 }
 
 #pragma mark - Table view data source

@@ -189,8 +189,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 #pragma mark - Navigation
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ViewPhoto"]) {
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
         CJMFIGalleryViewController *vc = (CJMFIGalleryViewController *)segue.destinationViewController;
@@ -200,14 +199,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
 }
 
-- (void)setAlbum:(CJMPhotoAlbum *)album
-{
+- (void)setAlbum:(CJMPhotoAlbum *)album {
     _album = album;
     self.navigationItem.title = album.albumTitle;
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
-{
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (self.editMode == YES) {
         return NO;
     } else {
@@ -217,8 +214,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 #pragma mark - NavBar items
 
-- (IBAction)toggleEditMode:(id)sender
-{
+- (IBAction)toggleEditMode:(id)sender {
     if ([self.editButton.title isEqualToString:@"Select"]) {
         [self.editButton setTitle:@"Cancel"];
         self.editMode = YES;
@@ -235,8 +231,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Changing navBar buttons based on current edit status.
-- (void)toggleEditControls
-{
+- (void)toggleEditControls {
     if (self.editMode == YES) {
         self.cameraButton.enabled = NO;
         self.deleteButton.title = @"Delete";
@@ -348,7 +343,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 - (void)presentPhotoGrabViewController {
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
-    UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
+    UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
     CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
     vc.delegate = self;
     [self presentViewController:navigationVC animated:YES completion:nil];

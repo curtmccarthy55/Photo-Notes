@@ -68,6 +68,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self.noteSection setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:self.noteOpacity]];
+    
     self.imageView.image = self.fullImage;
     self.scrollView.delegate = self;
     [self updateZoom];

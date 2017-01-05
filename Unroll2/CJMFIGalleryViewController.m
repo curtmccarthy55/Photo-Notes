@@ -13,6 +13,7 @@
 @property (nonatomic) BOOL makeViewsVisible;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonFavorite;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonOptions;
+@property (nonatomic) CGFloat noteOpacity;
 
 
 @end
@@ -25,6 +26,8 @@
     self.dataSource = self;
     self.makeViewsVisible = YES;
     self.view.backgroundColor = [UIColor whiteColor];
+    NSNumber *numOpacity = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
+    self.noteOpacity = numOpacity ? numOpacity.floatValue : 0.75;
     
     CJMFullImageViewController *fullImageVC = [self fullImageViewControllerForIndex:self.initialIndex];
     [self setViewControllers:@[fullImageVC]
@@ -68,13 +71,14 @@
     if (index >= self.albumCount || index < 0) {
         return nil;
     } else {
-    CJMFullImageViewController *fullImageController = [self.storyboard instantiateViewControllerWithIdentifier:@"FullImageVC"];
-    fullImageController.index = index;
-    fullImageController.albumName = self.albumName;
-    fullImageController.delegate = self;
-    [fullImageController setViewsVisible:self.makeViewsVisible];
-        
-    return fullImageController;
+        CJMFullImageViewController *fullImageController = [self.storyboard instantiateViewControllerWithIdentifier:@"FullImageVC"];
+        fullImageController.index = index;
+        fullImageController.albumName = self.albumName;
+        fullImageController.delegate = self;
+        fullImageController.noteOpacity = self.noteOpacity;
+        [fullImageController setViewsVisible:self.makeViewsVisible];
+            
+        return fullImageController;
     }
 }
 
