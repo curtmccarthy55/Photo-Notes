@@ -259,7 +259,19 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         self.editButton.enabled = NO;
         if (![self.album.albumTitle isEqualToString:@"Favorites"]){
             UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Take Picture" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionCamera) {
+                [self takePhoto];
+            }];
+            
+            UIAlertAction *fetchAction = [UIAlertAction actionWithTitle:@"Choose From Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionFetch) {
+                [self photosFromLibrary];
+            }];
+            
             UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil];
+            
+            [noPhotosAlert addAction:cameraAction];
+            [noPhotosAlert addAction:fetchAction];
             [noPhotosAlert addAction:dismissAction];
             
             [self presentViewController:noPhotosAlert animated:YES completion:nil];
@@ -279,36 +291,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     //Access camera
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForCamera) {
-        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
-            return;
-        } else {
-            UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
-            mediaUI.sourceType = UIImagePickerControllerSourceTypeCamera;
-//cjm multiple pictures            mediaUI.showsCameraControls = NO;
-            mediaUI.allowsEditing = NO;
-            mediaUI.delegate = self;
-            
-            [self presentViewController:mediaUI animated:YES completion:nil];
-        }
+        [self takePhoto];
     }];
     
     //Access photo library
-    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:@"Choose From Library"
-                                                            style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction *actionForLibrary){
-        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
-            if (status != PHAuthorizationStatusAuthorized) {
-                UIAlertController *adjustPrivacyController = [UIAlertController alertControllerWithTitle:@"Denied access to Photos" message:@"You will need to give Photo Notes permission to import from your Photo Library.\n\nPlease allow Photo Notes access to your Photo Library by going to Settings>Privacy>Photos." preferredStyle:UIAlertControllerStyleAlert];
-                
-                UIAlertAction *dismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}];
-                
-                [adjustPrivacyController addAction:dismiss];
-                
-                [self presentViewController:adjustPrivacyController animated:YES completion:nil];
-            } else {
-                [self presentPhotoGrabViewController];
-            }
-        }];
+    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:@"Choose From Library"       style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForLibrary) {
+            [self photosFromLibrary];
     }];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"
@@ -324,6 +312,36 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     alertController.popoverPresentationController.sourceView = self.view;
     
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)photosFromLibrary {
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
+        if (status != PHAuthorizationStatusAuthorized) {
+            UIAlertController *adjustPrivacyController = [UIAlertController alertControllerWithTitle:@"Denied access to Photos" message:@"You will need to give Photo Notes permission to import from your Photo Library.\n\nPlease allow Photo Notes access to your Photo Library by going to Settings>Privacy>Photos." preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *dismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}];
+            
+            [adjustPrivacyController addAction:dismiss];
+            
+            [self presentViewController:adjustPrivacyController animated:YES completion:nil];
+        } else {
+            [self presentPhotoGrabViewController];
+        }
+    }];
+}
+
+- (void)takePhoto {
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
+        return;
+    } else {
+        UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
+        mediaUI.sourceType = UIImagePickerControllerSourceTypeCamera;
+        //cjm multiple pictures            mediaUI.showsCameraControls = NO;
+        mediaUI.allowsEditing = NO;
+        mediaUI.delegate = self;
+        
+        [self presentViewController:mediaUI animated:YES completion:nil];
+    }
 }
 
 //Present users photo library
@@ -496,7 +514,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [fileSerializer writeObject:newPhotoData toRelativePath:newImage.fileName];
     [fileSerializer writeImage:thumbnail toRelativePath:newImage.thumbnailFileName];
 
-    [self setInitialValuesForCJMImage:newImage];
+    [newImage setInitialValuesForCJMImage:newImage inAlbum:self.album.albumTitle];
     newImage.photoCreationDate = [NSDate date];
     newImage.thumbnailNeedsRedraw = NO;
     [self.album addCJMImage:newImage];
@@ -542,15 +560,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 }
 
-//should move this to CJMImage's initializer
-- (void)setInitialValuesForCJMImage:(CJMImage *)cjmImage {
-    cjmImage.photoTitle = @"No Title Created ";
-    cjmImage.photoNote = @"Tap Edit to change the title and note!";
-    cjmImage.selectCoverHidden = YES;
-    cjmImage.photoFavorited = NO; //cjm favorites ImageVC set up
-    cjmImage.originalAlbum = self.album.albumTitle;
-}
-
 #pragma mark - CJMPhotoGrabber Delegate
 
 - (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller
@@ -559,8 +568,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //iterate through array of selected photos, convert them to CJMImages, and add to the current album.
-- (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos
-{
+- (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos {
     NSMutableArray *newImages = [[NSMutableArray alloc] init];
     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
@@ -615,7 +623,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
                                                                                               }];
         }
         
-        [self setInitialValuesForCJMImage:assetImage];
+        [assetImage setInitialValuesForCJMImage:assetImage inAlbum:self.album.albumTitle];
 //        assetImage.photoLocation = [asset location];
         assetImage.photoCreationDate = [asset creationDate];
         

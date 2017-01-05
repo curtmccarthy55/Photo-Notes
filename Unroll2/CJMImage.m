@@ -67,6 +67,14 @@
     return self;
 }
 
+- (void)setInitialValuesForCJMImage:(CJMImage *)cjmImage inAlbum:(NSString *)album {
+    cjmImage.photoTitle = @"No Title Created ";
+    cjmImage.photoNote = @"Tap Edit to change the title and note!";
+    cjmImage.selectCoverHidden = YES;
+    cjmImage.photoFavorited = NO; //cjm favorites ImageVC set up
+    cjmImage.originalAlbum = album;
+}
+
 - (NSString *)fileName {
     return [self.photoID UUIDString];
 }

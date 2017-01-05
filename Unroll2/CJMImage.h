@@ -34,5 +34,6 @@
 @property (nonatomic) BOOL photoFavorited;
 
 - (void)toggleSelectCoverHidden;
+- (void)setInitialValuesForCJMImage:(CJMImage *)cjmImage inAlbum:(NSString *)album;
 
 @end

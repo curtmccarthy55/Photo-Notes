@@ -252,6 +252,7 @@ static CJMAlbumManager *__sharedInstance;
 - (void)checkFavoriteCount {
     if (self.favPhotosAlbum.albumPhotos.count < 1) {
         [self.allAlbumsEdit removeObject:self.favAlbumEdit];
+        self.favAlbumEdit = nil;
     } else if (self.favPhotosAlbum.albumPhotos.count == 1) {
         if (![self.allAlbumsEdit containsObject:self.favAlbumEdit]) {
             [self addAlbum:self.favAlbumEdit];

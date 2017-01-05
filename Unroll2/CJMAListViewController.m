@@ -196,8 +196,7 @@
 
 #pragma mark - Navigation
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ViewGallery"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         CJMPhotoAlbum *sentAlbum = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
@@ -217,7 +216,7 @@
         CJMADetailViewController *detailVC = navigationController.viewControllers[0];
         detailVC.title = @"Create Album";
         detailVC.delegate = self;
-    } else if ([segue.identifier isEqualToString:@"ShowQuickNote"]) {
+    } else if ([segue.identifier isEqualToString:@"ViewQuickNote"]) {
         CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance] userQuickNote];
         UINavigationController *nav = segue.destinationViewController;
         CJMFullImageViewController *vc = nav.viewControllers[0];
@@ -227,18 +226,18 @@
         vc.isQuickNote = YES;
         //    [self.navigationController.toolbar setHidden:YES];
         [vc setViewsVisible:NO];
+    } else if ([segue.identifier isEqualToString:@"ViewSettings"]) {
+        //cjm quicknote
     }
 }
 
 #pragma mark - DetailVC delegate methods
 
-- (void)albumDetailViewControllerDidCancel:(CJMADetailViewController *)controller
-{
+- (void)albumDetailViewControllerDidCancel:(CJMADetailViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)albumDetailViewController:(CJMADetailViewController *)controller didFinishAddingAlbum:(CJMPhotoAlbum *)album
-{
+- (void)albumDetailViewController:(CJMADetailViewController *)controller didFinishAddingAlbum:(CJMPhotoAlbum *)album {
     NSInteger newRowIndex = [[[CJMAlbumManager sharedInstance] allAlbums] count];
     
     [[CJMAlbumManager sharedInstance] addAlbum:album];
@@ -252,8 +251,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)albumDetailViewController:(CJMADetailViewController *)controller didFinishEditingAlbum:(CJMPhotoAlbum *)album
-{
+- (void)albumDetailViewController:(CJMADetailViewController *)controller didFinishEditingAlbum:(CJMPhotoAlbum *)album {
     [self.tableView reloadData];
     [[CJMAlbumManager sharedInstance] save];
     [self dismissViewControllerAnimated:YES completion:nil];
