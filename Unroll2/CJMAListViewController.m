@@ -223,6 +223,8 @@
         vc.albumName = album.albumTitle;
         vc.delegate = self;
         vc.isQuickNote = YES;
+        NSNumber *numOpac = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
+        vc.noteOpacity = numOpac ? numOpac.floatValue : 0.75;
         //    [self.navigationController.toolbar setHidden:YES];
         [vc setViewsVisible:NO];
     } else if ([segue.identifier isEqualToString:@"ViewSettings"]) {

@@ -13,7 +13,7 @@
 #import "CJMImage.h"
 
 
-@interface CJMSettingsViewController ()
+@interface CJMSettingsViewController () 
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *btnDone;
 @property (weak, nonatomic) IBOutlet UISlider *sldOpacity;
@@ -24,6 +24,7 @@
 @property (nonatomic, strong) PHFetchResult *fetchResult;
 @property (strong) PHCachingImageManager *imageManager;
 
+@property (weak, nonatomic) IBOutlet UIButton *whiteButton;
 @end
 
 @implementation CJMSettingsViewController
@@ -45,6 +46,9 @@
     
     UITableViewCell *cell = self.tableView.visibleCells[0];
     NSLog(@"*cjm* cell.accessoryView.width == %f", cell.accessoryView.frame.size.width);
+    
+    [[self.whiteButton layer] setBorderWidth:1.0f];
+    [[self.whiteButton layer] setBorderColor:[UIColor blackColor].CGColor];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -101,6 +105,8 @@
         [self.btnDone setEnabled:YES];
     }
     
+    
+    
 //    float zoomVal = self.sldOpacity.value * 10.0; //75%
 //    float roundedVal = roundf(zoomVal);
 //    self.finalVal = roundedVal / 10.0;
@@ -114,16 +120,18 @@
 #pragma mark - CJMPhotoGrabber Methods and Delegate
 
 - (void)presentPhotoGrabViewController {
-//    NSString * storyboardName = @"Main";
-//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
-//    UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
-//    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
-    
-    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
+    NSString * storyboardName = @"Main";
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+    UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
+    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
     vc.delegate = self;
     
-    [self.navigationController pushViewController:vc animated:YES];
-//    [self presentViewController:navigationVC animated:YES completion:nil];
+    [self presentViewController:navigationVC animated:YES completion:nil];
+    
+//    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
+//    vc.delegate = self;
+//    
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller {
@@ -209,10 +217,10 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        
-    } else if (indexPath.section == 1) {
+    if (indexPath.section == 1) {
         [self photosFromLibrary];
+    } else if (indexPath.section == 2) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
