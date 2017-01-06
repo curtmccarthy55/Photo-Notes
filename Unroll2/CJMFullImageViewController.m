@@ -108,6 +108,10 @@
     [self updateConstraints];
     
     [self.delegate photoIsFavorited:self.cjmImage.photoFavorited]; //cjm favorites ImageVC -> PageVC
+    
+    if (self.fullImage == nil) {
+        [self.scrollView setBackgroundColor:[UIColor colorWithRed:49.0/255.0 green:116.0f/255.0f blue:194.0f/255.0f alpha:1.0]];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
