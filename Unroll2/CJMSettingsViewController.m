@@ -12,6 +12,17 @@
 #import "CJMPhotoAlbum.h"
 #import "CJMImage.h"
 
+typedef enum {
+    kPhotoNotesBlue,
+    kPhotoNotesRed,
+    kPhotoNotesBlack,
+    kPhotoNotesPurple,
+    kPhotoNotesOrange,
+    kPhotoNotesYellow,
+    kPhotoNotesGreen,
+    kPhotoNotesWhite
+} ThemeColor;
+
 
 @interface CJMSettingsViewController () 
 
@@ -25,6 +36,11 @@
 @property (strong) PHCachingImageManager *imageManager;
 
 @property (weak, nonatomic) IBOutlet UIButton *whiteButton;
+
+@property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *colorButtons;
+@property (nonatomic) NSInteger colorSelected;
+@property (nonatomic) BOOL colorChanged;
+
 @end
 
 @implementation CJMSettingsViewController
@@ -32,6 +48,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSNumber *currentColor = [[NSUserDefaults standardUserDefaults] valueForKey:@"PhotoNotesColor"];
+    self.colorSelected = currentColor.integerValue ? currentColor.integerValue : 0;
     [self.btnDone setEnabled:NO];
 }
 
@@ -47,8 +65,12 @@
     UITableViewCell *cell = self.tableView.visibleCells[0];
     NSLog(@"*cjm* cell.accessoryView.width == %f", cell.accessoryView.frame.size.width);
     
+    
     [[self.whiteButton layer] setBorderWidth:1.0f];
     [[self.whiteButton layer] setBorderColor:[UIColor blackColor].CGColor];
+    UIButton *button = [self.colorButtons objectAtIndex:self.colorSelected];
+    [[button layer] setBorderWidth:2.0f];
+    [[button layer] setBorderColor:[UIColor greenColor].CGColor];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,11 +86,100 @@
         NSNumber *newOpac = [NSNumber numberWithFloat:(self.sldOpacity.value / 100)];
         [[NSUserDefaults standardUserDefaults] setValue:newOpac forKey:@"noteOpacity"];
     }
+    
+    if (self.colorChanged) {
+        NSDictionary *dic = [self selectedColorWithTag:self.colorSelected];
+        [[NSUserDefaults standardUserDefaults] setValue:dic forKey:@"PhotoNotesColor"];
+    }
+    
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)cancelAction:(id)sender {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)standardColor:(UIButton *)sender {
+    self.colorChanged = YES;
+    
+    UIButton *currentColor = [self.colorButtons objectAtIndex:self.colorSelected];
+    if (currentColor.tag == 7) {
+        [[currentColor layer] setBorderWidth:1.0f];
+        [[currentColor layer] setBorderColor:[UIColor blackColor].CGColor];
+    } else {
+        [[currentColor layer] setBorderWidth:0.0];
+    }
+    
+    [[sender layer] setBorderWidth:2.0f];
+    [[sender layer] setBorderColor:[UIColor greenColor].CGColor];
+    
+    self.colorSelected = sender.tag;
+    
+    NSDictionary *dic = [self selectedColorWithTag:sender.tag];
+    NSNumber *red, *green, *blue;
+    red = [dic valueForKey:@"PhotoNotesRed"];
+    green = [dic valueForKey:@"PhotoNotesGreen"];
+    blue = [dic valueForKey:@"PhotoNotesBlue"];
+    
+    UIColor *userColor = [UIColor colorWithRed:red.floatValue green:green.floatValue blue:blue.floatValue alpha:1.0];
+    
+    [self.navigationController.navigationBar setBarTintColor:userColor];
+//    [self.sldOpacity setThumbTintColor:userColor];
+}
+
+- (NSDictionary *)selectedColorWithTag:(NSInteger)tag {
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    NSNumber *red, *green, *blue;
+    
+    switch (tag) {
+        case kPhotoNotesBlue:
+            red = [NSNumber numberWithFloat:60.0/255.0];
+            green = [NSNumber numberWithFloat:128.0/255.0];
+            blue = [NSNumber numberWithFloat:194.0/255.0];
+            break;
+        case kPhotoNotesRed:
+            red = [NSNumber numberWithFloat:0.81];
+            green = [NSNumber numberWithFloat:0.21];
+            blue = [NSNumber numberWithFloat:0.2];
+            break;
+        case kPhotoNotesBlack:
+            red = [NSNumber numberWithFloat:0.26];
+            green = [NSNumber numberWithFloat:0.26];
+            blue = [NSNumber numberWithFloat:0.26];
+            break;
+        case kPhotoNotesPurple:
+            red = [NSNumber numberWithFloat:0.71];
+            green = [NSNumber numberWithFloat:0.28];
+            blue = [NSNumber numberWithFloat:0.76];
+            break;
+        case kPhotoNotesOrange:
+            red = [NSNumber numberWithFloat:1.01];
+            green = [NSNumber numberWithFloat:0.58];
+            blue = [NSNumber numberWithFloat:-0.03];
+            break;
+        case kPhotoNotesYellow:
+            red = [NSNumber numberWithFloat:0.95];
+            green = [NSNumber numberWithFloat:0.94];
+            blue = [NSNumber numberWithFloat:0.01];
+            break;
+        case kPhotoNotesGreen:
+            red = [NSNumber numberWithFloat:-0.08];
+            green = [NSNumber numberWithFloat:0.56];
+            blue = [NSNumber numberWithFloat:-0.01];
+            break;
+        case kPhotoNotesWhite:
+            red = [NSNumber numberWithFloat:1.0];
+            green = [NSNumber numberWithFloat:1.0];
+            blue = [NSNumber numberWithFloat:1.0];
+            break;
+        default:
+            break;
+    }
+    [dictionary setObject:red forKey:@"PhotoNotesRed"];
+    [dictionary setObject:green forKey:@"PhotoNotesGreen"];
+    [dictionary setObject:blue forKey:@"PhotoNotesBlue"];
+    
+    return dictionary;
 }
 
 - (IBAction)btnTwitter:(id)sender {
