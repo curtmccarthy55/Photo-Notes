@@ -111,6 +111,7 @@
     
     if (self.fullImage == nil) {
         [self.scrollView setBackgroundColor:self.userColor];
+        [self.scrollView setAlpha:0.75];
     }
     if (self.isQuickNote) {
         [self.navigationController.navigationBar setBarTintColor:self.userColor];

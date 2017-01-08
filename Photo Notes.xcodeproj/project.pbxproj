@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 758F55181E22AAC40023F869 /* IconStoryboard.storyboard */; };
 		75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */; };
 		75EF2D451DF7361400557EDA /* CJMPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EF2D441DF7361400557EDA /* CJMPopoverViewController.m */; };
 		840852A61B5DA49E00664849 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 840852A51B5DA49E00664849 /* no_image.jpg */; };
@@ -47,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		758F55181E22AAC40023F869 /* IconStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IconStoryboard.storyboard; sourceTree = "<group>"; };
 		75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMSettingsViewController.h; sourceTree = "<group>"; };
 		75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMSettingsViewController.m; sourceTree = "<group>"; };
 		75EF2D431DF7361400557EDA /* CJMPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPopoverViewController.h; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 				84DC68F41B52B085000A2480 /* CJMCache.h */,
 				84DC68F51B52B085000A2480 /* CJMCache.m */,
 				846870861B3B1F240031787B /* LSStoryboard.storyboard */,
+				758F55181E22AAC40023F869 /* IconStoryboard.storyboard */,
 				84A769611ADAE39F00DE6741 /* Images.xcassets */,
 				84A769551ADAE39F00DE6741 /* Info.plist */,
 				84A769561ADAE39F00DE6741 /* main.m */,
@@ -317,6 +320,7 @@
 				84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */,
 				840852A61B5DA49E00664849 /* no_image.jpg in Resources */,
 				846870871B3B1F240031787B /* LSStoryboard.storyboard in Resources */,
+				758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */,
 				84A769621ADAE39F00DE6741 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

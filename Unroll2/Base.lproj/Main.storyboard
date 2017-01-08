@@ -906,7 +906,7 @@
                                                             <subviews>
                                                                 <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7TI-Rn-159" userLabel="Orange Button">
                                                                     <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
-                                                                    <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                    <color key="backgroundColor" red="0.93149190989847719" green="0.54535969664280248" blue="0.006784379623928331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="32" id="AuZ-rp-XeC"/>
                                                                         <constraint firstAttribute="height" constant="32" id="GId-bh-coq"/>
@@ -920,7 +920,7 @@
                                                                 </button>
                                                                 <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="apw-eK-jM9" userLabel="Yellow Button">
                                                                     <rect key="frame" x="44" y="0.0" width="32" height="32"/>
-                                                                    <color key="backgroundColor" red="0.94953508092667249" green="0.93590395046482289" blue="0.0059968827239274269" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <color key="backgroundColor" red="0.90906474463225617" green="0.89601458947605372" blue="0.0057412883120614997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="32" id="0Cv-3H-wgM"/>
                                                                         <constraint firstAttribute="height" constant="32" id="afe-lX-vdb"/>

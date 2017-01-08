@@ -175,14 +175,14 @@ typedef enum {
             selectedTag = @3;
             break;
         case kPhotoNotesOrange:
-            red = [NSNumber numberWithFloat:1.01];
-            green = [NSNumber numberWithFloat:0.58];
-            blue = [NSNumber numberWithFloat:-0.03];
+            red = [NSNumber numberWithFloat:0.93];
+            green = [NSNumber numberWithFloat:0.55];
+            blue = [NSNumber numberWithFloat:0.01];
             selectedTag = @4;
             break;
         case kPhotoNotesYellow:
-            red = [NSNumber numberWithFloat:0.95];
-            green = [NSNumber numberWithFloat:0.94];
+            red = [NSNumber numberWithFloat:0.91];
+            green = [NSNumber numberWithFloat:0.9];
             blue = [NSNumber numberWithFloat:0.01];
             selectedTag = @5;
             break;

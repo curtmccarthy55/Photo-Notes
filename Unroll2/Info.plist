@@ -24,27 +24,27 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>To take new photos directly from Photo Notes, please allow access to the camera.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To import photos from your existing photo collection, please allow access for Photo Notes.</string>
 	<key>UILaunchStoryboardName</key>
-	<string>LSStoryboard</string>
+	<string>IconStoryboard</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To import photos from your existing photo collection, please allow access for Photo Notes.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>To take new photos directly from Photo Notes, please allow access to the camera.</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>
