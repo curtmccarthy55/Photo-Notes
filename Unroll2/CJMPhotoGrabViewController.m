@@ -47,6 +47,9 @@ static NSString * const reuseIdentifier = @"GrabCell";
                                                                              target:self
                                                                              action:@selector(donePressed)];
     self.navigationItem.rightBarButtonItem.enabled = NO;
+    
+    [self.navigationController.navigationBar setBarTintColor:self.userColor];
+    [self.navigationController.toolbar setBarTintColor:self.userColor];
 }
 
 //Scroll to most recent photos in library (bottom of collectionView)

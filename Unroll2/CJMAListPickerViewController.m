@@ -51,7 +51,8 @@
                                                                               style:UIBarButtonItemStyleDone
                                                                              target:self
                                                                              action:@selector(donePressed)];
-    
+    [self.navigationController.navigationBar setBarTintColor:self.userColor];
+    [self.navigationController.toolbar setBarTintColor:self.userColor];
 }
 
 - (void)didReceiveMemoryWarning

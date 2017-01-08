@@ -346,6 +346,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
     CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
     vc.delegate = self;
+    vc.userColor = self.navigationController.navigationBar.barTintColor;
     [self presentViewController:navigationVC animated:YES completion:nil];
 }
 

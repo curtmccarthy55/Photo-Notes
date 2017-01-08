@@ -29,6 +29,7 @@
 @property (nonatomic) BOOL imageIsFavorite;//cjm favorites ImageVC set up
 @property (nonatomic) BOOL isQuickNote;
 @property (nonatomic) CGFloat noteOpacity;
+@property (nonatomic, strong) UIColor *userColor;
 
 - (void)showPopUpMenu;
 - (void)confirmImageDelete;

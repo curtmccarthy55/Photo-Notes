@@ -850,6 +850,9 @@
                                                                         <constraint firstAttribute="height" constant="32" id="czH-DY-NHs"/>
                                                                         <constraint firstAttribute="width" constant="32" id="uRl-8a-MCE"/>
                                                                     </constraints>
+                                                                    <state key="normal">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
                                                                     <connections>
                                                                         <action selector="standardColor:" destination="AXu-8r-XFG" eventType="touchUpInside" id="XNW-4f-bwo"/>
                                                                     </connections>
@@ -861,6 +864,9 @@
                                                                         <constraint firstAttribute="width" constant="32" id="HEp-Wt-pkK"/>
                                                                         <constraint firstAttribute="height" constant="32" id="X1Y-Yd-MGY"/>
                                                                     </constraints>
+                                                                    <state key="normal">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
                                                                     <connections>
                                                                         <action selector="standardColor:" destination="AXu-8r-XFG" eventType="touchUpInside" id="23f-dO-avC"/>
                                                                     </connections>
@@ -872,6 +878,9 @@
                                                                         <constraint firstAttribute="height" constant="32" id="MFX-g6-0fI"/>
                                                                         <constraint firstAttribute="width" constant="32" id="V5q-Wc-qzz"/>
                                                                     </constraints>
+                                                                    <state key="normal">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
                                                                     <connections>
                                                                         <action selector="standardColor:" destination="AXu-8r-XFG" eventType="touchUpInside" id="1Hn-59-kOQ"/>
                                                                     </connections>
@@ -883,6 +892,9 @@
                                                                         <constraint firstAttribute="height" constant="32" id="Iu3-Pe-Vah"/>
                                                                         <constraint firstAttribute="width" constant="32" id="sbP-7s-mWk"/>
                                                                     </constraints>
+                                                                    <state key="normal">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
                                                                     <connections>
                                                                         <action selector="standardColor:" destination="AXu-8r-XFG" eventType="touchUpInside" id="THc-Ka-NrU"/>
                                                                     </connections>
@@ -899,6 +911,9 @@
                                                                         <constraint firstAttribute="width" constant="32" id="AuZ-rp-XeC"/>
                                                                         <constraint firstAttribute="height" constant="32" id="GId-bh-coq"/>
                                                                     </constraints>
+                                                                    <state key="normal">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
                                                                     <connections>
                                                                         <action selector="standardColor:" destination="AXu-8r-XFG" eventType="touchUpInside" id="IlU-ue-ezS"/>
                                                                     </connections>
@@ -910,6 +925,9 @@
                                                                         <constraint firstAttribute="width" constant="32" id="0Cv-3H-wgM"/>
                                                                         <constraint firstAttribute="height" constant="32" id="afe-lX-vdb"/>
                                                                     </constraints>
+                                                                    <state key="normal">
+                                                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
                                                                     <connections>
                                                                         <action selector="standardColor:" destination="AXu-8r-XFG" eventType="touchUpInside" id="9EO-cK-CFO"/>
                                                                     </connections>
@@ -921,6 +939,9 @@
                                                                         <constraint firstAttribute="width" constant="32" id="LqI-j4-7nT"/>
                                                                         <constraint firstAttribute="height" constant="32" id="gSR-y7-TcW"/>
                                                                     </constraints>
+                                                                    <state key="normal">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
                                                                     <connections>
                                                                         <action selector="standardColor:" destination="AXu-8r-XFG" eventType="touchUpInside" id="d4h-qX-6vx"/>
                                                                     </connections>
@@ -932,6 +953,9 @@
                                                                         <constraint firstAttribute="width" constant="32" id="fZo-tK-CMB"/>
                                                                         <constraint firstAttribute="height" constant="32" id="xqd-JY-sq8"/>
                                                                     </constraints>
+                                                                    <state key="normal">
+                                                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
                                                                     <connections>
                                                                         <action selector="standardColor:" destination="AXu-8r-XFG" eventType="touchUpInside" id="eNJ-Hv-B9l"/>
                                                                     </connections>

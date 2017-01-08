@@ -48,24 +48,38 @@ typedef enum {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSNumber *currentColor = [[NSUserDefaults standardUserDefaults] valueForKey:@"PhotoNotesColor"];
-    self.colorSelected = currentColor.integerValue ? currentColor.integerValue : 0;
+    NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:@"PhotoNotesColor"];
+    NSNumber *currentTag = [dic valueForKey:@"PhotoNotesColorTag"];
+    self.colorSelected = currentTag.integerValue ? currentTag.integerValue : 0;
     [self.btnDone setEnabled:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    UIColor *userColor;
+    
+    NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:@"PhotoNotesColor"];
+    if (dic) {
+        NSNumber *red, *green, *blue;
+        red = [dic valueForKey:@"PhotoNotesRed"];
+        green = [dic valueForKey:@"PhotoNotesGreen"];
+        blue = [dic valueForKey:@"PhotoNotesBlue"];
+        userColor = [UIColor colorWithRed:red.floatValue green:green.floatValue blue:blue.floatValue alpha:1.0];
+    } else {
+        userColor = [UIColor colorWithRed:60.0/255.0 green:128.0/255.0 blue:194.0/255.0 alpha:1];
+    }
+    
+    [self.navigationController.navigationBar setBarTintColor:userColor];
+    
+    //Set current opacity
     NSNumber *currentOpacity = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
     CGFloat opacity = currentOpacity.floatValue ? currentOpacity.floatValue : 0.75;
     [self.noteView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:opacity]];
     [self.lblOpacity setText:[NSString stringWithFormat:@"%.f%%", roundf(opacity * 100)]];
     [self.sldOpacity setValue:(opacity * 100.0) animated:NO];
     
-    UITableViewCell *cell = self.tableView.visibleCells[0];
-    NSLog(@"*cjm* cell.accessoryView.width == %f", cell.accessoryView.frame.size.width);
-    
-    
+    //Set current color
     [[self.whiteButton layer] setBorderWidth:1.0f];
     [[self.whiteButton layer] setBorderColor:[UIColor blackColor].CGColor];
     UIButton *button = [self.colorButtons objectAtIndex:self.colorSelected];
@@ -100,6 +114,9 @@ typedef enum {
 }
 
 - (IBAction)standardColor:(UIButton *)sender {
+    if (self.btnDone.enabled == NO) {
+        [self.btnDone setEnabled:YES];
+    }
     self.colorChanged = YES;
     
     UIButton *currentColor = [self.colorButtons objectAtIndex:self.colorSelected];
@@ -130,54 +147,64 @@ typedef enum {
 - (NSDictionary *)selectedColorWithTag:(NSInteger)tag {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSNumber *red, *green, *blue;
+    NSNumber *selectedTag;
     
     switch (tag) {
         case kPhotoNotesBlue:
             red = [NSNumber numberWithFloat:60.0/255.0];
             green = [NSNumber numberWithFloat:128.0/255.0];
             blue = [NSNumber numberWithFloat:194.0/255.0];
+            selectedTag = @0;
             break;
         case kPhotoNotesRed:
             red = [NSNumber numberWithFloat:0.81];
             green = [NSNumber numberWithFloat:0.21];
             blue = [NSNumber numberWithFloat:0.2];
+            selectedTag = @1;
             break;
         case kPhotoNotesBlack:
             red = [NSNumber numberWithFloat:0.26];
             green = [NSNumber numberWithFloat:0.26];
             blue = [NSNumber numberWithFloat:0.26];
+            selectedTag = @2;
             break;
         case kPhotoNotesPurple:
             red = [NSNumber numberWithFloat:0.71];
             green = [NSNumber numberWithFloat:0.28];
             blue = [NSNumber numberWithFloat:0.76];
+            selectedTag = @3;
             break;
         case kPhotoNotesOrange:
             red = [NSNumber numberWithFloat:1.01];
             green = [NSNumber numberWithFloat:0.58];
             blue = [NSNumber numberWithFloat:-0.03];
+            selectedTag = @4;
             break;
         case kPhotoNotesYellow:
             red = [NSNumber numberWithFloat:0.95];
             green = [NSNumber numberWithFloat:0.94];
             blue = [NSNumber numberWithFloat:0.01];
+            selectedTag = @5;
             break;
         case kPhotoNotesGreen:
             red = [NSNumber numberWithFloat:-0.08];
             green = [NSNumber numberWithFloat:0.56];
             blue = [NSNumber numberWithFloat:-0.01];
+            selectedTag = @6;
             break;
         case kPhotoNotesWhite:
             red = [NSNumber numberWithFloat:1.0];
             green = [NSNumber numberWithFloat:1.0];
             blue = [NSNumber numberWithFloat:1.0];
+            selectedTag = @7;
             break;
         default:
             break;
     }
-    [dictionary setObject:red forKey:@"PhotoNotesRed"];
-    [dictionary setObject:green forKey:@"PhotoNotesGreen"];
-    [dictionary setObject:blue forKey:@"PhotoNotesBlue"];
+    [dictionary setValue:red forKey:@"PhotoNotesRed"];
+    [dictionary setValue:green forKey:@"PhotoNotesGreen"];
+    [dictionary setValue:blue forKey:@"PhotoNotesBlue"];
+    [dictionary setValue:selectedTag forKey:@"PhotoNotesColorTag"];
     
     return dictionary;
 }

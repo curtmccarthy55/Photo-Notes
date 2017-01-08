@@ -49,6 +49,9 @@
         self.nameField.text = self.albumToEdit.albumTitle;
         self.noteField.text = self.albumToEdit.albumNote;
     }
+    
+    [self.navigationController.navigationBar setBarTintColor:self.userColor];
+    [self.navigationController.toolbar setBarTintColor:self.userColor];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

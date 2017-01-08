@@ -21,6 +21,7 @@
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (nonatomic) BOOL popoverPresent;
+@property (nonatomic, strong) UIColor *userColor;
 
 @end
 
@@ -39,6 +40,20 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:@"PhotoNotesColor"];
+    if (dic) {
+        NSNumber *red, *green, *blue;
+        red = [dic valueForKey:@"PhotoNotesRed"];
+        green = [dic valueForKey:@"PhotoNotesGreen"];
+        blue = [dic valueForKey:@"PhotoNotesBlue"];
+        self.userColor = [UIColor colorWithRed:red.floatValue green:green.floatValue blue:blue.floatValue alpha:1.0];
+    } else {
+        self.userColor = [UIColor colorWithRed:60.0/255.0 green:128.0/255.0 blue:194.0/255.0 alpha:1];
+    }
+    
+    [self.navigationController.navigationBar setBarTintColor:self.userColor];
+    [self.navigationController.toolbar setBarTintColor:self.userColor];
     
     [self.navigationController.toolbar setHidden:NO];
     [self noAlbumsPopUp];
@@ -211,11 +226,13 @@
         detailVC.albumToEdit = sentAlbum;
         detailVC.title = @"Album Info";
         detailVC.delegate = self;
+        detailVC.userColor = self.userColor;
     } else if ([segue.identifier isEqualToString:@"AddAlbum"]) {
         UINavigationController *navigationController = segue.destinationViewController;
         CJMADetailViewController *detailVC = navigationController.viewControllers[0];
         detailVC.title = @"Create Album";
         detailVC.delegate = self;
+        detailVC.userColor = self.userColor;
     } else if ([segue.identifier isEqualToString:@"ViewQuickNote"]) {
         CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance] userQuickNote];
         UINavigationController *nav = segue.destinationViewController;
@@ -224,6 +241,7 @@
         vc.albumName = album.albumTitle;
         vc.delegate = self;
         vc.isQuickNote = YES;
+        vc.userColor = self.userColor;
         NSNumber *numOpac = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
         vc.noteOpacity = numOpac ? numOpac.floatValue : 0.75;
         //    [self.navigationController.toolbar setHidden:YES];
