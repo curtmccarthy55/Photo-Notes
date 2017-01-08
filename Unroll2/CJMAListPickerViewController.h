@@ -23,5 +23,6 @@
 @property (nonatomic, weak) id <CJMAListPickerDelegate> delegate;
 @property (nonatomic, strong) NSString *currentAlbumName;
 @property (nonatomic, strong) UIColor *userColor;
+@property (nonatomic, strong) NSNumber *userColorTag;
 
 @end

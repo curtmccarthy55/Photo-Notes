@@ -30,6 +30,7 @@
 @property (nonatomic) BOOL isQuickNote;
 @property (nonatomic) CGFloat noteOpacity;
 @property (nonatomic, strong) UIColor *userColor;
+@property (nonatomic, strong) NSNumber *userColorTag;
 
 - (void)showPopUpMenu;
 - (void)confirmImageDelete;

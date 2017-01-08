@@ -887,7 +887,7 @@
                                                                 </button>
                                                                 <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m4o-58-Ivl" userLabel="Purple Button">
                                                                     <rect key="frame" x="132" y="0.0" width="32" height="32"/>
-                                                                    <color key="backgroundColor" red="0.70624121634453418" green="0.28241429979736798" blue="0.76112388959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <color key="backgroundColor" red="0.67098236201976613" green="0.26409644203714555" blue="0.7280496510213198" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="32" id="Iu3-Pe-Vah"/>
                                                                         <constraint firstAttribute="width" constant="32" id="sbP-7s-mWk"/>
@@ -920,7 +920,7 @@
                                                                 </button>
                                                                 <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="apw-eK-jM9" userLabel="Yellow Button">
                                                                     <rect key="frame" x="44" y="0.0" width="32" height="32"/>
-                                                                    <color key="backgroundColor" red="0.90906474463225617" green="0.89601458947605372" blue="0.0057412883120614997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="32" id="0Cv-3H-wgM"/>
                                                                         <constraint firstAttribute="height" constant="32" id="afe-lX-vdb"/>
@@ -1077,7 +1077,7 @@
                                 <action selector="cancelAction:" destination="AXu-8r-XFG" id="1Yw-IH-K5C"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="YaD-cJ-6OL">
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="YaD-cJ-6OL">
                             <connections>
                                 <action selector="doneAction:" destination="AXu-8r-XFG" id="Suq-fR-JQu"/>
                             </connections>

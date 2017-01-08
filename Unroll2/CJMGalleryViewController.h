@@ -14,5 +14,7 @@
 @interface CJMGalleryViewController : UICollectionViewController <CJMPhotoGrabViewControllerDelegate>
 
 @property (nonatomic, weak) CJMPhotoAlbum *album;
+@property (nonatomic, strong) UIColor *userColor;
+@property (nonatomic, strong) NSNumber *userColorTag;
 
 @end

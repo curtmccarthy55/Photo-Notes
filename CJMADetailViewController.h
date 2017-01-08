@@ -24,5 +24,6 @@
 @property (nonatomic, strong) CJMPhotoAlbum *albumToEdit;
 @property (nonatomic, weak) id <CJMADetailViewControllerDelegate> delegate;
 @property (nonatomic, strong) UIColor *userColor;
+@property (nonatomic, strong) NSNumber *userColorTag;
 
 @end

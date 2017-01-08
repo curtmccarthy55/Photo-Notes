@@ -38,7 +38,8 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UIButton *whiteButton;
 
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *colorButtons;
-@property (nonatomic) NSInteger colorSelected;
+@property (nonatomic, strong) NSNumber *userColorTag;
+@property (nonatomic, strong) UIColor *userColor;
 @property (nonatomic) BOOL colorChanged;
 
 @end
@@ -48,29 +49,35 @@ typedef enum {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.btnDone setEnabled:NO];
+    
     NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:@"PhotoNotesColor"];
     NSNumber *currentTag = [dic valueForKey:@"PhotoNotesColorTag"];
-    self.colorSelected = currentTag.integerValue ? currentTag.integerValue : 0;
-    [self.btnDone setEnabled:NO];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+    self.userColorTag = currentTag ? currentTag : 0;
     
-    UIColor *userColor;
-    
-    NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:@"PhotoNotesColor"];
+//    NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:@"PhotoNotesColor"];
     if (dic) {
         NSNumber *red, *green, *blue;
         red = [dic valueForKey:@"PhotoNotesRed"];
         green = [dic valueForKey:@"PhotoNotesGreen"];
         blue = [dic valueForKey:@"PhotoNotesBlue"];
-        userColor = [UIColor colorWithRed:red.floatValue green:green.floatValue blue:blue.floatValue alpha:1.0];
+        self.userColor = [UIColor colorWithRed:red.floatValue green:green.floatValue blue:blue.floatValue alpha:1.0];
     } else {
-        userColor = [UIColor colorWithRed:60.0/255.0 green:128.0/255.0 blue:194.0/255.0 alpha:1];
+        self.userColor = [UIColor colorWithRed:60.0/255.0 green:128.0/255.0 blue:194.0/255.0 alpha:1];
+    }
+    if (self.userColorTag.integerValue != 5 && self.userColorTag.integerValue != 7) {
+        [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+        [self.navigationController.toolbar setTintColor:[UIColor whiteColor]];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor whiteColor] }];
+    } else {
+        [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
+        [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
+        [self.navigationController.toolbar setTintColor:[UIColor blackColor]];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor blackColor] }];
     }
     
-    [self.navigationController.navigationBar setBarTintColor:userColor];
+    [self.navigationController.navigationBar setBarTintColor:self.userColor];
     
     //Set current opacity
     NSNumber *currentOpacity = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
@@ -82,9 +89,14 @@ typedef enum {
     //Set current color
     [[self.whiteButton layer] setBorderWidth:1.0f];
     [[self.whiteButton layer] setBorderColor:[UIColor blackColor].CGColor];
-    UIButton *button = [self.colorButtons objectAtIndex:self.colorSelected];
+    UIButton *button = [self.colorButtons objectAtIndex:self.userColorTag.integerValue];
     [[button layer] setBorderWidth:2.0f];
     [[button layer] setBorderColor:[UIColor greenColor].CGColor];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -102,7 +114,7 @@ typedef enum {
     }
     
     if (self.colorChanged) {
-        NSDictionary *dic = [self selectedColorWithTag:self.colorSelected];
+        NSDictionary *dic = [self selectedColorWithTag:self.userColorTag.integerValue];
         [[NSUserDefaults standardUserDefaults] setValue:dic forKey:@"PhotoNotesColor"];
     }
     
@@ -119,7 +131,7 @@ typedef enum {
     }
     self.colorChanged = YES;
     
-    UIButton *currentColor = [self.colorButtons objectAtIndex:self.colorSelected];
+    UIButton *currentColor = [self.colorButtons objectAtIndex:self.userColorTag.integerValue];
     if (currentColor.tag == 7) {
         [[currentColor layer] setBorderWidth:1.0f];
         [[currentColor layer] setBorderColor:[UIColor blackColor].CGColor];
@@ -130,7 +142,8 @@ typedef enum {
     [[sender layer] setBorderWidth:2.0f];
     [[sender layer] setBorderColor:[UIColor greenColor].CGColor];
     
-    self.colorSelected = sender.tag;
+    NSNumber *numTag = [NSNumber numberWithInteger:sender.tag];
+    self.userColorTag = numTag;
     
     NSDictionary *dic = [self selectedColorWithTag:sender.tag];
     NSNumber *red, *green, *blue;
@@ -138,9 +151,17 @@ typedef enum {
     green = [dic valueForKey:@"PhotoNotesGreen"];
     blue = [dic valueForKey:@"PhotoNotesBlue"];
     
-    UIColor *userColor = [UIColor colorWithRed:red.floatValue green:green.floatValue blue:blue.floatValue alpha:1.0];
-    
-    [self.navigationController.navigationBar setBarTintColor:userColor];
+    if (self.userColorTag.integerValue != 5 && self.userColorTag.integerValue != 7) {
+        [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor whiteColor] }];
+    } else {
+        [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
+        [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor blackColor] }];
+    }
+    self.userColor = [UIColor colorWithRed:red.floatValue green:green.floatValue blue:blue.floatValue alpha:1.0];
+    [self.navigationController.navigationBar setBarTintColor:self.userColor];
 //    [self.sldOpacity setThumbTintColor:userColor];
 }
 
@@ -169,9 +190,9 @@ typedef enum {
             selectedTag = @2;
             break;
         case kPhotoNotesPurple:
-            red = [NSNumber numberWithFloat:0.71];
-            green = [NSNumber numberWithFloat:0.28];
-            blue = [NSNumber numberWithFloat:0.76];
+            red = [NSNumber numberWithFloat:0.67];
+            green = [NSNumber numberWithFloat:0.26];
+            blue = [NSNumber numberWithFloat:0.73];
             selectedTag = @3;
             break;
         case kPhotoNotesOrange:
@@ -181,9 +202,9 @@ typedef enum {
             selectedTag = @4;
             break;
         case kPhotoNotesYellow:
-            red = [NSNumber numberWithFloat:0.91];
-            green = [NSNumber numberWithFloat:0.9];
-            blue = [NSNumber numberWithFloat:0.01];
+            red = [NSNumber numberWithFloat:1.0];
+            green = [NSNumber numberWithFloat:0.99];
+            blue = [NSNumber numberWithFloat:-0.04];
             selectedTag = @5;
             break;
         case kPhotoNotesGreen:
@@ -263,6 +284,9 @@ typedef enum {
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
     CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
     vc.delegate = self;
+    vc.userColor = self.userColor;
+    vc.userColorTag = self.userColorTag;
+    //cjm 01/08
     
     [self presentViewController:navigationVC animated:YES completion:nil];
     
