@@ -13,6 +13,10 @@
 #import "CJMImage.h"
 #import "CJMServices.h"
 
+@import SafariServices;
+@import MessageUI;
+@import StoreKit;
+
 typedef enum {
     kPhotoNotesBlue,
     kPhotoNotesRed,
@@ -25,7 +29,7 @@ typedef enum {
 } ThemeColor;
 
 
-@interface CJMSettingsViewController () 
+@interface CJMSettingsViewController () <SFSafariViewControllerDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *btnDone;
 @property (weak, nonatomic) IBOutlet UISlider *sldOpacity;
@@ -394,6 +398,21 @@ typedef enum {
     if (indexPath.section == 1) {
         [self photosFromLibrary];
     } else if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=YOUR_APP_ID&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"]];
+        } else if (indexPath.row == 1) {
+            SFSafariViewController *vc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://www.twitter.com/beDevCurt"]];
+            vc.delegate = self;
+            [self presentViewController:vc animated:YES completion:nil];
+        } else {
+            MFMailComposeViewController *vc = [[MFMailComposeViewController alloc] init];
+            vc.mailComposeDelegate = self;
+            [vc setToRecipients:@[@"bedevcurt@gmail.com"]];
+            [vc setSubject:@"Photo Notes"];
+            if ([MFMailComposeViewController canSendMail]) {
+                [self presentViewController:vc animated:YES completion:nil];
+            }
+        }
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
