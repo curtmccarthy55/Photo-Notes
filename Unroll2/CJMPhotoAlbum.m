@@ -52,7 +52,7 @@
 }
 
 - (NSString *)description {
-    return  [NSString stringWithFormat:@"CJMPhotoAlbum with name:%@, memAddress:%p, and photoCount:%lu", self.albumTitle, self, self.albumPhotos.count];
+    return  [NSString stringWithFormat:@"CJMPhotoAlbum with name:%@, memAddress:%p, and photoCount:%lu", self.albumTitle, self, (unsigned long)self.albumPhotos.count];
 }
 
 - (CJMPhotoAlbum *)copyWithZone:(NSZone *)zone { 

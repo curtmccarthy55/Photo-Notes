@@ -399,7 +399,7 @@ typedef enum {
         [self photosFromLibrary];
     } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=YOUR_APP_ID&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=1021742238&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software&mt=8"]];
         } else if (indexPath.row == 1) {
             SFSafariViewController *vc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://www.twitter.com/beDevCurt"]];
             vc.delegate = self;
