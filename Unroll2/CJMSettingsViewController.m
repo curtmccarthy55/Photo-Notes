@@ -407,8 +407,10 @@ typedef enum {
         } else {
             MFMailComposeViewController *vc = [[MFMailComposeViewController alloc] init];
             vc.mailComposeDelegate = self;
+            vc.modalPresentationStyle = UIModalPresentationPageSheet;
             [vc setToRecipients:@[@"bedevcurt@gmail.com"]];
             [vc setSubject:@"Photo Notes"];
+            [vc setMessageBody:@"Hey Curt!" isHTML:NO];
             if ([MFMailComposeViewController canSendMail]) {
                 [self presentViewController:vc animated:YES completion:nil];
             }
@@ -417,60 +419,18 @@ typedef enum {
     }
 }
 
-#pragma mark - Table view data source
+#pragma mark - Safari and Mail delegates
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    if (result == MFMailComposeResultCancelled || result == MFMailComposeResultSent) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else if (result == MFMailComposeResultFailed) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Email Fail" message:@"Uh-oh... looks like the message failed to send.  Please try again or email me at bedevcurt@gmail.com direct from your Mail app" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
+        [alert addAction:actionDismiss];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
