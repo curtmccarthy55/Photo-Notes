@@ -1087,6 +1087,7 @@
                         <outlet property="btnDone" destination="YaD-cJ-6OL" id="Qnu-Nn-wqc"/>
                         <outlet property="lblOpacity" destination="djM-81-0Ua" id="etL-ae-q30"/>
                         <outlet property="noteView" destination="Frf-tp-QKU" id="NZZ-kQ-uyo"/>
+                        <outlet property="qnThumbnail" destination="tkO-Pd-JW7" id="wMO-PT-z5b"/>
                         <outlet property="sldOpacity" destination="Jdf-R4-WXo" id="2NB-5G-wsd"/>
                         <outlet property="whiteButton" destination="IXK-Q1-CBc" id="8ac-hv-c8Y"/>
                         <outletCollection property="colorButtons" destination="UOW-a1-Bam" id="I3Y-LB-pOV"/>

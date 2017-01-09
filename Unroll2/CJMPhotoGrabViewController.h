@@ -23,5 +23,6 @@
 @property (nonatomic, weak) id <CJMPhotoGrabViewControllerDelegate> delegate;
 @property (nonatomic, strong) UIColor *userColor;
 @property (nonatomic, strong) NSNumber *userColorTag;
+@property (nonatomic) BOOL singleSelection;
 
 @end

@@ -99,7 +99,11 @@
         [dateFormatter setDateStyle:NSDateFormatterFullStyle];
         [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
         self.photoLocAndDate.hidden = NO;
-        self.photoLocAndDate.text = [NSString stringWithFormat:@"Photo taken %@", [dateFormatter stringFromDate:self.cjmImage.photoCreationDate]];
+        if (self.isQuickNote) {
+            self.photoLocAndDate.text = [NSString stringWithFormat:@"Note edited %@", [dateFormatter stringFromDate:self.cjmImage.photoCreationDate]];
+        } else {
+            self.photoLocAndDate.text = [NSString stringWithFormat:@"Photo taken %@", [dateFormatter stringFromDate:self.cjmImage.photoCreationDate]];
+        }
     }
     self.initialZoomScale = self.scrollView.zoomScale;
 //cjm 12/30    self.focusIsOnImage = NO;
@@ -115,6 +119,7 @@
     }
     if (self.isQuickNote) {
         [self.oneTap setEnabled:NO];
+        self.scrollView.backgroundColor = [UIColor blackColor];
         if (self.userColorTag.integerValue != 5 && self.userColorTag.integerValue != 7) {
             [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
             [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
@@ -382,6 +387,13 @@
         [self confirmTextViewNotBlank];
         self.cjmImage.photoTitle = self.noteTitle.text;
         self.cjmImage.photoNote = self.noteEntry.text;
+        if (self.isQuickNote) {
+            self.cjmImage.photoCreationDate = [NSDate date];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+            [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+            self.photoLocAndDate.text = [NSString stringWithFormat:@"Note edited %@", [dateFormatter stringFromDate:self.cjmImage.photoCreationDate]];
+        }
         self.noteTitle.enabled = NO;
         self.noteEntry.editable = NO;
         self.noteEntry.selectable = NO;

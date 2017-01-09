@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Zpy-4E-NLU">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_5" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,11 +20,11 @@
                         <viewControllerLayoutGuide type="bottom" id="h9o-Lw-uvB"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="J2g-j9-CTg">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="736" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IconPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="egj-5V-Ig1">
-                                <rect key="frame" x="-0.5" y="151.5" width="375" height="412.5"/>
+                                <rect key="frame" x="217.33333333333337" y="41.333333333333343" width="301.33333333333326" height="331.33333333333337"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="egj-5V-Ig1" secondAttribute="height" multiplier="1:1.1" id="5qO-eD-jZe"/>
                                 </constraints>
@@ -32,9 +33,32 @@
                         <color key="backgroundColor" red="0.2363378931" green="0.50007843730000001" blue="0.76112388959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="egj-5V-Ig1" firstAttribute="width" secondItem="J2g-j9-CTg" secondAttribute="width" id="2Ef-H5-Gh4"/>
+                            <constraint firstItem="egj-5V-Ig1" firstAttribute="height" secondItem="J2g-j9-CTg" secondAttribute="height" multiplier="0.8" id="K4U-mE-dMr"/>
                             <constraint firstItem="egj-5V-Ig1" firstAttribute="centerX" secondItem="J2g-j9-CTg" secondAttribute="centerX" id="SM3-OZ-dWw"/>
-                            <constraint firstItem="egj-5V-Ig1" firstAttribute="centerY" secondItem="J2g-j9-CTg" secondAttribute="centerY" constant="24" id="kcX-5n-2aD"/>
+                            <constraint firstItem="egj-5V-Ig1" firstAttribute="centerY" secondItem="J2g-j9-CTg" secondAttribute="centerY" id="kcX-5n-2aD"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="2Ef-H5-Gh4"/>
+                                <exclude reference="K4U-mE-dMr"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=compact">
+                            <mask key="constraints">
+                                <exclude reference="2Ef-H5-Gh4"/>
+                                <include reference="K4U-mE-dMr"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=regular">
+                            <mask key="constraints">
+                                <include reference="K4U-mE-dMr"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="2Ef-H5-Gh4"/>
+                            </mask>
+                        </variation>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lgw-5m-mtB" userLabel="First Responder" sceneMemberID="firstResponder"/>

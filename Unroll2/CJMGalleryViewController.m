@@ -348,6 +348,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     vc.delegate = self;
     vc.userColor = self.userColor;
     vc.userColorTag = self.userColorTag;
+    vc.singleSelection = NO;
     [self presentViewController:navigationVC animated:YES completion:nil];
 }
 

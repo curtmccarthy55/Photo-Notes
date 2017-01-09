@@ -11,6 +11,7 @@
 #import "CJMAlbumManager.h"
 #import "CJMPhotoAlbum.h"
 #import "CJMImage.h"
+#import "CJMServices.h"
 
 typedef enum {
     kPhotoNotesBlue,
@@ -41,6 +42,9 @@ typedef enum {
 @property (nonatomic, strong) NSNumber *userColorTag;
 @property (nonatomic, strong) UIColor *userColor;
 @property (nonatomic) BOOL colorChanged;
+
+@property (weak, nonatomic) IBOutlet UIImageView *qnThumbnail;
+
 
 @end
 
@@ -97,6 +101,7 @@ typedef enum {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self displayQNThumnail];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -236,24 +241,6 @@ typedef enum {
 
 #pragma mark - Opacity Slider
 
-//- (void)viewDidLoad {
-//    [super viewDidLoad];
-//    float zoomVal = appSharedData.planZoom * 10.0;
-//    float roundedVal = roundf(zoomVal);
-//    float finalVal = roundedVal * 10.0;
-//
-//    [self.lblZoomScale setText:[NSString stringWithFormat:@"%.f%%", roundf(finalVal)]];
-//    [self.zoomSlider setValue:appSharedData.planZoom animated:NO];
-//}
-//
-//- (IBAction)btnApplyAction:(id)sender {
-//    appSharedData.planZoom = self.finalVal;
-//    NSNumber *userZoom = [NSNumber numberWithFloat:appSharedData.planZoom];
-//    [userDefaults setValue:userZoom forKey:@"iOS Zoom"];
-//    [self.delegate reloadViewToShowPlanChanges];
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//}
-//
 - (IBAction)slider:(UISlider*)sender {
     float oVal = sender.value;
     [self.lblOpacity setText:[NSString stringWithFormat:@"%.f%%", roundf(oVal)]];
@@ -263,37 +250,22 @@ typedef enum {
     if (self.btnDone.enabled == NO) {
         [self.btnDone setEnabled:YES];
     }
-    
-    
-    
-//    float zoomVal = self.sldOpacity.value * 10.0; //75%
-//    float roundedVal = roundf(zoomVal);
-//    self.finalVal = roundedVal / 10.0;
-//    float textVal = roundedVal * 10.0;
-//    [self.sldOpacity setValue:self.finalVal animated:NO];
-//    [self.noteView setAlpha:zoomVal];
-//    [self.lblOpacity setText:[NSString stringWithFormat:@"%.f%%", roundf(textVal)]];
 }
 
 
 #pragma mark - CJMPhotoGrabber Methods and Delegate
 
 - (void)presentPhotoGrabViewController {
-    NSString * storyboardName = @"Main";
+    NSString *storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
     CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
     vc.delegate = self;
     vc.userColor = self.userColor;
     vc.userColorTag = self.userColorTag;
-    //cjm 01/08
+    vc.singleSelection = YES;
     
     [self presentViewController:navigationVC animated:YES completion:nil];
-    
-//    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"PhotoGrabViewController"];
-//    vc.delegate = self;
-//    
-//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller {
@@ -341,23 +313,63 @@ typedef enum {
                                           }];
         }
         
+        dispatch_group_enter(imageLoadGroup);
+        @autoreleasepool {
+            [self.imageManager requestImageForAsset:asset
+                                         targetSize:CGSizeMake(120.0, 120.0)
+                                        contentMode:PHImageContentModeAspectFill
+                                            options:options
+                                      resultHandler:^(UIImage *result, NSDictionary *info) {
+                                          if(![info[PHImageResultIsDegradedKey] boolValue])
+                                          {
+                                              [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
+                                              assetImage.thumbnailNeedsRedraw = NO;
+                                              
+                                              dispatch_group_leave(imageLoadGroup);
+                                          }
+                                      }];
+        }
+
+        
         [assetImage setInitialValuesForCJMImage:assetImage inAlbum:@"CJMQuickNote"];
-        //        assetImage.photoLocation = [asset location];
-        assetImage.photoCreationDate = [asset creationDate];
+        assetImage.photoCreationDate = [NSDate date];
         
         [newImages addObject:assetImage];
     }
     
     CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance] userQuickNote];
+    [[CJMAlbumManager sharedInstance] albumWithName:@"CJMQuickNote" deleteImages:album.albumPhotos];
     [album addMultipleCJMImages:newImages];
+    [self.btnDone setEnabled:YES];
     
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
         self.navigationController.view.userInteractionEnabled = YES;
 //        [self.collectionView reloadData];
         [self dismissViewControllerAnimated:YES completion:nil];
         [[CJMAlbumManager sharedInstance] save];
+        [self displayQNThumnail];
         self.navigationController.view.userInteractionEnabled = YES;
     });
+}
+
+
+- (void)displayQNThumnail {
+    CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance] userQuickNote];
+    if (album.albumPhotos.count > 0) {
+        CJMImage *qnImage = album.albumPhotos[0];
+        
+        [[CJMServices sharedInstance] fetchThumbnailForImage:qnImage handler:^(UIImage *thumbnail) {
+            //if thumbnail not properly captured during import, create one
+            if (thumbnail.size.width == 0) {
+                qnImage.thumbnailNeedsRedraw = YES;
+                [[CJMServices sharedInstance] removeImageFromCache:qnImage];
+            } else {
+                self.qnThumbnail.image = thumbnail;
+            }
+        }];
+    } else {
+        [self.qnThumbnail setImage:[UIImage imageNamed:@"QuickNote PN Background"]];
+    }
 }
 
 - (void)photosFromLibrary {

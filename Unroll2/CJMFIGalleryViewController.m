@@ -25,6 +25,8 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.dataSource = self;
     self.makeViewsVisible = YES;
+    [self prefersStatusBarHidden];
+    [self setNeedsStatusBarAppearanceUpdate];
     self.view.backgroundColor = [UIColor whiteColor];
     NSNumber *numOpacity = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
     self.noteOpacity = numOpacity ? numOpacity.floatValue : 0.75;
@@ -46,7 +48,7 @@
 }
 
 -(BOOL)prefersStatusBarHidden {
-    if (self.navigationController.navigationBar.hidden == NO) {
+    if (self.makeViewsVisible && UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation)) {
         return NO;
     } else {
         return YES;
@@ -118,13 +120,15 @@
 
 - (void)toggleViewVisibility {
     if (self.makeViewsVisible == NO) {
-        [UIApplication sharedApplication].statusBarHidden = YES;
+        [self prefersStatusBarHidden];
+        [self setNeedsStatusBarAppearanceUpdate];
         [UIView animateWithDuration:0.2 animations:^{
             self.navigationController.navigationBar.alpha = 0;
             self.navigationController.toolbar.alpha = 0;
         }];
     } else if (self.makeViewsVisible == YES) {
-        [UIApplication sharedApplication].statusBarHidden = NO;
+        [self prefersStatusBarHidden];
+        [self setNeedsStatusBarAppearanceUpdate];
         [UIView animateWithDuration:0.2 animations:^{
             self.navigationController.navigationBar.alpha = 1;
             self.navigationController.toolbar.alpha = 1;
