@@ -106,8 +106,7 @@
         }
     }
     self.initialZoomScale = self.scrollView.zoomScale;
-//cjm 12/30    self.focusIsOnImage = NO;
-    self.viewsVisible = YES;
+    _viewsVisible = YES;
     [self handleNoteSectionAlignment];
     [self updateConstraints];
     
@@ -297,6 +296,9 @@
 #pragma mark - Buttons and taps
 
 - (IBAction)dismissQuickNote:(id)sender {
+    if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
+        [self handleNoteSectionDismissal];
+    }
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
