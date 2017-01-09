@@ -48,7 +48,7 @@
 }
 
 -(BOOL)prefersStatusBarHidden {
-    if (self.makeViewsVisible && UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation)) {
+    if (self.makeViewsVisible && self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         return NO;
     } else {
         return YES;
@@ -120,14 +120,14 @@
 
 - (void)toggleViewVisibility {
     if (self.makeViewsVisible == NO) {
-        [self prefersStatusBarHidden];
+//        [self prefersStatusBarHidden];
         [self setNeedsStatusBarAppearanceUpdate];
         [UIView animateWithDuration:0.2 animations:^{
             self.navigationController.navigationBar.alpha = 0;
             self.navigationController.toolbar.alpha = 0;
         }];
     } else if (self.makeViewsVisible == YES) {
-        [self prefersStatusBarHidden];
+//        [self prefersStatusBarHidden];
         [self setNeedsStatusBarAppearanceUpdate];
         [UIView animateWithDuration:0.2 animations:^{
             self.navigationController.navigationBar.alpha = 1;

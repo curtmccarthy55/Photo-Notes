@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Zpy-4E-NLU">
-    <device id="retina5_5" orientation="landscape">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -20,11 +20,11 @@
                         <viewControllerLayoutGuide type="bottom" id="h9o-Lw-uvB"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="J2g-j9-CTg">
-                        <rect key="frame" x="0.0" y="0.0" width="736" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IconPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="egj-5V-Ig1">
-                                <rect key="frame" x="217.33333333333337" y="41.333333333333343" width="301.33333333333326" height="331.33333333333337"/>
+                                <rect key="frame" x="0.0" y="140.33333333333337" width="414" height="455.33333333333326"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="egj-5V-Ig1" secondAttribute="height" multiplier="1:1.1" id="5qO-eD-jZe"/>
                                 </constraints>
