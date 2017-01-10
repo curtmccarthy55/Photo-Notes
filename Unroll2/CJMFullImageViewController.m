@@ -70,7 +70,7 @@
     
     [self.noteSection setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:self.noteOpacity]];
     
-    self.imageView.image = self.fullImage;
+    self.imageView.image = self.fullImage ? self.fullImage : [UIImage imageNamed:@"IconPhoto"];
     self.scrollView.delegate = self;
     [self updateZoom];
     self.favoriteChanged = self.cjmImage.photoFavorited;
@@ -114,11 +114,11 @@
     
     if (self.fullImage == nil) {
         [self.scrollView setBackgroundColor:self.userColor];
-        [self.scrollView setAlpha:0.75];
+        [self.scrollView setAlpha:0.90];
     }
     if (self.isQuickNote) {
         [self.oneTap setEnabled:NO];
-        self.scrollView.backgroundColor = [UIColor blackColor];
+        self.scrollView.backgroundColor = !self.fullImage ? self.userColor : [UIColor blackColor];
         if (self.userColorTag.integerValue != 5 && self.userColorTag.integerValue != 7) {
             [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
             [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];

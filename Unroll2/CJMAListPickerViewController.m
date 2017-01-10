@@ -51,6 +51,21 @@
                                                                               style:UIBarButtonItemStyleDone
                                                                              target:self
                                                                              action:@selector(donePressed)];
+    [self.navigationItem.rightBarButtonItem setEnabled:NO];
+    
+    if (self.userColorTag.integerValue != 5 && self.userColorTag.integerValue != 7) {
+        [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+        [self.navigationController.toolbar setTintColor:[UIColor whiteColor]];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor whiteColor] }];
+    } else {
+        [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
+        [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
+        [self.navigationController.toolbar setTintColor:[UIColor blackColor]];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor blackColor] }];
+    }
+    
+    
     [self.navigationController.navigationBar setBarTintColor:self.userColor];
     [self.navigationController.toolbar setBarTintColor:self.userColor];
 }
@@ -124,6 +139,7 @@
 #pragma mark - tableView delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.navigationItem.rightBarButtonItem setEnabled:YES];
     self.selectedAlbum = [self.transferAlbums objectAtIndex:indexPath.row];
 }
 

@@ -230,8 +230,14 @@ static CJMAlbumManager *__sharedInstance;
 
 //  cjm 12/27: removes each CJMImage in the images array from the original and favorites albums, then deletes the CJMImage from the disk.
 - (void)albumWithName:(NSString *)albumName deleteImages:(NSArray *)images {
+  
+    
+    
+    
+    
+    
     CJMPhotoAlbum *album = [self scanForAlbumWithName:albumName];
-    for (CJMImage *doomedImage in images) {
+    for (CJMImage *doomedImage in [images reverseObjectEnumerator]) {
         [[CJMServices sharedInstance] deleteImage:doomedImage];
         if (doomedImage.photoFavorited) {
             if (![album.albumTitle isEqualToString:@"Favorites"]) {

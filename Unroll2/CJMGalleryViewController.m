@@ -480,6 +480,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         aListPickerVC.delegate = self;
         aListPickerVC.title = @"Select Destination";
         aListPickerVC.currentAlbumName = self.album.albumTitle;
+        aListPickerVC.userColor = self.userColor;
+        aListPickerVC.userColorTag = self.userColorTag;
         [self presentViewController:vc animated:YES completion:nil]; //cjm 12/30
     }];
     

@@ -28,7 +28,6 @@ typedef enum {
     kPhotoNotesWhite
 } ThemeColor;
 
-
 @interface CJMSettingsViewController () <SFSafariViewControllerDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *btnDone;
@@ -342,8 +341,15 @@ typedef enum {
     }
     
     CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance] userQuickNote];
+    CJMImage *newImage = newImages[0];
+    if (album.albumPhotos.count > 0) {
+        CJMImage *oldImage = album.albumPhotos[0];
+        newImage.photoTitle = oldImage.photoTitle;
+        newImage.photoNote = oldImage.photoNote;
+        newImage.photoCreationDate = oldImage.photoCreationDate;
+    }
     [[CJMAlbumManager sharedInstance] albumWithName:@"CJMQuickNote" deleteImages:album.albumPhotos];
-    [album addMultipleCJMImages:newImages];
+    [album addCJMImage:newImage];
     [self.btnDone setEnabled:YES];
     
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
@@ -409,7 +415,7 @@ typedef enum {
             vc.mailComposeDelegate = self;
             vc.modalPresentationStyle = UIModalPresentationPageSheet;
             [vc setToRecipients:@[@"bedevcurt@gmail.com"]];
-            [vc setSubject:@"Photo Notes"];
+            [vc setSubject:@"Photo Notes - Add context to your photos"];
             [vc setMessageBody:@"Hey Curt!" isHTML:NO];
             if ([MFMailComposeViewController canSendMail]) {
                 [self presentViewController:vc animated:YES completion:nil];
