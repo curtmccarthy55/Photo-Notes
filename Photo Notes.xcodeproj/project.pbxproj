@@ -14,7 +14,6 @@
 		84401F0A1B2CAA0D00B4FB89 /* CJMAListPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */; };
 		84401F3F1B3092F100B4FB89 /* CJMHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84401F3E1B3092F100B4FB89 /* CJMHudView.m */; };
 		845B90CF1AF42BC300365239 /* CJMFIGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845B90CE1AF42BC300365239 /* CJMFIGalleryViewController.m */; };
-		846870871B3B1F240031787B /* LSStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 846870861B3B1F240031787B /* LSStoryboard.storyboard */; };
 		84A769571ADAE39F00DE6741 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769561ADAE39F00DE6741 /* main.m */; };
 		84A7695A1ADAE39F00DE6741 /* CJMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769591ADAE39F00DE6741 /* CJMAppDelegate.m */; };
 		84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84A7695E1ADAE39F00DE6741 /* Main.storyboard */; };
@@ -60,7 +59,6 @@
 		84401F3E1B3092F100B4FB89 /* CJMHudView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMHudView.m; sourceTree = "<group>"; };
 		845B90CD1AF42BC300365239 /* CJMFIGalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMFIGalleryViewController.h; sourceTree = "<group>"; };
 		845B90CE1AF42BC300365239 /* CJMFIGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMFIGalleryViewController.m; sourceTree = "<group>"; };
-		846870861B3B1F240031787B /* LSStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LSStoryboard.storyboard; sourceTree = "<group>"; };
 		84A769511ADAE39F00DE6741 /* Unroll2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unroll2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A769551ADAE39F00DE6741 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84A769561ADAE39F00DE6741 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -207,7 +205,6 @@
 				84C2B94C1ADF39E60034786C /* CJMFileSerializer.m */,
 				84DC68F41B52B085000A2480 /* CJMCache.h */,
 				84DC68F51B52B085000A2480 /* CJMCache.m */,
-				846870861B3B1F240031787B /* LSStoryboard.storyboard */,
 				758F55181E22AAC40023F869 /* IconStoryboard.storyboard */,
 				84A769611ADAE39F00DE6741 /* Images.xcassets */,
 				84A769551ADAE39F00DE6741 /* Info.plist */,
@@ -279,7 +276,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = CJM;
-				LastUpgradeCheck = 0620;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Bluewraith;
 				TargetAttributes = {
 					84A769501ADAE39F00DE6741 = {
@@ -319,7 +316,6 @@
 				84C2B9381ADB0A580034786C /* CJMAListTableViewCell.xib in Resources */,
 				84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */,
 				840852A61B5DA49E00664849 /* no_image.jpg in Resources */,
-				846870871B3B1F240031787B /* LSStoryboard.storyboard in Resources */,
 				758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */,
 				84A769621ADAE39F00DE6741 /* Images.xcassets in Resources */,
 			);
@@ -406,15 +402,19 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -448,8 +448,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -457,6 +459,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -480,6 +483,7 @@
 				INFOPLIST_FILE = Unroll2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Desdinova.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -495,6 +499,7 @@
 				INFOPLIST_FILE = Unroll2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Desdinova.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -515,6 +520,7 @@
 				);
 				INFOPLIST_FILE = Unroll2Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Desdinova.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Unroll2.app/Unroll2";
 			};
@@ -530,6 +536,7 @@
 				);
 				INFOPLIST_FILE = Unroll2Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Desdinova.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Unroll2.app/Unroll2";
 			};

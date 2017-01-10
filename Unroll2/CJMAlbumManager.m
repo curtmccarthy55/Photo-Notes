@@ -46,7 +46,7 @@ static CJMAlbumManager *__sharedInstance;
 - (void)handleFirstTime {
     BOOL firstTime = [[NSUserDefaults standardUserDefaults] boolForKey:@"FirstTime"];
     BOOL favorites = [[NSUserDefaults standardUserDefaults] boolForKey:@"FavoritesReserved"];
-    BOOL quickNote = [[NSUserDefaults standardUserDefaults] boolForKey:@"QuickNoteMade"];
+//    BOOL quickNote = [[NSUserDefaults standardUserDefaults] boolForKey:@"QuickNoteMade"];
     
     if (firstTime) {
         CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"My Photo Notes" andNote:@"Tap Edit to customize the name and note sections."];
@@ -61,16 +61,15 @@ static CJMAlbumManager *__sharedInstance;
         }
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FavoritesReserved"];
     }
-    if (!quickNote) { //cjm 01/03
-        CJMPhotoAlbum *quickNoteAlbum = [self userQuickNote];
-        [self addAlbum:quickNoteAlbum];
-        [self save];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QuickNoteMade"];
-    }
+//    if (!quickNote) { //cjm 01/10
+//        CJMPhotoAlbum *quickNoteAlbum = [self userQuickNote];
+//        [self addAlbum:quickNoteAlbum];
+//        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QuickNoteMade"];
+//    }
 }
 
 - (void)registerDefaults {
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"FirstTime" : @YES , @"FavoritesReserved" : @NO , @"QuickNoteMade" : @NO }];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"FirstTime" : @YES , @"FavoritesReserved" : @NO /*, @"QuickNoteMade" : @NO*/ }];
 }
 
 #pragma mark - Content
@@ -98,11 +97,15 @@ static CJMAlbumManager *__sharedInstance;
     return _allAlbumsEdit;
 }
 
-- (CJMPhotoAlbum *)userQuickNote { //cjm 01/03
+- (CJMPhotoAlbum *)userQuickNote { //cjm 01/10
     CJMPhotoAlbum *album = [self scanForAlbumWithName:@"CJMQuickNote"];
     if (!album) {
         album = [[CJMPhotoAlbum alloc] initWithName:@"CJMQuickNote"];
+        CJMImage *image = [[CJMImage alloc] init];
+        [image setInitialValuesForCJMImage:image inAlbum:album.albumTitle];
+        [album addCJMImage:image];
         [self addAlbum:album];
+        [self save];
     }
     
     NSLog(@"*cjm* allAlbums == %@, allAlbumsEdit == %@", self.allAlbums, self.allAlbumsEdit);
