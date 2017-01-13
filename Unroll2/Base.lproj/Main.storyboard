@@ -39,7 +39,11 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="rt5-SI-mbi"/>
-                        <barButtonItem systemItem="camera" id="igR-0V-lHp"/>
+                        <barButtonItem systemItem="camera" id="igR-0V-lHp">
+                            <connections>
+                                <action selector="photoGrab:" destination="NO4-kQ-OsT" id="qj5-X6-kYg"/>
+                            </connections>
+                        </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Photo Notes Albums" id="QE4-93-jxo">
                         <barButtonItem key="backBarButtonItem" title="Albums" id="L1L-3p-ckW"/>
@@ -56,6 +60,7 @@
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
+                        <outlet property="cameraButton" destination="igR-0V-lHp" id="9XR-NO-XTn"/>
                         <outlet property="editButton" destination="zk0-Rl-znW" id="BEt-pL-9iy"/>
                         <segue destination="EVj-cY-PaK" kind="presentation" identifier="EditAlbum" id="a2e-sF-Y6k"/>
                         <segue destination="uLg-8C-qq2" kind="show" identifier="ViewGallery" id="FTW-8o-DJa"/>

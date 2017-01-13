@@ -9,20 +9,27 @@
 #import "CJMAListViewController.h"
 #import "CJMGalleryViewController.h"
 #import "CJMAListTableViewCell.h"
+#import "CJMAListPickerViewController.h"
 #import "CJMPopoverViewController.h"
 #import "CJMAlbumManager.h"
 #import "CJMPhotoAlbum.h"
 #import "CJMServices.h"
+#import "CJMFileSerializer.h"
 
 
 #define CJMAListCellIdentifier @"AlbumCell"
 
-@interface CJMAListViewController () <UIPopoverPresentationControllerDelegate, CJMPopoverDelegate>
+@interface CJMAListViewController () <UIPopoverPresentationControllerDelegate, CJMPopoverDelegate, CJMPhotoGrabViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CJMAListPickerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraButton;
 @property (nonatomic) BOOL popoverPresent;
 @property (nonatomic, strong) UIColor *userColor;
 @property (nonatomic, strong) NSNumber *userColorTag;
+@property (nonatomic, strong) NSArray *selectedPhotos;
+
+
+@property (nonatomic, strong) PHCachingImageManager *imageManager;
 
 @end
 
@@ -164,6 +171,199 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark - Photo Grab
+
+- (IBAction)photoGrab:(id)sender {
+    //__weak CJMGalleryViewController *weakSelf = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
+                                                                             message:nil
+                                                                      preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    //Access camera
+    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForCamera) {
+        [self takePhoto];
+    }];
+    
+    //Access photo library
+    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:@"Choose From Library"       style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForLibrary) {
+        [self photosFromLibrary];
+    }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"
+                                                     style:UIAlertActionStyleCancel
+                                                   handler:^(UIAlertAction *actionCancel) {}];
+    
+    [alertController addAction:cameraAction];
+    [alertController addAction:libraryAction];
+    [alertController addAction:cancel];
+    
+    alertController.popoverPresentationController.barButtonItem = self.cameraButton;
+    [alertController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionDown];
+    alertController.popoverPresentationController.sourceView = self.view;
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)photosFromLibrary {
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
+        if (status != PHAuthorizationStatusAuthorized) {
+            UIAlertController *adjustPrivacyController = [UIAlertController alertControllerWithTitle:@"Denied access to Photos" message:@"You will need to give Photo Notes permission to import from your Photo Library.\n\nPlease allow Photo Notes access to your Photo Library by going to Settings>Privacy>Photos." preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *dismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}];
+            
+            [adjustPrivacyController addAction:dismiss];
+            
+            [self presentViewController:adjustPrivacyController animated:YES completion:nil];
+        } else {
+            [self presentPhotoGrabViewController];
+        }
+    }];
+}
+
+- (void)takePhoto {
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
+        return;
+    } else {
+        UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
+        mediaUI.sourceType = UIImagePickerControllerSourceTypeCamera;
+        //cjm multiple pictures            mediaUI.showsCameraControls = NO;
+        mediaUI.allowsEditing = NO;
+        mediaUI.delegate = self;
+        
+        [self presentViewController:mediaUI animated:YES completion:nil];
+    }
+}
+
+//Present users photo library
+- (void)presentPhotoGrabViewController { //cjm album list photo grab
+    NSString * storyboardName = @"Main";
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+    UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
+    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
+    vc.delegate = self;
+    vc.userColor = self.userColor;
+    vc.userColorTag = self.userColorTag;
+    vc.singleSelection = NO;
+    [self presentViewController:navigationVC animated:YES completion:nil];
+}
+
+- (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos {
+    NSMutableArray *newImages = [[NSMutableArray alloc] init];
+    //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
+    CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
+    
+    if (!self.imageManager) {
+        self.imageManager = [[PHCachingImageManager alloc] init];
+    }
+    
+    __block NSInteger counter = [photos count];
+    //    __weak CJMGalleryViewController *weakSelf = self;
+    
+    dispatch_group_t imageLoadGroup = dispatch_group_create();
+    for (int i = 0; i < photos.count; i++)
+    {
+        __block CJMImage *assetImage = [[CJMImage alloc] init];
+        PHAsset *asset = (PHAsset *)photos[i];
+        
+        PHImageRequestOptions *options = [PHImageRequestOptions new];
+        options.networkAccessAllowed = YES;
+        options.version = PHImageRequestOptionsVersionCurrent;
+        
+        dispatch_group_enter(imageLoadGroup);
+        @autoreleasepool {
+            [self.imageManager requestImageDataForAsset:asset
+                                                options:options
+                                          resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+                                              
+                                              counter--;
+                                              if(![info[PHImageResultIsDegradedKey] boolValue])
+                                              {
+                                                  [fileSerializer writeObject:imageData toRelativePath:assetImage.fileName];
+                                                  dispatch_group_leave(imageLoadGroup);
+                                              }
+                                              
+                                          }];
+        }
+        
+        dispatch_group_enter(imageLoadGroup);
+        @autoreleasepool {
+            [self.imageManager requestImageForAsset:asset
+                                         targetSize:CGSizeMake(120.0, 120.0)
+                                        contentMode:PHImageContentModeAspectFill
+                                            options:options
+                                      resultHandler:^(UIImage *result, NSDictionary *info) {
+                                          if(![info[PHImageResultIsDegradedKey] boolValue])
+                                          {
+                                              [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
+                                              assetImage.thumbnailNeedsRedraw = NO;
+                                              
+                                              dispatch_group_leave(imageLoadGroup);
+                                          }
+                                      }];
+        }
+        
+//        [assetImage setInitialValuesForCJMImage:assetImage inAlbum:self.album.albumTitle];
+        //        assetImage.photoLocation = [asset location];
+        assetImage.photoCreationDate = [asset creationDate];
+        
+        [newImages addObject:assetImage];
+    }
+    
+    
+    //cjm 01/12
+    //We need to basically execute a Transfer of the selected images to the AListPickerVC once the newImages array is done being loaded.
+    self.selectedPhotos = [NSArray arrayWithArray:newImages];
+    
+    
+    dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
+        self.navigationController.view.userInteractionEnabled = YES;
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
+        NSString *storyboardName = @"Main";
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+        UINavigationController *vc = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"AListPickerViewController"];
+        CJMAListPickerViewController *aListPickerVC = (CJMAListPickerViewController *)[vc topViewController];
+        aListPickerVC.delegate = self;
+        aListPickerVC.title = @"Select Destination";
+        aListPickerVC.currentAlbumName = nil;
+        aListPickerVC.userColor = self.userColor;
+        aListPickerVC.userColorTag = self.userColorTag;
+        [self presentViewController:vc animated:YES completion:nil];
+        
+        
+        
+//        self.navigationController.view.userInteractionEnabled = YES;
+//        [self.tableView reloadData];
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//        [[CJMAlbumManager sharedInstance] save];
+//        self.navigationController.view.userInteractionEnabled = YES;
+        
+        //        NSLog(@"••••• FIN");
+    });
+}
+
+- (void)aListPickerViewControllerDidCancel:(CJMAListPickerViewController *)controller {
+    self.selectedPhotos = nil;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+- (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album {
+    [self.selectedPhotos enumerateObjectsUsingBlock:^(CJMImage *image, NSUInteger count, BOOL *stop) {
+        image.selectCoverHidden = YES;
+    }];
+    [album addMultipleCJMImages:self.selectedPhotos];
+    [[CJMAlbumManager sharedInstance] save];
+    self.selectedPhotos = nil;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - QuickNotes
 
 - (IBAction)actionQuicknote:(id)sender {
@@ -172,7 +372,6 @@
     vc.albumName = @"Favorites";
     vc.delegate = self;
     vc.isQuickNote = YES;
-//    [self.navigationController.toolbar setHidden:YES];
     [vc setViewsVisible:NO];
 }
 

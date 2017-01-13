@@ -340,7 +340,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Present users photo library
-- (void)presentPhotoGrabViewController {
+- (void)presentPhotoGrabViewController { //cjm album list photo grab
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];

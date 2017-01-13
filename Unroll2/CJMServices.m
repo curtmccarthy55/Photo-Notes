@@ -40,8 +40,7 @@ static CJMServices *__sharedInstance;
 - (instancetype)init
 {
     self = [super init];
-    if(self)
-    {
+    if(self) {
         self.cache = [[CJMCache alloc] init];
         self.fileSerializer = [[CJMFileSerializer alloc] init];
     }
