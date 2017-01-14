@@ -33,6 +33,7 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *exportButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cameraButton;
 @property (nonatomic, strong) NSArray *selectedCells;
+@property (nonatomic, strong) NSMutableArray *pickerPhotos;
 
 @end
 
@@ -325,18 +326,67 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }];
 }
 
-- (void)takePhoto {
+- (void)takePhoto { //cjm 01/12
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
         return;
     } else {
         UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
         mediaUI.sourceType = UIImagePickerControllerSourceTypeCamera;
-        //cjm multiple pictures            mediaUI.showsCameraControls = NO;
+        mediaUI.showsCameraControls = NO;
         mediaUI.allowsEditing = NO;
         mediaUI.delegate = self;
         
+        UIView *overlay = [self customCameraOverlay];
+        [mediaUI setCameraOverlayView:overlay];
         [self presentViewController:mediaUI animated:YES completion:nil];
+        
     }
+}
+
+- (UIView *)customCameraOverlay { //cjm 01/12
+    UIView *mainOverlay = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    
+    UIView *buttonBar = [[UIView alloc] init];
+    [buttonBar setBackgroundColor:[UIColor lightGrayColor]];
+    buttonBar.translatesAutoresizingMaskIntoConstraints = NO;
+    [mainOverlay addSubview:buttonBar];
+    NSLayoutConstraint *horizontalConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:mainOverlay attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *bottomConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:mainOverlay attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *widthConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:mainOverlay attribute:NSLayoutAttributeWidth multiplier:1.0 constant:-16.0];
+    NSLayoutConstraint *heightConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:([UIScreen mainScreen].bounds.size.height / 4.0)];
+    [mainOverlay addConstraints:@[horizontalConst, bottomConst, widthConst, heightConst]];
+    
+    UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [cameraButton setTitle:@"Take Photo" forState:UIControlStateNormal];
+    cameraButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:cameraButton];
+    NSLayoutConstraint *buttonHorizon = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *buttonVert = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+    [buttonBar addConstraints:@[buttonHorizon, buttonVert]];
+    //cjm 01/12
+    
+    
+    
+    
+//    UIView *clear_view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+//    clear_view.opaque = NO;
+//    clear_view.backgroundColor = [UIColor clearColor];
+//    [main_overlay_view addSubview:clear_view];
+    
+//    for(int i = 0; i < 2; i++) {
+//        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+//        // when a button is touched, UIImagePickerController snaps a picture
+//        [button addTarget:self action:@selector(testIfButtonResponds) forControlEvents:UIControlEventTouchUpInside];
+//        button.frame = CGRectMake( i * self.view.frame.size.width / 2, self.view.frame.size.height - 100, self.view.frame.size.width / 2, 100);
+//        [button setBackgroundColor: (i < 1) ? [UIColor redColor] : [UIColor blueColor] ];
+//        [mainOverlay addSubview:button];
+//    }
+    
+    return mainOverlay;
+}
+
+- (void)testIfButtonResponds {
+    NSLog(@"PICTURE TAKEN");
 }
 
 //Present users photo library
@@ -502,23 +552,59 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 #pragma mark - image picker delegate
 
 //Converting photo captured by in-app camera to CJMImage.
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info //cjm 01/12
 {
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
     NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
-    CJMImage *newImage = [[CJMImage alloc] init];
+//    CJMImage *newImage = [[CJMImage alloc] init];
     UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:CellSize];
     
+    
+    
+    
+    
+    NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[newPhotoData, thumbnail] forKeys:@[@"newImage", @"newThumbnail"]];
+    
+    if (!self.pickerPhotos) {
+        self.pickerPhotos = [[NSMutableArray alloc] init];
+    }
+    [self.pickerPhotos addObject:dic];
+    
+    
+    
+    
+//    CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
+//    
+//    [fileSerializer writeObject:newPhotoData toRelativePath:newImage.fileName];
+//    [fileSerializer writeImage:thumbnail toRelativePath:newImage.thumbnailFileName];
+//    
+//    [newImage setInitialValuesForCJMImage:newImage inAlbum:self.album.albumTitle];
+//    newImage.photoCreationDate = [NSDate date];
+//    newImage.thumbnailNeedsRedraw = NO;
+//    [self.album addCJMImage:newImage];
+//    
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//    
+//    [[CJMAlbumManager sharedInstance] save];
+}
+
+- (void)photoCaptureFinished {
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
-    [fileSerializer writeObject:newPhotoData toRelativePath:newImage.fileName];
-    [fileSerializer writeImage:thumbnail toRelativePath:newImage.thumbnailFileName];
-
-    [newImage setInitialValuesForCJMImage:newImage inAlbum:self.album.albumTitle];
-    newImage.photoCreationDate = [NSDate date];
-    newImage.thumbnailNeedsRedraw = NO;
-    [self.album addCJMImage:newImage];
-    
+    for (NSDictionary *dic in self.pickerPhotos) {
+        NSData *newPhotoData = [dic valueForKey:@"newImage"];
+        UIImage *thumbnail = [dic valueForKey:@"newThumbnail"];
+        CJMImage *newImage = [[CJMImage alloc] init];
+        
+        [fileSerializer writeObject:newPhotoData toRelativePath:newImage.fileName];
+        [fileSerializer writeImage:thumbnail toRelativePath:newImage.thumbnailFileName];
+        
+        
+        [newImage setInitialValuesForCJMImage:newImage inAlbum:self.album.albumTitle];
+        newImage.photoCreationDate = [NSDate date];
+        newImage.thumbnailNeedsRedraw = NO;
+        [self.album addCJMImage:newImage];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
     
     [[CJMAlbumManager sharedInstance] save];

@@ -173,6 +173,60 @@
 
 #pragma mark - Photo Grab
 
+//- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+//{
+//    UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
+//    NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
+//    CJMImage *newImage = [[CJMImage alloc] init];
+//    UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:CGSizeMake(120.0, 120.0)];
+//    
+//    CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
+//    
+//    [fileSerializer writeObject:newPhotoData toRelativePath:newImage.fileName];
+//    [fileSerializer writeImage:thumbnail toRelativePath:newImage.thumbnailFileName];
+//    
+//    [newImage setInitialValuesForCJMImage:newImage inAlbum:self.album.albumTitle];
+//    newImage.photoCreationDate = [NSDate date];
+//    newImage.thumbnailNeedsRedraw = NO;
+//    [self.album addCJMImage:newImage];
+//    
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//    
+//    [[CJMAlbumManager sharedInstance] save];
+//}
+
+- (UIImage *)getCenterMaxSquareImageByCroppingImage:(UIImage *)image andShrinkToSize:(CGSize)newSize
+{
+    //Get crop bounds
+    CGSize centerSquareSize;
+    double originalImageWidth = CGImageGetWidth(image.CGImage);
+    double originalImageHeight = CGImageGetHeight(image.CGImage);
+    if (originalImageHeight <= originalImageWidth) {
+        centerSquareSize.width = originalImageHeight;
+        centerSquareSize.height = originalImageHeight;
+    } else {
+        centerSquareSize.width = originalImageWidth;
+        centerSquareSize.height = originalImageWidth;
+    }
+    //Determine crop origin
+    double x = (originalImageWidth - centerSquareSize.width) / 2.0;
+    double y = (originalImageHeight - centerSquareSize.height) / 2.0;
+    
+    //Crop and create CGImageRef.  This is where an improvement likely lies.
+    CGRect cropRect = CGRectMake(x, y, centerSquareSize.height, centerSquareSize.width);
+    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
+    UIImage *cropped = [UIImage imageWithCGImage:imageRef scale:0.0 orientation:image.imageOrientation];
+    
+    //Scale the image down to the smaller file size and return
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [cropped drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    CGImageRelease(imageRef);
+    return newImage;
+    
+}
+
 - (IBAction)photoGrab:(id)sender {
     //__weak CJMGalleryViewController *weakSelf = self;
     
