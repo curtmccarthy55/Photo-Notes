@@ -35,6 +35,8 @@
 @property (nonatomic, strong) NSArray *selectedCells;
 @property (nonatomic, strong) NSMutableArray *pickerPhotos;
 
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
+
 @end
 
 @implementation CJMGalleryViewController
@@ -330,6 +332,17 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
         return;
     } else {
+        self.imagePicker = [[UIImagePickerController alloc] init];
+        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        self.imagePicker.showsCameraControls = NO;
+        self.imagePicker.allowsEditing = NO;
+        self.imagePicker.delegate = self;
+        
+        UIView *overlay = [self customCameraOverlay];
+        [self.imagePicker setCameraOverlayView:overlay];
+        [self presentViewController:self.imagePicker animated:YES completion:nil];
+        
+        /*
         UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
         mediaUI.sourceType = UIImagePickerControllerSourceTypeCamera;
         mediaUI.showsCameraControls = NO;
@@ -339,6 +352,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         UIView *overlay = [self customCameraOverlay];
         [mediaUI setCameraOverlayView:overlay];
         [self presentViewController:mediaUI animated:YES completion:nil];
+         */
     }
 }
 
@@ -359,6 +373,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [cameraButton setImage:[UIImage imageNamed:@"CameraShutter"] forState:UIControlStateNormal];
 //    [cameraButton setImage:[UIImage imageNamed:@"PressedCameraShutter"] forState:UIControlStateHighlighted]; not selecting new image
     [cameraButton setTintColor:[UIColor whiteColor]];
+    [cameraButton addTarget:self action:@selector(shutterPressed) forControlEvents:UIControlEventTouchUpInside];
     cameraButton.translatesAutoresizingMaskIntoConstraints = NO;
     [buttonBar addSubview:cameraButton];
     NSLayoutConstraint *buttonHorizon = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
@@ -386,6 +401,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [doneButton addTarget:self action:@selector(photoCaptureFinished) forControlEvents:UIControlEventTouchUpInside];
     doneButton.translatesAutoresizingMaskIntoConstraints = NO;
     [buttonBar addSubview:doneButton];
     NSLayoutConstraint *doneBottom = [NSLayoutConstraint constraintWithItem:doneButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-8.0];
@@ -395,6 +411,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     cancelButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [cancelButton addTarget:self action:@selector(cancelCamera) forControlEvents:UIControlEventTouchUpInside];
     [buttonBar addSubview:cancelButton];
     NSLayoutConstraint *cancelBottom = [NSLayoutConstraint constraintWithItem:cancelButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-8.0];
     NSLayoutConstraint *cancelLead = [NSLayoutConstraint constraintWithItem:cancelButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeLeading multiplier:1.0 constant:8.0];
@@ -585,7 +602,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
 }
 
-#pragma mark - image picker delegate
+#pragma mark - image picker delegate and controls
 
 //Converting photo captured by in-app camera to CJMImage.
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info //cjm 01/12
@@ -624,7 +641,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 //    [[CJMAlbumManager sharedInstance] save];
 }
 
-- (void)photoCaptureFinished {
+- (void)photoCaptureFinished { //cjm 01/12
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
     for (NSDictionary *dic in self.pickerPhotos) {
@@ -644,6 +661,17 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self dismissViewControllerAnimated:YES completion:nil];
     
     [[CJMAlbumManager sharedInstance] save];
+}
+
+- (void)shutterPressed { //cjm 01/12
+    NSLog(@"TAKE THE PICTURE");
+    [self.imagePicker takePicture];
+}
+
+- (void)cancelCamera { //cjm 01/12
+    self.pickerPhotos = nil;
+    self.imagePicker = nil;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - CJMImage prep code
