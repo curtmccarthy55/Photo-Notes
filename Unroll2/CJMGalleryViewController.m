@@ -160,7 +160,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         selectedImage.selectCoverHidden = NO;
         selectedCell.cellSelectCover.hidden = selectedImage.selectCoverHidden;
         self.deleteButton.enabled = YES;
-        self.exportButton.enabled = YES;
+        self.exportButton.enabled = [self.album.albumTitle isEqualToString:@"Favorites"] ? NO : YES;
     }
 }
 
