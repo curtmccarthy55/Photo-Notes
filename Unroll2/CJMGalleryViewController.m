@@ -17,6 +17,7 @@
 #import "CJMImage.h"
 #import "CJMHudView.h"
 #import "CJMFileSerializer.h"
+#import <AVFoundation/AVFoundation.h>
 #import <dispatch/dispatch.h>
 
 #define CellSize [(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]
@@ -493,8 +494,18 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 #pragma mark - image picker delegate and controls
 
 - (void)takePhoto { //cjm 01/12
+    NSString *mediaType = AVMediaTypeVideo;
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
-        return;
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Camera Available" message:@"There's no device camera available for Photo Notes to use." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
+        [alert addAction:actionDismiss];
+        [self presentViewController:alert animated:YES completion:nil];
+    } else if (authStatus != AVAuthorizationStatusAuthorized) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Camera Access Denied" message:@"Please allow Photo Notes permission to use the camera in Settings>Privacy>Camera." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
+        [alert addAction:actionDismiss];
+        [self presentViewController:alert animated:YES completion:nil];
     } else {
         self.imagePicker = [[UIImagePickerController alloc] init];
         self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
