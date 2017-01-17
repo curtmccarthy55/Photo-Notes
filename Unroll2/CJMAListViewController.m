@@ -28,7 +28,9 @@
 @property (nonatomic, strong) NSNumber *userColorTag;
 @property (nonatomic, strong) NSArray *selectedPhotos;
 
-
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
+@property (nonatomic, strong) UIButton *flashButton;
+@property (nonatomic, strong) NSMutableArray *pickerPhotos;
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
 
 @end
@@ -275,20 +277,6 @@
     }];
 }
 
-- (void)takePhoto {
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
-        return;
-    } else {
-        UIImagePickerController *mediaUI = [[UIImagePickerController alloc] init];
-        mediaUI.sourceType = UIImagePickerControllerSourceTypeCamera;
-        //cjm multiple pictures            mediaUI.showsCameraControls = NO;
-        mediaUI.allowsEditing = NO;
-        mediaUI.delegate = self;
-        
-        [self presentViewController:mediaUI animated:YES completion:nil];
-    }
-}
-
 //Present users photo library
 - (void)presentPhotoGrabViewController { //cjm album list photo grab
     NSString * storyboardName = @"Main";
@@ -408,15 +396,195 @@
 }
 
 
-- (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album {
+- (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album { //cjm 01/12
     [self.selectedPhotos enumerateObjectsUsingBlock:^(CJMImage *image, NSUInteger count, BOOL *stop) {
         image.selectCoverHidden = YES;
+        image.photoTitle = @"No Title Created ";
+        image.photoNote = @"Tap Edit to change the title and note!";
+        image.photoFavorited = NO; //cjm favorites ImageVC set up
+        image.originalAlbum = album.albumTitle;
     }];
     [album addMultipleCJMImages:self.selectedPhotos];
     [[CJMAlbumManager sharedInstance] save];
     self.selectedPhotos = nil;
+    self.flashButton = nil;
+    self.imagePicker = nil;
+    self.pickerPhotos = nil;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+#pragma mark - image picker delegate and controls
+
+- (void)takePhoto { //cjm 01/12
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
+        return;
+    } else {
+        self.imagePicker = [[UIImagePickerController alloc] init];
+        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        self.imagePicker.showsCameraControls = NO;
+        self.imagePicker.allowsEditing = NO;
+        self.imagePicker.delegate = self;
+        self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
+        self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+        
+        UIView *overlay = [self customCameraOverlay];
+        [self.imagePicker setCameraOverlayView:overlay];
+        
+        [self presentViewController:self.imagePicker animated:YES completion:nil];
+    }
+}
+
+- (UIView *)customCameraOverlay { //cjm 01/12
+    UIView *mainOverlay = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    
+    UIView *buttonBar = [[UIView alloc] init];
+    [buttonBar setBackgroundColor:[UIColor clearColor]];
+    buttonBar.translatesAutoresizingMaskIntoConstraints = NO;
+    [mainOverlay addSubview:buttonBar];
+    NSLayoutConstraint *horizontalConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:mainOverlay attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *bottomConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:mainOverlay attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *widthConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:mainOverlay attribute:NSLayoutAttributeWidth multiplier:1.0 constant:-16.0];
+    NSLayoutConstraint *heightConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:([UIScreen mainScreen].bounds.size.height / 4.0)];
+    [mainOverlay addConstraints:@[horizontalConst, bottomConst, widthConst, heightConst]];
+    
+    UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [cameraButton setImage:[UIImage imageNamed:@"CameraShutter"] forState:UIControlStateNormal];
+    //    [cameraButton setImage:[UIImage imageNamed:@"PressedCameraShutter"] forState:UIControlStateHighlighted]; not selecting new image
+    [cameraButton setTintColor:[UIColor whiteColor]];
+    [cameraButton addTarget:self action:@selector(shutterPressed) forControlEvents:UIControlEventTouchUpInside];
+    cameraButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:cameraButton];
+    NSLayoutConstraint *buttonHorizon = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *buttonVert = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+    [buttonBar addConstraints:@[buttonHorizon, buttonVert]];
+    
+    self.flashButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.flashButton addTarget:self action:@selector(updateFlashMode) forControlEvents:UIControlEventTouchUpInside];
+    [self.flashButton setImage:[UIImage imageNamed:@"FlashOff"] forState:UIControlStateNormal];
+    [self.flashButton setTintColor:[UIColor whiteColor]];
+    self.flashButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:self.flashButton];
+    NSLayoutConstraint *flashTop = [NSLayoutConstraint constraintWithItem:self.flashButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeTop multiplier:1.0 constant:16.0];
+    NSLayoutConstraint *flashLead = [NSLayoutConstraint constraintWithItem:self.flashButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeLeading multiplier:1.0 constant:8.0];
+    NSLayoutConstraint *flashHeight = [NSLayoutConstraint constraintWithItem:self.flashButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:44.0];
+    NSLayoutConstraint *flashWidth = [NSLayoutConstraint constraintWithItem:self.flashButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:44.0];
+    [buttonBar addConstraints:@[flashTop, flashLead, flashHeight, flashWidth]];
+    
+    UIButton *camFlipButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [camFlipButton setImage:[UIImage imageNamed:@"CamFlip"] forState:UIControlStateNormal];
+    [camFlipButton addTarget:self action:@selector(reverseCamera) forControlEvents:UIControlEventTouchUpInside];
+    [camFlipButton setTintColor:[UIColor whiteColor]];
+    camFlipButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:camFlipButton];
+    NSLayoutConstraint *flipTop = [NSLayoutConstraint constraintWithItem:camFlipButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.flashButton attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *flipTrail = [NSLayoutConstraint constraintWithItem:camFlipButton attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:-8.0];
+    NSLayoutConstraint *flipWidth = [NSLayoutConstraint constraintWithItem:camFlipButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:44.0];
+    NSLayoutConstraint *flipHeight = [NSLayoutConstraint constraintWithItem:camFlipButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:44.0];
+    [buttonBar addConstraints:@[flipTop, flipTrail, flipWidth, flipHeight]];
+    
+    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [doneButton addTarget:self action:@selector(photoCaptureFinished) forControlEvents:UIControlEventTouchUpInside];
+    doneButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:doneButton];
+    NSLayoutConstraint *doneBottom = [NSLayoutConstraint constraintWithItem:doneButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-8.0];
+    NSLayoutConstraint *doneTrail = [NSLayoutConstraint constraintWithItem:doneButton attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:-8.0];
+    [buttonBar addConstraints:@[doneBottom, doneTrail]];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    cancelButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [cancelButton addTarget:self action:@selector(cancelCamera) forControlEvents:UIControlEventTouchUpInside];
+    [buttonBar addSubview:cancelButton];
+    NSLayoutConstraint *cancelBottom = [NSLayoutConstraint constraintWithItem:cancelButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-8.0];
+    NSLayoutConstraint *cancelLead = [NSLayoutConstraint constraintWithItem:cancelButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeLeading multiplier:1.0 constant:8.0];
+    [buttonBar addConstraints:@[cancelBottom, cancelLead]];
+    
+    return mainOverlay;
+}
+
+//Converting photo captured by in-app camera to CJMImage.
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info //cjm 01/12
+{
+    UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
+    NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
+    UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:CGSizeMake(120.0, 120.0)];
+    
+    NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[newPhotoData, thumbnail] forKeys:@[@"newImage", @"newThumbnail"]];
+    
+    if (!self.pickerPhotos) {
+        self.pickerPhotos = [[NSMutableArray alloc] init];
+    }
+    [self.pickerPhotos addObject:dic];
+}
+
+- (void)photoCaptureFinished { //cjm 01/12
+    CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
+    NSMutableArray *tempAlbum = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *dic in self.pickerPhotos) {
+        NSData *newPhotoData = [dic valueForKey:@"newImage"];
+        UIImage *thumbnail = [dic valueForKey:@"newThumbnail"];
+        CJMImage *newImage = [[CJMImage alloc] init];
+        
+        [fileSerializer writeObject:newPhotoData toRelativePath:newImage.fileName];
+        [fileSerializer writeImage:thumbnail toRelativePath:newImage.thumbnailFileName];
+        
+        newImage.photoCreationDate = [NSDate date];
+        newImage.thumbnailNeedsRedraw = NO;
+        [tempAlbum addObject:newImage];
+    }
+    
+    self.selectedPhotos = [NSArray arrayWithArray:tempAlbum];
+    
+    self.navigationController.view.userInteractionEnabled = YES;
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    NSString *storyboardName = @"Main";
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+    UINavigationController *vc = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"AListPickerViewController"];
+    CJMAListPickerViewController *aListPickerVC = (CJMAListPickerViewController *)[vc topViewController];
+    aListPickerVC.delegate = self;
+    aListPickerVC.title = @"Select Destination";
+    aListPickerVC.currentAlbumName = nil;
+    aListPickerVC.userColor = self.userColor;
+    aListPickerVC.userColorTag = self.userColorTag;
+    [self presentViewController:vc animated:YES completion:nil];
+    
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [[CJMAlbumManager sharedInstance] save];
+}
+
+- (void)shutterPressed { //cjm 01/12
+    NSLog(@"TAKE THE PICTURE");
+    [self.imagePicker takePicture];
+}
+
+- (void)updateFlashMode {
+    if (self.imagePicker.cameraFlashMode == UIImagePickerControllerCameraFlashModeOff) {
+        [self.imagePicker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOn];
+        [self.flashButton setImage:[UIImage imageNamed:@"FlashOn"] forState:UIControlStateNormal];
+    } else {
+        [self.imagePicker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
+        [self.flashButton setImage:[UIImage imageNamed:@"FlashOff"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)reverseCamera {
+    if (self.imagePicker.cameraDevice == UIImagePickerControllerCameraDeviceRear) {
+        self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    } else {
+        self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+    }
+}
+
+- (void)cancelCamera { 
+    self.pickerPhotos = nil;
+    self.imagePicker = nil;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 #pragma mark - QuickNotes
 
