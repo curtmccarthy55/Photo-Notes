@@ -599,14 +599,14 @@
 
 #pragma mark - QuickNotes
 
-- (IBAction)actionQuicknote:(id)sender {
-    CJMFullImageViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"FullImageVC"];
-    vc.index = 0;
-    vc.albumName = @"Favorites";
-    vc.delegate = self;
-    vc.isQuickNote = YES;
-    [vc setViewsVisible:NO];
-}
+//- (IBAction)actionQuicknote:(id)sender {
+//    CJMFullImageViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"FullImageVC"];
+//    vc.index = 0;
+//    vc.albumName = @"Favorites";
+//    vc.delegate = self;
+//    vc.isQuickNote = YES;
+//    [vc setViewsVisible:NO];
+//}
 
 - (void)photoIsFavorited:(BOOL)isFavorited {
     

@@ -8,13 +8,19 @@
 
 #import "CJMAppDelegate.h"
 #import "CJMServices.h"
+#import "CJMAListViewController.h"
+
+
+#define kQuickNoteAction @"com.Desdinova.Unroll2.QuickNote"
+#define kCameraAction @"com.Desdinova.Unroll2.OpenCamera"
 
 @interface CJMAppDelegate ()
+
+@property (nonatomic, strong) NSDictionary *launchDic;
 
 @end
 
 @implementation CJMAppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
@@ -23,12 +29,34 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
+    NSLog(@"application didFinishLaunchingWithOptions called");
+    BOOL launchedFromShortCut = NO;
+//    var launchedFromShortCut = false
+    self.launchDic = launchOptions;
+    
+    if ([application respondsToSelector:@selector(setShortcutItems:)]) {
+        if ([launchOptions objectForKey:UIApplicationLaunchOptionsShortcutItemKey]) {
+            UIApplicationShortcutItem *shortcutItem = [launchOptions objectForKey:UIApplicationLaunchOptionsShortcutItemKey];
+            launchedFromShortCut = shortcutItem ? YES : NO;
+            [self handleShortCutItem:shortcutItem];
+        }
+    }
+    /*Check for ShortCutItem
+    if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
+        launchedFromShortCut = true
+        handleShortCutItem(shortcutItem)
+    }
+     */
+    
+    
 #ifdef DEBUG
     [[CJMServices sharedInstance] beginReportingMemoryToConsoleWithInterval:5.f];
 #endif
 
     
-    return YES;
+    //Return false incase application was launched from shorcut to prevent
+    //application(_:performActionForShortcutItem:completionHandler:) from being called
+    return !launchedFromShortCut;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -54,6 +82,11 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    UIApplicationShortcutItem *shortcutItem = [self.launchDic objectForKey:UIApplicationLaunchOptionsShortcutItemKey];
+    
+    if ([application respondsToSelector:@selector(setShortcutItems:)] && shortcutItem != nil) {
+        [self handleShortCutItem:shortcutItem];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -61,8 +94,35 @@
     [[CJMAlbumManager sharedInstance] save];
 }
 
+// implementing shortcut
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL succeeded))completionHandler {
+    BOOL handledShortcut = [self handleShortCutItem:shortcutItem];
     
+    completionHandler(handledShortcut);
 }
+
+- (BOOL)handleShortCutItem:(UIApplicationShortcutItem *)shortcutItem {
+    BOOL handled = NO;
+//    var handled = false
+    
+    NSString *shortcutType = shortcutItem.type;
+    
+    if (shortcutType) {
+        UINavigationController *rootNavController = (UINavigationController *)self.window.rootViewController;
+        CJMAListViewController *rootViewController = (CJMAListViewController *)rootNavController.viewControllers.firstObject;
+        [rootNavController popToRootViewControllerAnimated:YES];
+        
+        if ([shortcutType isEqualToString:kQuickNoteAction]) {
+            [rootViewController performSegueWithIdentifier:@"ViewQuickNote" sender:nil];
+            handled = YES;
+        } else if ([shortcutType isEqualToString:kCameraAction]) {
+            [rootViewController takePhoto];
+            handled = YES;
+        }
+    }
+    
+    return handled;
+}
+
 
 @end

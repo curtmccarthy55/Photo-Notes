@@ -140,7 +140,6 @@
     
     if (self.isQuickNote) {
         [self shiftNote:nil];
-        [self enableEdit:nil];
     }
 }
 
