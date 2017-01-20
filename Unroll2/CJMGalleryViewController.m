@@ -38,6 +38,7 @@
 
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
 @property (nonatomic, strong) UIButton *flashButton;
+@property (nonatomic, strong) UIButton *doneButton;
 
 @end
 
@@ -515,14 +516,100 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
         self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
         
-        UIView *overlay = [self customCameraOverlay];
+        UIView *overlay;
+        if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
+            overlay = [self customLandscapeCameraOverlay];
+        } else {
+            overlay = [self customPortraitCameraOverlay];
+        }
         [self.imagePicker setCameraOverlayView:overlay];
+        self.imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         
         [self presentViewController:self.imagePicker animated:YES completion:nil];
     }
 }
 
-- (UIView *)customCameraOverlay { //cjm 01/12
+- (UIView *)customLandscapeCameraOverlay {
+    CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
+    
+    UIView *mainOverlay = [[UIView alloc] initWithFrame:frame];
+    [mainOverlay setBackgroundColor:[UIColor clearColor]];
+    
+    UIView *buttonBar = [[UIView alloc] init];
+    [buttonBar setBackgroundColor:[UIColor clearColor]];
+    buttonBar.translatesAutoresizingMaskIntoConstraints = NO;
+    [mainOverlay addSubview:buttonBar];
+    NSLayoutConstraint *horizontalConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:mainOverlay attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *bottomConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:mainOverlay attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *widthConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:mainOverlay attribute:NSLayoutAttributeWidth multiplier:1.0 constant:-16.0];
+    NSLayoutConstraint *heightConst = [NSLayoutConstraint constraintWithItem:buttonBar attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:(frame.size.height / 4.0)];
+    [mainOverlay addConstraints:@[horizontalConst, bottomConst, widthConst, heightConst]];
+    
+    UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [cameraButton setImage:[UIImage imageNamed:@"CameraShutter"] forState:UIControlStateNormal];
+    //    [cameraButton setImage:[UIImage imageNamed:@"PressedCameraShutter"] forState:UIControlStateHighlighted]; not selecting new image
+    [cameraButton setTintColor:[UIColor whiteColor]];
+    [cameraButton addTarget:self action:@selector(shutterPressed) forControlEvents:UIControlEventTouchUpInside];
+    cameraButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:cameraButton];
+    NSLayoutConstraint *buttonHorizon = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *buttonVert = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+    [buttonBar addConstraints:@[buttonHorizon, buttonVert]];
+    
+    UIImage *currentFlash;
+    if (self.imagePicker.cameraFlashMode == UIImagePickerControllerCameraFlashModeOn) {
+        currentFlash = [UIImage imageNamed:@"FlashOn"];
+    } else {
+        currentFlash = [UIImage imageNamed:@"FlashOff"];
+    }
+    self.flashButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.flashButton addTarget:self action:@selector(updateFlashMode) forControlEvents:UIControlEventTouchUpInside];
+    [self.flashButton setImage:currentFlash forState:UIControlStateNormal];
+    [self.flashButton setTintColor:[UIColor whiteColor]];
+    self.flashButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:self.flashButton];
+    NSLayoutConstraint *flashTop = [NSLayoutConstraint constraintWithItem:self.flashButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeTop multiplier:1.0 constant:16.0];
+    NSLayoutConstraint *flashLead = [NSLayoutConstraint constraintWithItem:self.flashButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeLeading multiplier:1.0 constant:8.0];
+    NSLayoutConstraint *flashHeight = [NSLayoutConstraint constraintWithItem:self.flashButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:44.0];
+    NSLayoutConstraint *flashWidth = [NSLayoutConstraint constraintWithItem:self.flashButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:44.0];
+    [buttonBar addConstraints:@[flashTop, flashLead, flashHeight, flashWidth]];
+    
+    UIButton *camFlipButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [camFlipButton setImage:[UIImage imageNamed:@"CamFlip"] forState:UIControlStateNormal];
+    [camFlipButton addTarget:self action:@selector(reverseCamera) forControlEvents:UIControlEventTouchUpInside];
+    [camFlipButton setTintColor:[UIColor whiteColor]];
+    camFlipButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:camFlipButton];
+    NSLayoutConstraint *flipTop = [NSLayoutConstraint constraintWithItem:camFlipButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.flashButton attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *flipTrail = [NSLayoutConstraint constraintWithItem:camFlipButton attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:-8.0];
+    NSLayoutConstraint *flipWidth = [NSLayoutConstraint constraintWithItem:camFlipButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:44.0];
+    NSLayoutConstraint *flipHeight = [NSLayoutConstraint constraintWithItem:camFlipButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:44.0];
+    [buttonBar addConstraints:@[flipTop, flipTrail, flipWidth, flipHeight]];
+    
+    self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [self.doneButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    [self.doneButton addTarget:self action:@selector(photoCaptureFinished) forControlEvents:UIControlEventTouchUpInside];
+    self.doneButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:self.doneButton];
+    [self.doneButton setEnabled:NO];
+    NSLayoutConstraint *doneBottom = [NSLayoutConstraint constraintWithItem:self.doneButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-8.0];
+    NSLayoutConstraint *doneTrail = [NSLayoutConstraint constraintWithItem:self.doneButton attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:-8.0];
+    [buttonBar addConstraints:@[doneBottom, doneTrail]];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    cancelButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [cancelButton addTarget:self action:@selector(cancelCamera) forControlEvents:UIControlEventTouchUpInside];
+    [buttonBar addSubview:cancelButton];
+    NSLayoutConstraint *cancelBottom = [NSLayoutConstraint constraintWithItem:cancelButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-8.0];
+    NSLayoutConstraint *cancelLead = [NSLayoutConstraint constraintWithItem:cancelButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeLeading multiplier:1.0 constant:8.0];
+    [buttonBar addConstraints:@[cancelBottom, cancelLead]];
+    
+    return mainOverlay;
+}
+
+- (UIView *)customPortraitCameraOverlay { //cjm 01/12
     UIView *mainOverlay = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
     UIView *buttonBar = [[UIView alloc] init];
@@ -545,11 +632,16 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     NSLayoutConstraint *buttonHorizon = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
     NSLayoutConstraint *buttonVert = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
     [buttonBar addConstraints:@[buttonHorizon, buttonVert]];
-    //cjm 01/12
     
+    UIImage *currentFlash;
+    if (self.imagePicker.cameraFlashMode == UIImagePickerControllerCameraFlashModeOn) {
+        currentFlash = [UIImage imageNamed:@"FlashOn"];
+    } else {
+        currentFlash = [UIImage imageNamed:@"FlashOff"];
+    }
     self.flashButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.flashButton addTarget:self action:@selector(updateFlashMode) forControlEvents:UIControlEventTouchUpInside];
-    [self.flashButton setImage:[UIImage imageNamed:@"FlashOff"] forState:UIControlStateNormal];
+    [self.flashButton setImage:currentFlash forState:UIControlStateNormal];
     [self.flashButton setTintColor:[UIColor whiteColor]];
     self.flashButton.translatesAutoresizingMaskIntoConstraints = NO;
     [buttonBar addSubview:self.flashButton];
@@ -571,13 +663,15 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     NSLayoutConstraint *flipHeight = [NSLayoutConstraint constraintWithItem:camFlipButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:44.0];
     [buttonBar addConstraints:@[flipTop, flipTrail, flipWidth, flipHeight]];
     
-    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
-    [doneButton addTarget:self action:@selector(photoCaptureFinished) forControlEvents:UIControlEventTouchUpInside];
-    doneButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [buttonBar addSubview:doneButton];
-    NSLayoutConstraint *doneBottom = [NSLayoutConstraint constraintWithItem:doneButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-8.0];
-    NSLayoutConstraint *doneTrail = [NSLayoutConstraint constraintWithItem:doneButton attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:-8.0];
+    self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [self.doneButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    [self.doneButton addTarget:self action:@selector(photoCaptureFinished) forControlEvents:UIControlEventTouchUpInside];
+    self.doneButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:self.doneButton];
+    [self.doneButton setEnabled:NO];
+    NSLayoutConstraint *doneBottom = [NSLayoutConstraint constraintWithItem:self.doneButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-8.0];
+    NSLayoutConstraint *doneTrail = [NSLayoutConstraint constraintWithItem:self.doneButton attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:buttonBar attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:-8.0];
     [buttonBar addConstraints:@[doneBottom, doneTrail]];
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -595,6 +689,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 //Converting photo captured by in-app camera to CJMImage.
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info //cjm 01/12
 {
+    [self.doneButton setEnabled:YES];
+    [self.doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
     NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
 //    CJMImage *newImage = [[CJMImage alloc] init];
@@ -626,6 +722,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [self.album addCJMImage:newImage];
     }
     self.flashButton = nil;
+    self.doneButton = nil;
     self.imagePicker = nil;
     [self dismissViewControllerAnimated:YES completion:nil];
     

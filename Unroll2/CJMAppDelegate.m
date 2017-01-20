@@ -29,9 +29,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    NSLog(@"application didFinishLaunchingWithOptions called");
     BOOL launchedFromShortCut = NO;
-//    var launchedFromShortCut = false
     self.launchDic = launchOptions;
     
     if ([application respondsToSelector:@selector(setShortcutItems:)]) {
@@ -41,18 +39,10 @@
             [self handleShortCutItem:shortcutItem];
         }
     }
-    /*Check for ShortCutItem
-    if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
-        launchedFromShortCut = true
-        handleShortCutItem(shortcutItem)
-    }
-     */
-    
     
 #ifdef DEBUG
     [[CJMServices sharedInstance] beginReportingMemoryToConsoleWithInterval:5.f];
 #endif
-
     
     //Return false incase application was launched from shorcut to prevent
     //application(_:performActionForShortcutItem:completionHandler:) from being called
@@ -71,6 +61,7 @@
     // If application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     [[CJMAlbumManager sharedInstance] save];
     [[CJMServices sharedInstance] endReportingMemoryToConsole];
+    self.launchDic = nil;
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

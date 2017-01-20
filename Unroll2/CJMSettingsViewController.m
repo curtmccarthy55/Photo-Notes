@@ -238,10 +238,6 @@ typedef enum {
     return dictionary;
 }
 
-- (IBAction)btnTwitter:(id)sender {
-    NSLog(@"*cjm* direct user to twitter.com/beDevCurt");
-}
-
 #pragma mark - Opacity Slider
 
 - (IBAction)slider:(UISlider*)sender {

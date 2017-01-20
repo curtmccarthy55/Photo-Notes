@@ -117,6 +117,10 @@
         [self.scrollView setAlpha:0.90];
     }
     if (self.isQuickNote) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Clear"
+                                                                                  style:UIBarButtonItemStyleDone
+                                                                                 target:self
+                                                                                 action:@selector(clearNote)];
         [self.oneTap setEnabled:NO];
         self.scrollView.backgroundColor = !self.fullImage ? self.userColor : [UIColor blackColor];
         if (self.userColorTag.integerValue != 5 && self.userColorTag.integerValue != 7) {
@@ -132,6 +136,11 @@
         }
         [self.navigationController.navigationBar setBarTintColor:self.userColor];
     }
+}
+
+- (void)clearNote {
+    [self.noteTitle setText:@""];
+    [self.noteEntry setText:@""];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
