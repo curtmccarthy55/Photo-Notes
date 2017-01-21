@@ -15,7 +15,7 @@
         <scene sceneID="lJj-hb-zQi">
             <objects>
                 <tableViewController id="NO4-kQ-OsT" customClass="CJMAListViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="LAb-oi-MDb">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="LAb-oi-MDb">
                         <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -477,7 +477,7 @@
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlx-cQ-nGb">
-                                <rect key="frame" x="0.0" y="559" width="375" height="492"/>
+                                <rect key="frame" x="0.0" y="515" width="375" height="492"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="INM-E8-0PE">
                                         <rect key="frame" x="8" y="0.0" width="359" height="62"/>
@@ -564,11 +564,11 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="657-po-rB3" secondAttribute="trailing" id="18q-4L-iht"/>
+                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="657-po-rB3" secondAttribute="bottom" constant="-88" id="FVW-KF-XEn"/>
                             <constraint firstAttribute="width" secondItem="rlx-cQ-nGb" secondAttribute="width" id="WJS-3w-Z15"/>
                             <constraint firstAttribute="centerX" secondItem="rlx-cQ-nGb" secondAttribute="centerX" id="YkM-Nt-NKo"/>
                             <constraint firstItem="657-po-rB3" firstAttribute="leading" secondItem="ulg-px-Jgm" secondAttribute="leading" id="bcM-Ia-vJM"/>
                             <constraint firstAttribute="bottom" secondItem="657-po-rB3" secondAttribute="bottom" id="e1a-z9-0uA"/>
-                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="C9P-pQ-slP" secondAttribute="top" constant="-44" id="fLI-Ne-Zbt" userLabel="noteShiftConstraint"/>
                             <constraint firstItem="657-po-rB3" firstAttribute="top" secondItem="ulg-px-Jgm" secondAttribute="top" id="wYo-XK-pCq"/>
                         </constraints>
                     </view>
@@ -587,7 +587,7 @@
                         <outlet property="noteEntry" destination="c5T-Ao-Wwn" id="I8u-10-JSN"/>
                         <outlet property="noteSection" destination="rlx-cQ-nGb" id="uT1-tT-pd3"/>
                         <outlet property="noteSectionHeight" destination="JG2-5r-Vk9" id="rRj-z4-H0v"/>
-                        <outlet property="noteShiftConstraint" destination="fLI-Ne-Zbt" id="3eB-lR-0bf"/>
+                        <outlet property="noteShiftConstraint" destination="FVW-KF-XEn" id="oRs-13-7z9"/>
                         <outlet property="noteTitle" destination="upp-GS-1zm" id="X3Z-dK-8dH"/>
                         <outlet property="oneTap" destination="PKx-nw-LUR" id="WDx-Id-La1"/>
                         <outlet property="photoLocAndDate" destination="pWS-x4-vhI" id="uPl-vd-6gF"/>

@@ -74,18 +74,12 @@
     self.scrollView.delegate = self;
     [self updateZoom];
     self.favoriteChanged = self.cjmImage.photoFavorited;
-    NSLog(@"*cjm* self.favoriteChanged == %@, self.cjmImage.photoFavorited == %@", [NSNumber numberWithBool:self.favoriteChanged], [NSNumber numberWithBool:self.cjmImage.photoFavorited]);
-
     self.noteTitle.text = self.cjmImage.photoTitle;
     self.noteTitle.textColor = [UIColor whiteColor];
     self.noteTitle.adjustsFontSizeToFitWidth = YES;
-    
     if ([self.noteTitle.text isEqual:@"No Title Created "]) {
         self.noteTitle.text = @"";
     }
-    
-    //Transform shifts title up to make it level with noteSection buttons.
-//    self.noteTitle.layer.sublayerTransform = CATransform3DMakeTranslation(0, -3, 0);
     self.noteEntry.text = self.cjmImage.photoNote;
     self.noteEntry.selectable = NO;
     self.noteEntry.textColor = [UIColor whiteColor];
@@ -136,11 +130,6 @@
         }
         [self.navigationController.navigationBar setBarTintColor:self.userColor];
     }
-}
-
-- (void)clearNote {
-    [self.noteTitle setText:@""];
-    [self.noteEntry setText:@""];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -303,6 +292,11 @@
 
 #pragma mark - Buttons and taps
 
+- (void)clearNote {
+    [self.noteTitle setText:@""];
+    [self.noteEntry setText:@""];
+}
+
 - (IBAction)dismissQuickNote:(id)sender {
     if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
@@ -321,9 +315,10 @@
         shiftConstant = -(self.view.bounds.size.height);
     } else if (self.viewsVisible == YES) {
         CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
-        shiftConstant = -(self.view.bounds.size.height - self.navigationController.toolbar.frame.size.height - topBarsHeight);
+//        shiftConstant = -(self.view.bounds.size.height - self.navigationController.toolbar.frame.size.height - topBarsHeight + 44.0);
+        shiftConstant = -(self.view.bounds.size.height - topBarsHeight);
     } else {
-        shiftConstant = -(self.view.bounds.size.height - self.navigationController.toolbar.frame.size.height);
+        shiftConstant = -(self.view.bounds.size.height/* - self.navigationController.toolbar.frame.size.height */);
     }
     
     if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
@@ -371,11 +366,16 @@
     }];
 }
 
-- (void)handleNoteSectionAlignment { //cjm shiftNote method
-    if (self.viewsVisible)
-        self.noteShiftConstraint.constant = -self.navigationController.toolbar.frame.size.height;
-    else
-        self.noteShiftConstraint.constant = 0;
+- (void)handleNoteSectionAlignment { //cjm 01/21
+    if (self.viewsVisible) {
+        if (self.isQuickNote) {
+            self.noteShiftConstraint.constant = -44.0;
+        } else {
+            self.noteShiftConstraint.constant = -(44.0 + self.navigationController.toolbar.frame.size.height);
+        }
+    } else {
+        self.noteShiftConstraint.constant = -44.0;
+    }
     
     [self.noteSection setNeedsUpdateConstraints];
 }
@@ -424,17 +424,19 @@
     if (self.viewsVisible == YES) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-            self.noteShiftConstraint.constant = -self.navigationController.toolbar.frame.size.height;
+//            self.noteShiftConstraint.constant = -self.navigationController.toolbar.frame.size.height;
             [self.noteSection setHidden:NO];
             [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:YES];
+            [self handleNoteSectionAlignment];
         }];
     } else if (self.viewsVisible == NO) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor blackColor];
-            self.noteShiftConstraint.constant = 0;
+//            self.noteShiftConstraint.constant = 0;
             [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:NO];
+            [self handleNoteSectionAlignment];
         }];
     }
 }
