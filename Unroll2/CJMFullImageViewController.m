@@ -321,9 +321,9 @@
         shiftConstant = -(self.view.bounds.size.height);
     } else if (self.viewsVisible == YES) {
         CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
-        shiftConstant = -(self.view.bounds.size.height - 44 - topBarsHeight);
+        shiftConstant = -(self.view.bounds.size.height - self.navigationController.toolbar.frame.size.height - topBarsHeight);
     } else {
-        shiftConstant = -(self.view.bounds.size.height - 44);
+        shiftConstant = -(self.view.bounds.size.height - self.navigationController.toolbar.frame.size.height);
     }
     
     if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
@@ -373,7 +373,7 @@
 
 - (void)handleNoteSectionAlignment { //cjm shiftNote method
     if (self.viewsVisible)
-        self.noteShiftConstraint.constant = -44.0;
+        self.noteShiftConstraint.constant = -self.navigationController.toolbar.frame.size.height;
     else
         self.noteShiftConstraint.constant = 0;
     
@@ -424,7 +424,7 @@
     if (self.viewsVisible == YES) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-            self.noteShiftConstraint.constant = -44.0;
+            self.noteShiftConstraint.constant = -self.navigationController.toolbar.frame.size.height;
             [self.noteSection setHidden:NO];
             [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:YES];

@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>2.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -28,6 +28,25 @@
 	<string>To take new photos directly from Photo Notes, please allow access to the camera.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To import photos from your existing photo collection, please allow access for Photo Notes.</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>CameraIcon</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Open Camera</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.Desdinova.Unroll2.OpenCamera</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>QNCompose</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Open QuickNote</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.Desdinova.Unroll2.QuickNote</string>
+		</dict>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>IconStoryboard</string>
 	<key>UIMainStoryboardFile</key>
@@ -46,24 +65,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>CameraIcon</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.Desdinova.Unroll2.OpenCamera</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Open Camera</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>QNCompose</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.Desdinova.Unroll2.QuickNote</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Open QuickNote</string>
-		</dict>
-	</array>
 </dict>
 </plist>
