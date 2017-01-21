@@ -293,6 +293,8 @@
 #pragma mark - Buttons and taps
 
 - (void)clearNote {
+    self.cjmImage.photoTitle = @"";
+    self.cjmImage.photoNote = @"";
     [self.noteTitle setText:@""];
     [self.noteEntry setText:@""];
 }
