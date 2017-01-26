@@ -46,7 +46,6 @@ static CJMAlbumManager *__sharedInstance;
 - (void)handleFirstTime {
     BOOL firstTime = [[NSUserDefaults standardUserDefaults] boolForKey:@"FirstTime"];
     BOOL favorites = [[NSUserDefaults standardUserDefaults] boolForKey:@"FavoritesReserved"];
-//    BOOL quickNote = [[NSUserDefaults standardUserDefaults] boolForKey:@"QuickNoteMade"];
     
     if (firstTime) {
         CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"My Photo Notes" andNote:@"Tap Edit to customize the name and note sections."];
@@ -61,11 +60,6 @@ static CJMAlbumManager *__sharedInstance;
         }
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FavoritesReserved"];
     }
-//    if (!quickNote) { //cjm 01/10
-//        CJMPhotoAlbum *quickNoteAlbum = [self userQuickNote];
-//        [self addAlbum:quickNoteAlbum];
-//        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QuickNoteMade"];
-//    }
 }
 
 - (void)registerDefaults {
@@ -80,7 +74,6 @@ static CJMAlbumManager *__sharedInstance;
     NSArray *newArray = [NSArray arrayWithArray:fullArray];
     
     return newArray;
-//    return [self.allAlbumsEdit array];
 }
 
 
@@ -108,7 +101,7 @@ static CJMAlbumManager *__sharedInstance;
         [self save];
     }
     
-    NSLog(@"*cjm* allAlbums == %@, allAlbumsEdit == %@", self.allAlbums, self.allAlbumsEdit);
+//    NSLog(@"*cjm* allAlbums == %@, allAlbumsEdit == %@", self.allAlbums, self.allAlbumsEdit);
     
     return album;
 }
