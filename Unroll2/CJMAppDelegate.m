@@ -94,7 +94,6 @@
 
 - (BOOL)handleShortCutItem:(UIApplicationShortcutItem *)shortcutItem {
     BOOL handled = NO;
-//    var handled = false
     
     NSString *shortcutType = shortcutItem.type;
     

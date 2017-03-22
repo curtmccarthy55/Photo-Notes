@@ -352,8 +352,6 @@
                                       }];
         }
         
-//        [assetImage setInitialValuesForCJMImage:assetImage inAlbum:self.album.albumTitle];
-        //        assetImage.photoLocation = [asset location];
         assetImage.photoCreationDate = [asset creationDate];
         
         [newImages addObject:assetImage];

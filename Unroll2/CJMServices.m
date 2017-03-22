@@ -51,11 +51,11 @@ static CJMServices *__sharedInstance;
 
 - (void)fetchimageWithName:(NSString *)name asData:(BOOL)asData handler:(CJMImageCompletionHandler)handler
 {
-    if([self.cache objectForKey:name])
+    if([self.cache objectForKey:name]) {
         handler([self.cache objectForKey:name]);
-    else
-    {
+    } else {
         UIImage *returnImage = nil;
+        
         if(asData) {
             returnImage = [self.fileSerializer readImageFromRelativePath:name];
         } else {
@@ -67,6 +67,7 @@ static CJMServices *__sharedInstance;
         } else {
             returnImage = [UIImage imageNamed:@"No Image"];
         }
+        
         if(handler)
             handler(returnImage);
     }

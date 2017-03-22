@@ -11,6 +11,7 @@
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
+//        NSLog(@"number of arguments == %d, arguments == %s", argc, *argv);
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([CJMAppDelegate class]));
     }
 }
