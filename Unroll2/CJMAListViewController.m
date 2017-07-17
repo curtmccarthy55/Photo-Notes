@@ -425,31 +425,43 @@
         [alert addAction:actionDismiss];
         [self presentViewController:alert animated:YES completion:nil];
     } else if (authStatus != AVAuthorizationStatusAuthorized) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Camera Access Denied" message:@"Please allow Photo Notes permission to use the camera in Settings>Privacy>Camera." preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
-        [alert addAction:actionDismiss];
-        [self presentViewController:alert animated:YES completion:nil];
+        //cjm 07/17 Camera Access issue.  Previously, only the below else clause that displays the alertController was present in this else-if section 
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            if (granted) {
+                NSLog(@"Permission for camera access granted.");
+                [self prepAndDisplayCamera];
+            } else {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Camera Access Denied" message:@"Please allow Photo Notes permission to use the camera in Settings>Privacy>Camera." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
+                [alert addAction:actionDismiss];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+        }];
     } else {
-        self.imagePicker = [[UIImagePickerController alloc] init];
-        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        self.imagePicker.showsCameraControls = NO;
-        self.imagePicker.allowsEditing = NO;
-        self.imagePicker.delegate = self;
-        self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
-        self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
-        
-        //cjm 01/19 check orientation/trait collection and call the appropriate overlay
-        UIView *overlay;
-        if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
-            overlay = [self customLandscapeCameraOverlay];
-        } else {
-            overlay = [self customPortraitCameraOverlay];
-        }
-        [self.imagePicker setCameraOverlayView:overlay];
-        self.imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        
-        [self presentViewController:self.imagePicker animated:YES completion:nil];
+        [self prepAndDisplayCamera];
     }
+}
+
+- (void)prepAndDisplayCamera {
+    self.imagePicker = [[UIImagePickerController alloc] init];
+    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    self.imagePicker.showsCameraControls = NO;
+    self.imagePicker.allowsEditing = NO;
+    self.imagePicker.delegate = self;
+    self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
+    self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+    
+    //cjm 01/19 check orientation/trait collection and call the appropriate overlay
+    UIView *overlay;
+    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
+        overlay = [self customLandscapeCameraOverlay];
+    } else {
+        overlay = [self customPortraitCameraOverlay];
+    }
+    [self.imagePicker setCameraOverlayView:overlay];
+    self.imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    
+    [self presentViewController:self.imagePicker animated:YES completion:nil];
 }
 
 
@@ -638,7 +650,7 @@
     [self.pickerPhotos addObject:dic];
 }
 
-- (void)photoCaptureFinished { //cjm 01/12
+- (void)photoCaptureFinished { //camera Done button selector
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     NSMutableArray *tempAlbum = [[NSMutableArray alloc] init];
     

@@ -503,10 +503,34 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [alert addAction:actionDismiss];
         [self presentViewController:alert animated:YES completion:nil];
     } else if (authStatus != AVAuthorizationStatusAuthorized) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Camera Access Denied" message:@"Please allow Photo Notes permission to use the camera in Settings>Privacy>Camera." preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
-        [alert addAction:actionDismiss];
-        [self presentViewController:alert animated:YES completion:nil];
+        //cjmn 05/30 TEST BELOW CODE.  Make sure this works for both iPhone and iPad, and test for issues with self in the block.
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            if (granted) { //code copy/pasted from final else statement below.  Perhaps move into its own method.
+                self.imagePicker = [[UIImagePickerController alloc] init];
+                self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                self.imagePicker.showsCameraControls = NO;
+                self.imagePicker.allowsEditing = NO;
+                self.imagePicker.delegate = self;
+                self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
+                self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+                
+                UIView *overlay;
+                if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
+                    overlay = [self customLandscapeCameraOverlay];
+                } else {
+                    overlay = [self customPortraitCameraOverlay];
+                }
+                [self.imagePicker setCameraOverlayView:overlay];
+                self.imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+                
+                [self presentViewController:self.imagePicker animated:YES completion:nil];
+            } else {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Camera Access Denied" message:@"Please allow Photo Notes permission to use the camera in Settings>Privacy>Camera." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
+                [alert addAction:actionDismiss];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+        }];
     } else {
         self.imagePicker = [[UIImagePickerController alloc] init];
         self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -691,6 +715,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 {
     [self.doneButton setEnabled:YES];
     [self.doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
     NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
 //    CJMImage *newImage = [[CJMImage alloc] init];
@@ -791,7 +816,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     UIGraphicsEndImageContext();
     CGImageRelease(imageRef);
     return newImage;
-
 }
 
 #pragma mark - CJMPhotoGrabber Delegate

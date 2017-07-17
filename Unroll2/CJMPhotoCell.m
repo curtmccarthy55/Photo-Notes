@@ -28,7 +28,6 @@
         if (thumbnail.size.width == 0) {
             cjmImage.thumbnailNeedsRedraw = YES;
             [[CJMServices sharedInstance] removeImageFromCache:cjmImage];
-//            NSLog(@"redrawing thumbnail");
         } else {
             self.cellImage.image = thumbnail;
         }
