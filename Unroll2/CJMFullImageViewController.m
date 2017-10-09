@@ -71,6 +71,11 @@
     [self.noteSection setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:self.noteOpacity]];
     
     self.imageView.image = self.fullImage ? self.fullImage : [UIImage imageNamed:@"IconPhoto"];
+    if (@available(iOS 11.0, *)) {
+        self.imageView.accessibilityIgnoresInvertColors = YES;
+        self.noteSection.accessibilityIgnoresInvertColors = YES;
+        self.scrollView.accessibilityIgnoresInvertColors = YES;
+    }
     self.scrollView.delegate = self;
     [self updateZoom];
     self.favoriteChanged = self.cjmImage.photoFavorited;
@@ -253,10 +258,12 @@
     
     // center image if it is smaller than screen
     float hPadding = (viewWidth - self.scrollView.zoomScale * imageWidth) / 2;
-    if (hPadding < 0) hPadding = 0;
+    if (hPadding < 0)
+        hPadding = 0;
     
     float vPadding = (viewHeight - self.scrollView.zoomScale * imageHeight) / 2;
-    if (vPadding < 0) vPadding = 0;
+    if (vPadding < 0)
+        vPadding = 0;
     
     self.leftConstraint.constant = hPadding;
     self.rightConstraint.constant = hPadding;

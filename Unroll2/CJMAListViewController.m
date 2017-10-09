@@ -425,7 +425,7 @@
         [alert addAction:actionDismiss];
         [self presentViewController:alert animated:YES completion:nil];
     } else if (authStatus != AVAuthorizationStatusAuthorized) {
-        //cjm 07/17 Camera Access issue.  Previously, only the below else clause that displays the alertController was present in this else-if section 
+        //cjm 07/17 Camera Access issue.  Previously, only the below else clause that displays the alertController was present in this else-if section
         [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
             if (granted) {
                 NSLog(@"Permission for camera access granted.");

@@ -50,6 +50,9 @@
             cell.cellThumbnail.image = [UIImage imageNamed:@"no_image.jpg"];
         }
     }
+    if (@available(iOS 11.0, *)) {
+        cell.cellThumbnail.accessibilityIgnoresInvertColors = YES;
+    }
 }
 
 

@@ -32,7 +32,9 @@
             self.cellImage.image = thumbnail;
         }
     }];
-
+    if (@available(iOS 11.0, *)) {
+        self.cellImage.accessibilityIgnoresInvertColors = YES;
+    }
 }
 
 
