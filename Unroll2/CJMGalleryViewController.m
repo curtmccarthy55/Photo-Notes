@@ -827,8 +827,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 //iterate through array of selected photos, convert them to CJMImages, and add to the current album.
 - (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos {
-    NSMutableArray *newImages = [[NSMutableArray alloc] init];
-    //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
+    NSMutableArray *newImages = [[NSMutableArray alloc] init]; //Will hold the images, image creation dates, and image locations from each PHAsset in the received array.
+    
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
     if (!self.imageManager) {
@@ -839,8 +839,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 //    __weak CJMGalleryViewController *weakSelf = self;
     
     dispatch_group_t imageLoadGroup = dispatch_group_create();
-    for (int i = 0; i < photos.count; i++)
-    {
+    for (int i = 0; i < photos.count; i++) {
         __block CJMImage *assetImage = [[CJMImage alloc] init];
         PHAsset *asset = (PHAsset *)photos[i];
         
@@ -851,34 +850,31 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         dispatch_group_enter(imageLoadGroup);
         @autoreleasepool {
             [self.imageManager requestImageDataForAsset:asset
-                                                options:options
-                                          resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-                                              
+                                            options:options
+                                       resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
                                               counter--;
-                                              if(![info[PHImageResultIsDegradedKey] boolValue])
-                                              {
+                                              if(![info[PHImageResultIsDegradedKey] boolValue]) {
                                                   [fileSerializer writeObject:imageData toRelativePath:assetImage.fileName];
+                                                  
                                                   dispatch_group_leave(imageLoadGroup);
                                               }
-                                              
                                           }];
         }
         
         dispatch_group_enter(imageLoadGroup);
         @autoreleasepool {
             [self.imageManager requestImageForAsset:asset
-                                         targetSize:CellSize
-                                        contentMode:PHImageContentModeAspectFill
-                                            options:options
-                                      resultHandler:^(UIImage *result, NSDictionary *info) {
-                                              if(![info[PHImageResultIsDegradedKey] boolValue])
-                                              {
+                                      targetSize:CellSize
+                                     contentMode:PHImageContentModeAspectFill
+                                         options:options
+                                   resultHandler:^(UIImage *result, NSDictionary *info) {
+                                              if(![info[PHImageResultIsDegradedKey] boolValue]) {
                                                   [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
                                                   assetImage.thumbnailNeedsRedraw = NO;
                                                   
                                                   dispatch_group_leave(imageLoadGroup);
                                               }
-                                                                                              }];
+                                          }];
         }
         
         [assetImage setInitialValuesForCJMImage:assetImage inAlbum:self.album.albumTitle];
