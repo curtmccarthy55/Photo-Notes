@@ -749,6 +749,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.flashButton = nil;
     self.doneButton = nil;
     self.imagePicker = nil;
+    self.pickerPhotos = nil;
     [self dismissViewControllerAnimated:YES completion:nil];
     
     [[CJMAlbumManager sharedInstance] save];
