@@ -849,6 +849,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         options.version = PHImageRequestOptionsVersionCurrent;
         
         dispatch_group_enter(imageLoadGroup);
+        /*
+         Note about dispatch_group_enter:
+         increments the current count of outstanding tasks in imageLoadGroup, thus requires a call to dispatch_group_leave.
+         appears to handle tasks synchronously.
+         dispatch_group_async(group, queue, block) manages this count for you while submitting the work asynchronously.
+         test swapping out these dispatch_group_enter/dispatch_group_leave calls with dispatch_group_async and compare performance.
+         dispatch_group_notify (and dispatch_group_wait) will wait until the group has zeroed out its outstanding tasks.
+         */
         @autoreleasepool {
             [self.imageManager requestImageDataForAsset:asset
                                             options:options
