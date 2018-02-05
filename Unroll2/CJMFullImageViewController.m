@@ -27,7 +27,9 @@
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *twoTap;
 
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteShiftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteSectionDown;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *noteSectionUp;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *constr_TitleTop;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteSectionHeight;
 
@@ -43,6 +45,7 @@
 @property (nonatomic) float initialZoomScale;
 @property (nonatomic) BOOL focusIsOnImage;
 @property (nonatomic) BOOL favoriteChanged;
+@property (nonatomic) BOOL noteShown;
 
 @end
 
@@ -52,6 +55,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.noteShown = NO;
     if (self.albumName == nil) { //cjm 12/30
         self.albumName = @"Favorites";
         self.index = 0;
@@ -197,13 +201,16 @@
 
 //Sets the note section height equal to the space between the toolbar and navbar
 - (void)fullSizeForNoteSection { //cjm shiftNote method
+    /* cjm 02/04
     if (self.isQuickNote) {
+//        UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
         self.noteSectionHeight.constant = (self.view.frame.size.height);
     } else if (self.viewsVisible == YES) {
         self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
     } else if (self.viewsVisible == NO) {
         self.noteSectionHeight.constant = self.view.frame.size.height;
     }
+     */
 }
 
 #pragma mark - scrollView handling
@@ -313,25 +320,29 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)setNoteShown:(BOOL)shown {
+    _noteShown = shown;
+    if (shown) {
+        self.noteSectionUp.active = YES;
+        self.noteSectionDown.active = NO;
+    } else {
+        self.noteSectionDown.active = YES;
+        self.noteSectionUp.active = NO;
+    }
+    
+    NSLog(@"UIScreen Height == %f", UIScreen.mainScreen.bounds.size.height);
+    if (UIScreen.mainScreen.bounds.size.height == 812 && UIDevice.currentDevice.orientation == UIDeviceOrientationPortrait) {
+        self.noteSectionUp.constant = -44.0;
+    }
+}
 
 //first button press: Slide the note section up so it touches the bottom of the navbar
 //second button press: Slide the note section back down to just above the toolbar
 - (IBAction)shiftNote:(id)sender { //cjm shiftNote method
     [self fullSizeForNoteSection];
     
-    CGFloat shiftConstant;
-    if (self.isQuickNote) {
-        shiftConstant = -(self.view.bounds.size.height);
-    } else if (self.viewsVisible == YES) {
-        CGFloat topBarsHeight = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
-//        shiftConstant = -(self.view.bounds.size.height - self.navigationController.toolbar.frame.size.height - topBarsHeight + 44.0);
-        shiftConstant = -(self.view.bounds.size.height - topBarsHeight);
-    } else {
-        shiftConstant = -(self.view.bounds.size.height/* - self.navigationController.toolbar.frame.size.height */);
-    }
-    
     if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
-        self.noteShiftConstraint.constant = shiftConstant;
+        [self setNoteShown:YES];
         [self.noteSection setNeedsUpdateConstraints];
         self.noteTitle.text = self.cjmImage.photoTitle;
         
@@ -375,15 +386,19 @@
     }];
 }
 
-- (void)handleNoteSectionAlignment { //cjm 01/21
+- (void)handleNoteSectionAlignment { //cjm 02/04
     if (self.viewsVisible) {
         if (self.isQuickNote) {
-            self.noteShiftConstraint.constant = -44.0;
+//            self.noteSectionDown.constant = -44.0;
+            [self setNoteShown:NO];
         } else {
-            self.noteShiftConstraint.constant = -(44.0 + self.navigationController.toolbar.frame.size.height);
+            [self setNoteShown:NO];
+            self.noteSectionDown.constant = -44.0;
+//            self.noteSectionDown.constant = -(44.0 + self.navigationController.toolbar.frame.size.height);
         }
     } else {
-        self.noteShiftConstraint.constant = -44.0;
+        self.noteSectionDown.constant = 0.0;
+        [self setNoteShown:NO];
     }
     
     [self.noteSection setNeedsUpdateConstraints];

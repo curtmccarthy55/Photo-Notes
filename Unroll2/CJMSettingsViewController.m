@@ -401,7 +401,11 @@ typedef enum {
         [self photosFromLibrary];
     } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=1021742238&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software&mt=8"]];
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:]];
+//            NSString *str_URL = @"https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=1021742238&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software&mt=8";
+            NSString *str_URL = @"https://itunes.apple.com/us/app/photo-notes-add-context-to-your-photos/id1021742238?mt=8";
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str_URL] options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @NO} completionHandler:nil];
+            
         } else if (indexPath.row == 1) {
             SFSafariViewController *vc = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://www.twitter.com/beDevCurt"]];
             vc.delegate = self;

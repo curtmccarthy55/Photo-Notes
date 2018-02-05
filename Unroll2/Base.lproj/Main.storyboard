@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -469,7 +468,7 @@
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlx-cQ-nGb">
-                                <rect key="frame" x="0.0" y="515" width="375" height="492"/>
+                                <rect key="frame" x="0.0" y="559" width="375" height="603"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="INM-E8-0PE">
                                         <rect key="frame" x="8" y="0.0" width="359" height="62"/>
@@ -530,7 +529,7 @@
                                         </constraints>
                                     </stackView>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
-                                        <rect key="frame" x="4" y="64" width="367" height="422"/>
+                                        <rect key="frame" x="4" y="64" width="367" height="533"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -542,7 +541,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="INM-E8-0PE" secondAttribute="trailing" constant="8" id="A3o-v5-XBe"/>
-                                    <constraint firstAttribute="height" constant="492" id="JG2-5r-Vk9" userLabel="noteSectionHeight"/>
+                                    <constraint firstAttribute="height" priority="250" constant="492" id="JG2-5r-Vk9" userLabel="noteSectionHeight"/>
                                     <constraint firstItem="INM-E8-0PE" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="8" id="Jrm-1X-AVs"/>
                                     <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="INM-E8-0PE" secondAttribute="bottom" constant="2" id="Uo0-lx-7X6"/>
                                     <constraint firstAttribute="bottom" secondItem="c5T-Ao-Wwn" secondAttribute="bottom" constant="6" id="c6m-cq-xkB"/>
@@ -555,11 +554,13 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="wQ3-K1-h7l" firstAttribute="trailing" secondItem="657-po-rB3" secondAttribute="trailing" id="18q-4L-iht"/>
-                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="657-po-rB3" secondAttribute="bottom" constant="-88" id="FVW-KF-XEn"/>
+                            <constraint firstAttribute="trailing" secondItem="657-po-rB3" secondAttribute="trailing" id="18q-4L-iht"/>
+                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="height" secondItem="wQ3-K1-h7l" secondAttribute="height" id="5Rk-HC-pCe"/>
+                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="wQ3-K1-h7l" secondAttribute="bottom" constant="-44" id="FVW-KF-XEn"/>
                             <constraint firstAttribute="width" secondItem="rlx-cQ-nGb" secondAttribute="width" id="WJS-3w-Z15"/>
                             <constraint firstItem="wQ3-K1-h7l" firstAttribute="centerX" secondItem="rlx-cQ-nGb" secondAttribute="centerX" id="YkM-Nt-NKo"/>
-                            <constraint firstItem="657-po-rB3" firstAttribute="leading" secondItem="wQ3-K1-h7l" secondAttribute="leading" id="bcM-Ia-vJM"/>
+                            <constraint firstItem="657-po-rB3" firstAttribute="leading" secondItem="ulg-px-Jgm" secondAttribute="leading" id="bcM-Ia-vJM"/>
+                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="wQ3-K1-h7l" secondAttribute="top" priority="999" id="c1j-KL-Cmu"/>
                             <constraint firstAttribute="bottom" secondItem="657-po-rB3" secondAttribute="bottom" id="e1a-z9-0uA"/>
                             <constraint firstItem="657-po-rB3" firstAttribute="top" secondItem="ulg-px-Jgm" secondAttribute="top" id="wYo-XK-pCq"/>
                         </constraints>
@@ -574,13 +575,15 @@
                     </navigationItem>
                     <connections>
                         <outlet property="bottomConstraint" destination="OoQ-hw-nfe" id="zev-GL-fh4"/>
+                        <outlet property="constr_TitleTop" destination="Vx1-HH-oAR" id="jpo-hx-t1L"/>
                         <outlet property="editNoteButton" destination="CjO-W7-o96" id="yb1-1L-yiW"/>
                         <outlet property="imageView" destination="21o-UG-qC7" id="ewO-gV-UAU"/>
                         <outlet property="leftConstraint" destination="2aF-os-TrH" id="kMt-rq-Hft"/>
                         <outlet property="noteEntry" destination="c5T-Ao-Wwn" id="I8u-10-JSN"/>
                         <outlet property="noteSection" destination="rlx-cQ-nGb" id="uT1-tT-pd3"/>
+                        <outlet property="noteSectionDown" destination="FVW-KF-XEn" id="4zT-Jd-XYh"/>
                         <outlet property="noteSectionHeight" destination="JG2-5r-Vk9" id="rRj-z4-H0v"/>
-                        <outlet property="noteShiftConstraint" destination="FVW-KF-XEn" id="oRs-13-7z9"/>
+                        <outlet property="noteSectionUp" destination="c1j-KL-Cmu" id="Lvv-ne-cNa"/>
                         <outlet property="noteTitle" destination="upp-GS-1zm" id="X3Z-dK-8dH"/>
                         <outlet property="oneTap" destination="PKx-nw-LUR" id="WDx-Id-La1"/>
                         <outlet property="photoLocAndDate" destination="pWS-x4-vhI" id="uPl-vd-6gF"/>

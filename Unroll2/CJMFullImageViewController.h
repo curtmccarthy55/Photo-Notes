@@ -25,7 +25,7 @@
 @property (nonatomic, strong) NSString *albumName;
 @property (nonatomic) NSInteger index;
 @property (nonatomic, weak) id <CJMFullImageViewControllerDelegate> delegate;
-@property (nonatomic) BOOL viewsVisible;
+@property (nonatomic) BOOL viewsVisible; //top/bottom bars are visible
 @property (nonatomic) BOOL imageIsFavorite;//cjm favorites ImageVC set up
 @property (nonatomic) BOOL isQuickNote;
 @property (nonatomic) CGFloat noteOpacity;
