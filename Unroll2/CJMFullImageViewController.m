@@ -197,22 +197,6 @@
     }
 }
 
-#pragma mark - View adjustments
-
-//Sets the note section height equal to the space between the toolbar and navbar
-- (void)fullSizeForNoteSection { //cjm shiftNote method
-    /* cjm 02/04
-    if (self.isQuickNote) {
-//        UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
-        self.noteSectionHeight.constant = (self.view.frame.size.height);
-    } else if (self.viewsVisible == YES) {
-        self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
-    } else if (self.viewsVisible == NO) {
-        self.noteSectionHeight.constant = self.view.frame.size.height;
-    }
-     */
-}
-
 #pragma mark - scrollView handling
 
 // Update zoom scale and constraints
@@ -304,6 +288,30 @@
     return self.imageView;
 }
 
+#pragma mark - View adjustments
+
+//Sets the note section height equal to the space between the toolbar and navbar
+- (void)fullSizeForNoteSection { //cjm shiftNote method
+    if (self.viewsVisible) {
+        UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
+        [NSLayoutConstraint activateConstraints:@[[self.noteSection.heightAnchor constraintEqualToAnchor:safeArea.heightAnchor multiplier:1.0]]];
+    } else {
+        //        [self.noteSection.heightAnchor constraintEqualToAnchor:self.view.heightAnchor multiplier:1.0];
+        [NSLayoutConstraint activateConstraints:@[[self.noteSection.heightAnchor constraintEqualToAnchor:self.view.heightAnchor multiplier:1.0]]];
+    }
+    
+    /* cjm 02/04
+     if (self.isQuickNote) {
+     //        UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
+     self.noteSectionHeight.constant = (self.view.frame.size.height);
+     } else if (self.viewsVisible == YES) {
+     self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
+     } else if (self.viewsVisible == NO) {
+     self.noteSectionHeight.constant = self.view.frame.size.height;
+     }
+     */
+}
+
 #pragma mark - Buttons and taps
 
 - (void)clearNote {
@@ -325,15 +333,25 @@
     if (shown) {
         self.noteSectionUp.active = YES;
         self.noteSectionDown.active = NO;
+        if (UIScreen.mainScreen.bounds.size.height == 812.00) {
+            if (UIDevice.currentDevice.orientation == UIDeviceOrientationPortrait) {
+                if (!self.viewsVisible) {
+                    self.noteSectionUp.constant = -88.0;
+                    self.constr_TitleTop.constant = 44.0;
+                }
+            }
+        }
     } else {
         self.noteSectionDown.active = YES;
         self.noteSectionUp.active = NO;
+        self.constr_TitleTop.constant = 0.0;
     }
     
     NSLog(@"UIScreen Height == %f", UIScreen.mainScreen.bounds.size.height);
-    if (UIScreen.mainScreen.bounds.size.height == 812 && UIDevice.currentDevice.orientation == UIDeviceOrientationPortrait) {
-        self.noteSectionUp.constant = -44.0;
-    }
+//    if (UIScreen.mainScreen.bounds.size.height == 812 && UIDevice.currentDevice.orientation == UIDeviceOrientationPortrait) {
+//        self.noteSectionUp.constant = 44.0;
+//    }
+    
 }
 
 //first button press: Slide the note section up so it touches the bottom of the navbar
@@ -357,6 +375,7 @@
             [self.photoLocAndDate setAlpha:1.0];
         }];
     } else {
+        [self setNoteShown:NO];
         [self handleNoteSectionDismissal];
     }
 }
@@ -397,7 +416,7 @@
 //            self.noteSectionDown.constant = -(44.0 + self.navigationController.toolbar.frame.size.height);
         }
     } else {
-        self.noteSectionDown.constant = 0.0;
+//        self.noteSectionDown.constant = 0.0;
         [self setNoteShown:NO];
     }
     
@@ -448,7 +467,6 @@
     if (self.viewsVisible == YES) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-//            self.noteShiftConstraint.constant = -self.navigationController.toolbar.frame.size.height;
             [self.noteSection setHidden:NO];
             [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:YES];
@@ -457,7 +475,6 @@
     } else if (self.viewsVisible == NO) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor blackColor];
-//            self.noteShiftConstraint.constant = 0;
             [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:NO];
             [self handleNoteSectionAlignment];
