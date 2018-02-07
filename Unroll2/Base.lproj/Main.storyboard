@@ -446,6 +446,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NOx-fv-SYE">
+                                <rect key="frame" x="-0.5" y="-0.5" width="375" height="603"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.5" maximumZoomScale="1.5" translatesAutoresizingMaskIntoConstraints="NO" id="657-po-rB3">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <subviews>
@@ -555,8 +559,12 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="657-po-rB3" secondAttribute="trailing" id="18q-4L-iht"/>
+                            <constraint firstItem="NOx-fv-SYE" firstAttribute="height" secondItem="wQ3-K1-h7l" secondAttribute="height" id="2Nh-hF-IqT"/>
                             <constraint firstItem="rlx-cQ-nGb" firstAttribute="height" secondItem="wQ3-K1-h7l" secondAttribute="height" id="5Rk-HC-pCe"/>
+                            <constraint firstItem="NOx-fv-SYE" firstAttribute="centerX" secondItem="wQ3-K1-h7l" secondAttribute="centerX" id="5n6-oX-tIG"/>
+                            <constraint firstItem="NOx-fv-SYE" firstAttribute="centerY" secondItem="wQ3-K1-h7l" secondAttribute="centerY" id="AUk-6B-wYv"/>
                             <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="wQ3-K1-h7l" secondAttribute="bottom" constant="-44" id="FVW-KF-XEn"/>
+                            <constraint firstItem="NOx-fv-SYE" firstAttribute="width" secondItem="wQ3-K1-h7l" secondAttribute="width" id="NBS-bR-Xt7"/>
                             <constraint firstAttribute="width" secondItem="rlx-cQ-nGb" secondAttribute="width" id="WJS-3w-Z15"/>
                             <constraint firstItem="wQ3-K1-h7l" firstAttribute="centerX" secondItem="rlx-cQ-nGb" secondAttribute="centerX" id="YkM-Nt-NKo"/>
                             <constraint firstItem="657-po-rB3" firstAttribute="leading" secondItem="ulg-px-Jgm" secondAttribute="leading" id="bcM-Ia-vJM"/>

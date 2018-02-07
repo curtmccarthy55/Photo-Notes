@@ -24,7 +24,7 @@
     [super viewDidLoad];
 //    self.automaticallyAdjustsScrollViewInsets = NO;
     self.dataSource = self;
-    self.makeViewsVisible = YES;
+    self.makeViewsVisible = YES; //cjm note shift
     [self prefersStatusBarHidden];
     [self setNeedsStatusBarAppearanceUpdate];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -55,6 +55,14 @@
     }
 }
 
+#pragma mark UIPageViewController Delegate
+
+/*
+- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray<UIViewController *> *)pendingViewControllers {
+    [self toggleViewVisibility];
+}
+ */
+
 #pragma mark UIPageViewControllerDataSource
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(CJMFullImageViewController *)currentImageVC {
@@ -78,7 +86,7 @@
         fullImageController.albumName = self.albumName;
         fullImageController.delegate = self;
         fullImageController.noteOpacity = self.noteOpacity;
-        [fullImageController setViewsVisible:self.makeViewsVisible];
+        [fullImageController setBarsVisible:self.makeViewsVisible];
             
         return fullImageController;
     }
@@ -86,9 +94,9 @@
 
 #pragma mark - navBar and toolbar visibility
 
-- (void)setMakeViewsVisible:(BOOL)makeViewsVisible {
-    _makeViewsVisible = makeViewsVisible;
-    [self toggleViewVisibility];
+- (void)setMakeViewsVisible:(BOOL)setting { //cjm note shift
+    _makeViewsVisible = setting;
+//    [self toggleViewVisibility];
 }
 
 #pragma mark - navBar and toolbar buttons
@@ -118,20 +126,18 @@
     [currentVC confirmImageDelete];
 }
 
-- (void)toggleViewVisibility {
+- (void)toggleViewVisibility { //cjm note shift.  called whenever _makeViewsVisible is set.  responsible for hiding top/bot bars.
     if (self.makeViewsVisible == NO) {
-//        [self prefersStatusBarHidden];
         [self setNeedsStatusBarAppearanceUpdate];
         [UIView animateWithDuration:0.2 animations:^{
-            self.navigationController.navigationBar.alpha = 0;
-            self.navigationController.toolbar.alpha = 0;
+            [self.navigationController setNavigationBarHidden:YES];
+            [self.navigationController setToolbarHidden:YES];
         }];
     } else if (self.makeViewsVisible == YES) {
-//        [self prefersStatusBarHidden];
         [self setNeedsStatusBarAppearanceUpdate];
         [UIView animateWithDuration:0.2 animations:^{
-            self.navigationController.navigationBar.alpha = 1;
-            self.navigationController.toolbar.alpha = 1;
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+            [self.navigationController setToolbarHidden:NO animated:YES];
         }];
     }
 }
@@ -139,9 +145,11 @@
 #pragma mark - CJMFullImageVC Delegate Methods
 
 - (void)toggleFullImageShow:(BOOL)yesOrNo forViewController:(CJMFullImageViewController *)viewController {
-//    self.makeViewsVisible = !self.makeViewsVisible;
-    self.makeViewsVisible = !yesOrNo; //cjm 12/30 viewsVisible
-    [viewController setViewsVisible:self.makeViewsVisible];
+    self.makeViewsVisible = yesOrNo;
+    
+    
+//    self.makeViewsVisible = !yesOrNo; //cjm 12/30 viewsVisible
+//    [viewController setViewsVisible:self.makeViewsVisible];
 }
 
 //deletes the currently displayed image and updates screen based on position in album

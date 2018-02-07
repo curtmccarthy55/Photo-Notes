@@ -60,8 +60,10 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [super viewWillAppear:animated];
     self.editMode = NO;
     [self toggleEditControls];
-    self.navigationController.navigationBar.alpha = 1;
-    self.navigationController.toolbar.alpha = 1;
+    [self.navigationController.navigationBar setHidden:NO];
+    [self.navigationController.toolbar setHidden:NO];
+//    self.navigationController.navigationBar.alpha = 1;
+//    self.navigationController.toolbar.alpha = 1;
     [self confirmEditButtonEnabled];
     [self.collectionView reloadData];
     
