@@ -716,7 +716,7 @@
 
 
 #pragma mark - QuickNotes
-
+/*
 - (void)photoIsFavorited:(BOOL)isFavorited {
     
 }
@@ -724,6 +724,7 @@
 - (void)toggleFullImageShow:(BOOL)yesOrNo forViewController:(CJMFullImageViewController *)viewController {
     
 }
+ */
 
 
 #pragma mark - Editing the list

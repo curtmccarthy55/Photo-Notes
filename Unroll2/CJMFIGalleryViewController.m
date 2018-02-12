@@ -126,7 +126,7 @@
     [currentVC confirmImageDelete];
 }
 
-- (void)toggleViewVisibility { //cjm note shift.  called whenever _makeViewsVisible is set.  responsible for hiding top/bot bars.
+- (void)toggleViewVisibility { //cjm note shift.  Can likely remove this as FullImageVC is now responsible.
     if (self.makeViewsVisible == NO) {
         [self setNeedsStatusBarAppearanceUpdate];
         [UIView animateWithDuration:0.2 animations:^{
@@ -144,12 +144,8 @@
 
 #pragma mark - CJMFullImageVC Delegate Methods
 
-- (void)toggleFullImageShow:(BOOL)yesOrNo forViewController:(CJMFullImageViewController *)viewController {
-    self.makeViewsVisible = yesOrNo;
-    
-    
-//    self.makeViewsVisible = !yesOrNo; //cjm 12/30 viewsVisible
-//    [viewController setViewsVisible:self.makeViewsVisible];
+- (void)updateBarsHidden:(BOOL)setting {
+    self.makeViewsVisible = setting;
 }
 
 //deletes the currently displayed image and updates screen based on position in album

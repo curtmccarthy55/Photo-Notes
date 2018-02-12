@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		755558CA203240B3005A9478 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C8203240B2005A9478 /* Fabric.framework */; };
+		755558CB203240B3005A9478 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C9203240B3005A9478 /* Crashlytics.framework */; };
 		758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 758F55181E22AAC40023F869 /* IconStoryboard.storyboard */; };
 		75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */; };
 		75EF2D451DF7361400557EDA /* CJMPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EF2D441DF7361400557EDA /* CJMPopoverViewController.m */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		755558C8203240B2005A9478 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
+		755558C9203240B3005A9478 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
 		758F55181E22AAC40023F869 /* IconStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IconStoryboard.storyboard; sourceTree = "<group>"; };
 		75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMSettingsViewController.h; sourceTree = "<group>"; };
 		75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMSettingsViewController.m; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				755558CB203240B3005A9478 /* Crashlytics.framework in Frameworks */,
+				755558CA203240B3005A9478 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +195,8 @@
 				75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */,
 				75EF2D431DF7361400557EDA /* CJMPopoverViewController.h */,
 				75EF2D441DF7361400557EDA /* CJMPopoverViewController.m */,
+				755558C9203240B3005A9478 /* Crashlytics.framework */,
+				755558C8203240B2005A9478 /* Fabric.framework */,
 				845B92211AF94C9C00365239 /* Data Objects */,
 				845B92201AF94BC400365239 /* Cells */,
 				84A769541ADAE39F00DE6741 /* Supporting Files */,
@@ -241,6 +249,7 @@
 				84A7694D1ADAE39F00DE6741 /* Sources */,
 				84A7694E1ADAE39F00DE6741 /* Frameworks */,
 				84A7694F1ADAE39F00DE6741 /* Resources */,
+				755558C720324042005A9478 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -330,6 +339,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		755558C720324042005A9478 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run a5db485822aea0357dd171a638d8a2a7706fba19 7ef5e842cad7a474c0082880cbf58d6149de25d43aeb3f93ddff752ef7160ec9";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		84A7694D1ADAE39F00DE6741 /* Sources */ = {
@@ -483,6 +508,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Unroll2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -502,6 +531,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Unroll2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

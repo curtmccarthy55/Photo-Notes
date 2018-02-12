@@ -9,7 +9,8 @@
 #import "CJMAppDelegate.h"
 #import "CJMServices.h"
 #import "CJMAListViewController.h"
-
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 #define kQuickNoteAction @"com.Desdinova.Unroll2.QuickNote"
 #define kCameraAction @"com.Desdinova.Unroll2.OpenCamera"
@@ -23,6 +24,7 @@
 @implementation CJMAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [Fabric with:@[[Crashlytics class]]];
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];

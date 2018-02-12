@@ -116,6 +116,9 @@
     }
     self.initialZoomScale = self.scrollView.zoomScale;
 //    _viewsVisible = YES;
+//    [self handleBarHiding];
+    [self updateForBarVisibility:self.barsVisible animated:NO];
+    [self toggleBars];
     [self handleNoteSectionAlignment];
     [self updateConstraints];
     
@@ -167,9 +170,6 @@
     [super viewWillDisappear:animated];
     if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
-    }
-    if (!self.viewsVisible) {
-        [self imageViewTapped:self];
     }
     
     [self updateZoom];
@@ -378,11 +378,34 @@
 
 - (void)setBarsVisible:(BOOL)setting {
     _barsVisible = setting;
-    [self updateNoteSectionForSingleTap];
+}
+
+- (void)handleBarHiding {
+    [self updateForBarVisibility:self.barsVisible animated:YES];
     [self toggleBars];
 }
 
-- (void)updateNoteSectionForSingleTap {
+- (void)updateForBarVisibility:(BOOL)barsHidden animated:(BOOL)animated { //if called from viewWillAppear: animated == false, else animated == true
+    NSTimeInterval duration = animated ? 0.2 : 0.0;
+    if (barsHidden) {
+        [UIView animateWithDuration:duration animations:^{
+            self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+            [self.noteSection setHidden:NO];
+            [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:YES];
+            [self handleNoteSectionAlignment];
+        }];
+    } else if (!barsHidden) {
+        [UIView animateWithDuration:duration animations:^{
+            self.scrollView.backgroundColor = [UIColor blackColor];
+            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:NO];
+            [self handleNoteSectionAlignment];
+        }];
+    }
+}
+
+- (void)updateForHiddenBars {
     //    if (self.viewsVisible == YES) {
     if (self.barsVisible == YES) {
         [UIView animateWithDuration:0.2 animations:^{
@@ -510,8 +533,10 @@
         }
     } else {
         BOOL updateBars = !self.barsVisible;
-        [self setBarsVisible:updateBars];
-        [self.delegate toggleFullImageShow:self.viewsVisible forViewController:self];
+        self.barsVisible = updateBars;
+        [self updateForBarVisibility:self.barsVisible animated:YES];
+        [self toggleBars];
+        [self.delegate updateBarsHidden:self.barsVisible];
     }
 }
 
