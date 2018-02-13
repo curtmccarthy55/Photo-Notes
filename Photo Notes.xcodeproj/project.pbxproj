@@ -84,8 +84,8 @@
 		84C2B93D1ADB38880034786C /* CJMPhotoAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMPhotoAlbum.m; sourceTree = "<group>"; };
 		84C2B93F1ADC2F750034786C /* CJMImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMImage.h; sourceTree = "<group>"; };
 		84C2B9401ADC2F750034786C /* CJMImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMImage.m; sourceTree = "<group>"; };
-		84C2B9451ADC51280034786C /* CJMADetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CJMADetailViewController.h; path = ../CJMADetailViewController.h; sourceTree = "<group>"; };
-		84C2B9461ADC51280034786C /* CJMADetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CJMADetailViewController.m; path = ../CJMADetailViewController.m; sourceTree = "<group>"; };
+		84C2B9451ADC51280034786C /* CJMADetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMADetailViewController.h; sourceTree = "<group>"; };
+		84C2B9461ADC51280034786C /* CJMADetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMADetailViewController.m; sourceTree = "<group>"; };
 		84C2B9481ADCBB420034786C /* CJMGalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMGalleryViewController.h; sourceTree = "<group>"; };
 		84C2B9491ADCBB420034786C /* CJMGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMGalleryViewController.m; sourceTree = "<group>"; };
 		84C2B94B1ADF39E60034786C /* CJMFileSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMFileSerializer.h; sourceTree = "<group>"; };
@@ -124,6 +124,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7561EDD62033197F00F99E3F /* App Wide */ = {
+			isa = PBXGroup;
+			children = (
+				84A7695E1ADAE39F00DE6741 /* Main.storyboard */,
+				84A769581ADAE39F00DE6741 /* CJMAppDelegate.h */,
+				84A769591ADAE39F00DE6741 /* CJMAppDelegate.m */,
+			);
+			name = "App Wide";
+			sourceTree = "<group>";
+		};
+		7561EDD720331CE500F99E3F /* Album List */ = {
+			isa = PBXGroup;
+			children = (
+				84C2B92E1ADB022E0034786C /* CJMAListViewController.h */,
+				84C2B92F1ADB022E0034786C /* CJMAListViewController.m */,
+				84C2B9451ADC51280034786C /* CJMADetailViewController.h */,
+				84C2B9461ADC51280034786C /* CJMADetailViewController.m */,
+				75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */,
+				75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */,
+				75EF2D431DF7361400557EDA /* CJMPopoverViewController.h */,
+				75EF2D441DF7361400557EDA /* CJMPopoverViewController.m */,
+			);
+			name = "Album List";
+			sourceTree = "<group>";
+		};
+		7561EDD820331CFE00F99E3F /* Album */ = {
+			isa = PBXGroup;
+			children = (
+				84C2B9481ADCBB420034786C /* CJMGalleryViewController.h */,
+				84C2B9491ADCBB420034786C /* CJMGalleryViewController.m */,
+				84C2B9931AE42E040034786C /* CJMPhotoGrabViewController.h */,
+				84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */,
+				84401F081B2CAA0D00B4FB89 /* CJMAListPickerViewController.h */,
+				84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */,
+				845B90CD1AF42BC300365239 /* CJMFIGalleryViewController.h */,
+				845B90CE1AF42BC300365239 /* CJMFIGalleryViewController.m */,
+				84F1FDAB1AEAF57A0092D424 /* CJMFullImageViewController.h */,
+				84F1FDAC1AEAF57A0092D424 /* CJMFullImageViewController.m */,
+			);
+			name = Album;
+			sourceTree = "<group>";
+		};
 		845B92201AF94BC400365239 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,32 +216,14 @@
 		84A769531ADAE39F00DE6741 /* Unroll2 */ = {
 			isa = PBXGroup;
 			children = (
-				84A7695E1ADAE39F00DE6741 /* Main.storyboard */,
-				84A769581ADAE39F00DE6741 /* CJMAppDelegate.h */,
-				84A769591ADAE39F00DE6741 /* CJMAppDelegate.m */,
-				84C2B92E1ADB022E0034786C /* CJMAListViewController.h */,
-				84C2B92F1ADB022E0034786C /* CJMAListViewController.m */,
-				84C2B9451ADC51280034786C /* CJMADetailViewController.h */,
-				84C2B9461ADC51280034786C /* CJMADetailViewController.m */,
-				84C2B9481ADCBB420034786C /* CJMGalleryViewController.h */,
-				84C2B9491ADCBB420034786C /* CJMGalleryViewController.m */,
-				84C2B9931AE42E040034786C /* CJMPhotoGrabViewController.h */,
-				84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */,
-				84401F081B2CAA0D00B4FB89 /* CJMAListPickerViewController.h */,
-				84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */,
-				845B90CD1AF42BC300365239 /* CJMFIGalleryViewController.h */,
-				845B90CE1AF42BC300365239 /* CJMFIGalleryViewController.m */,
-				84F1FDAB1AEAF57A0092D424 /* CJMFullImageViewController.h */,
-				84F1FDAC1AEAF57A0092D424 /* CJMFullImageViewController.m */,
-				75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */,
-				75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */,
-				75EF2D431DF7361400557EDA /* CJMPopoverViewController.h */,
-				75EF2D441DF7361400557EDA /* CJMPopoverViewController.m */,
-				755558C9203240B3005A9478 /* Crashlytics.framework */,
-				755558C8203240B2005A9478 /* Fabric.framework */,
-				845B92211AF94C9C00365239 /* Data Objects */,
+				7561EDD62033197F00F99E3F /* App Wide */,
+				7561EDD720331CE500F99E3F /* Album List */,
+				7561EDD820331CFE00F99E3F /* Album */,
 				845B92201AF94BC400365239 /* Cells */,
 				84A769541ADAE39F00DE6741 /* Supporting Files */,
+				845B92211AF94C9C00365239 /* Data Objects */,
+				755558C9203240B3005A9478 /* Crashlytics.framework */,
+				755558C8203240B2005A9478 /* Fabric.framework */,
 			);
 			path = Unroll2;
 			sourceTree = "<group>";

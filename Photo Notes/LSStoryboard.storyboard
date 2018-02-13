@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Photo Notes Albums-->
+        <scene sceneID="k8A-YM-lsO">
+            <objects>
+                <viewController id="Yrr-mU-PSV" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vz9-SP-EZD"/>
+                        <viewControllerLayoutGuide type="bottom" id="NrJ-PG-V0I"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7dD-tt-gaO">
+                        <rect key="frame" x="0.0" y="64" width="375" height="559"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    </view>
+                    <toolbarItems>
+                        <barButtonItem systemItem="edit" id="sQU-q8-17W"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="r4l-Pr-Qqo"/>
+                        <barButtonItem title="QuickNote" id="4hE-Ee-Eoi"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="cjQ-hL-qjD"/>
+                        <barButtonItem systemItem="camera" id="mhA-yq-BLh"/>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="Photo Notes Albums" id="ch1-nP-I9a">
+                        <barButtonItem key="leftBarButtonItem" image="FatGear" id="yJN-an-krL"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="OvU-ot-A7m"/>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="g5N-iF-DCO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1920" y="259"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="ack-5S-axh">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="2lF-3b-uEJ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="aUn-2s-LEt">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.2363378931" green="0.50007843730000001" blue="0.76112388959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" id="TUY-lh-18m">
+                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.2363378931" green="0.50007843730000001" blue="0.76112388959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="Yrr-mU-PSV" kind="relationship" relationship="rootViewController" id="sIW-8j-C1D"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WzU-Dk-rou" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1192" y="259"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="FatGear" width="22" height="22"/>
+    </resources>
+</document>
