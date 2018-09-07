@@ -23,7 +23,7 @@
 @property (nonatomic, strong) NSString *albumTitle;
 @property (nonatomic, strong) NSString *albumNote;
 @property (nonatomic) BOOL privateAlbum;
-@property (nonatomic, strong) NSArray *albumPhotos;
+@property (nonatomic, strong) NSArray<CJMImage *> *albumPhotos;
 @property (nonatomic, strong) CJMImage *albumPreviewImage;
 @property (nonatomic, weak) id <CJMPhotoAlbumDelegate> delegate;
 

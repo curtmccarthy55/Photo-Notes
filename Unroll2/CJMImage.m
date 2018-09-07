@@ -17,8 +17,8 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [self init];
     if(self) {
-        self.name = [aDecoder decodeObjectForKey:@"Name"];
-        self.local = [aDecoder decodeBoolForKey:@"Local"];
+        //        self.name = [aDecoder decodeObjectForKey:@"Name"];  TODO: we should be able to remove this.
+        //        self.local = [aDecoder decodeBoolForKey:@"Local"];  TODO: we should be able to remove this.
         self.photoID = [aDecoder decodeObjectForKey:@"photoID"];
         self.photoTitle = [aDecoder decodeObjectForKey:@"Title"];
         self.photoNote = [aDecoder decodeObjectForKey:@"Note"];
@@ -44,8 +44,9 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:self.name forKey:@"Name"];
-    [aCoder encodeBool:self.local forKey:@"Local"];
+    //    [aCoder encodeObject:self.name forKey:@"Name"]; TODO: we should be able to remove this.
+    //    [aCoder encodeBool:self.local forKey:@"Local"]; TODO: we should be able to remove this.
+//    NSLog(@"local == %d", self.local);
     [aCoder encodeObject:self.photoID forKey:@"photoID"];
     [aCoder encodeObject:self.photoTitle forKey:@"Title"];
     [aCoder encodeObject:self.photoNote forKey:@"Note"];

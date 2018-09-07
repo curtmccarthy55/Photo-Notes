@@ -20,7 +20,7 @@ static CJMServices *__sharedInstance;
 
 @property (nonatomic) CJMCache *cache;
 @property (nonatomic) CJMFileSerializer *fileSerializer;
-@property (nonatomic) NSTimer *debug_memoryReportingTimer;
+@property (nonatomic) NSTimer *debug_memoryReportingTimer; //cjm 09/05
 
 @end
 
@@ -85,8 +85,7 @@ static CJMServices *__sharedInstance;
     [self.fileSerializer deleteImageWithFileName:userImage.fileName];
 }
 
-- (void)removeImageFromCache:(CJMImage *)image
-{
+- (void)removeImageFromCache:(CJMImage *)image {
     if ([self.cache objectForKey:image.fileName]) {
         [self.cache removeObjectForKey:image.fileName];
     }
@@ -127,7 +126,7 @@ static CJMServices *__sharedInstance;
 @implementation CJMServices (Debugging)
 
 - (void)beginReportingMemoryToConsoleWithInterval:(NSTimeInterval)interval
-{
+{ //cjm 09/05
     if(self.debug_memoryReportingTimer)
         [self endReportingMemoryToConsole];
         
@@ -151,7 +150,7 @@ static CJMServices *__sharedInstance;
 
 #ifdef DEBUG
 - (void)reportMemoryToConsoleWithReferrer:(NSString *)referrer
-{
+{ //cjm 09/05
     struct task_basic_info kerBasicInfo;
     mach_msg_type_number_t kerBasicSize = sizeof(kerBasicInfo);
     kern_return_t kerBasic = task_info(mach_task_self(),

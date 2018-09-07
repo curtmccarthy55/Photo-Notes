@@ -122,7 +122,9 @@
     [self handleNoteSectionAlignment];
     [self updateConstraints];
     
-    [self.delegate photoIsFavorited:self.cjmImage.photoFavorited]; //cjm favorites ImageVC -> PageVC
+    if (!self.isQuickNote) {
+        [self.delegate photoIsFavorited:self.cjmImage.photoFavorited];
+    }//cjm favorites ImageVC -> PageVC
     
     if (self.fullImage == nil) {
         [self.scrollView setBackgroundColor:self.userColor];

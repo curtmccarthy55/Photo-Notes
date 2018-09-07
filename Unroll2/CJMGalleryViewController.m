@@ -159,7 +159,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     } else if (self.editMode == YES) {
         
         [self shouldPerformSegueWithIdentifier:@"ViewPhoto" sender:nil];
-        CJMPhotoCell *selectedCell =(CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+        CJMPhotoCell *selectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
         CJMImage *selectedImage = (CJMImage *)[self.album.albumPhotos objectAtIndex:indexPath.row];
         selectedImage.selectCoverHidden = NO;
         selectedCell.cellSelectCover.hidden = selectedImage.selectCoverHidden;
