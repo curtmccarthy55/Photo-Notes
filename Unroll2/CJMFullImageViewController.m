@@ -84,6 +84,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setPrefersLargeTitles:NO];
     
     NSLog(@"IS_IPHONE_X == %d", IS_IPHONE_X);
     

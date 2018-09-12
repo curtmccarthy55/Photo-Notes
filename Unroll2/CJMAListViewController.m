@@ -55,6 +55,11 @@
     
     [self userColors];
     [self.navigationController.toolbar setHidden:NO];
+    [self.navigationController.toolbar setTranslucent:YES];
+    
+    [self.navigationController.navigationBar setPrefersLargeTitles:YES];
+    [self.navigationController.navigationBar setTranslucent:YES];
+    
     [self noAlbumsPopUp];
     [self.tableView reloadData];
 }

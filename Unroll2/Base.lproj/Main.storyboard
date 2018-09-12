@@ -12,7 +12,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Photo Notes Albums-->
+        <!--Albums-->
         <scene sceneID="lJj-hb-zQi">
             <objects>
                 <tableViewController id="NO4-kQ-OsT" customClass="CJMAListViewController" sceneMemberID="viewController">
@@ -45,7 +45,7 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="Photo Notes Albums" id="QE4-93-jxo">
+                    <navigationItem key="navigationItem" title="Albums" id="QE4-93-jxo">
                         <barButtonItem key="backBarButtonItem" title="Albums" id="L1L-3p-ckW"/>
                         <barButtonItem key="leftBarButtonItem" image="FatGear" id="N5S-FN-s6G">
                             <connections>

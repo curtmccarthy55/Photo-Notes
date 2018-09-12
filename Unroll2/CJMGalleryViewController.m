@@ -62,6 +62,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self toggleEditControls];
     [self.navigationController.navigationBar setHidden:NO];
     [self.navigationController.toolbar setHidden:NO];
+    [self.navigationController.navigationBar setPrefersLargeTitles:YES];
 //    self.navigationController.navigationBar.alpha = 1;
 //    self.navigationController.toolbar.alpha = 1;
     [self confirmEditButtonEnabled];
@@ -74,6 +75,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         }
     }
 }
+
 
 //Add photo count footer to gallery.
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
