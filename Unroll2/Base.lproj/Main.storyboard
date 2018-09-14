@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XRF-wX-XIn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XRF-wX-XIn">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -169,7 +167,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1KJ-0Y-CbB">
-                                <rect key="frame" x="323" y="3" width="44" height="30"/>
+                                <rect key="frame" x="323" y="2.5" width="44" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="jAW-Vh-CA3"/>
                                 </constraints>
@@ -331,7 +329,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YYl-wd-sDL">
-                                    <rect key="frame" x="167" y="-11" width="42" height="21"/>
+                                    <rect key="frame" x="166.5" y="-11" width="42" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
@@ -447,7 +445,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NOx-fv-SYE">
-                                <rect key="frame" x="-0.5" y="-0.5" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.5" maximumZoomScale="1.5" translatesAutoresizingMaskIntoConstraints="NO" id="657-po-rB3">
@@ -761,11 +759,11 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="119.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="QuickNote PN Background" translatesAutoresizingMaskIntoConstraints="NO" id="QGu-Bi-6S0">
-                                                    <rect key="frame" x="264" y="8" width="103" height="103"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PlumOnBlack" translatesAutoresizingMaskIntoConstraints="NO" id="QGu-Bi-6S0">
+                                                    <rect key="frame" x="263.5" y="8" width="103.5" height="103.5"/>
                                                 </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Frf-tp-QKU">
-                                                    <rect key="frame" x="264" y="8" width="103" height="103"/>
+                                                    <rect key="frame" x="263.5" y="8" width="103.5" height="103.5"/>
                                                     <subviews>
                                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Note Text" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PPf-E8-83d">
                                                             <rect key="frame" x="0.0" y="38" width="103" height="27"/>
@@ -781,7 +779,7 @@
                                                     </constraints>
                                                 </view>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="XL7-Iy-btT">
-                                                    <rect key="frame" x="16" y="35.5" width="187.5" height="49.5"/>
+                                                    <rect key="frame" x="16" y="35" width="187.5" height="49.5"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2ib-S7-kXb">
                                                             <rect key="frame" x="0.0" y="0.0" width="187.5" height="19.5"/>
@@ -990,8 +988,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="119.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="QuickNote PN Background" translatesAutoresizingMaskIntoConstraints="NO" id="tkO-Pd-JW7">
-                                                    <rect key="frame" x="255" y="0.0" width="120" height="119"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PlumOnBlack" translatesAutoresizingMaskIntoConstraints="NO" id="tkO-Pd-JW7">
+                                                    <rect key="frame" x="255" y="0.0" width="120" height="119.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="120" id="hWa-qz-7zy"/>
                                                     </constraints>
@@ -1227,7 +1225,7 @@
     </scenes>
     <resources>
         <image name="FatGear" width="22" height="22"/>
-        <image name="QuickNote PN Background" width="341" height="341"/>
+        <image name="PlumOnBlack" width="170" height="170"/>
         <image name="WhiteStarEmpty" width="44" height="44"/>
     </resources>
     <inferredMetricsTieBreakers>

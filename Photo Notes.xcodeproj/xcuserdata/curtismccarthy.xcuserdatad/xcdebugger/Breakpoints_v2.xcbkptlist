@@ -65,38 +65,6 @@
             endingLineNumber = "412"
             landmarkName = "-updateForHiddenBars"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[CJMFullImageViewController updateForHiddenBars]"
-                  moduleName = "Unroll2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/curtismccarthy/Documents/Programming/My%20Xcode/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/CJMFullImageViewController.m"
-                  timestampString = "539803122.869953"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "388"
-                  endingLineNumber = "388"
-                  offsetFromSymbolStart = "92">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__49-[CJMFullImageViewController updateForHiddenBars]_block_invoke"
-                  moduleName = "Unroll2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/curtismccarthy/Documents/Programming/My%20Xcode/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/CJMFullImageViewController.m"
-                  timestampString = "539803122.87201"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "388"
-                  endingLineNumber = "388"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -113,38 +81,6 @@
             endingLineNumber = "421"
             landmarkName = "-updateForHiddenBars"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[CJMFullImageViewController updateForHiddenBars]"
-                  moduleName = "Unroll2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/curtismccarthy/Documents/Programming/My%20Xcode/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/CJMFullImageViewController.m"
-                  timestampString = "539803122.876834"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "397"
-                  endingLineNumber = "397"
-                  offsetFromSymbolStart = "280">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__49-[CJMFullImageViewController updateForHiddenBars]_block_invoke.324"
-                  moduleName = "Unroll2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/curtismccarthy/Documents/Programming/My%20Xcode/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/CJMFullImageViewController.m"
-                  timestampString = "539803122.878949"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "397"
-                  endingLineNumber = "397"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

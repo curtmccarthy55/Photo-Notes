@@ -107,6 +107,7 @@ static CJMAlbumManager *__sharedInstance;
 }
 
 - (CJMPhotoAlbum *)favPhotosAlbum {
+    //TODO this is passing the favAlbumEdit instance, not a copy.  Does it need to be copied?  Does favAlbumEdit need to be private?
     CJMPhotoAlbum *albumCopy = self.favAlbumEdit;
     return albumCopy;
 }
@@ -226,12 +227,6 @@ static CJMAlbumManager *__sharedInstance;
 
 //  cjm 12/27: removes each CJMImage in the images array from the original and favorites albums, then deletes the CJMImage from the disk.
 - (void)albumWithName:(NSString *)albumName deleteImages:(NSArray *)images {
-  
-    
-    
-    
-    
-    
     CJMPhotoAlbum *album = [self scanForAlbumWithName:albumName];
     for (CJMImage *doomedImage in [images reverseObjectEnumerator]) {
         [[CJMServices sharedInstance] deleteImage:doomedImage];
