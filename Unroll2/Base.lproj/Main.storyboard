@@ -155,19 +155,19 @@
         <scene sceneID="L8e-gh-bBZ">
             <objects>
                 <viewController storyboardIdentifier="CJMPopover" id="esm-W3-GvC" customClass="CJMPopoverViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="p66-3a-ldh">
+                    <view key="view" contentMode="scaleToFill" id="p66-3a-ldh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mh0-Hf-3Oq">
-                                <rect key="frame" x="8" y="52.000000000000007" width="102.33333333333333" height="20.333333333333336"/>
+                                <rect key="frame" x="8" y="52" width="102.33333333333333" height="20.333333333333329"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1KJ-0Y-CbB">
-                                <rect key="frame" x="323" y="46.333333333333343" width="44" height="30.000000000000007"/>
+                                <rect key="frame" x="323" y="46.666666666666664" width="44" height="29.999999999999993"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="jAW-Vh-CA3"/>
                                 </constraints>
@@ -181,7 +181,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Detail Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="LvU-oV-Mvv">
-                                <rect key="frame" x="3" y="74.333333333333343" width="369" height="36"/>
+                                <rect key="frame" x="3" y="74.333333333333329" width="369" height="36"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
@@ -271,7 +271,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="641"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="eJ5-cr-OcG">
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" sectionInsetReference="safeArea" id="eJ5-cr-OcG">
                             <size key="itemSize" width="100" height="100"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="50" height="50"/>
@@ -329,7 +329,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YYl-wd-sDL">
-                                    <rect key="frame" x="385" y="-11" width="42" height="21"/>
+                                    <rect key="frame" x="186" y="-11" width="42" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
@@ -514,7 +514,7 @@
                                             </stackView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pWS-x4-vhI">
                                                 <rect key="frame" x="0.0" y="44" width="37.333333333333336" height="18"/>
-                                                <directionalEdgeInsets key="directionalLayoutMargins" top="8" leading="10" bottom="8" trailing="8"/>
+                                                <directionalEdgeInsets key="directionalLayoutMargins" top="8" leading="20" bottom="8" trailing="8"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -544,7 +544,7 @@
                                     </constraint>
                                     <constraint firstAttribute="height" priority="250" constant="492" id="JG2-5r-Vk9" userLabel="noteSectionHeight"/>
                                     <constraint firstItem="INM-E8-0PE" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="8" id="Jrm-1X-AVs">
-                                        <variation key="heightClass=compact-widthClass=compact" constant="32"/>
+                                        <variation key="heightClass=compact-widthClass=compact" constant="36"/>
                                     </constraint>
                                     <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="INM-E8-0PE" secondAttribute="bottom" constant="2" id="Uo0-lx-7X6"/>
                                     <constraint firstAttribute="bottom" secondItem="c5T-Ao-Wwn" secondAttribute="bottom" constant="6" id="c6m-cq-xkB"/>

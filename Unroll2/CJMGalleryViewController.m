@@ -21,6 +21,7 @@
 #import <dispatch/dispatch.h>
 
 #define CellSize [(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]
+#define CelSize self.view.bounds.size.width - self.view.safeAreaInsets.left - self.view.safeAreaInsets.right
 
 @import Photos;
 
@@ -39,6 +40,7 @@
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
 @property (nonatomic, strong) UIButton *flashButton;
 @property (nonatomic, strong) UIButton *doneButton;
+@property (nonatomic, readonly) CGSize cellSize;
 
 @end
 
@@ -53,6 +55,22 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.navigationController.toolbarHidden = NO;
     self.navigationItem.title = self.album.albumTitle;
     self.navigationItem.backBarButtonItem.title = @"Albums";
+}
+
+- (CGSize)cellSize {
+    CGFloat columnSpaces;
+    if (UIScreen.mainScreen.bounds.size.height > UIScreen.mainScreen.bounds.size.width) {
+        //Portrait
+        columnSpaces = 3.0;
+    } else {
+        //Landscape
+        columnSpaces = 5.0;
+    }
+    
+    CGFloat sideLength;
+    sideLength = (self.view.bounds.size.width - self.view.safeAreaInsets.left - self.view.safeAreaInsets.right) / columnSpaces;
+    CGSize returnSize = CGSizeMake(sideLength, sideLength);
+    return returnSize;
 }
 
 //Make sure nav bars and associated controls are visible whenever the gallery appears.
@@ -133,7 +151,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [[CJMServices sharedInstance] fetchImage:imageForCell handler:^(UIImage *fetchedImage) {
             tempFullImage = fetchedImage;
         }];
-        UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:tempFullImage andShrinkToSize:CellSize];
+        UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:tempFullImage andShrinkToSize:self.cellSize];
         imageForCell.thumbnailNeedsRedraw = NO;
         [fileSerializer writeImage:thumbnail toRelativePath:imageForCell.thumbnailFileName];
         [cell updateWithImage:imageForCell];
@@ -723,7 +741,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
     NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
 //    CJMImage *newImage = [[CJMImage alloc] init];
-    UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:CellSize];
+    UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:self.cellSize];
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[newPhotoData, thumbnail] forKeys:@[@"newImage", @"newThumbnail"]];
     
@@ -877,7 +895,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         dispatch_group_enter(imageLoadGroup);
         @autoreleasepool {
             [self.imageManager requestImageForAsset:asset
-                                      targetSize:CellSize
+                                      targetSize:self.cellSize
                                      contentMode:PHImageContentModeAspectFill
                                          options:options
                                    resultHandler:^(UIImage *result, NSDictionary *info) {
