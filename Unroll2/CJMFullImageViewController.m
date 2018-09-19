@@ -57,6 +57,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //this line prevents the image from jumping around when Nav bars are hidden/shown
+    self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    
     self.noteShown = NO;
     if (self.albumName == nil) { //cjm 12/30
         self.albumName = @"Favorites";
@@ -247,7 +251,7 @@
 }
 
 - (void)updateConstraints
-{
+{ //cjm note shift.  Image position is bouncing around when zoomed in and showing/hiding the top and bottom bars.
     float imageWidth = self.imageView.image.size.width;
     float imageHeight = self.imageView.image.size.height;
     
@@ -256,10 +260,14 @@
     
     // center image if it is smaller than screen
     float horizontalPadding = (viewWidth - self.scrollView.zoomScale * imageWidth) / 2;
-    if (horizontalPadding < 0) { horizontalPadding = 0; }
+    if (horizontalPadding < 0) {
+        horizontalPadding = 0;
+    }
     
     float verticalPadding = (viewHeight - self.scrollView.zoomScale * imageHeight) / 2;
-    if (verticalPadding < 0) { verticalPadding = 0; }
+    if (verticalPadding < 0) {
+        verticalPadding = 0;
+    }
 
     self.leftConstraint.constant = horizontalPadding;
     self.rightConstraint.constant = horizontalPadding;
@@ -530,9 +538,9 @@
     NSLog(@"****IMAGEVIEW TAPPED****");
     if (self.isQuickNote) {
         if (self.navigationController.navigationBar.isHidden == YES) {
-            [self.navigationController.navigationBar setHidden:NO];
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
         } else {
-            [self.navigationController.navigationBar setHidden:YES];
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
         }
     } else {
         BOOL updateBars = !self.barsVisible;
