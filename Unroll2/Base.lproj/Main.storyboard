@@ -528,7 +528,7 @@
                                         </constraints>
                                     </stackView>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
-                                        <rect key="frame" x="4" y="64" width="367" height="620"/>
+                                        <rect key="frame" x="4" y="64" width="367" height="584"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -539,24 +539,17 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="INM-E8-0PE" secondAttribute="trailing" constant="8" id="A3o-v5-XBe">
-                                        <variation key="heightClass=compact-widthClass=compact" constant="32"/>
-                                    </constraint>
+                                    <constraint firstItem="sWf-Rj-Lks" firstAttribute="trailing" secondItem="INM-E8-0PE" secondAttribute="trailing" constant="8" id="A3o-v5-XBe"/>
                                     <constraint firstAttribute="height" priority="250" constant="492" id="JG2-5r-Vk9" userLabel="noteSectionHeight"/>
-                                    <constraint firstItem="INM-E8-0PE" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="8" id="Jrm-1X-AVs">
-                                        <variation key="heightClass=compact-widthClass=compact" constant="36"/>
-                                    </constraint>
+                                    <constraint firstItem="INM-E8-0PE" firstAttribute="leading" secondItem="sWf-Rj-Lks" secondAttribute="leading" constant="8" id="Jrm-1X-AVs"/>
                                     <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="INM-E8-0PE" secondAttribute="bottom" constant="2" id="Uo0-lx-7X6"/>
-                                    <constraint firstAttribute="bottom" secondItem="c5T-Ao-Wwn" secondAttribute="bottom" constant="6" id="c6m-cq-xkB"/>
-                                    <constraint firstAttribute="trailing" secondItem="c5T-Ao-Wwn" secondAttribute="trailing" constant="4" id="eDY-kG-ysU">
-                                        <variation key="heightClass=compact-widthClass=compact" constant="32"/>
-                                    </constraint>
-                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="4" id="kyF-Kg-2xp">
-                                        <variation key="heightClass=compact-widthClass=compact" constant="32"/>
-                                    </constraint>
+                                    <constraint firstItem="sWf-Rj-Lks" firstAttribute="bottom" secondItem="c5T-Ao-Wwn" secondAttribute="bottom" constant="8" id="c6m-cq-xkB"/>
+                                    <constraint firstItem="sWf-Rj-Lks" firstAttribute="trailing" secondItem="c5T-Ao-Wwn" secondAttribute="trailing" constant="4" id="eDY-kG-ysU"/>
+                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="leading" secondItem="sWf-Rj-Lks" secondAttribute="leading" constant="4" id="kyF-Kg-2xp"/>
                                     <constraint firstItem="INM-E8-0PE" firstAttribute="centerX" secondItem="rlx-cQ-nGb" secondAttribute="centerX" id="lrn-CH-Cev"/>
                                     <constraint firstItem="INM-E8-0PE" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" id="u4o-i1-Zzt"/>
                                 </constraints>
+                                <viewLayoutGuide key="safeArea" id="sWf-Rj-Lks"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>

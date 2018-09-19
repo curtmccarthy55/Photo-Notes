@@ -216,6 +216,14 @@
 // It will also animate because willAnimateRotationToInterfaceOrientation
 // is called from within an animation block
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
+    //cjm 09/19
+    CGFloat screenWidth = UIScreen.mainScreen.bounds.size.width;
+    CGFloat screenHeight = UIScreen.mainScreen.bounds.size.height;
+    UILayoutGuide *viewSafeArea = self.view.safeAreaLayoutGuide;
+    UILayoutGuide *noteSafeArea = self.noteSection.safeAreaLayoutGuide;
+    
+    NSLog(@"***SAFE AREA INFO*** \nscreenWidth == %f; \nscreenHeight == %f; \nself.view.safeAreaLayoutGuide == %@; \nnoteSection.safeAreaLayoutGuide == %@", screenWidth, screenHeight, NSStringFromCGRect(viewSafeArea.layoutFrame), NSStringFromCGRect(noteSafeArea.layoutFrame));
+    
     [super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
     
     //cjm 12/30
