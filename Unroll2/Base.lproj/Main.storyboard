@@ -219,7 +219,7 @@
         <scene sceneID="6dO-Q8-3nc">
             <objects>
                 <viewController id="jJn-j5-MU1" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="pKY-Rf-TPL">
+                    <view key="view" contentMode="scaleToFill" id="pKY-Rf-TPL">
                         <rect key="frame" x="0.0" y="0.0" width="300" height="90"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -236,7 +236,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5Zv-vL-0s2">
-                                <rect key="frame" x="16" y="108.33333333333334" width="268" height="2"/>
+                                <rect key="frame" x="16" y="108.33333333333333" width="268" height="2"/>
                             </progressView>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -329,7 +329,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YYl-wd-sDL">
-                                    <rect key="frame" x="186" y="-11" width="42" height="21"/>
+                                    <rect key="frame" x="166.66666666666666" y="-11" width="42" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
@@ -619,7 +619,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="36u-2c-g1I">
-                                <rect key="frame" x="0.0" y="-34" width="375" height="724"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="690"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="9dK-LP-zyX">
                                     <size key="itemSize" width="100" height="100"/>
@@ -628,7 +628,7 @@
                                     <inset key="sectionInset" minX="1" minY="1" maxX="1" maxY="1"/>
                                 </collectionViewFlowLayout>
                                 <view key="backgroundView" contentMode="scaleToFill" id="iFH-AQ-hrz">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="690"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 </view>
@@ -689,10 +689,10 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="height" secondItem="36u-2c-g1I" secondAttribute="height" id="1Zu-HJ-2JV"/>
                             <constraint firstItem="36u-2c-g1I" firstAttribute="bottom" secondItem="OXK-vN-eNE" secondAttribute="bottom" id="B6F-lu-vY2"/>
-                            <constraint firstAttribute="width" secondItem="36u-2c-g1I" secondAttribute="width" id="Uvg-Zc-Uy8"/>
-                            <constraint firstItem="36u-2c-g1I" firstAttribute="leading" secondItem="OXK-vN-eNE" secondAttribute="leading" id="rpc-1q-UGU"/>
+                            <constraint firstItem="36u-2c-g1I" firstAttribute="leading" secondItem="OXK-vN-eNE" secondAttribute="leading" id="FbY-aS-0s1"/>
+                            <constraint firstItem="OXK-vN-eNE" firstAttribute="top" secondItem="36u-2c-g1I" secondAttribute="top" id="lKO-eE-LFn"/>
+                            <constraint firstItem="36u-2c-g1I" firstAttribute="trailing" secondItem="OXK-vN-eNE" secondAttribute="trailing" id="rpc-1q-UGU"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="OXK-vN-eNE"/>
                     </view>
