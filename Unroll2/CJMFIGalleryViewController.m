@@ -14,7 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonFavorite;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonOptions;
 @property (nonatomic) CGFloat noteOpacity;
-
+@property (nonatomic) NSInteger currentIndex;
 
 @end
 
@@ -23,6 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.currentIndex = self.initialIndex;
     self.dataSource = self;
     self.makeViewsVisible = YES; //cjm note shift
     [self prefersStatusBarHidden];
@@ -60,25 +61,20 @@
     }
 }
 
-#pragma mark UIPageViewController Delegate
-
-/*
-- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray<UIViewController *> *)pendingViewControllers {
-    [self toggleViewVisibility];
+- (UIViewController *)childViewControllerForHomeIndicatorAutoHidden {
+    CJMFullImageViewController *currentVC = [self fullImageViewControllerForIndex:self.currentIndex];
+    return currentVC;
 }
- */
 
 #pragma mark UIPageViewControllerDataSource
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(CJMFullImageViewController *)currentImageVC {
     NSInteger previousIndex = currentImageVC.index - 1;
-//    NSLog(@"Creating previous VC.");
     return [self fullImageViewControllerForIndex:previousIndex];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(CJMFullImageViewController *)currentImageVC {
     NSInteger nextIndex = currentImageVC.index + 1;
-//    NSLog(@"Creating next VC.");
     return [self fullImageViewControllerForIndex:nextIndex];
 }
 
@@ -86,6 +82,7 @@
     if (index >= self.albumCount || index < 0) {
         return nil;
     } else {
+        self.currentIndex = index;
         CJMFullImageViewController *fullImageController = [self.storyboard instantiateViewControllerWithIdentifier:@"FullImageVC"];
         fullImageController.index = index;
         fullImageController.albumName = self.albumName;
@@ -94,6 +91,16 @@
         [fullImageController setBarsVisible:self.makeViewsVisible];
             
         return fullImageController;
+    }
+}
+
+#pragma mark - UIPageViewControllerDelegate
+
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed {
+    if (completed) {
+        //currentIndex should match the new vc's index.
+    } else {
+        //currentIndex should match the original vc's index.
     }
 }
 

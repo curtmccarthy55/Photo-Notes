@@ -466,7 +466,7 @@
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlx-cQ-nGb">
-                                <rect key="frame" x="0.0" y="646" width="375" height="690"/>
+                                <rect key="frame" x="0.0" y="646" width="375" height="724"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="INM-E8-0PE">
                                         <rect key="frame" x="8" y="0.0" width="359" height="62"/>
@@ -528,7 +528,7 @@
                                         </constraints>
                                     </stackView>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
-                                        <rect key="frame" x="4" y="64" width="367" height="584"/>
+                                        <rect key="frame" x="4" y="64" width="367" height="618"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -540,14 +540,13 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="sWf-Rj-Lks" firstAttribute="trailing" secondItem="INM-E8-0PE" secondAttribute="trailing" constant="8" id="A3o-v5-XBe"/>
-                                    <constraint firstAttribute="height" priority="250" constant="492" id="JG2-5r-Vk9" userLabel="noteSectionHeight"/>
                                     <constraint firstItem="INM-E8-0PE" firstAttribute="leading" secondItem="sWf-Rj-Lks" secondAttribute="leading" constant="8" id="Jrm-1X-AVs"/>
                                     <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="INM-E8-0PE" secondAttribute="bottom" constant="2" id="Uo0-lx-7X6"/>
                                     <constraint firstItem="sWf-Rj-Lks" firstAttribute="bottom" secondItem="c5T-Ao-Wwn" secondAttribute="bottom" constant="8" id="c6m-cq-xkB"/>
                                     <constraint firstItem="sWf-Rj-Lks" firstAttribute="trailing" secondItem="c5T-Ao-Wwn" secondAttribute="trailing" constant="4" id="eDY-kG-ysU"/>
                                     <constraint firstItem="c5T-Ao-Wwn" firstAttribute="leading" secondItem="sWf-Rj-Lks" secondAttribute="leading" constant="4" id="kyF-Kg-2xp"/>
                                     <constraint firstItem="INM-E8-0PE" firstAttribute="centerX" secondItem="rlx-cQ-nGb" secondAttribute="centerX" id="lrn-CH-Cev"/>
-                                    <constraint firstItem="INM-E8-0PE" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" id="u4o-i1-Zzt"/>
+                                    <constraint firstItem="INM-E8-0PE" firstAttribute="top" secondItem="sWf-Rj-Lks" secondAttribute="top" id="u4o-i1-Zzt"/>
                                 </constraints>
                                 <viewLayoutGuide key="safeArea" id="sWf-Rj-Lks"/>
                             </view>
@@ -555,13 +554,13 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="657-po-rB3" secondAttribute="trailing" id="18q-4L-iht"/>
-                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="height" secondItem="wQ3-K1-h7l" secondAttribute="height" id="5Rk-HC-pCe"/>
                             <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="wQ3-K1-h7l" secondAttribute="bottom" constant="-44" id="FVW-KF-XEn"/>
                             <constraint firstAttribute="width" secondItem="rlx-cQ-nGb" secondAttribute="width" id="WJS-3w-Z15"/>
                             <constraint firstItem="wQ3-K1-h7l" firstAttribute="centerX" secondItem="rlx-cQ-nGb" secondAttribute="centerX" id="YkM-Nt-NKo"/>
                             <constraint firstItem="657-po-rB3" firstAttribute="leading" secondItem="ulg-px-Jgm" secondAttribute="leading" id="bcM-Ia-vJM"/>
-                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="wQ3-K1-h7l" secondAttribute="top" priority="999" id="c1j-KL-Cmu"/>
+                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="ulg-px-Jgm" secondAttribute="top" priority="999" id="c1j-KL-Cmu"/>
                             <constraint firstAttribute="bottom" secondItem="657-po-rB3" secondAttribute="bottom" id="e1a-z9-0uA"/>
+                            <constraint firstItem="rlx-cQ-nGb" firstAttribute="height" secondItem="657-po-rB3" secondAttribute="height" id="gFK-OZ-kWU" userLabel="superViewHeight"/>
                             <constraint firstItem="657-po-rB3" firstAttribute="top" secondItem="ulg-px-Jgm" secondAttribute="top" id="wYo-XK-pCq"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="wQ3-K1-h7l"/>
@@ -582,7 +581,6 @@
                         <outlet property="noteEntry" destination="c5T-Ao-Wwn" id="I8u-10-JSN"/>
                         <outlet property="noteSection" destination="rlx-cQ-nGb" id="uT1-tT-pd3"/>
                         <outlet property="noteSectionDown" destination="FVW-KF-XEn" id="4zT-Jd-XYh"/>
-                        <outlet property="noteSectionHeight" destination="JG2-5r-Vk9" id="rRj-z4-H0v"/>
                         <outlet property="noteSectionUp" destination="c1j-KL-Cmu" id="Lvv-ne-cNa"/>
                         <outlet property="noteTitle" destination="upp-GS-1zm" id="X3Z-dK-8dH"/>
                         <outlet property="oneTap" destination="PKx-nw-LUR" id="WDx-Id-La1"/>
@@ -590,6 +588,7 @@
                         <outlet property="rightConstraint" destination="7Ba-sJ-cgT" id="VPd-Pk-Hbu"/>
                         <outlet property="scrollView" destination="657-po-rB3" id="Cqd-Ns-NfT"/>
                         <outlet property="seeNoteButton" destination="Wdb-G9-he9" id="ab3-dh-JcD"/>
+                        <outlet property="superHeight" destination="gFK-OZ-kWU" id="eqC-3d-UX2"/>
                         <outlet property="topConstraint" destination="N7P-wH-oks" id="fl1-Pm-qGm"/>
                         <outlet property="twoTap" destination="UoA-ua-AfI" id="DC9-vC-nq8"/>
                     </connections>
