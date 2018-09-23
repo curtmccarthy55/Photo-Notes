@@ -1,5 +1,5 @@
 //
-//  CJMFIGalleryViewController.h
+//  CJMPageImageViewController.h
 //  Unroll
 //
 //  Created by Curt on 5/1/15.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CJMFullImageViewController.h"
 
-@interface CJMFIGalleryViewController : UIPageViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate, CJMFullImageViewControllerDelegate>
+@interface CJMPageImageViewController : UIPageViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate, CJMFullImageViewControllerDelegate>
 
 @property (nonatomic) NSInteger initialIndex;
 @property (nonatomic, strong) NSString *albumName;

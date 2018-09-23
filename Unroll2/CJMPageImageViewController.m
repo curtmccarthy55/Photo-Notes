@@ -1,14 +1,14 @@
 //
-//  CJMFIGalleryViewController.m
+//  CJMPageImageViewController.m
 //  Unroll
 //
 //  Created by Curt on 5/1/15.
 //  Copyright (c) 2015 Bluewraith. All rights reserved.
 //
 
-#import "CJMFIGalleryViewController.h"
+#import "CJMPageImageViewController.h"
 
-@interface CJMFIGalleryViewController ()
+@interface CJMPageImageViewController ()
 
 @property (nonatomic) BOOL makeViewsVisible;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonFavorite;
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation CJMFIGalleryViewController
+@implementation CJMPageImageViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

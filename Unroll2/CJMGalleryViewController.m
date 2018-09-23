@@ -7,7 +7,7 @@
 //
 
 #import "CJMGalleryViewController.h"
-#import "CJMFIGalleryViewController.h"
+#import "CJMPageImageViewController.h"
 #import "CJMFullImageViewController.h"
 #import "CJMAListPickerViewController.h"
 #import "CJMServices.h"
@@ -28,7 +28,7 @@
 @interface CJMGalleryViewController () <CJMAListPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource>
 
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
-@property (nonatomic, strong) CJMFIGalleryViewController *fullImageVC;
+@property (nonatomic, strong) CJMPageImageViewController *fullImageVC;
 @property (nonatomic) BOOL editMode;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *deleteButton;
@@ -220,7 +220,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ViewPhoto"]) {
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-        CJMFIGalleryViewController *vc = (CJMFIGalleryViewController *)segue.destinationViewController;
+        CJMPageImageViewController *vc = (CJMPageImageViewController *)segue.destinationViewController;
         vc.albumName = self.album.albumTitle;
         vc.albumCount = self.album.albumPhotos.count;
         vc.initialIndex = indexPath.item;

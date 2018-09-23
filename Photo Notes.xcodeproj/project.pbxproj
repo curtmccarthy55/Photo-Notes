@@ -15,7 +15,7 @@
 		840852A61B5DA49E00664849 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 840852A51B5DA49E00664849 /* no_image.jpg */; };
 		84401F0A1B2CAA0D00B4FB89 /* CJMAListPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */; };
 		84401F3F1B3092F100B4FB89 /* CJMHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84401F3E1B3092F100B4FB89 /* CJMHudView.m */; };
-		845B90CF1AF42BC300365239 /* CJMFIGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845B90CE1AF42BC300365239 /* CJMFIGalleryViewController.m */; };
+		845B90CF1AF42BC300365239 /* CJMPageImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845B90CE1AF42BC300365239 /* CJMPageImageViewController.m */; };
 		84A769571ADAE39F00DE6741 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769561ADAE39F00DE6741 /* main.m */; };
 		84A7695A1ADAE39F00DE6741 /* CJMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769591ADAE39F00DE6741 /* CJMAppDelegate.m */; };
 		84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84A7695E1ADAE39F00DE6741 /* Main.storyboard */; };
@@ -61,8 +61,8 @@
 		84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAListPickerViewController.m; sourceTree = "<group>"; };
 		84401F3D1B3092F100B4FB89 /* CJMHudView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMHudView.h; sourceTree = "<group>"; };
 		84401F3E1B3092F100B4FB89 /* CJMHudView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMHudView.m; sourceTree = "<group>"; };
-		845B90CD1AF42BC300365239 /* CJMFIGalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMFIGalleryViewController.h; sourceTree = "<group>"; };
-		845B90CE1AF42BC300365239 /* CJMFIGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMFIGalleryViewController.m; sourceTree = "<group>"; };
+		845B90CD1AF42BC300365239 /* CJMPageImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPageImageViewController.h; sourceTree = "<group>"; };
+		845B90CE1AF42BC300365239 /* CJMPageImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMPageImageViewController.m; sourceTree = "<group>"; };
 		84A769511ADAE39F00DE6741 /* Unroll2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unroll2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A769551ADAE39F00DE6741 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84A769561ADAE39F00DE6741 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -158,8 +158,8 @@
 				84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */,
 				84401F081B2CAA0D00B4FB89 /* CJMAListPickerViewController.h */,
 				84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */,
-				845B90CD1AF42BC300365239 /* CJMFIGalleryViewController.h */,
-				845B90CE1AF42BC300365239 /* CJMFIGalleryViewController.m */,
+				845B90CD1AF42BC300365239 /* CJMPageImageViewController.h */,
+				845B90CE1AF42BC300365239 /* CJMPageImageViewController.m */,
 				84F1FDAB1AEAF57A0092D424 /* CJMFullImageViewController.h */,
 				84F1FDAC1AEAF57A0092D424 /* CJMFullImageViewController.m */,
 			);
@@ -397,7 +397,7 @@
 				84401F3F1B3092F100B4FB89 /* CJMHudView.m in Sources */,
 				84F1FDAD1AEAF57A0092D424 /* CJMFullImageViewController.m in Sources */,
 				84C2B9981AE441CE0034786C /* CJMPhotoCell.m in Sources */,
-				845B90CF1AF42BC300365239 /* CJMFIGalleryViewController.m in Sources */,
+				845B90CF1AF42BC300365239 /* CJMPageImageViewController.m in Sources */,
 				84C2B9471ADC51280034786C /* CJMADetailViewController.m in Sources */,
 				84C2B9501ADF4AA00034786C /* CJMServices.m in Sources */,
 				84DC68F61B52B085000A2480 /* CJMCache.m in Sources */,
