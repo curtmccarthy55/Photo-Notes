@@ -35,7 +35,7 @@
     //cjm favorites album [CJMAlbumManager save] calls [fileSerializer writeObject:allAlbumsEdit toRelativePath:@"Unroll.plist"]
     NSString *filePath = [self absolutePathFromRelativePath:path];
     NSLog(@"filePath == %@", filePath);
-    return [NSKeyedArchiver archiveRootObject:data toFile:[self absolutePathFromRelativePath:path]];
+    return [NSKeyedArchiver archiveRootObject:data toFile:filePath];
 }
 
 - (BOOL)writeImage:(UIImage *)image toRelativePath:(NSString *)path

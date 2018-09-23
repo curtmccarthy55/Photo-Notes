@@ -12,6 +12,8 @@
 #import "CJMImage.h"
 #import "CJMHudView.h"
 
+#define IS_IPHONE_X (BOOL)(UIScreen.mainScreen.bounds.size.height == 812.00)
+
 @import Photos;
 
 @interface CJMFullImageViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate>
@@ -31,7 +33,8 @@
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *noteSectionUp;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *constr_TitleTop;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteSectionHeight;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *superHeight;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *safeAreaHeight;
 
 @property (strong, nonatomic) IBOutlet UIView *noteSection;
 @property (strong, nonatomic) IBOutlet UITextField *noteTitle;
@@ -46,6 +49,7 @@
 @property (nonatomic) BOOL focusIsOnImage;
 @property (nonatomic) BOOL favoriteChanged;
 @property (nonatomic) BOOL noteShown;
+@property (nonatomic) BOOL noteHidden;
 
 @end
 
@@ -55,6 +59,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //this line prevents the image from jumping around when Nav bars are hidden/shown
+    self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    
     self.noteShown = NO;
     if (self.albumName == nil) { //cjm 12/30
         self.albumName = @"Favorites";
@@ -67,11 +75,8 @@
     
     self.editNoteButton.hidden = YES;
     [self.oneTap requireGestureRecognizerToFail:self.twoTap];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     
+    //following lines moved from viewWillAppear
     [self.noteSection setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:self.noteOpacity]];
     
     self.imageView.image = self.fullImage ? self.fullImage : [UIImage imageNamed:@"IconPhoto"];
@@ -81,6 +86,14 @@
         self.scrollView.accessibilityIgnoresInvertColors = YES;
     }
     self.scrollView.delegate = self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    
+    NSLog(@"IS_IPHONE_X == %d", IS_IPHONE_X);
+    
     [self updateZoom];
     self.favoriteChanged = self.cjmImage.photoFavorited;
     self.noteTitle.text = self.cjmImage.photoTitle;
@@ -109,11 +122,16 @@
         }
     }
     self.initialZoomScale = self.scrollView.zoomScale;
-    _viewsVisible = YES;
+//    _viewsVisible = YES;
+//    [self handleBarHiding];
+    [self updateForBarVisibility:self.barsVisible animated:NO];
+    [self toggleBars];
     [self handleNoteSectionAlignment];
     [self updateConstraints];
     
-    [self.delegate photoIsFavorited:self.cjmImage.photoFavorited]; //cjm favorites ImageVC -> PageVC
+    if (!self.isQuickNote) {
+        [self.delegate photoIsFavorited:self.cjmImage.photoFavorited];
+    }//cjm favorites ImageVC -> PageVC
     
     if (self.fullImage == nil) {
         [self.scrollView setBackgroundColor:self.userColor];
@@ -162,9 +180,6 @@
     if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
     }
-    if (!self.viewsVisible) {
-        [self imageViewTapped:self];
-    }
     
     [self updateZoom];
     
@@ -197,7 +212,7 @@
     }
 }
 
-#pragma mark - scrollView handling
+#pragma mark - scrollView zoom handling
 
 // Update zoom scale and constraints
 // It will also animate because willAnimateRotationToInterfaceOrientation
@@ -205,24 +220,14 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
     [super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
     
-    //cjm 12/30
-    if (!self.viewsVisible) {
-        [self imageViewTapped:self];
-    }
-    
-//    if (self.focusIsOnImage) {
-//        [self imageViewTapped:self];
-//    }
-    
-    if ([self.seeNoteButton.titleLabel.text isEqual:@"Dismiss"]) {
-        [self handleNoteSectionDismissal];
-    } else if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
-        [self handleNoteSectionAlignment];
-    }
-    
     [self updateZoom];
-    
     self.initialZoomScale = self.scrollView.zoomScale;
+//    cjm 09/19 note shift
+//    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+//        self.noteSectionUp.constant = 0.0;
+//        self.constr_TitleTop.constant = 0.0;
+//    }
+//    [self.noteSection setNeedsUpdateConstraints];
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
@@ -240,7 +245,7 @@
 }
 
 - (void)updateConstraints
-{
+{ //cjm note shift.  Image position is bouncing around when zoomed in and showing/hiding the top and bottom bars.
     float imageWidth = self.imageView.image.size.width;
     float imageHeight = self.imageView.image.size.height;
     
@@ -248,19 +253,21 @@
     float viewHeight = self.view.bounds.size.height;
     
     // center image if it is smaller than screen
-    float hPadding = (viewWidth - self.scrollView.zoomScale * imageWidth) / 2;
-    if (hPadding < 0)
-        hPadding = 0;
+    float horizontalPadding = (viewWidth - self.scrollView.zoomScale * imageWidth) / 2;
+    if (horizontalPadding < 0) {
+        horizontalPadding = 0;
+    }
     
-    float vPadding = (viewHeight - self.scrollView.zoomScale * imageHeight) / 2;
-    if (vPadding < 0)
-        vPadding = 0;
+    float verticalPadding = (viewHeight - self.scrollView.zoomScale * imageHeight) / 2;
+    if (verticalPadding < 0) {
+        verticalPadding = 0;
+    }
+
+    self.leftConstraint.constant = horizontalPadding;
+    self.rightConstraint.constant = horizontalPadding;
     
-    self.leftConstraint.constant = hPadding;
-    self.rightConstraint.constant = hPadding;
-    
-    self.topConstraint.constant = vPadding;
-    self.bottomConstraint.constant = vPadding;
+    self.topConstraint.constant = verticalPadding;
+    self.bottomConstraint.constant = verticalPadding;
     
     // Makes zoom out animation smooth and starting from the right point not from (0, 0)
     [self.view layoutIfNeeded];
@@ -288,80 +295,13 @@
     return self.imageView;
 }
 
-#pragma mark - View adjustments
-
-//Sets the note section height equal to the space between the toolbar and navbar
-- (void)fullSizeForNoteSection { //cjm shiftNote method
-    if (self.viewsVisible) {
-        UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
-        [NSLayoutConstraint activateConstraints:@[[self.noteSection.heightAnchor constraintEqualToAnchor:safeArea.heightAnchor multiplier:1.0]]];
-    } else {
-        //        [self.noteSection.heightAnchor constraintEqualToAnchor:self.view.heightAnchor multiplier:1.0];
-        [NSLayoutConstraint activateConstraints:@[[self.noteSection.heightAnchor constraintEqualToAnchor:self.view.heightAnchor multiplier:1.0]]];
-    }
-    
-    /* cjm 02/04
-     if (self.isQuickNote) {
-     //        UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
-     self.noteSectionHeight.constant = (self.view.frame.size.height);
-     } else if (self.viewsVisible == YES) {
-     self.noteSectionHeight.constant = (self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - self.navigationController.toolbar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height);
-     } else if (self.viewsVisible == NO) {
-     self.noteSectionHeight.constant = self.view.frame.size.height;
-     }
-     */
-}
-
-#pragma mark - Buttons and taps
-
-- (void)clearNote {
-    self.cjmImage.photoTitle = @"";
-    self.cjmImage.photoNote = @"";
-    [self.noteTitle setText:@""];
-    [self.noteEntry setText:@""];
-}
-
-- (IBAction)dismissQuickNote:(id)sender {
-    if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
-        [self handleNoteSectionDismissal];
-    }
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)setNoteShown:(BOOL)shown {
-    _noteShown = shown;
-    if (shown) {
-        self.noteSectionUp.active = YES;
-        self.noteSectionDown.active = NO;
-        if (UIScreen.mainScreen.bounds.size.height == 812.00) {
-            if (UIDevice.currentDevice.orientation == UIDeviceOrientationPortrait) {
-                if (!self.viewsVisible) {
-                    self.noteSectionUp.constant = -88.0;
-                    self.constr_TitleTop.constant = 44.0;
-                }
-            }
-        }
-    } else {
-        self.noteSectionDown.active = YES;
-        self.noteSectionUp.active = NO;
-        self.constr_TitleTop.constant = 0.0;
-    }
-    
-    NSLog(@"UIScreen Height == %f", UIScreen.mainScreen.bounds.size.height);
-//    if (UIScreen.mainScreen.bounds.size.height == 812 && UIDevice.currentDevice.orientation == UIDeviceOrientationPortrait) {
-//        self.noteSectionUp.constant = 44.0;
-//    }
-    
-}
+#pragma mark - Note Shift
 
 //first button press: Slide the note section up so it touches the bottom of the navbar
 //second button press: Slide the note section back down to just above the toolbar
-- (IBAction)shiftNote:(id)sender { //cjm shiftNote method
-    [self fullSizeForNoteSection];
-    
+- (IBAction)shiftNote:(id)sender { //cjm note shift
     if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
         [self setNoteShown:YES];
-        [self.noteSection setNeedsUpdateConstraints];
         self.noteTitle.text = self.cjmImage.photoTitle;
         
         [UIView animateWithDuration:0.25 animations:^{
@@ -380,7 +320,22 @@
     }
 }
 
-- (void)handleNoteSectionDismissal { //cjm shiftNote method
+- (void)setNoteShown:(BOOL)shown { //cjm note shift
+    _noteShown = shown;
+    if (shown) {
+        self.noteSectionUp.active = YES;
+        self.noteSectionDown.active = NO;
+    } else {
+        self.noteSectionUp.active = NO;
+        self.noteSectionDown.active = YES;
+        self.constr_TitleTop.constant = 0.0;
+    }
+    [self.noteSection setNeedsUpdateConstraints];
+    
+    NSLog(@"UIScreen Height == %f", UIScreen.mainScreen.bounds.size.height);
+}
+
+- (void)handleNoteSectionDismissal { //cjm note shift
     if ([self.editNoteButton.titleLabel.text isEqual:@"Done"]) {
         [self enableEdit:self];
     }
@@ -391,7 +346,9 @@
     
     [UIView animateWithDuration:0.25 animations:^{
         [self.noteSection.superview layoutIfNeeded];
-        if (!self.viewsVisible) {
+        
+//        if (!self.viewsVisible) {
+        if (!self.barsVisible) {
             [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:NO];
         }else {
@@ -399,34 +356,126 @@
         }
         
         [self.seeNoteButton setTitle:@"See Note" forState:UIControlStateNormal];
-        
         [self.noteEntry setAlpha:0.0];
         [self.photoLocAndDate setAlpha:0.0];
     }];
 }
 
-- (void)handleNoteSectionAlignment { //cjm 02/04
+- (IBAction)dismissQuickNote:(id)sender {
+    if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
+        [self handleNoteSectionDismissal];
+    }
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - View adjustments
+
+- (void)setBarsVisible:(BOOL)setting {
+    _barsVisible = setting;
+}
+
+- (void)handleBarHiding {
+    [self updateForBarVisibility:self.barsVisible animated:YES];
+    [self toggleBars];
+}
+
+- (void)updateForBarVisibility:(BOOL)barsHidden animated:(BOOL)animated { //if called from viewWillAppear: animated == false, else animated == true
+    NSTimeInterval duration = animated ? 0.2 : 0.0;
+    if (barsHidden) {
+        [UIView animateWithDuration:duration animations:^{
+            self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+            [self.noteSection setHidden:NO];
+            self.noteHidden = NO;
+            [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:YES];
+            [self handleNoteSectionAlignment];
+        }];
+    } else if (!barsHidden) {
+        [UIView animateWithDuration:duration animations:^{
+            self.scrollView.backgroundColor = [UIColor blackColor];
+            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:NO];
+            [self handleNoteSectionAlignment];
+        }];
+    }
+}
+
+- (void)updateForHiddenBars {
+    //    if (self.viewsVisible == YES) {
+    if (self.barsVisible == YES) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+            [self.noteSection setHidden:NO];
+            self.noteHidden = NO;
+            [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:YES];
+            [self handleNoteSectionAlignment];
+        }];
+        //    } else if (self.viewsVisible == NO) {
+    } else if (self.barsVisible == NO) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.scrollView.backgroundColor = [UIColor blackColor];
+            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:NO];
+            [self handleNoteSectionAlignment];
+        }];
+    }
+}
+
+- (void)toggleBars {
+    if (self.barsVisible == NO) {
+        [self setNeedsStatusBarAppearanceUpdate];
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
+            [self.navigationController setToolbarHidden:YES animated:YES];
+        }];
+    } else if (self.barsVisible == YES) {
+        [self setNeedsStatusBarAppearanceUpdate];
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+            [self.navigationController setToolbarHidden:NO animated:YES];
+        }];
+    }
+}
+
+#pragma mark - Buttons and taps
+
+- (void)clearNote {
+    self.cjmImage.photoTitle = @"";
+    self.cjmImage.photoNote = @"";
+    [self.noteTitle setText:@""];
+    [self.noteEntry setText:@""];
+}
+
+- (void)handleNoteSectionAlignment { //cjm note shift.  we can probably remove this.
+    /*
     if (self.viewsVisible) {
         if (self.isQuickNote) {
-//            self.noteSectionDown.constant = -44.0;
             [self setNoteShown:NO];
         } else {
             [self setNoteShown:NO];
-            self.noteSectionDown.constant = -44.0;
-//            self.noteSectionDown.constant = -(44.0 + self.navigationController.toolbar.frame.size.height);
         }
     } else {
-//        self.noteSectionDown.constant = 0.0;
         [self setNoteShown:NO];
     }
     
     [self.noteSection setNeedsUpdateConstraints];
+     */
+}
+
+- (BOOL)prefersHomeIndicatorAutoHidden {
+    if (self.noteHidden == YES) {
+        return YES;
+    }
+    return NO;
 }
 
 //Enables editing the note and title sections
 - (IBAction)enableEdit:(id)sender {
     if ([self.editNoteButton.titleLabel.text isEqualToString:@"Hide"]) {
         [self.noteSection setHidden:YES];
+        self.noteHidden = YES;
+        [self prefersHomeIndicatorAutoHidden];
     } else if ([self.editNoteButton.titleLabel.text isEqual:@"Edit"]) {
         [self registerForKeyboardNotifications];
         self.noteTitle.enabled = YES;
@@ -460,38 +509,24 @@
 
 - (void)setViewsVisible:(BOOL)viewsVisible {
     _viewsVisible = viewsVisible;
-    [self updateForSingleTap];
-}
-
-- (void)updateForSingleTap {
-    if (self.viewsVisible == YES) {
-        [UIView animateWithDuration:0.2 animations:^{
-            self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-            [self.noteSection setHidden:NO];
-            [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
-            [self.editNoteButton setHidden:YES];
-            [self handleNoteSectionAlignment];
-        }];
-    } else if (self.viewsVisible == NO) {
-        [UIView animateWithDuration:0.2 animations:^{
-            self.scrollView.backgroundColor = [UIColor blackColor];
-            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
-            [self.editNoteButton setHidden:NO];
-            [self handleNoteSectionAlignment];
-        }];
-    }
+//    [selupdateNoteSectionForSingleTapap];
 }
 
 - (IBAction)imageViewTapped:(id)sender {
     //cjm 12/30 viewsVisible. this is the first method called when the user taps once on the UIScrollView.
+    NSLog(@"****IMAGEVIEW TAPPED****");
     if (self.isQuickNote) {
         if (self.navigationController.navigationBar.isHidden == YES) {
-            [self.navigationController.navigationBar setHidden:NO];
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
         } else {
-            [self.navigationController.navigationBar setHidden:YES];
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
         }
     } else {
-        [self.delegate toggleFullImageShow:self.viewsVisible forViewController:self];
+        BOOL updateBars = !self.barsVisible;
+        self.barsVisible = updateBars;
+        [self updateForBarVisibility:self.barsVisible animated:YES];
+        [self toggleBars];
+        [self.delegate updateBarsHidden:self.barsVisible];
     }
 }
 

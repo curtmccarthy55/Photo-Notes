@@ -14,9 +14,9 @@
 @protocol CJMFullImageViewControllerDelegate <NSObject>
 
 @optional
-- (void)toggleFullImageShow:(BOOL)yesOrNo forViewController:(CJMFullImageViewController *)viewController;
+- (void)updateBarsHidden:(BOOL)setting;
 - (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex;
-- (void)photoIsFavorited:(BOOL)isFavorited; //cjm favorites ImageVC -> PageVC
+- (void)photoIsFavorited:(BOOL)isFavorited;     //cjm favorites ImageVC -> PageVC
 
 @end
 
@@ -25,8 +25,9 @@
 @property (nonatomic, strong) NSString *albumName;
 @property (nonatomic) NSInteger index;
 @property (nonatomic, weak) id <CJMFullImageViewControllerDelegate> delegate;
-@property (nonatomic) BOOL viewsVisible; //top/bottom bars are visible
-@property (nonatomic) BOOL imageIsFavorite;//cjm favorites ImageVC set up
+@property (nonatomic) BOOL viewsVisible;        //old top/bottom bars are visible
+@property (nonatomic) BOOL barsVisible;         //top/bottom bars are visible
+@property (nonatomic) BOOL imageIsFavorite;     //cjm favorites ImageVC set up
 @property (nonatomic) BOOL isQuickNote;
 @property (nonatomic) CGFloat noteOpacity;
 @property (nonatomic, strong) UIColor *userColor;
@@ -34,6 +35,6 @@
 
 - (void)showPopUpMenu;
 - (void)confirmImageDelete;
-- (void)actionFavorite:(BOOL)userFavorited; //cjm favorites PageVC -> ImageVC
+- (void)actionFavorite:(BOOL)userFavorited;     //cjm favorites PageVC -> ImageVC
 
 @end

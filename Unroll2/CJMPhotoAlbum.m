@@ -12,7 +12,7 @@
 
 @interface CJMPhotoAlbum ()
 
-@property (nonatomic, strong) NSMutableOrderedSet *albumEditablePhotos;
+@property (nonatomic, strong) NSMutableOrderedSet<CJMImage *> *albumEditablePhotos;
 
 @end
 

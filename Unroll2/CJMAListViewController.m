@@ -55,6 +55,11 @@
     
     [self userColors];
     [self.navigationController.toolbar setHidden:NO];
+    [self.navigationController.toolbar setTranslucent:YES];
+    
+    [self.navigationController.navigationBar setPrefersLargeTitles:YES];
+    [self.navigationController.navigationBar setTranslucent:YES];
+    
     [self noAlbumsPopUp];
     [self.tableView reloadData];
 }
@@ -482,6 +487,15 @@
     UIView *mainOverlay = [[UIView alloc] initWithFrame:frame];
     [mainOverlay setBackgroundColor:[UIColor clearColor]];
     
+    /*Should replace dummy view with UILayoutGuide.  Below should have the same effect as buttonBar set up that follows.
+    UILayoutGuide *buttonGuide = [UILayoutGuide new];
+    [mainOverlay addLayoutGuide:buttonGuide];
+    [buttonGuide.centerXAnchor constraintEqualToAnchor:mainOverlay.centerXAnchor].active = YES;
+    [buttonGuide.bottomAnchor constraintEqualToAnchor:mainOverlay.bottomAnchor].active = YES;
+    [buttonGuide.widthAnchor constraintEqualToAnchor:mainOverlay.widthAnchor multiplier:1.0 constant:-16.0].active = YES;
+    [buttonGuide.heightAnchor constraintEqualToConstant:(frame.size.height / 4.0)].active = YES;
+     */
+    
     UIView *buttonBar = [[UIView alloc] init];
     [buttonBar setBackgroundColor:[UIColor clearColor]];
     buttonBar.translatesAutoresizingMaskIntoConstraints = NO;
@@ -716,7 +730,7 @@
 
 
 #pragma mark - QuickNotes
-
+/*
 - (void)photoIsFavorited:(BOOL)isFavorited {
     
 }
@@ -724,6 +738,7 @@
 - (void)toggleFullImageShow:(BOOL)yesOrNo forViewController:(CJMFullImageViewController *)viewController {
     
 }
+ */
 
 
 #pragma mark - Editing the list
