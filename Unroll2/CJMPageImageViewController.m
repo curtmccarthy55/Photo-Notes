@@ -22,7 +22,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.automaticallyAdjustsScrollViewInsets = NO;
     self.currentIndex = self.initialIndex;
     self.dataSource = self;
     self.makeViewsVisible = YES; //cjm note shift

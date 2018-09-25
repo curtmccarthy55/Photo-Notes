@@ -155,19 +155,19 @@
         <scene sceneID="L8e-gh-bBZ">
             <objects>
                 <viewController storyboardIdentifier="CJMPopover" id="esm-W3-GvC" customClass="CJMPopoverViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="p66-3a-ldh">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="p66-3a-ldh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mh0-Hf-3Oq">
-                                <rect key="frame" x="8" y="52" width="102.33333333333333" height="20.333333333333329"/>
+                                <rect key="frame" x="8" y="52.000000000000007" width="102.33333333333333" height="20.333333333333336"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1KJ-0Y-CbB">
-                                <rect key="frame" x="323" y="46.666666666666664" width="44" height="29.999999999999993"/>
+                                <rect key="frame" x="323" y="46.333333333333336" width="44" height="30.000000000000007"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="jAW-Vh-CA3"/>
                                 </constraints>
@@ -181,7 +181,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Detail Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="LvU-oV-Mvv">
-                                <rect key="frame" x="3" y="74.333333333333329" width="369" height="36"/>
+                                <rect key="frame" x="3" y="74.333333333333343" width="369" height="36"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
@@ -592,7 +592,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="bottomConstraint" destination="OoQ-hw-nfe" id="zev-GL-fh4"/>
-                        <outlet property="constr_TitleTop" destination="Vx1-HH-oAR" id="jpo-hx-t1L"/>
                         <outlet property="editNoteButton" destination="CjO-W7-o96" id="yb1-1L-yiW"/>
                         <outlet property="imageView" destination="21o-UG-qC7" id="ewO-gV-UAU"/>
                         <outlet property="leftConstraint" destination="2aF-os-TrH" id="kMt-rq-Hft"/>
@@ -1236,7 +1235,7 @@
     </scenes>
     <resources>
         <image name="FatGear" width="22" height="22"/>
-        <image name="PlumOnBlack" width="170" height="170"/>
+        <image name="PlumOnBlack" width="170.66667175292969" height="170.66667175292969"/>
         <image name="WhiteStarEmpty" width="44" height="44"/>
     </resources>
     <inferredMetricsTieBreakers>

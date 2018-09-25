@@ -17,38 +17,38 @@
 @import Photos;
 
 @interface CJMFullImageViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate>
-
+@property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (nonatomic, strong) UIImage *fullImage;
+@property (nonatomic, strong) CJMImage *cjmImage;
+
+#pragma mark ImageView Constraints
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *topConstraint;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *leftConstraint;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *rightConstraint;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomConstraint;
-@property (nonatomic, strong) CJMImage *cjmImage;
+
+#pragma mark Gesture Recognizers
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *oneTap;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *twoTap;
 
-@property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteSectionDown;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *noteSectionUp;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *constr_TitleTop;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomConstraint;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *superHeight;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *safeAreaHeight;
-
+#pragma mark Note View and Subviews
 @property (strong, nonatomic) IBOutlet UIView *noteSection;
 @property (strong, nonatomic) IBOutlet UITextField *noteTitle;
 @property (strong, nonatomic) IBOutlet UITextView *noteEntry;
 @property (strong, nonatomic) IBOutlet UILabel *photoLocAndDate;
-
 @property (strong, nonatomic) IBOutlet UIButton *seeNoteButton;
 @property (strong, nonatomic) IBOutlet UIButton *editNoteButton;
+//Note View constraints
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteSectionDown;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *noteSectionUp;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *superHeight;
 
+#pragma mark Functionality Variables
 @property (nonatomic) CGFloat lastZoomScale;
 @property (nonatomic) float initialZoomScale;
-@property (nonatomic) BOOL focusIsOnImage;
 @property (nonatomic) BOOL favoriteChanged;
-@property (nonatomic) BOOL noteShown;
+@property (nonatomic) BOOL displayingNote;
 @property (nonatomic) BOOL noteHidden;
 
 @end
@@ -63,7 +63,7 @@
     //this line prevents the image from jumping around when Nav bars are hidden/shown
     self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     
-    self.noteShown = NO;
+    self.displayingNote = NO;
     if (self.albumName == nil) { //cjm 12/30
         self.albumName = @"Favorites";
         self.index = 0;
@@ -122,11 +122,10 @@
         }
     }
     self.initialZoomScale = self.scrollView.zoomScale;
-//    _viewsVisible = YES;
-//    [self handleBarHiding];
+    
+    //cjm 09/25 nav bar handling
     [self updateForBarVisibility:self.barsVisible animated:NO];
     [self toggleBars];
-    [self handleNoteSectionAlignment];
     [self updateConstraints];
     
     if (!self.isQuickNote) {
@@ -177,6 +176,11 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    if (self.displayingNote) {
+        [self shiftNote:nil];
+    }
+    
+    
     if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
     }
@@ -287,7 +291,7 @@
     if (minZoom == self.lastZoomScale) minZoom += 0.000001;
     
     self.lastZoomScale = self.scrollView.zoomScale = minZoom;
-    self.scrollView.zoomScale = minZoom -= 0.000001;
+    self.scrollView.zoomScale = minZoom -= 0.000001;  //TODO: see if we can remove this +/- tweak.  Was in place to make sure scrollview content corrected itself, but probably shouldn't be necessary.
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
@@ -300,9 +304,14 @@
 //first button press: Slide the note section up so it touches the bottom of the navbar
 //second button press: Slide the note section back down to just above the toolbar
 - (IBAction)shiftNote:(id)sender { //cjm note shift
-    if ([self.seeNoteButton.titleLabel.text isEqual:@"See Note"]) {
-        [self setNoteShown:YES];
+    if (!self.displayingNote) {
         self.noteTitle.text = self.cjmImage.photoTitle;
+        
+        //Display the note section
+        [self setDisplayingNote:YES];
+        self.noteSectionUp.active = YES;
+        self.noteSectionDown.active = NO;
+        [self.noteSection setNeedsUpdateConstraints];
         
         [UIView animateWithDuration:0.25 animations:^{
             [self.noteSection.superview layoutIfNeeded];
@@ -315,22 +324,27 @@
             [self.photoLocAndDate setAlpha:1.0];
         }];
     } else {
-        [self setNoteShown:NO];
+        //Dismiss the note section
+        [self setDisplayingNote:NO];
+        self.noteSectionUp.active = NO;
+        self.noteSectionDown.active = YES;
+        [self.noteSection setNeedsUpdateConstraints];
         [self handleNoteSectionDismissal];
     }
 }
 
-- (void)setNoteShown:(BOOL)shown { //cjm note shift
-    _noteShown = shown;
+- (void)setDisplayingNote:(BOOL)shown { //cjm note shift
+    _displayingNote = shown;
+    /*
     if (shown) {
         self.noteSectionUp.active = YES;
         self.noteSectionDown.active = NO;
     } else {
         self.noteSectionUp.active = NO;
         self.noteSectionDown.active = YES;
-        self.constr_TitleTop.constant = 0.0;
     }
     [self.noteSection setNeedsUpdateConstraints];
+     */
     
     NSLog(@"UIScreen Height == %f", UIScreen.mainScreen.bounds.size.height);
 }
@@ -339,15 +353,12 @@
     if ([self.editNoteButton.titleLabel.text isEqual:@"Done"]) {
         [self enableEdit:self];
     }
-    [self handleNoteSectionAlignment];
     if ([self.noteTitle.text isEqual:@"No Title Created "]) {
         self.noteTitle.text = @"";
     }
     
     [UIView animateWithDuration:0.25 animations:^{
         [self.noteSection.superview layoutIfNeeded];
-        
-//        if (!self.viewsVisible) {
         if (!self.barsVisible) {
             [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:NO];
@@ -370,10 +381,6 @@
 
 #pragma mark - View adjustments
 
-- (void)setBarsVisible:(BOOL)setting {
-    _barsVisible = setting;
-}
-
 - (void)handleBarHiding {
     [self updateForBarVisibility:self.barsVisible animated:YES];
     [self toggleBars];
@@ -388,20 +395,17 @@
             self.noteHidden = NO;
             [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:YES];
-            [self handleNoteSectionAlignment];
         }];
     } else if (!barsHidden) {
         [UIView animateWithDuration:duration animations:^{
             self.scrollView.backgroundColor = [UIColor blackColor];
             [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:NO];
-            [self handleNoteSectionAlignment];
         }];
     }
 }
 
 - (void)updateForHiddenBars {
-    //    if (self.viewsVisible == YES) {
     if (self.barsVisible == YES) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
@@ -409,15 +413,12 @@
             self.noteHidden = NO;
             [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:YES];
-            [self handleNoteSectionAlignment];
         }];
-        //    } else if (self.viewsVisible == NO) {
     } else if (self.barsVisible == NO) {
         [UIView animateWithDuration:0.2 animations:^{
             self.scrollView.backgroundColor = [UIColor blackColor];
             [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:NO];
-            [self handleNoteSectionAlignment];
         }];
     }
 }
@@ -447,22 +448,6 @@
     [self.noteEntry setText:@""];
 }
 
-- (void)handleNoteSectionAlignment { //cjm note shift.  we can probably remove this.
-    /*
-    if (self.viewsVisible) {
-        if (self.isQuickNote) {
-            [self setNoteShown:NO];
-        } else {
-            [self setNoteShown:NO];
-        }
-    } else {
-        [self setNoteShown:NO];
-    }
-    
-    [self.noteSection setNeedsUpdateConstraints];
-     */
-}
-
 - (BOOL)prefersHomeIndicatorAutoHidden {
     if (self.noteHidden == YES) {
         return YES;
@@ -470,7 +455,11 @@
     return NO;
 }
 
-//Enables editing the note and title sections
+//Implements control states for the note section:
+//Note down, bars visible: button is hidden.
+//Note down, bars hidden: button displays "Hide".  Tapping in this state hides the note section.
+//Note up, text edit disabled: button displays  "Edit".  Tapping enables note section text fields, makes note text field first responsder, changes button text to "Done".
+//Note up, text edit enabled: button displays "Done".  Tapping disables text fields, all fields are checked for text with values being loaded into appropriate cjmImage variables.
 - (IBAction)enableEdit:(id)sender {
     if ([self.editNoteButton.titleLabel.text isEqualToString:@"Hide"]) {
         [self.noteSection setHidden:YES];
@@ -507,13 +496,7 @@
     }
 }
 
-- (void)setViewsVisible:(BOOL)viewsVisible {
-    _viewsVisible = viewsVisible;
-//    [selupdateNoteSectionForSingleTapap];
-}
-
 - (IBAction)imageViewTapped:(id)sender {
-    //cjm 12/30 viewsVisible. this is the first method called when the user taps once on the UIScrollView.
     NSLog(@"****IMAGEVIEW TAPPED****");
     if (self.isQuickNote) {
         if (self.navigationController.navigationBar.isHidden == YES) {
