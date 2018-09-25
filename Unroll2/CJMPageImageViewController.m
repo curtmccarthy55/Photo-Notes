@@ -60,10 +60,12 @@
     }
 }
 
+/*TODO: hide home indicator
 - (UIViewController *)childViewControllerForHomeIndicatorAutoHidden {
     CJMFullImageViewController *currentVC = [self fullImageViewControllerForIndex:self.currentIndex];
     return currentVC;
 }
+ */
 
 #pragma mark UIPageViewControllerDataSource
 
@@ -103,13 +105,6 @@
     }
 }
 
-#pragma mark - navBar and toolbar visibility
-
-- (void)setMakeViewsVisible:(BOOL)setting { //cjm note shift
-    _makeViewsVisible = setting;
-//    [self toggleViewVisibility];
-}
-
 #pragma mark - navBar and toolbar buttons
 
 - (IBAction)favoriteImage:(UIBarButtonItem *)sender { //cjm favorites PageVC -> ImageVC
@@ -137,26 +132,15 @@
     [currentVC confirmImageDelete];
 }
 
-- (void)toggleViewVisibility { //cjm note shift.  Can likely remove this as FullImageVC is now responsible.
-    if (self.makeViewsVisible == NO) {
-        [self setNeedsStatusBarAppearanceUpdate];
-        [UIView animateWithDuration:0.2 animations:^{
-            [self.navigationController setNavigationBarHidden:YES];
-            [self.navigationController setToolbarHidden:YES];
-        }];
-    } else if (self.makeViewsVisible == YES) {
-        [self setNeedsStatusBarAppearanceUpdate];
-        [UIView animateWithDuration:0.2 animations:^{
-            [self.navigationController setNavigationBarHidden:NO animated:YES];
-            [self.navigationController setToolbarHidden:NO animated:YES];
-        }];
-    }
-}
-
 #pragma mark - CJMFullImageVC Delegate Methods
 
 - (void)updateBarsHidden:(BOOL)setting {
     self.makeViewsVisible = setting;
+    if (self.makeViewsVisible) {
+        [NSNotificationCenter.defaultCenter postNotificationName:@"ImageShowBars" object:nil];
+    } else {
+        [NSNotificationCenter.defaultCenter postNotificationName:@"ImageHideBars" object:nil];
+    }
 }
 
 //deletes the currently displayed image and updates screen based on position in album

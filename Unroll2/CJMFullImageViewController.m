@@ -60,6 +60,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    [NSNotificationCenter.defaultCenter  addObserver:self
+                                            selector:@selector(showBars) name:@"ImageShowBars"
+                                              object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self
+                                           selector:@selector(hideBars) name:@"ImageHideBars"
+                                             object:nil];
+    
+    
+    
     //this line prevents the image from jumping around when Nav bars are hidden/shown
     self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     
@@ -125,7 +135,6 @@
     
     //cjm 09/25 nav bar handling
     [self updateForBarVisibility:self.barsVisible animated:NO];
-    [self toggleBars];
     [self updateConstraints];
     
     if (!self.isQuickNote) {
@@ -190,6 +199,10 @@
     if (self.favoriteChanged != self.cjmImage.photoFavorited) {
         [self handleFavoriteDidChange];
     }
+}
+
+- (void)dealloc {
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (void)handleFavoriteDidChange {
@@ -380,64 +393,60 @@
 }
 
 #pragma mark - View adjustments
+- (void)hideBars {
+    self.barsVisible = NO;
+}
 
-- (void)handleBarHiding {
-    [self updateForBarVisibility:self.barsVisible animated:YES];
-    [self toggleBars];
+- (void)showBars {
+    self.barsVisible = YES;
 }
 
 - (void)updateForBarVisibility:(BOOL)barsHidden animated:(BOOL)animated { //if called from viewWillAppear: animated == false, else animated == true
     NSTimeInterval duration = animated ? 0.2 : 0.0;
-    if (barsHidden) {
+    [self setNeedsStatusBarAppearanceUpdate];
+    if (self.barsVisible) {
         [UIView animateWithDuration:duration animations:^{
             self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
             [self.noteSection setHidden:NO];
             self.noteHidden = NO;
             [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:YES];
-        }];
-    } else if (!barsHidden) {
-        [UIView animateWithDuration:duration animations:^{
-            self.scrollView.backgroundColor = [UIColor blackColor];
-            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
-            [self.editNoteButton setHidden:NO];
-        }];
-    }
-}
-
-- (void)updateForHiddenBars {
-    if (self.barsVisible == YES) {
-        [UIView animateWithDuration:0.2 animations:^{
-            self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-            [self.noteSection setHidden:NO];
-            self.noteHidden = NO;
-            [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
-            [self.editNoteButton setHidden:YES];
-        }];
-    } else if (self.barsVisible == NO) {
-        [UIView animateWithDuration:0.2 animations:^{
-            self.scrollView.backgroundColor = [UIColor blackColor];
-            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
-            [self.editNoteButton setHidden:NO];
-        }];
-    }
-}
-
-- (void)toggleBars {
-    if (self.barsVisible == NO) {
-        [self setNeedsStatusBarAppearanceUpdate];
-        [UIView animateWithDuration:0.2 animations:^{
-            [self.navigationController setNavigationBarHidden:YES animated:YES];
-            [self.navigationController setToolbarHidden:YES animated:YES];
-        }];
-    } else if (self.barsVisible == YES) {
-        [self setNeedsStatusBarAppearanceUpdate];
-        [UIView animateWithDuration:0.2 animations:^{
+            //toggleBars
             [self.navigationController setNavigationBarHidden:NO animated:YES];
             [self.navigationController setToolbarHidden:NO animated:YES];
         }];
+//    } else if (!barsHidden) { //below is for if bars should be hidden...
+    } else if (!self.barsVisible)  {
+        [UIView animateWithDuration:duration animations:^{
+            self.scrollView.backgroundColor = [UIColor blackColor];
+            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:NO];
+            
+            
+            //toggleBars
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
+            [self.navigationController setToolbarHidden:YES animated:YES];
+        }];
     }
 }
+//TODO: clear this if possible
+//- (void)updateForHiddenBars {
+//    if (self.barsVisible == YES) {
+//        [UIView animateWithDuration:0.2 animations:^{
+//            self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+//            [self.noteSection setHidden:NO];
+//            self.noteHidden = NO;
+//            [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
+//            [self.editNoteButton setHidden:YES];
+//        }];
+//    } else if (self.barsVisible == NO) {
+//        [UIView animateWithDuration:0.2 animations:^{
+//            self.scrollView.backgroundColor = [UIColor blackColor];
+//            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
+//            [self.editNoteButton setHidden:NO];
+//        }];
+//    }
+//}
 
 #pragma mark - Buttons and taps
 
@@ -490,7 +499,9 @@
         self.noteEntry.selectable = NO;
         [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
         [self.editNoteButton sizeToFit];
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
+//        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        [NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+        [NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillHideNotification object:nil];
         
         [[CJMAlbumManager sharedInstance] save];
     }
@@ -508,7 +519,6 @@
         BOOL updateBars = !self.barsVisible;
         self.barsVisible = updateBars;
         [self updateForBarVisibility:self.barsVisible animated:YES];
-        [self toggleBars];
         [self.delegate updateBarsHidden:self.barsVisible];
     }
 }
