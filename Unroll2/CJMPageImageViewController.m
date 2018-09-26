@@ -11,6 +11,7 @@
 @interface CJMPageImageViewController ()
 
 @property (nonatomic) BOOL makeViewsVisible;
+@property (nonatomic) BOOL makeHomeVisible;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonFavorite;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonOptions;
 @property (nonatomic) CGFloat noteOpacity;
@@ -53,19 +54,24 @@
 }
 
 -(BOOL)prefersStatusBarHidden {
-    if (self.makeViewsVisible && self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
-        return NO;
-    } else {
+    if (!self.makeViewsVisible || self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
+        NSLog(@"PageImageVC prefersStatusBarHidden returned YES");
         return YES;
+    } else {
+        NSLog(@"PageImageVC prefersStatusBarHidden returned NO");
+        return NO;
     }
 }
 
-/*TODO: hide home indicator
-- (UIViewController *)childViewControllerForHomeIndicatorAutoHidden {
-    CJMFullImageViewController *currentVC = [self fullImageViewControllerForIndex:self.currentIndex];
-    return currentVC;
+- (BOOL)prefersHomeIndicatorAutoHidden {
+    if (!self.makeViewsVisible && !self.makeHomeVisible) { //if bars aren't visible or 
+        NSLog(@"PageImageVC prefersHomeIndicatorAutoHidden returned YES");
+        return YES;
+    } else {
+        NSLog(@"PageImageVC prefersHomeIndicatorAutoHidden returned NO");
+        return NO;
+    }
 }
- */
 
 #pragma mark UIPageViewControllerDataSource
 
@@ -136,11 +142,17 @@
 
 - (void)updateBarsHidden:(BOOL)setting {
     self.makeViewsVisible = setting;
+    [self setNeedsStatusBarAppearanceUpdate];
     if (self.makeViewsVisible) {
         [NSNotificationCenter.defaultCenter postNotificationName:@"ImageShowBars" object:nil];
     } else {
         [NSNotificationCenter.defaultCenter postNotificationName:@"ImageHideBars" object:nil];
     }
+}
+
+- (void)makeHomeIndicatorVisible:(BOOL)visible {
+    self.makeHomeVisible = visible;
+    [self setNeedsUpdateOfHomeIndicatorAutoHidden];
 }
 
 //deletes the currently displayed image and updates screen based on position in album

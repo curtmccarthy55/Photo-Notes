@@ -15,6 +15,7 @@
 
 @optional
 - (void)updateBarsHidden:(BOOL)setting;
+- (void)makeHomeIndicatorVisible:(BOOL)visible;
 - (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex;
 - (void)photoIsFavorited:(BOOL)isFavorited;     //cjm favorites ImageVC -> PageVC
 

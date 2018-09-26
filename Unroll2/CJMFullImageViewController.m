@@ -98,6 +98,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setPrefersLargeTitles:NO];
+    if (!self.isQuickNote) {
+        [self.delegate makeHomeIndicatorVisible:YES];
+    }
     
     [self updateZoom];
     self.favoriteChanged = self.cjmImage.photoFavorited;
@@ -130,6 +133,10 @@
     
     //cjm 09/25 nav bar handling
     [self updateForBarVisibility:self.barsVisible animated:NO];
+    if (!self.barsVisible) {
+        [self.noteSection setHidden:NO];
+        self.noteHidden = NO;
+    }
     [self updateConstraints];
     
     if (!self.isQuickNote) {
@@ -400,11 +407,22 @@
     self.barsVisible = YES;
 }
 
+- (BOOL)prefersStatusBarHidden {
+    NSLog(@"fullImageVC prefersStatusBarHidden called");
+    if (!self.barsVisible) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 - (void)updateForBarVisibility:(BOOL)visible animated:(BOOL)animated {
     //if called from viewWillAppear: animated == false, else animated == true
     NSTimeInterval duration = animated ? 0.2 : 0.0;
-    [self setNeedsStatusBarAppearanceUpdate];
     if (visible) {
+        if (!self.isQuickNote) {
+            [self.delegate makeHomeIndicatorVisible:YES];
+        }
         [UIView animateWithDuration:duration animations:^{
             //toggleBars
             [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -456,7 +474,9 @@
     if ([self.editNoteButton.titleLabel.text isEqualToString:@"Hide"]) {
         [self.noteSection setHidden:YES];
         self.noteHidden = YES;
-        [self prefersHomeIndicatorAutoHidden];
+        if (!self.isQuickNote) {
+            [self.delegate makeHomeIndicatorVisible:NO];
+        }
     } else if ([self.editNoteButton.titleLabel.text isEqual:@"Edit"]) {
         [self registerForKeyboardNotifications];
         self.noteTitle.enabled = YES;

@@ -71,6 +71,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     return returnSize;
 }
 
+-(BOOL)prefersStatusBarHidden {
+    NSLog(@"GalleryVC prefersStatusBarHidden called.");
+    return NO;
+}
+
 //Make sure nav bars and associated controls are visible whenever the gallery appears.
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
