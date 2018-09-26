@@ -605,7 +605,6 @@
                         <outlet property="rightConstraint" destination="7Ba-sJ-cgT" id="VPd-Pk-Hbu"/>
                         <outlet property="scrollView" destination="657-po-rB3" id="Cqd-Ns-NfT"/>
                         <outlet property="seeNoteButton" destination="Wdb-G9-he9" id="ab3-dh-JcD"/>
-                        <outlet property="superHeight" destination="gFK-OZ-kWU" id="eqC-3d-UX2"/>
                         <outlet property="topConstraint" destination="N7P-wH-oks" id="fl1-Pm-qGm"/>
                         <outlet property="twoTap" destination="UoA-ua-AfI" id="DC9-vC-nq8"/>
                     </connections>

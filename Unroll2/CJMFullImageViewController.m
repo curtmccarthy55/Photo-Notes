@@ -12,8 +12,6 @@
 #import "CJMImage.h"
 #import "CJMHudView.h"
 
-#define IS_IPHONE_X (BOOL)(UIScreen.mainScreen.bounds.size.height == 812.00)
-
 @import Photos;
 
 @interface CJMFullImageViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate>
@@ -39,10 +37,9 @@
 @property (strong, nonatomic) IBOutlet UILabel *photoLocAndDate;
 @property (strong, nonatomic) IBOutlet UIButton *seeNoteButton;
 @property (strong, nonatomic) IBOutlet UIButton *editNoteButton;
-//Note View constraints
+//Note View dynamic constraints
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *noteSectionDown;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *noteSectionUp;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *superHeight;
 
 #pragma mark Functionality Variables
 @property (nonatomic) CGFloat lastZoomScale;
@@ -61,7 +58,7 @@
     [super viewDidLoad];
     
     
-    [NSNotificationCenter.defaultCenter  addObserver:self
+    [NSNotificationCenter.defaultCenter addObserver:self
                                             selector:@selector(showBars) name:@"ImageShowBars"
                                               object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self
@@ -101,8 +98,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setPrefersLargeTitles:NO];
-    
-    NSLog(@"IS_IPHONE_X == %d", IS_IPHONE_X);
     
     [self updateZoom];
     self.favoriteChanged = self.cjmImage.photoFavorited;
@@ -164,6 +159,10 @@
             [self.navigationController.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor blackColor] }];
         }
         [self.navigationController.navigationBar setBarTintColor:self.userColor];
+        
+        if (self.isQuickNote) {
+            [self.navigationController setToolbarHidden:YES animated:NO];
+        }
     }
 }
 
@@ -392,7 +391,7 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - View adjustments
+#pragma mark - Nav Bar adjustments
 - (void)hideBars {
     self.barsVisible = NO;
 }
@@ -401,52 +400,36 @@
     self.barsVisible = YES;
 }
 
-- (void)updateForBarVisibility:(BOOL)barsHidden animated:(BOOL)animated { //if called from viewWillAppear: animated == false, else animated == true
+- (void)updateForBarVisibility:(BOOL)visible animated:(BOOL)animated {
+    //if called from viewWillAppear: animated == false, else animated == true
     NSTimeInterval duration = animated ? 0.2 : 0.0;
     [self setNeedsStatusBarAppearanceUpdate];
-    if (self.barsVisible) {
+    if (visible) {
         [UIView animateWithDuration:duration animations:^{
+            //toggleBars
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+            [self.navigationController setToolbarHidden:NO animated:YES];
+            
+            //update note appearance
             self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
             [self.noteSection setHidden:NO];
             self.noteHidden = NO;
             [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:YES];
-            //toggleBars
-            [self.navigationController setNavigationBarHidden:NO animated:YES];
-            [self.navigationController setToolbarHidden:NO animated:YES];
         }];
-//    } else if (!barsHidden) { //below is for if bars should be hidden...
-    } else if (!self.barsVisible)  {
+    } else if (!visible)  {
         [UIView animateWithDuration:duration animations:^{
-            self.scrollView.backgroundColor = [UIColor blackColor];
-            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
-            [self.editNoteButton setHidden:NO];
-            
-            
             //toggleBars
             [self.navigationController setNavigationBarHidden:YES animated:YES];
             [self.navigationController setToolbarHidden:YES animated:YES];
+            
+            //update note appearance
+            self.scrollView.backgroundColor = [UIColor blackColor];
+            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
+            [self.editNoteButton setHidden:NO];
         }];
     }
 }
-//TODO: clear this if possible
-//- (void)updateForHiddenBars {
-//    if (self.barsVisible == YES) {
-//        [UIView animateWithDuration:0.2 animations:^{
-//            self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-//            [self.noteSection setHidden:NO];
-//            self.noteHidden = NO;
-//            [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
-//            [self.editNoteButton setHidden:YES];
-//        }];
-//    } else if (self.barsVisible == NO) {
-//        [UIView animateWithDuration:0.2 animations:^{
-//            self.scrollView.backgroundColor = [UIColor blackColor];
-//            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
-//            [self.editNoteButton setHidden:NO];
-//        }];
-//    }
-//}
 
 #pragma mark - Buttons and taps
 

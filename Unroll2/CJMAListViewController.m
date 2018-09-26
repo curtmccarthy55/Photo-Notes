@@ -821,6 +821,7 @@
         vc.isQuickNote = YES;
         vc.userColor = self.userColor;
         vc.userColorTag = self.userColorTag;
+        vc.barsVisible = YES;
         NSNumber *numOpac = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
         vc.noteOpacity = numOpac ? numOpac.floatValue : 0.75;
     } else if ([segue.identifier isEqualToString:@"ViewSettings"]) {
