@@ -764,18 +764,30 @@
         [alert addAction:actionDismiss];
         [self presentViewController:alert animated:YES completion:nil];
     } else {
-        NSUInteger favInt = [[CJMAlbumManager sharedInstance].allAlbums indexOfObject:[CJMAlbumManager sharedInstance].favPhotosAlbum];
-        NSIndexPath *favPath = [NSIndexPath indexPathForRow:favInt inSection:0];
-        BOOL favoritesActive = [CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos.count > 0 ? YES : NO;
-        [[CJMAlbumManager sharedInstance] removeAlbumAtIndex:indexPath.row];
-        [[CJMAlbumManager sharedInstance] save];
-        if ([CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos.count < 1 && favoritesActive) {
-            [tableView deleteRowsAtIndexPaths:@[indexPath, favPath] withRowAnimation:UITableViewRowAnimationFade];
-        } else {
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        }
-        [tableView reloadData];
-        [self noAlbumsPopUp];
+        NSString *message = [NSString stringWithFormat:@"Any photo notes in %@ will be permanently deleted.", album.albumTitle];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete Album?"
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:@"Delete"
+                                                               style:UIAlertActionStyleDestructive
+                                                             handler:^(UIAlertAction *action) {
+            NSUInteger favInt = [[CJMAlbumManager sharedInstance].allAlbums indexOfObject:[CJMAlbumManager sharedInstance].favPhotosAlbum];
+            NSIndexPath *favPath = [NSIndexPath indexPathForRow:favInt inSection:0];
+            BOOL favoritesActive = [CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos.count > 0 ? YES : NO;
+            [[CJMAlbumManager sharedInstance] removeAlbumAtIndex:indexPath.row];
+            [[CJMAlbumManager sharedInstance] save];
+            if ([CJMAlbumManager sharedInstance].favPhotosAlbum.albumPhotos.count < 1 && favoritesActive) {
+                [tableView deleteRowsAtIndexPaths:@[indexPath, favPath] withRowAnimation:UITableViewRowAnimationFade];
+            } else {
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            }
+            [tableView reloadData];
+            [self noAlbumsPopUp];
+        }];
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:actionDelete];
+        [alert addAction:actionCancel];
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 
