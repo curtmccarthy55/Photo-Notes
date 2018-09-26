@@ -20,9 +20,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import <dispatch/dispatch.h>
 
-#define CellSize [(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize]
-#define CelSize self.view.bounds.size.width - self.view.safeAreaInsets.left - self.view.safeAreaInsets.right
-
 @import Photos;
 
 @interface CJMGalleryViewController () <CJMAListPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource>
@@ -41,6 +38,7 @@
 @property (nonatomic, strong) UIButton *flashButton;
 @property (nonatomic, strong) UIButton *doneButton;
 @property (nonatomic, readonly) CGSize cellSize;
+@property (nonatomic) CGFloat newCellSize;
 
 @end
 
@@ -81,9 +79,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self.navigationController.navigationBar setHidden:NO];
     [self.navigationController.toolbar setHidden:NO];
     [self.navigationController.navigationBar setPrefersLargeTitles:YES];
-//    self.navigationController.navigationBar.alpha = 1;
-//    self.navigationController.toolbar.alpha = 1;
     [self confirmEditButtonEnabled];
+    //cjm 09/26
+//    NSLog(@"viewWillAppear view.safeAreaSize.width == %f, .height == %f", self.view.safeAreaLayoutGuide.layoutFrame.size.width, self.view.safeAreaLayoutGuide.layoutFrame.size.height);
+//    NSLog(@"viewWillAppear collView.safeAreaSize.width == %f, .height == %f", self.collectionView.safeAreaLayoutGuide.layoutFrame.size.width, self.collectionView.safeAreaLayoutGuide.layoutFrame.size.height);
+    NSLog(@"viewWillAppear called");
+
+    self.newCellSize = 0.0;
     [self.collectionView reloadData];
     
     if ([self.album.albumTitle isEqualToString:@"Favorites"]) {
@@ -94,6 +96,39 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
 }
 
+- (void)photoCellForWidth:(CGFloat)saWidth { //cjm cellSize
+    CGFloat cellsPerRow = 0.0;
+//    CGFloat cellSpacing = 1.0;
+    
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    if (UIDeviceOrientationIsLandscape(orientation)) {
+        cellsPerRow = 6.0;
+    } else {
+        cellsPerRow = 4.0;
+    }
+    self.newCellSize = (saWidth - (cellsPerRow + 1.0)/* * cellSpacing*/) / cellsPerRow;
+    NSLog(@"photoCellForWidth newCellSize == %f", self.newCellSize);
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator { //cjm cellSize
+    NSLog(@"viewWillTransitionToSize size.width == %f, size.height == %f", size.width, size.height);
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    self.newCellSize = 0.0;
+    [self.collectionViewLayout invalidateLayout];
+}
+/*
+override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    photoCellForSize(UIScreen.main.bounds.size)
+    collectionView?.reloadData()
+}
+
+override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransition(to: size, with: coordinator)
+    photoCellForSize(size)
+    collectionViewLayout.invalidateLayout()
+}
+*/
 
 //Add photo count footer to gallery.
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -989,16 +1024,25 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 //Establishes cell size based on device screen size.  4 cells across in portrait, 5 cells across in landscape.
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
-        CGFloat viewWidth = lroundf(collectionView.frame.size.width);
-        int cellWidth = (viewWidth/5) - 2;
-        return CGSizeMake(cellWidth, cellWidth);
-    } else {
-        CGFloat viewWidth = lroundf(collectionView.frame.size.width);
-        int cellWidth = (viewWidth/4) - 2;
-        return CGSizeMake(cellWidth, cellWidth);
+{ //cjm cellSize
+    if (self.newCellSize == 0.0) {
+        CGFloat cvSize = self.collectionView.safeAreaLayoutGuide.layoutFrame.size.width;
+        [self photoCellForWidth:cvSize];
     }
+    /*
+    NSLog(@"****cjm**** sizeForItemAtIndexPath called.");
+    CGFloat cvSize = self.collectionView.safeAreaLayoutGuide.layoutFrame.size.width;
+    CGFloat cellsPerRow = 0.0;
+    
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    if (UIDeviceOrientationIsLandscape(orientation)) {
+        cellsPerRow = 6.0;
+    } else {
+        cellsPerRow = 4.0;
+    }
+    self.newCellSize = (cvSize - (cellsPerRow + 1.0)) / cellsPerRow;
+     */
+    return CGSizeMake(self.newCellSize, self.newCellSize);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -1007,8 +1051,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //resizes collectionView cells per sizeForItemAtIndexPath when user rotates device.
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     [self.collectionView.collectionViewLayout invalidateLayout];
 }
