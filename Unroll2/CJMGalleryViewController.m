@@ -324,7 +324,7 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
             UIAlertController *noPhotosAlert = [UIAlertController alertControllerWithTitle:@"No photos added yet" message:@"Tap the camera below to add photos" preferredStyle:UIAlertControllerStyleAlert];
             
             UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Take Picture" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionCamera) {
-                [self takePhoto];
+                [self openCamera];
             }];
             
             UIAlertAction *fetchAction = [UIAlertAction actionWithTitle:@"Choose From Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionFetch) {
@@ -354,7 +354,7 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     
     //Access camera
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForCamera) {
-        [self takePhoto];
+        [self openCamera];
     }];
     
     //Access photo library
@@ -556,36 +556,18 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
 
 #pragma mark - image picker delegate and controls
 
-- (void)takePhoto { //cjm 01/12
+- (void)openCamera { //cjm camera ui
     NSString *mediaType = AVMediaTypeVideo;
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Camera Available" message:@"There's no device camera available for Photo Notes to use." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Camera Available" message:@"There's no camera available for Photo Notes to use." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
         [alert addAction:actionDismiss];
         [self presentViewController:alert animated:YES completion:nil];
     } else if (authStatus != AVAuthorizationStatusAuthorized) {
-        //cjmn 05/30 TEST BELOW CODE.  Make sure this works for both iPhone and iPad, and test for issues with self in the block.
-        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
-            if (granted) { //code copy/pasted from final else statement below.  Perhaps move into its own method.
-                self.imagePicker = [[UIImagePickerController alloc] init];
-                self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                self.imagePicker.showsCameraControls = NO;
-                self.imagePicker.allowsEditing = NO;
-                self.imagePicker.delegate = self;
-                self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
-                self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
-                
-                UIView *overlay;
-                if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
-                    overlay = [self customLandscapeCameraOverlay];
-                } else {
-                    overlay = [self customPortraitCameraOverlay];
-                }
-                [self.imagePicker setCameraOverlayView:overlay];
-                self.imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                
-                [self presentViewController:self.imagePicker animated:YES completion:nil];
+        [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
+            if (granted) {
+                [self presentCamera];
             } else {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Camera Access Denied" message:@"Please allow Photo Notes permission to use the camera in Settings>Privacy>Camera." preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
@@ -594,28 +576,35 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
             }
         }];
     } else {
-        self.imagePicker = [[UIImagePickerController alloc] init];
-        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        self.imagePicker.showsCameraControls = NO;
-        self.imagePicker.allowsEditing = NO;
-        self.imagePicker.delegate = self;
-        self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
-        self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
-        
-        UIView *overlay;
-        if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
-            overlay = [self customLandscapeCameraOverlay];
-        } else {
-            overlay = [self customPortraitCameraOverlay];
-        }
-        [self.imagePicker setCameraOverlayView:overlay];
-        self.imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        
-        [self presentViewController:self.imagePicker animated:YES completion:nil];
+        [self presentCamera];
     }
 }
 
-- (UIView *)customLandscapeCameraOverlay {
+- (void)presentCamera {
+    self.imagePicker = [[UIImagePickerController alloc] init];
+    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    self.imagePicker.showsCameraControls = NO;
+    self.imagePicker.allowsEditing = NO;
+    self.imagePicker.delegate = self;
+    self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
+    self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+    
+    CGAffineTransform adjustHeight = CGAffineTransformMakeTranslation(0.0, 44.0); //cjm camera ui
+    self.imagePicker.cameraViewTransform = adjustHeight;
+    
+    UIView *overlay;
+    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
+        overlay = [self customLandscapeCameraOverlay];
+    } else {
+        overlay = [self customPortraitCameraOverlay];
+    }
+    [self.imagePicker setCameraOverlayView:overlay];
+    self.imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    
+    [self presentViewController:self.imagePicker animated:YES completion:nil];
+}
+
+- (UIView *)customLandscapeCameraOverlay { //cjm camera ui
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
     
     UIView *mainOverlay = [[UIView alloc] initWithFrame:frame];
@@ -695,7 +684,7 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     return mainOverlay;
 }
 
-- (UIView *)customPortraitCameraOverlay { //cjm 01/12
+- (UIView *)customPortraitCameraOverlay { //cjm camera ui
     UIView *mainOverlay = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
     UIView *buttonBar = [[UIView alloc] init];

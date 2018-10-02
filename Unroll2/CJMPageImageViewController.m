@@ -95,7 +95,7 @@
         fullImageController.albumName = self.albumName;
         fullImageController.delegate = self;
         fullImageController.noteOpacity = self.noteOpacity;
-        [fullImageController setBarsVisible:self.makeViewsVisible];
+        fullImageController.barsVisible = self.makeViewsVisible;
             
         return fullImageController;
     }

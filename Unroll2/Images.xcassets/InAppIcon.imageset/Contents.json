@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "plumeria on black@1x.jpg",
+      "filename" : "InAppIcon@1x.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "plumeria on black@2x.jpg",
+      "filename" : "InAppIcon@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "plumeria on black@3x.jpg",
+      "filename" : "InAppIcon@3x.png",
       "scale" : "3x"
     }
   ],

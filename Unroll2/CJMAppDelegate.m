@@ -108,7 +108,7 @@
             [rootViewController performSegueWithIdentifier:@"ViewQuickNote" sender:nil];
             handled = YES;
         } else if ([shortcutType isEqualToString:kCameraAction]) {
-            [rootViewController takePhoto];
+            [rootViewController openCamera];
             handled = YES;
         }
     }

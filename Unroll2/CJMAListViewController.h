@@ -13,6 +13,6 @@
 
 @interface CJMAListViewController : UITableViewController <CJMADetailViewControllerDelegate, CJMFullImageViewControllerDelegate>
 
-- (void)takePhoto;
+- (void)openCamera;
 
 @end

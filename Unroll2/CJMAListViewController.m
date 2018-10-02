@@ -245,7 +245,7 @@
     
     //Access camera
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionForCamera) {
-        [self takePhoto];
+        [self openCamera];
     }];
     
     //Access photo library
@@ -421,11 +421,11 @@
 
 #pragma mark - image picker delegate and controls
 
-- (void)takePhoto { //cjm 01/12
+- (void)openCamera { //cjm 01/12
     NSString *mediaType = AVMediaTypeVideo;
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Camera Available" message:@"There's no device camera available for Photo Notes to use." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Camera Available" message:@"There's no camera available for Photo Notes to use." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
         [alert addAction:actionDismiss];
         [self presentViewController:alert animated:YES completion:nil];
@@ -455,6 +455,48 @@
     self.imagePicker.delegate = self;
     self.imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
     self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+    
+    
+    
+    //cjm camera ui. what're we trying to answer:
+    //how do we know how far to adjust the viewPort down?
+    //get the height of the screen, and if it's greater than 800 pts (and the device is not an iPad?  iPhone X and up, but also iPad...), translate the viewport down at least 44 points to hide notch.
+    //how much room do we have below the viewPort for the bottomBar?
+    //get the viewport height, and subtract it and any translation from the screen's longDimension.
+    //how tall should we make the bottomBar?
+    //once we have the height of the bottom area, set the buttonBar's height equal to the remaining space.  Pin the bottomBar's bottom to the screen's bottom, then pin any added buttons to the view's safe area.
+    CGFloat screenHeight = UIScreen.mainScreen.bounds.size.height;
+    CGFloat screenWidth = UIScreen.mainScreen.bounds.size.width;
+    CGFloat longDimension;
+    CGFloat shortDimension;
+    if (screenHeight > screenWidth) {
+        longDimension = screenHeight;
+        shortDimension = screenWidth;
+    } else {
+        longDimension = screenWidth;
+        shortDimension = screenHeight;
+    }
+    CGSize cameraFrame;
+    CGFloat aspectRatio = 4.0 / 3.0;
+    cameraFrame = CGSizeMake(shortDimension, shortDimension * aspectRatio);
+    
+    if (longDimension < 800) {
+        //determine remaining space for bottom buttons
+        screenHeight -= 44.0; //subtract top bar
+        screenHeight -= cameraFrame.height; //subtract viewport.
+        //set buttonBar height = screenHeight, and set the contents relative to buttonBar's safe area.
+        
+    }
+    
+    
+    
+    CGAffineTransform adjustHeight = CGAffineTransformMakeTranslation(0.0, 44.0); //cjm camera ui
+    self.imagePicker.cameraViewTransform = adjustHeight;
+    
+    
+    
+    
+    
     
     //cjm 01/19 check orientation/trait collection and call the appropriate overlay
     UIView *overlay;
@@ -487,7 +529,7 @@
     UIView *mainOverlay = [[UIView alloc] initWithFrame:frame];
     [mainOverlay setBackgroundColor:[UIColor clearColor]];
     
-    /*Should replace dummy view with UILayoutGuide.  Below should have the same effect as buttonBar set up that follows.
+    /*cjm camera ui Should replace dummy view with UILayoutGuide.  Below should have the same effect as buttonBar set up that follows.
     UILayoutGuide *buttonGuide = [UILayoutGuide new];
     [mainOverlay addLayoutGuide:buttonGuide];
     [buttonGuide.centerXAnchor constraintEqualToAnchor:mainOverlay.centerXAnchor].active = YES;

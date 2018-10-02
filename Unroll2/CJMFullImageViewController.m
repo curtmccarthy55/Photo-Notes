@@ -80,13 +80,12 @@
         self.fullImage = fetchedImage;
     }];
     
-    self.editNoteButton.hidden = YES;
     [self.oneTap requireGestureRecognizerToFail:self.twoTap];
     
     //following lines moved from viewWillAppear
     [self.noteSection setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:self.noteOpacity]];
     
-    self.imageView.image = self.fullImage ? self.fullImage : [UIImage imageNamed:@"IconPhoto"];
+    self.imageView.image = self.fullImage ? self.fullImage : [UIImage imageNamed:@"InAppIcon"];
     if (@available(iOS 11.0, *)) {
         self.imageView.accessibilityIgnoresInvertColors = YES;
         self.noteSection.accessibilityIgnoresInvertColors = YES;
@@ -144,8 +143,7 @@
     }//cjm favorites ImageVC -> PageVC
     
     if (self.fullImage == nil) {
-        [self.scrollView setBackgroundColor:self.userColor];
-        [self.scrollView setAlpha:0.90];
+        [self.scrollView setBackgroundColor:[UIColor blackColor]];
     }
     if (self.isQuickNote) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Clear"
@@ -153,7 +151,7 @@
                                                                                  target:self
                                                                                  action:@selector(clearNote)];
         [self.oneTap setEnabled:NO];
-        self.scrollView.backgroundColor = !self.fullImage ? self.userColor : [UIColor blackColor];
+        self.scrollView.backgroundColor = [UIColor blackColor];//!self.fullImage ? self.userColor : [UIColor blackColor];
         if (self.userColorTag.integerValue != 5 && self.userColorTag.integerValue != 7) {
             [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
             [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
@@ -194,7 +192,6 @@
     if (self.displayingNote) {
         [self shiftNote:nil];
     }
-    
     
     if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
@@ -335,7 +332,7 @@
         [UIView animateWithDuration:0.25 animations:^{
             [self.noteSection.superview layoutIfNeeded];
             
-            self.editNoteButton.hidden = NO;
+            [self.editNoteButton setHidden:NO];
             [self.seeNoteButton setTitle:@"Dismiss" forState:UIControlStateNormal];
             [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
             
@@ -382,7 +379,7 @@
             [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
             [self.editNoteButton setHidden:NO];
         }else {
-            self.editNoteButton.hidden = YES;
+            [self.editNoteButton setHidden:YES];
         }
         
         [self.seeNoteButton setTitle:@"See Note" forState:UIControlStateNormal];
@@ -401,10 +398,14 @@
 #pragma mark - Nav Bar adjustments
 - (void)hideBars {
     self.barsVisible = NO;
+    [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
+    [self.editNoteButton setHidden:NO];
 }
 
 - (void)showBars {
     self.barsVisible = YES;
+    [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
+    [self.editNoteButton setHidden:YES];
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -418,7 +419,7 @@
 
 - (void)updateForBarVisibility:(BOOL)visible animated:(BOOL)animated {
     //if called from viewWillAppear: animated == false, else animated == true
-    NSTimeInterval duration = animated ? 0.2 : 0.0;
+    NSTimeInterval duration = 0.0;//animated ? 0.2 : 0.0;
     if (visible) {
         if (!self.isQuickNote) {
             [self.delegate makeHomeIndicatorVisible:YES];
