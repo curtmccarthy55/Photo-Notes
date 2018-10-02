@@ -47,7 +47,7 @@
                 cell.cellThumbnail.image = thumbnail;
             }];
         } else {
-            cell.cellThumbnail.image = [UIImage imageNamed:@"no_image.jpg"];
+            cell.cellThumbnail.image = [UIImage imageNamed:@"NoImage"];
         }
     }
     if (@available(iOS 11.0, *)) {

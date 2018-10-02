@@ -95,40 +95,6 @@
     return cell;
 }
 
-//- (void)configureTextForCell:(CJMAListTableViewCell *)cell withAlbum:(CJMPhotoAlbum *)album
-//{
-//    cell.cellAlbumName.text = album.albumTitle;
-//    
-//    if (album.albumPhotos.count == 0) {
-//        cell.cellAlbumCount.text = @"No Photos";
-//    } else if (album.albumPhotos.count == 1) {
-//        cell.cellAlbumCount.text = @"1 Photo";
-//    } else {
-//        cell.cellAlbumCount.text = [NSString stringWithFormat:@"%lu Photos", (unsigned long)album.albumPhotos.count];
-//    }
-//}
-//
-//- (void)configureThumbnailForCell:(CJMAListTableViewCell *)cell forAlbum:(CJMPhotoAlbum *)album
-//{
-//    [[CJMServices sharedInstance] fetchThumbnailForImage:album.albumPreviewImage
-//                                                 handler:^(UIImage *thumbnail) {
-//                                                     cell.cellThumbnail.image = thumbnail;
-//                                                 }];
-//    
-//    if (cell.cellThumbnail.image == nil) {
-//        if (album.albumPhotos.count >= 1) {
-//            CJMImage *firstImage = album.albumPhotos[0];
-//            
-//            [[CJMServices sharedInstance] fetchThumbnailForImage:firstImage handler:^(UIImage *thumbnail) {
-//                cell.cellThumbnail.image = thumbnail;
-//            }];
-//            
-//        } else {
-//            cell.cellThumbnail.image = [UIImage imageNamed:@"no_image.jpg"];
-//        }
-//    }
-//}
-
 //replaces blank rows with blank space in the tableView
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
