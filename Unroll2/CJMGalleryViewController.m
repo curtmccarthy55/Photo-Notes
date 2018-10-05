@@ -36,9 +36,15 @@
 
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
 @property (nonatomic, strong) UIButton *flashButton;
+@property (nonatomic, strong) UIImageView *capturedPhotos;
 @property (nonatomic, strong) UIButton *doneButton;
+@property (nonatomic, strong) UIButton *cameraCancelButton;
+@property (nonatomic, strong) UIButton *cameraFlipButton;
+@property (nonatomic) UIDeviceOrientation lastOrientation;
+
 @property (nonatomic, readonly) CGSize cellSize;
 @property (nonatomic) CGFloat newCellSize;
+
 
 @end
 
@@ -616,7 +622,45 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     [self.imagePicker setCameraOverlayView:overlay];
     self.imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     
-    [self presentViewController:self.imagePicker animated:YES completion:nil];
+    
+    self.lastOrientation = UIDevice.currentDevice.orientation;
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(rotateCameraViews) name:UIDeviceOrientationDidChangeNotification object:nil]; //cjm 10/05
+    
+    
+    [self presentViewController:self.imagePicker animated:YES completion:^{
+        [self rotateCameraViews];
+    }];
+}
+
+- (void)rotateCameraViews { //cjm 10/05
+    UIDeviceOrientation orientation = UIDevice.currentDevice.orientation;
+    double rotation = 1;
+    switch (orientation) {
+        case UIDeviceOrientationPortrait:
+            rotation = 0;
+            break;
+            
+        case UIDeviceOrientationLandscapeLeft:
+            rotation = M_PI_2;
+            break;
+            
+        case UIDeviceOrientationLandscapeRight:
+            rotation = -M_PI_2;
+            break;
+            
+        default:
+            break;
+    }
+    if (rotation != 1) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.capturedPhotos.transform = CGAffineTransformMakeRotation(rotation);
+            self.flashButton.transform = CGAffineTransformMakeRotation(rotation);
+            self.cameraFlipButton.transform = CGAffineTransformMakeRotation(rotation);
+            self.doneButton.transform = CGAffineTransformMakeRotation(rotation);
+            self.cameraCancelButton.transform = CGAffineTransformMakeRotation(rotation);
+        }];
+    }
+    self.lastOrientation = orientation;
 }
 
 - (UIView *)cameraOverlayWithFrame:(CGRect)overlayFrame containerHeight:(CGFloat)barHeight {
@@ -642,7 +686,18 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     cameraButton.translatesAutoresizingMaskIntoConstraints = NO;
     [buttonBar addSubview:cameraButton];
     [cameraButton.centerXAnchor constraintEqualToAnchor:saGuide.centerXAnchor].active = YES;
-    [cameraButton.centerYAnchor constraintEqualToAnchor:saGuide.centerYAnchor].active = YES;
+    [cameraButton.bottomAnchor constraintEqualToAnchor:saGuide.bottomAnchor].active = YES;
+    
+    //add captured photos thumbnail
+    self.capturedPhotos = [UIImageView new];
+    [self.capturedPhotos setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.capturedPhotos setContentMode: UIViewContentModeScaleAspectFit];
+    [self.capturedPhotos setImage:[UIImage imageNamed:@"NoImage"]];
+    [mainOverlay addSubview:self.capturedPhotos];
+    [self.capturedPhotos.widthAnchor constraintEqualToAnchor:saGuide.heightAnchor multiplier:0.5].active = YES;
+    [self.capturedPhotos.heightAnchor constraintEqualToAnchor:saGuide.heightAnchor multiplier:0.5].active = YES;
+    [self.capturedPhotos.centerXAnchor constraintEqualToAnchor:saGuide.centerXAnchor].active = YES;
+    [self.capturedPhotos.topAnchor constraintEqualToAnchor:saGuide.topAnchor constant:16.0].active = YES;
     
     //add flash button
     UIImage *currentFlash;
@@ -663,16 +718,16 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     [self.flashButton.widthAnchor constraintEqualToConstant:44.0].active = YES;
     
     //add front/back camera toggle
-    UIButton *camFlipButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [camFlipButton setImage:[UIImage imageNamed:@"CamFlip"] forState:UIControlStateNormal];
-    [camFlipButton addTarget:self action:@selector(reverseCamera) forControlEvents:UIControlEventTouchUpInside];
-    [camFlipButton setTintColor:[UIColor whiteColor]];
-    camFlipButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [buttonBar addSubview:camFlipButton];
-    [camFlipButton.topAnchor constraintEqualToAnchor:saGuide.topAnchor constant:8.0].active = YES;
-    [camFlipButton.trailingAnchor constraintEqualToAnchor:saGuide.trailingAnchor constant:-8.0].active = YES;
-    [camFlipButton.heightAnchor constraintEqualToConstant:44.0].active = YES;
-    [camFlipButton.widthAnchor constraintEqualToConstant:44.0].active = YES;
+    self.cameraFlipButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.cameraFlipButton setImage:[UIImage imageNamed:@"CamFlip"] forState:UIControlStateNormal];
+    [self.cameraFlipButton addTarget:self action:@selector(reverseCamera) forControlEvents:UIControlEventTouchUpInside];
+    [self.cameraFlipButton setTintColor:[UIColor whiteColor]];
+    self.cameraFlipButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar addSubview:self.cameraFlipButton];
+    [self.cameraFlipButton.topAnchor constraintEqualToAnchor:saGuide.topAnchor constant:8.0].active = YES;
+    [self.cameraFlipButton.trailingAnchor constraintEqualToAnchor:saGuide.trailingAnchor constant:-8.0].active = YES;
+    [self.cameraFlipButton.heightAnchor constraintEqualToConstant:44.0].active = YES;
+    [self.cameraFlipButton.widthAnchor constraintEqualToConstant:44.0].active = YES;
     
     //add done button
     self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -686,13 +741,13 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     [self.doneButton.trailingAnchor constraintEqualToAnchor:saGuide.trailingAnchor constant:-8.0].active = YES;
     
     //add cancel button
-    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    cancelButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [cancelButton addTarget:self action:@selector(cancelCamera) forControlEvents:UIControlEventTouchUpInside];
-    [buttonBar addSubview:cancelButton];
-    [cancelButton.bottomAnchor constraintEqualToAnchor:saGuide.bottomAnchor constant:-8.0].active = YES;
-    [cancelButton.leadingAnchor constraintEqualToAnchor:saGuide.leadingAnchor constant:8.0].active = YES;
+    self.cameraCancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.cameraCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    self.cameraCancelButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.cameraCancelButton addTarget:self action:@selector(cancelCamera) forControlEvents:UIControlEventTouchUpInside];
+    [buttonBar addSubview:self.cameraCancelButton];
+    [self.cameraCancelButton.bottomAnchor constraintEqualToAnchor:saGuide.bottomAnchor constant:-8.0].active = YES;
+    [self.cameraCancelButton.leadingAnchor constraintEqualToAnchor:saGuide.leadingAnchor constant:8.0].active = YES;
     
     return mainOverlay;
 }
@@ -734,9 +789,13 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
         [self.album addCJMImage:newImage];
     }
     self.flashButton = nil;
+    self.capturedPhotos = nil;
+    self.cameraCancelButton = nil;
+    self.cameraFlipButton = nil;
     self.doneButton = nil;
     self.imagePicker = nil;
     self.pickerPhotos = nil;
+    [NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
     
     [[CJMAlbumManager sharedInstance] save];
