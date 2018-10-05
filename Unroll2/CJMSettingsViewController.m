@@ -34,6 +34,7 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UISlider *sldOpacity;
 @property (weak, nonatomic) IBOutlet UIView *noteView;
 @property (weak, nonatomic) IBOutlet UITextField *lblOpacity;
+@property (weak, nonatomic) IBOutlet UIImageView *sampleImage;
 @property (nonatomic) CGFloat finalVal;
 
 @property (nonatomic, strong) PHFetchResult *fetchResult;
@@ -100,6 +101,12 @@ typedef enum {
     [[button layer] setBorderWidth:2.0f];
     [[button layer] setBorderColor:[UIColor greenColor].CGColor];
     
+    for (UIButton *btn in self.colorButtons) {
+        btn.accessibilityIgnoresInvertColors = YES;
+    }
+    self.qnThumbnail.accessibilityIgnoresInvertColors = YES;
+    self.noteView.accessibilityIgnoresInvertColors = YES;
+    self.sampleImage.accessibilityIgnoresInvertColors = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

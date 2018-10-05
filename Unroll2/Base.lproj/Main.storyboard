@@ -149,7 +149,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UEJ-PL-hae" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2585" y="-351"/>
+            <point key="canvasLocation" x="2724" y="-352"/>
         </scene>
         <!--Popover View Controller-->
         <scene sceneID="L8e-gh-bBZ">
@@ -1100,6 +1100,7 @@
                         <outlet property="lblOpacity" destination="djM-81-0Ua" id="etL-ae-q30"/>
                         <outlet property="noteView" destination="Frf-tp-QKU" id="NZZ-kQ-uyo"/>
                         <outlet property="qnThumbnail" destination="tkO-Pd-JW7" id="wMO-PT-z5b"/>
+                        <outlet property="sampleImage" destination="QGu-Bi-6S0" id="jDO-nm-5JR"/>
                         <outlet property="sldOpacity" destination="Jdf-R4-WXo" id="2NB-5G-wsd"/>
                         <outlet property="whiteButton" destination="IXK-Q1-CBc" id="8ac-hv-c8Y"/>
                         <outletCollection property="colorButtons" destination="UOW-a1-Bam" id="I3Y-LB-pOV"/>
@@ -1114,7 +1115,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JkA-2z-Mze" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2584.8000000000002" y="-1045.7271364317842"/>
+            <point key="canvasLocation" x="2724" y="-1046"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7kw-SU-7qu">
