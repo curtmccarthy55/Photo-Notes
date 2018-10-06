@@ -669,7 +669,8 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     //create container view for buttons
     UIView *buttonBar = [[UIView alloc] init];
     [buttonBar setBackgroundColor:[UIColor clearColor]];
-    buttonBar.translatesAutoresizingMaskIntoConstraints = NO;
+    [buttonBar setClipsToBounds:YES];
+    [buttonBar setTranslatesAutoresizingMaskIntoConstraints:NO];
     [mainOverlay addSubview:buttonBar];
     [buttonBar.centerXAnchor constraintEqualToAnchor:mainOverlay.centerXAnchor].active = YES;
     [buttonBar.bottomAnchor constraintEqualToAnchor:mainOverlay.bottomAnchor].active = YES;
@@ -677,27 +678,33 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     [buttonBar.heightAnchor constraintEqualToConstant:barHeight].active = YES;
     UILayoutGuide *saGuide = buttonBar.safeAreaLayoutGuide;
     
-    //add camera shutter button
-    UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [cameraButton setImage:[UIImage imageNamed:@"CameraShutter"] forState:UIControlStateNormal];
-    //    [cameraButton setImage:[UIImage imageNamed:@"PressedCameraShutter"] forState:UIControlStateHighlighted]; not selecting new image
-    [cameraButton setTintColor:[UIColor whiteColor]];
-    [cameraButton addTarget:self action:@selector(shutterPressed) forControlEvents:UIControlEventTouchUpInside];
-    cameraButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [buttonBar addSubview:cameraButton];
-    [cameraButton.centerXAnchor constraintEqualToAnchor:saGuide.centerXAnchor].active = YES;
-    [cameraButton.bottomAnchor constraintEqualToAnchor:saGuide.bottomAnchor].active = YES;
+    //add top row of buttons
+    //add top row container view
+    UIView *topRow = [UIView new];
+    [topRow setBackgroundColor:[UIColor clearColor]];
+    [topRow setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [mainOverlay addSubview:topRow];
+    [topRow.centerXAnchor constraintEqualToAnchor:saGuide.centerXAnchor].active = YES;
+    [topRow.leadingAnchor constraintEqualToAnchor:saGuide.leadingAnchor].active = YES;
+    [topRow.topAnchor constraintEqualToAnchor:saGuide.topAnchor].active = YES;
+    [topRow.trailingAnchor constraintEqualToAnchor:saGuide.trailingAnchor].active = YES;
+    [topRow.bottomAnchor constraintEqualToAnchor:saGuide.centerYAnchor].active = YES;
+    UILayoutGuide *topGuide = topRow.safeAreaLayoutGuide;
     
     //add captured photos thumbnail
     self.capturedPhotos = [UIImageView new];
+    [self.capturedPhotos.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+    [self.capturedPhotos.layer setBorderWidth:1.0];
+    [self.capturedPhotos.layer setCornerRadius:5.0];
     [self.capturedPhotos setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.capturedPhotos setContentMode: UIViewContentModeScaleAspectFit];
     [self.capturedPhotos setImage:[UIImage imageNamed:@"NoImage"]];
-    [mainOverlay addSubview:self.capturedPhotos];
-    [self.capturedPhotos.widthAnchor constraintEqualToAnchor:saGuide.heightAnchor multiplier:0.5].active = YES;
-    [self.capturedPhotos.heightAnchor constraintEqualToAnchor:saGuide.heightAnchor multiplier:0.5].active = YES;
-    [self.capturedPhotos.centerXAnchor constraintEqualToAnchor:saGuide.centerXAnchor].active = YES;
-    [self.capturedPhotos.topAnchor constraintEqualToAnchor:saGuide.topAnchor constant:16.0].active = YES;
+    [topRow addSubview:self.capturedPhotos];
+    [self.capturedPhotos.widthAnchor constraintEqualToAnchor:topGuide.heightAnchor multiplier:0.7].active = YES;
+    [self.capturedPhotos.heightAnchor constraintEqualToAnchor:topGuide.heightAnchor multiplier:0.7].active = YES;
+    [self.capturedPhotos.centerXAnchor constraintEqualToAnchor:topGuide.centerXAnchor].active = YES;
+    //    [self.capturedPhotos.topAnchor constraintEqualToAnchor:saGuide.topAnchor constant:16.0].active = YES;
+    [self.capturedPhotos.centerYAnchor constraintEqualToAnchor:topGuide.centerYAnchor].active = YES;
     
     //add flash button
     UIImage *currentFlash;
@@ -711,9 +718,10 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     [self.flashButton setImage:currentFlash forState:UIControlStateNormal];
     [self.flashButton setTintColor:[UIColor whiteColor]];
     self.flashButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [buttonBar addSubview:self.flashButton];
-    [self.flashButton.topAnchor constraintEqualToAnchor:saGuide.topAnchor constant:8.0].active = YES;
-    [self.flashButton.leadingAnchor constraintEqualToAnchor:saGuide.leadingAnchor constant:8.0].active = YES;
+    [topRow addSubview:self.flashButton];
+    [self.flashButton.topAnchor constraintEqualToAnchor:topGuide.topAnchor constant:8.0].active = YES;
+    //    [self.flashButton.centerYAnchor constraintEqualToAnchor:topGuide.centerYAnchor].active = YES;
+    [self.flashButton.leadingAnchor constraintEqualToAnchor:topGuide.leadingAnchor constant:8.0].active = YES;
     [self.flashButton.heightAnchor constraintEqualToConstant:44.0].active = YES;
     [self.flashButton.widthAnchor constraintEqualToConstant:44.0].active = YES;
     
@@ -723,11 +731,36 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     [self.cameraFlipButton addTarget:self action:@selector(reverseCamera) forControlEvents:UIControlEventTouchUpInside];
     [self.cameraFlipButton setTintColor:[UIColor whiteColor]];
     self.cameraFlipButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [buttonBar addSubview:self.cameraFlipButton];
+    [topRow addSubview:self.cameraFlipButton];
     [self.cameraFlipButton.topAnchor constraintEqualToAnchor:saGuide.topAnchor constant:8.0].active = YES;
-    [self.cameraFlipButton.trailingAnchor constraintEqualToAnchor:saGuide.trailingAnchor constant:-8.0].active = YES;
+    //    [self.cameraFlipButton.centerYAnchor constraintEqualToAnchor:topGuide.centerYAnchor].active = YES;
+    [self.cameraFlipButton.trailingAnchor constraintEqualToAnchor:topGuide.trailingAnchor constant:-8.0].active = YES;
     [self.cameraFlipButton.heightAnchor constraintEqualToConstant:44.0].active = YES;
     [self.cameraFlipButton.widthAnchor constraintEqualToConstant:44.0].active = YES;
+    
+    //add bottom row buttons
+    //add bottom row container view
+    UIView *bottomRow = [UIView new];
+    [bottomRow setBackgroundColor:[UIColor clearColor]];
+    [bottomRow setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [mainOverlay addSubview:bottomRow];
+    [bottomRow.centerXAnchor constraintEqualToAnchor:saGuide.centerXAnchor].active = YES;
+    [bottomRow.leadingAnchor constraintEqualToAnchor:saGuide.leadingAnchor].active = YES;
+    [bottomRow.topAnchor constraintEqualToAnchor:saGuide.centerYAnchor].active = YES;
+    [bottomRow.trailingAnchor constraintEqualToAnchor:saGuide.trailingAnchor].active = YES;
+    [bottomRow.bottomAnchor constraintEqualToAnchor:saGuide.bottomAnchor].active = YES;
+    UILayoutGuide *bottomGuide = bottomRow.safeAreaLayoutGuide;
+    
+    //add camera shutter button
+    UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [cameraButton setImage:[UIImage imageNamed:@"CameraShutter"] forState:UIControlStateNormal];
+    [cameraButton setImage:[UIImage imageNamed:@"PressedCameraShutter"] forState:UIControlStateHighlighted]; //not selecting new image
+    [cameraButton setTintColor:[UIColor whiteColor]];
+    [cameraButton addTarget:self action:@selector(shutterPressed) forControlEvents:UIControlEventTouchUpInside];
+    cameraButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [bottomRow addSubview:cameraButton];
+    [cameraButton.centerXAnchor constraintEqualToAnchor:bottomGuide.centerXAnchor].active = YES;
+    [cameraButton.centerYAnchor constraintEqualToAnchor:bottomGuide.centerYAnchor].active = YES;
     
     //add done button
     self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -735,19 +768,21 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     [self.doneButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [self.doneButton addTarget:self action:@selector(photoCaptureFinished) forControlEvents:UIControlEventTouchUpInside];
     self.doneButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [buttonBar addSubview:self.doneButton];
+    [bottomRow addSubview:self.doneButton];
     [self.doneButton setEnabled:NO];
-    [self.doneButton.bottomAnchor constraintEqualToAnchor:saGuide.bottomAnchor constant:-8.0].active = YES;
-    [self.doneButton.trailingAnchor constraintEqualToAnchor:saGuide.trailingAnchor constant:-8.0].active = YES;
+    [self.doneButton.bottomAnchor constraintEqualToAnchor:bottomGuide.bottomAnchor constant:-8.0].active = YES;
+    //    [self.doneButton.centerYAnchor constraintEqualToAnchor:bottomGuide.centerYAnchor].active = YES;
+    [self.doneButton.trailingAnchor constraintEqualToAnchor:bottomGuide.trailingAnchor constant:-8.0].active = YES;
     
     //add cancel button
     self.cameraCancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.cameraCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     self.cameraCancelButton.translatesAutoresizingMaskIntoConstraints = NO;
     [self.cameraCancelButton addTarget:self action:@selector(cancelCamera) forControlEvents:UIControlEventTouchUpInside];
-    [buttonBar addSubview:self.cameraCancelButton];
-    [self.cameraCancelButton.bottomAnchor constraintEqualToAnchor:saGuide.bottomAnchor constant:-8.0].active = YES;
-    [self.cameraCancelButton.leadingAnchor constraintEqualToAnchor:saGuide.leadingAnchor constant:8.0].active = YES;
+    [bottomRow addSubview:self.cameraCancelButton];
+    [self.cameraCancelButton.bottomAnchor constraintEqualToAnchor:bottomGuide.bottomAnchor constant:-8.0].active = YES;
+    //    [self.cameraCancelButton.centerYAnchor constraintEqualToAnchor:bottomGuide.centerYAnchor].active = YES;
+    [self.cameraCancelButton.leadingAnchor constraintEqualToAnchor:bottomGuide.leadingAnchor constant:8.0].active = YES;
     
     return mainOverlay;
 }
