@@ -42,6 +42,8 @@
 	<string>To take new photos directly from Photo Notes, please allow access to the camera.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To import photos from your existing photo collection, please allow access for Photo Notes.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Allow Photo Notes to save this image to your photo collection?</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>

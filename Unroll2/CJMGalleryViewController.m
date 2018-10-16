@@ -59,6 +59,11 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.navigationController.toolbarHidden = NO;
     self.navigationItem.title = self.album.albumTitle;
     self.navigationItem.backBarButtonItem.title = @"Albums";
+    
+    //scroll to bottom before displaying
+    CGSize pageSize = self.view.bounds.size;
+    CGPoint contentOffset = CGPointMake(0, pageSize.height * self.album.albumPhotos.count - 1);
+    [self.collectionView setContentOffset:contentOffset animated:NO];
 }
 
 - (CGSize)cellSize {
@@ -793,6 +798,8 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     [self.doneButton setEnabled:YES];
     [self.doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
+    //    TODO: Use PHAsset instead of UIImage
+//    PHAsset *newAsset = [info objectForKey:UIImagePickerControllerPHAsset];
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
     NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
 //    CJMImage *newImage = [[CJMImage alloc] init];
@@ -1053,19 +1060,6 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
         CGFloat cvSize = self.collectionView.safeAreaLayoutGuide.layoutFrame.size.width;
         [self photoCellForWidth:cvSize];
     }
-    /*
-    NSLog(@"****cjm**** sizeForItemAtIndexPath called.");
-    CGFloat cvSize = self.collectionView.safeAreaLayoutGuide.layoutFrame.size.width;
-    CGFloat cellsPerRow = 0.0;
-    
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    if (UIDeviceOrientationIsLandscape(orientation)) {
-        cellsPerRow = 6.0;
-    } else {
-        cellsPerRow = 4.0;
-    }
-    self.newCellSize = (cvSize - (cellsPerRow + 1.0)) / cellsPerRow;
-     */
     return CGSizeMake(self.newCellSize, self.newCellSize);
 }
 

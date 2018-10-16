@@ -586,14 +586,33 @@
     }];
     
     UIAlertAction *saveImageAction = [UIAlertAction actionWithTitle:@"Save To Camera Roll" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSave){
+//        TODO: replacing with this permission request.
+/*
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+            if (status == PHAuthorizationStatusAuthorized) {
+                UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
+                
+                CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
+                                                   withType:@"Success"
+                                                   animated:YES];
+                hudView.text = @"Done!";
+                [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
+            } else {
+                CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
+                                                   withType:@"Success"
+                                                   animated:YES];
+                hudView.text = @"Save Denied";
+                [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
+            }
+            self.navigationController.view.userInteractionEnabled = YES;
+        }];
+*/
         UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
-        
+
         CJMHudView *hudView = [CJMHudView hudInView:self.navigationController.view
                                            withType:@"Success"
                                            animated:YES];
-        
         hudView.text = @"Done!";
-        
         [hudView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5f];
         
         self.navigationController.view.userInteractionEnabled = YES;

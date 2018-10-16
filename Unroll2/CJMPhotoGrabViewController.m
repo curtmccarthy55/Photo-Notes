@@ -36,11 +36,6 @@ static NSString * const reuseIdentifier = @"GrabCell";
     self.imageManager = [[PHCachingImageManager alloc] init];
     self.fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:nil];
     self.navigationItem.title = @"Select Photos";
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
                                                                              style:UIBarButtonItemStylePlain
@@ -66,17 +61,22 @@ static NSString * const reuseIdentifier = @"GrabCell";
     
     [self.navigationController.navigationBar setBarTintColor:self.userColor];
     [self.navigationController.toolbar setBarTintColor:self.userColor];
+    
+    //scroll to bottom before displaying
+    CGSize pageSize = self.view.bounds.size;
+    CGPoint contentOffset = CGPointMake(0, pageSize.height * self.fetchResult.count - 1);
+    [self.collectionView setContentOffset:contentOffset animated:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 //Scroll to most recent photos in library (bottom of collectionView)
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    NSInteger section = [self.collectionView numberOfSections] - 1;
-    NSInteger item = [self.collectionView numberOfItemsInSection:section] - 1;
-    NSIndexPath *lastIndexPath = [NSIndexPath indexPathForItem:item inSection:section];
-    [self.collectionView scrollToItemAtIndexPath:lastIndexPath atScrollPosition:(UICollectionViewScrollPositionBottom) animated:YES];
 }
 
 
