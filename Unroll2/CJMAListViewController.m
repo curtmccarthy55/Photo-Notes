@@ -16,6 +16,7 @@
 #import "CJMServices.h"
 #import "CJMFileSerializer.h"
 #import "PHNPhotoGrabCompletionDelegate.h"
+#import "PHNImportAlbumsVC.h"
 #import <AVFoundation/AVFoundation.h>
 
 #define CJMAListCellIdentifier @"AlbumCell"
@@ -276,10 +277,10 @@
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
+//    PHNImportAlbumsVC *vc = (PHNImportAlbumsVC *)[navigationVC topViewController];
     PHNImportAlbumsVC *vc = (PHNImportAlbumsVC *)[navigationVC topViewController];
     vc.delegate = self;
-    
-    
+
     
     /*
     CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];

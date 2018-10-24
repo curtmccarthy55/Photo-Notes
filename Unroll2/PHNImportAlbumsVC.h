@@ -6,11 +6,12 @@
 //  Copyright © 2018 Bluewraith. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "PHNPhotoGrabCompletionDelegate.h"
+#import <UIKit/UIKit.h>
 
 @interface PHNImportAlbumsVC : UITableViewController
 
 @property (nonatomic, weak) id <PHNPhotoGrabCompletionDelegate> delegate;
+@property (nonatomic, strong) NSString *testString;
 
 @end

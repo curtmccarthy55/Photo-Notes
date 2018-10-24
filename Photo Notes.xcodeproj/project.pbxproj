@@ -56,6 +56,7 @@
 		755558C8203240B2005A9478 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		755558C9203240B3005A9478 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
 		758F55181E22AAC40023F869 /* IconStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IconStoryboard.storyboard; sourceTree = "<group>"; };
+		75A1E4322180E7FE00F740C1 /* CJMAListTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CJMAListTableViewCell.h; sourceTree = "<group>"; };
 		75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMSettingsViewController.h; sourceTree = "<group>"; };
 		75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMSettingsViewController.m; sourceTree = "<group>"; };
 		75EF2D431DF7361400557EDA /* CJMPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPopoverViewController.h; sourceTree = "<group>"; };
@@ -79,9 +80,8 @@
 		84A769701ADAE3A000DE6741 /* Unroll2Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Unroll2Tests.m; sourceTree = "<group>"; };
 		84C2B92E1ADB022E0034786C /* CJMAListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMAListViewController.h; sourceTree = "<group>"; };
 		84C2B92F1ADB022E0034786C /* CJMAListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAListViewController.m; sourceTree = "<group>"; };
-		84C2B9341ADB0A580034786C /* CJMAListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CJMAListTableViewCell.h; path = ../CJMAListTableViewCell.h; sourceTree = "<group>"; };
-		84C2B9351ADB0A580034786C /* CJMAListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CJMAListTableViewCell.m; path = ../CJMAListTableViewCell.m; sourceTree = "<group>"; };
-		84C2B9361ADB0A580034786C /* CJMAListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CJMAListTableViewCell.xib; path = ../CJMAListTableViewCell.xib; sourceTree = "<group>"; };
+		84C2B9351ADB0A580034786C /* CJMAListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAListTableViewCell.m; sourceTree = "<group>"; };
+		84C2B9361ADB0A580034786C /* CJMAListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CJMAListTableViewCell.xib; sourceTree = "<group>"; };
 		84C2B9391ADB35C30034786C /* CJMAlbumManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMAlbumManager.h; sourceTree = "<group>"; };
 		84C2B93A1ADB35C30034786C /* CJMAlbumManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAlbumManager.m; sourceTree = "<group>"; };
 		84C2B93C1ADB38880034786C /* CJMPhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPhotoAlbum.h; sourceTree = "<group>"; };
@@ -137,7 +137,7 @@
 				84C2B9931AE42E040034786C /* CJMPhotoGrabViewController.h */,
 				84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */,
 			);
-			path = "Image Import";
+			name = "Image Import";
 			sourceTree = "<group>";
 		};
 		7561EDD62033197F00F99E3F /* App Wide */ = {
@@ -187,7 +187,7 @@
 				84C2B9971AE441CE0034786C /* CJMPhotoCell.m */,
 				84F1FDB01AEF21A60092D424 /* CJMGrabCell.h */,
 				84F1FDB11AEF21A60092D424 /* CJMGrabCell.m */,
-				84C2B9341ADB0A580034786C /* CJMAListTableViewCell.h */,
+				75A1E4322180E7FE00F740C1 /* CJMAListTableViewCell.h */,
 				84C2B9351ADB0A580034786C /* CJMAListTableViewCell.m */,
 				84C2B9361ADB0A580034786C /* CJMAListTableViewCell.xib */,
 				84401F3D1B3092F100B4FB89 /* CJMHudView.h */,
