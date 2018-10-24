@@ -140,7 +140,7 @@
     CJMAListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CJMAListCellIdentifier forIndexPath:indexPath];
     
     CJMPhotoAlbum *album = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
-    [cell configureTextForCell:cell withAlbum:album];
+    [cell configureWithTitle:album.albumTitle withAlbumCount:(int)album.albumPhotos.count];
     [cell configureThumbnailForCell:cell forAlbum:album];
     cell.accessoryType = UITableViewCellAccessoryDetailButton;
     cell.showsReorderControl = YES;
@@ -277,18 +277,11 @@
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
-//    PHNImportAlbumsVC *vc = (PHNImportAlbumsVC *)[navigationVC topViewController];
     PHNImportAlbumsVC *vc = (PHNImportAlbumsVC *)[navigationVC topViewController];
-    vc.delegate = self;
-
-    
-    /*
-    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
     vc.delegate = self;
     vc.userColor = self.userColor;
     vc.userColorTag = self.userColorTag;
-    vc.singleSelection = NO;
-     */
+    
     [self presentViewController:navigationVC animated:YES completion:nil];
 }
 

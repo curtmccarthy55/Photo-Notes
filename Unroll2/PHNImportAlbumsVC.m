@@ -8,11 +8,13 @@
 
 #import "CJMAListTableViewCell.h"
 #import "PHNImportAlbumsVC.h"
+#import "PHNPhotoGrabCompletionDelegate.h"
 #import "CJMPhotoGrabViewController.h"
 
 @import Photos;
 
 #define SEGUE_IDENTIFIER @"ViewCollection"
+#define CJMAListCellIdentifier @"AlbumCell"
 
 @interface PHNImportAlbumsVC ()
 
@@ -27,6 +29,7 @@ typedef enum {
 @property (nonatomic, strong) PHFetchResult<PHCollection *> *userCollections;
 @property (nonatomic, strong) NSArray *sectionLocalizedTitles;
 @property (strong) PHCachingImageManager *imageManager;
+@property (nonatomic, strong) PHFetchOptions *ascendingOptions;
 
 @property (nonatomic, strong) NSIndexPath *selectedIndex;
 
@@ -37,24 +40,40 @@ typedef enum {
 - (void)viewDidLoad { //cjm album fetch
     [super viewDidLoad];
     
+    UINib *nib = [UINib nibWithNibName:@"CJMAListTableViewCell" bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:CJMAListCellIdentifier];
+    self.tableView.rowHeight = 80;
+    
     self.imageManager = [PHCachingImageManager new];
     self.sectionLocalizedTitles = @[@"", @"Smart Albums", @"Albums"];
     
     //Create a PHFetchResult object for each section in the table view.
-    PHFetchOptions *allPhotosOptions = [PHFetchOptions new];
-    allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
-    self.allPhotos = [PHAsset fetchAssetsWithOptions:allPhotosOptions];
-    self.smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-    self.userCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
+    self.ascendingOptions = [PHFetchOptions new];
+    self.ascendingOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
+    self.allPhotos = [PHAsset fetchAssetsWithOptions:self.ascendingOptions];
+    self.smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil]; //PHAssetCollection
+    self.userCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil]; //PHCollectionList
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
-                                                                             style:UIBarButtonItemStylePlain
-                                                                            target:self
-                                                                            action:@selector(cancelPressed)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelPressed)];
+    
+    if (self.userColorTag.integerValue != 5 && self.userColorTag.integerValue != 7) {
+        [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+        [self.navigationController.toolbar setTintColor:[UIColor whiteColor]];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor whiteColor] }];
+    } else {
+        [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
+        [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
+        [self.navigationController.toolbar setTintColor:[UIColor blackColor]];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor blackColor] }];
+    }
+    
+    [self.navigationController.navigationBar setBarTintColor:self.userColor];
+    [self.navigationController.toolbar setBarTintColor:self.userColor];
 }
 
 - (void)cancelPressed {
-    [self.delegate photoGrabViewControllerDidCancel:self];
+    [self.delegate photoGrabSceneDidCancel];
 }
 
 #pragma mark - Table view data source
@@ -79,40 +98,26 @@ typedef enum {
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"reuseIdentifier" forIndexPath:indexPath];
+    CJMAListTableViewCell *cell = (CJMAListTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CJMAListCellIdentifier forIndexPath:indexPath];
     
     PHAsset *asset;
-    PHFetchOptions *fetchOptions = [PHFetchOptions new];
-    fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
-    switch (indexPath.section) {
-        case 0:
-            cell.textLabel.text = @"All Photos";
-            asset = self.allPhotos.lastObject; 
-            break;
-        case 1:
-        { //brackets create separate scope to allow for variable assignments...
-            PHAssetCollection *assetCollection = self.smartAlbums[indexPath.row];
-            cell.textLabel.text = assetCollection.localizedTitle;
-            
-            PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:fetchOptions];
-            asset = result.lastObject;
-            
-            break;
-        }
-            case 2:
-        {
-//            PHCollection *collection = self.userCollections[indexPath.row];
-//            cell.textLabel.text = collection.localizedTitle;
-//            
-//            PHFetchResult *result = []
-//            asset = result.firstObject;
-            
-            
-            
-            break;
-        }
-        default:
-            break;
+    if (indexPath.section == 0) {
+        NSLog(@"should be showing All Photos cell");
+        [cell configureWithTitle:@"All Photos" withAlbumCount:(int)self.allPhotos.count];
+        asset = self.allPhotos.lastObject;
+    } else if (indexPath.section == 1) {
+        PHAssetCollection *assetCollection = self.smartAlbums[indexPath.row];
+        PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:self.ascendingOptions];
+        asset = result.lastObject;
+        
+        [cell configureWithTitle:assetCollection.localizedTitle withAlbumCount:(int)result.count];
+    } else if (indexPath.section == 2) {
+        NSLog(@"fetching collection from self.userCollections[%ld]", (long)indexPath.row);
+        //            PHCollection *collection = self.userCollections[indexPath.row];
+        //            cell.textLabel.text = collection.localizedTitle;
+        //
+        //            PHFetchResult *result = []
+        //            asset = result.firstObject;
     }
     
     [self.imageManager requestImageForAsset:asset
@@ -120,8 +125,7 @@ typedef enum {
                                 contentMode:PHImageContentModeAspectFill
                                     options:nil
                               resultHandler:^(UIImage *result, NSDictionary *info) {
-                                  cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
-                                  cell.imageView.image = result;
+                                  cell.cellThumbnail.image = result;
                               }];
     
     return cell;
@@ -142,9 +146,9 @@ typedef enum {
     if ([segue.identifier isEqualToString:SEGUE_IDENTIFIER]) {
         CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)segue.destinationViewController;
         //         vc.title =
-        //         vc.delegate = self;
-        //         vc.userColor = self.userColor;
-        //         vc.userColorTag = self.userColorTag;
+         vc.delegate = self.delegate;
+        vc.userColor = self.userColor;
+        vc.userColorTag = self.userColorTag;
         vc.singleSelection = NO;
     }
     

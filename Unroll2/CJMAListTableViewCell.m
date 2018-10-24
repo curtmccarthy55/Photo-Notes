@@ -10,6 +10,13 @@
 #import "CJMPhotoAlbum.h"
 #import "CJMServices.h"
 
+@interface CJMAListTableViewCell ()
+
+@property (weak, nonatomic) IBOutlet UILabel *cellAlbumName;
+@property (weak, nonatomic) IBOutlet UILabel *cellAlbumCount;
+
+@end
+
 @implementation CJMAListTableViewCell
 
 - (void)awakeFromNib {
@@ -23,16 +30,18 @@
     // Configure the view for the selected state
 }
 
-- (void)configureTextForCell:(CJMAListTableViewCell *)cell withAlbum:(CJMPhotoAlbum *)album {
-    cell.cellAlbumName.text = album.albumTitle;
+- (void)configureWithTitle:(NSString *)albumTitle withAlbumCount:(int)albumCount {
+    self.cellAlbumName.text = albumTitle;
     
-    if (album.albumPhotos.count == 0) {
-        cell.cellAlbumCount.text = @"No Photos";
-    } else if (album.albumPhotos.count == 1) {
-        cell.cellAlbumCount.text = @"1 Photo";
+    NSString *albumCountText;
+    if (albumCount == 0) {
+        albumCountText = @"No Photos";
+    } else if (albumCount == 1) {
+        albumCountText = @"1 Photo";
     } else {
-        cell.cellAlbumCount.text = [NSString stringWithFormat:@"%lu Photos", (unsigned long)album.albumPhotos.count];
+        albumCountText = [NSString stringWithFormat:@"%lu Photos", (unsigned long)albumCount];
     }
+    self.cellAlbumCount.text = albumCountText;
 }
 
 - (void)configureThumbnailForCell:(CJMAListTableViewCell *)cell forAlbum:(CJMPhotoAlbum *)album {

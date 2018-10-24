@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "CJMPhotoGrabViewController.h"
+#import "PHNPhotoGrabCompletionDelegate.h"
 
-@interface CJMSettingsViewController : UITableViewController <CJMPhotoGrabViewControllerDelegate>
+@interface CJMSettingsViewController : UITableViewController <PHNPhotoGrabCompletionDelegate>
 
 @end

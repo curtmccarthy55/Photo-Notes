@@ -10,17 +10,11 @@
 @import Photos;
 
 @class CJMPhotoGrabViewController;
-
-@protocol CJMPhotoGrabViewControllerDelegate <NSObject>
-
-- (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller;
-- (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos;
-
-@end
+@protocol PHNPhotoGrabCompletionDelegate;
 
 @interface CJMPhotoGrabViewController : UIViewController
 
-@property (nonatomic, weak) id <CJMPhotoGrabViewControllerDelegate> delegate;
+@property (nonatomic, weak) id <PHNPhotoGrabCompletionDelegate> delegate;
 @property (nonatomic, strong) UIColor *userColor;
 @property (nonatomic, strong) NSNumber *userColorTag;
 @property (nonatomic) BOOL singleSelection;

@@ -13,10 +13,8 @@
 @interface CJMAListTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *cellThumbnail;
-@property (weak, nonatomic) IBOutlet UILabel *cellAlbumName;
-@property (weak, nonatomic) IBOutlet UILabel *cellAlbumCount;
 
-- (void)configureTextForCell:(CJMAListTableViewCell *)cell withAlbum:(CJMPhotoAlbum *)album;
+- (void)configureWithTitle:(NSString *)albumTitle withAlbumCount:(int)albumCount;
 - (void)configureThumbnailForCell:(CJMAListTableViewCell *)cell forAlbum:(CJMPhotoAlbum *)album;
 
 @end

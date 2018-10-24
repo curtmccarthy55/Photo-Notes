@@ -231,9 +231,9 @@
 			isa = PBXGroup;
 			children = (
 				7561EDD62033197F00F99E3F /* App Wide */,
-				751497D72176904B001E6D52 /* Image Import */,
 				7561EDD720331CE500F99E3F /* Album List */,
 				7561EDD820331CFE00F99E3F /* Album */,
+				751497D72176904B001E6D52 /* Image Import */,
 				845B92201AF94BC400365239 /* Cells */,
 				84A769541ADAE39F00DE6741 /* Supporting Files */,
 				845B92211AF94C9C00365239 /* Data Objects */,

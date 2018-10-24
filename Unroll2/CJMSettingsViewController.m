@@ -276,14 +276,14 @@ typedef enum {
     [self presentViewController:navigationVC animated:YES completion:nil];
 }
 
-- (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller {
+- (void)photoGrabSceneDidCancel {
     [self dismissViewControllerAnimated:YES completion:nil];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 //iterate through array of selected photos, convert them to CJMImages, and add to the current album.
-- (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos {
+- (void)photoGrabSceneDidFinishSelectingPhotos:(NSArray *)photos {
     NSMutableArray *newImages = [[NSMutableArray alloc] init];
     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
@@ -337,7 +337,7 @@ typedef enum {
                                           }
                                       }];
         }
-
+        
         
         [assetImage setInitialValuesForCJMImage:assetImage inAlbum:@"CJMQuickNote"];
         assetImage.photoCreationDate = [NSDate date];
@@ -359,14 +359,13 @@ typedef enum {
     
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
         self.navigationController.view.userInteractionEnabled = YES;
-//        [self.collectionView reloadData];
+        //        [self.collectionView reloadData];
         [self dismissViewControllerAnimated:YES completion:nil];
         [[CJMAlbumManager sharedInstance] save];
         [self displayQNThumnail];
         self.navigationController.view.userInteractionEnabled = YES;
     });
 }
-
 
 - (void)displayQNThumnail {
     CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance] userQuickNote];

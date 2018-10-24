@@ -89,7 +89,7 @@
 //    CJMPhotoAlbum *album = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
     CJMPhotoAlbum *album = [self.transferAlbums objectAtIndex:indexPath.row];
     
-    [cell configureTextForCell:cell withAlbum:album];
+    [cell configureWithTitle:album.albumTitle withAlbumCount:(int)album.albumPhotos.count];
     [cell configureThumbnailForCell:cell forAlbum:album];
     
     return cell;

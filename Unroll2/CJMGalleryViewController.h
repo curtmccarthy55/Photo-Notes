@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "CJMPhotoGrabViewController.h"
+#import "PHNPhotoGrabCompletionDelegate.h"
 
 @class CJMPhotoAlbum;
 
-@interface CJMGalleryViewController : UICollectionViewController <CJMPhotoGrabViewControllerDelegate>
+@interface CJMGalleryViewController : UICollectionViewController <PHNPhotoGrabCompletionDelegate>
 
 @property (nonatomic, weak) CJMPhotoAlbum *album;
 @property (nonatomic, strong) UIColor *userColor;

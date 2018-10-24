@@ -7,6 +7,7 @@
 //
 
 #import "CJMPhotoGrabViewController.h"
+#import "PHNPhotoGrabCompletionDelegate.h"
 #import "CJMGrabCell.h"
 #import "CJMHudView.h"
 
@@ -147,7 +148,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
 
 - (void)cancelPressed
 {
-    [self.delegate photoGrabViewControllerDidCancel:self];
+    [self.delegate photoGrabSceneDidCancel];
 }
 
 - (void)donePressed
@@ -164,7 +165,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
         PHAsset *asset = self.fetchResult[indexPath.item];
         [pickedPhotos addObject:asset];
     }
-    [self.delegate photoGrabViewController:self didFinishSelectingPhotos:[pickedPhotos copy]];
+    [self.delegate photoGrabSceneDidFinishSelectingPhotos:[pickedPhotos copy]];
 }
 
 #pragma mark UICollectionViewFlowLayoutDelegate

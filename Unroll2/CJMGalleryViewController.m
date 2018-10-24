@@ -17,6 +17,7 @@
 #import "CJMImage.h"
 #import "CJMHudView.h"
 #import "CJMFileSerializer.h"
+#import "PHNPhotoGrabCompletionDelegate.h"
 #import <AVFoundation/AVFoundation.h>
 #import <dispatch/dispatch.h>
 
@@ -891,15 +892,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     return newImage;
 }
 
-#pragma mark - CJMPhotoGrabber Delegate
+#pragma mark - PHNPhotoGrabDelegate Delegate
 
-- (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller
-{
+- (void)photoGrabSceneDidCancel {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 //iterate through array of selected photos, convert them to CJMImages, and add to the current album.
-- (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos {
+- (void)photoGrabSceneDidFinishSelectingPhotos:(NSArray *)photos {
     NSMutableArray *newImages = [[NSMutableArray alloc] init]; //Will hold the images, image creation dates, and image locations from each PHAsset in the received array.
     
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
@@ -909,7 +909,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
     
     __block NSInteger counter = [photos count];
-//    __weak CJMGalleryViewController *weakSelf = self;
+    //    __weak CJMGalleryViewController *weakSelf = self;
     
     dispatch_group_t imageLoadGroup = dispatch_group_create();
     for (int i = 0; i < photos.count; i++) {
@@ -931,8 +931,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
          */
         @autoreleasepool {
             [self.imageManager requestImageDataForAsset:asset
-                                            options:options
-                                       resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+                                                options:options
+                                          resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
                                               counter--;
                                               if(![info[PHImageResultIsDegradedKey] boolValue]) {
                                                   [fileSerializer writeObject:imageData toRelativePath:assetImage.fileName];
@@ -945,28 +945,28 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         dispatch_group_enter(imageLoadGroup);
         @autoreleasepool {
             [self.imageManager requestImageForAsset:asset
-                                      targetSize:self.cellSize
-                                     contentMode:PHImageContentModeAspectFill
-                                         options:options
-                                   resultHandler:^(UIImage *result, NSDictionary *info) {
-                                              if(![info[PHImageResultIsDegradedKey] boolValue]) {
-                                                  [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
-                                                  assetImage.thumbnailNeedsRedraw = NO;
-                                                  
-                                                  dispatch_group_leave(imageLoadGroup);
-                                              }
-                                          }];
+                                         targetSize:self.cellSize
+                                        contentMode:PHImageContentModeAspectFill
+                                            options:options
+                                      resultHandler:^(UIImage *result, NSDictionary *info) {
+                                          if(![info[PHImageResultIsDegradedKey] boolValue]) {
+                                              [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
+                                              assetImage.thumbnailNeedsRedraw = NO;
+                                              
+                                              dispatch_group_leave(imageLoadGroup);
+                                          }
+                                      }];
         }
         
         [assetImage setInitialValuesForCJMImage:assetImage inAlbum:self.album.albumTitle];
-//        assetImage.photoLocation = [asset location];
+        //        assetImage.photoLocation = [asset location];
         assetImage.photoCreationDate = [asset creationDate];
         
         [newImages addObject:assetImage];
     }
-
+    
     [self.album addMultipleCJMImages:newImages];
-
+    
     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
         self.navigationController.view.userInteractionEnabled = YES;
         [self.collectionView reloadData];
@@ -974,11 +974,9 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [[CJMAlbumManager sharedInstance] save];
         self.navigationController.view.userInteractionEnabled = YES;
         
-//        NSLog(@"••••• FIN");
+        //        NSLog(@"••••• FIN");
     });
 }
-
-
 
 #pragma mark - CJMAListPicker Delegate
 
