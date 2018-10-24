@@ -30,8 +30,7 @@
     const CGFloat boxWidth = 96.0f;
     const CGFloat boxHeight = 96.0f;
     
-    CGRect boxRect = CGRectMake(
-                                roundf(self.bounds.size.width - boxWidth) / 2.0f,
+    CGRect boxRect = CGRectMake(roundf(self.bounds.size.width - boxWidth) / 2.0f,
                                 roundf(self.bounds.size.height - boxHeight) / 2.0f,
                                 boxWidth,
                                 boxHeight);
@@ -45,8 +44,7 @@
     if ([self.type isEqual:@"Success"]) {
     UIImage *image = [UIImage imageNamed:@"Checkmark"];
     
-    CGPoint imagePoint = CGPointMake(
-                                     self.center.x - roundf(image.size.width / 2.0f),
+    CGPoint imagePoint = CGPointMake(self.center.x - roundf(image.size.width / 2.0f),
                                      self.center.y - roundf(image.size.height / 2.0f)
                                                                   - boxHeight / 8.0f);
     

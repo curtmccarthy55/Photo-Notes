@@ -424,7 +424,7 @@ typedef enum {
             vc.mailComposeDelegate = self;
             vc.modalPresentationStyle = UIModalPresentationPageSheet;
             [vc setToRecipients:@[@"bedevcurt@gmail.com"]];
-            [vc setSubject:@"Photo Notes - Add context to your photos"];
+            [vc setSubject:@"Photo Notes Support"];
             [vc setMessageBody:@"Hey Curt!" isHTML:NO];
             if ([MFMailComposeViewController canSendMail]) {
                 [self presentViewController:vc animated:YES completion:nil];

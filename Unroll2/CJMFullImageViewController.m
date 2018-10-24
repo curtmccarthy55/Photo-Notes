@@ -57,7 +57,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     [NSNotificationCenter.defaultCenter addObserver:self
                                             selector:@selector(showBars) name:@"ImageShowBars"
                                               object:nil];
@@ -96,6 +95,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [self.navigationController.navigationBar setPrefersLargeTitles:NO];
     if (!self.isQuickNote) {
         [self.delegate makeHomeIndicatorVisible:YES];

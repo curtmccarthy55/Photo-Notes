@@ -52,7 +52,7 @@
 
 static NSString * const reuseIdentifier = @"GalleryCell";
 
-#pragma mark - View prep and display
+#pragma mark - Scene set up
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -61,8 +61,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.navigationItem.backBarButtonItem.title = @"Albums";
     
     //scroll to bottom before displaying
-    CGSize pageSize = self.view.bounds.size;
-    CGPoint contentOffset = CGPointMake(0, pageSize.height * self.album.albumPhotos.count - 1);
+    CGSize viewSize = self.view.bounds.size;
+    CGPoint contentOffset = CGPointMake(0, viewSize.height * self.album.albumPhotos.count - 1);
     [self.collectionView setContentOffset:contentOffset animated:NO];
 }
 
@@ -90,16 +90,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 //Make sure nav bars and associated controls are visible whenever the gallery appears.
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    NSLog(@"viewWillAppear called");
     self.editMode = NO;
     [self toggleEditControls];
     [self.navigationController.navigationBar setHidden:NO];
     [self.navigationController.toolbar setHidden:NO];
     [self.navigationController.navigationBar setPrefersLargeTitles:YES];
     [self confirmEditButtonEnabled];
-    //cjm 09/26
-//    NSLog(@"viewWillAppear view.safeAreaSize.width == %f, .height == %f", self.view.safeAreaLayoutGuide.layoutFrame.size.width, self.view.safeAreaLayoutGuide.layoutFrame.size.height);
-//    NSLog(@"viewWillAppear collView.safeAreaSize.width == %f, .height == %f", self.collectionView.safeAreaLayoutGuide.layoutFrame.size.width, self.collectionView.safeAreaLayoutGuide.layoutFrame.size.height);
-    NSLog(@"viewWillAppear called");
 
     self.newCellSize = 0.0;
     [self.collectionView reloadData];
@@ -132,19 +129,6 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.newCellSize = 0.0;
     [self.collectionViewLayout invalidateLayout];
 }
-/*
-override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    photoCellForSize(UIScreen.main.bounds.size)
-    collectionView?.reloadData()
-}
-
-override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-    super.viewWillTransition(to: size, with: coordinator)
-    photoCellForSize(size)
-    collectionViewLayout.invalidateLayout()
-}
-*/
 
 //Add photo count footer to gallery.
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -406,7 +390,7 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
 
 
 //Present users photo library
-- (void)presentPhotoGrabViewController { //cjm album list photo grab
+- (void)presentPhotoGrabViewController { //cjm album fetch
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
@@ -580,7 +564,7 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
             if (granted) {
                 [self prepAndDisplayCamera];
             } else {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Camera Access Denied" message:@"Please allow Photo Notes permission to use the camera in Settings>Privacy>Camera." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Camera Access Denied" message:@"You can give Photo Notes permission to use the camera in Settings>Privacy>Camera." preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction *dismissAction) {}];
                 [alert addAction:actionDismiss];
                 [self presentViewController:alert animated:YES completion:nil];
@@ -792,13 +776,13 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
     return mainOverlay;
 }
 
-//Converting photo captured by in-app camera to CJMImage.
+//Converting photo captured by in-app camera to CJMImage.  Called whenever takePicture is called.
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info //cjm 01/12
 {
     [self.doneButton setEnabled:YES];
     [self.doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
-    //    TODO: Use PHAsset instead of UIImage
+    //    TODO: Use PHAsset instead of UIImage. cjm album fetch
 //    PHAsset *newAsset = [info objectForKey:UIImagePickerControllerPHAsset];
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
     NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);

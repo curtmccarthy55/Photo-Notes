@@ -15,12 +15,14 @@
 #import "CJMPhotoAlbum.h"
 #import "CJMServices.h"
 #import "CJMFileSerializer.h"
+#import "PHNPhotoGrabCompletionDelegate.h"
 #import <AVFoundation/AVFoundation.h>
-
 
 #define CJMAListCellIdentifier @"AlbumCell"
 
-@interface CJMAListViewController () <UIPopoverPresentationControllerDelegate, CJMPopoverDelegate, CJMPhotoGrabViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CJMAListPickerDelegate>
+@class PHNImportAlbumsVC;
+
+@interface CJMAListViewController () <UIPopoverPresentationControllerDelegate, CJMPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CJMAListPickerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraButton;
@@ -189,28 +191,6 @@
 
 #pragma mark - Photo Grab
 
-//- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-//{
-//    UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
-//    NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
-//    CJMImage *newImage = [[CJMImage alloc] init];
-//    UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:CGSizeMake(120.0, 120.0)];
-//    
-//    CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
-//    
-//    [fileSerializer writeObject:newPhotoData toRelativePath:newImage.fileName];
-//    [fileSerializer writeImage:thumbnail toRelativePath:newImage.thumbnailFileName];
-//    
-//    [newImage setInitialValuesForCJMImage:newImage inAlbum:self.album.albumTitle];
-//    newImage.photoCreationDate = [NSDate date];
-//    newImage.thumbnailNeedsRedraw = NO;
-//    [self.album addCJMImage:newImage];
-//    
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//    
-//    [[CJMAlbumManager sharedInstance] save];
-//}
-
 - (UIImage *)getCenterMaxSquareImageByCroppingImage:(UIImage *)image andShrinkToSize:(CGSize)newSize
 {
     //Get crop bounds
@@ -292,24 +272,31 @@
 }
 
 //Present users photo library
-- (void)presentPhotoGrabViewController { //cjm album list photo grab
+- (void)presentPhotoGrabViewController { //cjm album fetch
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
+    PHNImportAlbumsVC *vc = (PHNImportAlbumsVC *)[navigationVC topViewController];
+    vc.delegate = self;
+    
+    
+    
+    /*
     CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
     vc.delegate = self;
     vc.userColor = self.userColor;
     vc.userColorTag = self.userColorTag;
     vc.singleSelection = NO;
+     */
     [self presentViewController:navigationVC animated:YES completion:nil];
 }
 
-- (void)photoGrabViewControllerDidCancel:(CJMPhotoGrabViewController *)controller
-{
+#pragma mark - Photo Grab Scene Delegate
+- (void)photoGrabSceneDidCancel {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)photoGrabViewController:(CJMPhotoGrabViewController *)controller didFinishSelectingPhotos:(NSArray *)photos {
+- (void)photoGrabSceneDidFinishSelectingPhotos:(NSArray *)photos {
     NSMutableArray *newImages = [[NSMutableArray alloc] init];
     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
@@ -389,16 +376,6 @@
         aListPickerVC.userColor = self.userColor;
         aListPickerVC.userColorTag = self.userColorTag;
         [self presentViewController:vc animated:YES completion:nil];
-        
-        
-        
-//        self.navigationController.view.userInteractionEnabled = YES;
-//        [self.tableView reloadData];
-//        [self dismissViewControllerAnimated:YES completion:nil];
-//        [[CJMAlbumManager sharedInstance] save];
-//        self.navigationController.view.userInteractionEnabled = YES;
-        
-        //        NSLog(@"••••• FIN");
     });
 }
 
@@ -677,11 +654,15 @@
     [self.doneButton setEnabled:YES];
     [self.doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
-//    TODO: Use PHAsset instead of UIImage
+//    TODO: Use PHAsset instead of UIImage. cjm album fetch
 //    PHAsset *newAsset = [info objectForKey:UIImagePickerControllerPHAsset];
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
     NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
     UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:CGSizeMake(120.0, 120.0)];
+    
+    //cjm album fetch
+    NSDictionary *metaDic = [info objectForKey:UIImagePickerControllerMediaMetadata];
+    NSLog(@"metaDic == %@", metaDic);
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[newPhotoData, thumbnail] forKeys:@[@"newImage", @"newThumbnail"]];
     

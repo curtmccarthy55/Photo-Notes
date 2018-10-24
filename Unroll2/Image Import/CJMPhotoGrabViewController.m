@@ -33,6 +33,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
     } else {
         self.collectionView.allowsMultipleSelection = YES;
     }
+    //cjm album fetch.  PHAsset fetch call made here.
     self.imageManager = [[PHCachingImageManager alloc] init];
     self.fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:nil];
     self.navigationItem.title = @"Select Photos";
@@ -101,31 +102,23 @@ static NSString * const reuseIdentifier = @"GrabCell";
     
     cell.cellSelectCover.hidden = YES;
     
-    if (collectionView.indexPathsForSelectedItems.count > 0) {
-        if ([collectionView.indexPathsForSelectedItems containsObject:indexPath]) {
-            [collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-            cell.cellSelectCover.hidden = NO;
-        }
+    //check if indexPath has been selected and reveal its cell's selectCover if it has been.
+    if ((collectionView.indexPathsForSelectedItems.count > 0) &&
+        ([collectionView.indexPathsForSelectedItems containsObject:indexPath])) {
+        [collectionView selectItemAtIndexPath:indexPath
+                                     animated:NO
+                               scrollPosition:UICollectionViewScrollPositionNone];
+        cell.cellSelectCover.hidden = NO;
     }
-    
-    // Increment the cell's tag
-    NSInteger currentTag = cell.tag + 1;
-    cell.tag = currentTag;
     
     PHAsset *asset = self.fetchResult[indexPath.row];
     cell.asset = asset;
-    
     [self.imageManager requestImageForAsset:asset
                                  targetSize:cell.frame.size
                                 contentMode:PHImageContentModeAspectFill
                                     options:nil
                               resultHandler:^(UIImage *result, NSDictionary *info) {
-                                  
-                                  // Only update the thumbnail if the cell tag hasn't changed. Otherwise, the cell has been re-used.
-                                  if (cell.tag == currentTag) {
-                                      cell.cellImage.image = result;
-                                  }
-                                  
+                                  cell.cellImage.image = result;
                               }];
     
     return cell;

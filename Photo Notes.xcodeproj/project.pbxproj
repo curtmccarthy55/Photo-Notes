@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		751497DA21769137001E6D52 /* PHNImportAlbumsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 751497D921769137001E6D52 /* PHNImportAlbumsVC.m */; };
 		755558CA203240B3005A9478 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C8203240B2005A9478 /* Fabric.framework */; };
 		755558CB203240B3005A9478 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C9203240B3005A9478 /* Crashlytics.framework */; };
 		758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 758F55181E22AAC40023F869 /* IconStoryboard.storyboard */; };
@@ -49,6 +50,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		751497D821769137001E6D52 /* PHNImportAlbumsVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHNImportAlbumsVC.h; sourceTree = "<group>"; };
+		751497D921769137001E6D52 /* PHNImportAlbumsVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PHNImportAlbumsVC.m; sourceTree = "<group>"; };
+		751497DC217FD894001E6D52 /* PHNPhotoGrabCompletionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHNPhotoGrabCompletionDelegate.h; sourceTree = "<group>"; };
 		755558C8203240B2005A9478 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		755558C9203240B3005A9478 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
 		758F55181E22AAC40023F869 /* IconStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IconStoryboard.storyboard; sourceTree = "<group>"; };
@@ -124,6 +128,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		751497D72176904B001E6D52 /* Image Import */ = {
+			isa = PBXGroup;
+			children = (
+				751497DC217FD894001E6D52 /* PHNPhotoGrabCompletionDelegate.h */,
+				751497D821769137001E6D52 /* PHNImportAlbumsVC.h */,
+				751497D921769137001E6D52 /* PHNImportAlbumsVC.m */,
+				84C2B9931AE42E040034786C /* CJMPhotoGrabViewController.h */,
+				84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */,
+			);
+			path = "Image Import";
+			sourceTree = "<group>";
+		};
 		7561EDD62033197F00F99E3F /* App Wide */ = {
 			isa = PBXGroup;
 			children = (
@@ -154,8 +170,6 @@
 			children = (
 				84C2B9481ADCBB420034786C /* CJMGalleryViewController.h */,
 				84C2B9491ADCBB420034786C /* CJMGalleryViewController.m */,
-				84C2B9931AE42E040034786C /* CJMPhotoGrabViewController.h */,
-				84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */,
 				84401F081B2CAA0D00B4FB89 /* CJMAListPickerViewController.h */,
 				84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */,
 				845B90CD1AF42BC300365239 /* CJMPageImageViewController.h */,
@@ -217,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				7561EDD62033197F00F99E3F /* App Wide */,
+				751497D72176904B001E6D52 /* Image Import */,
 				7561EDD720331CE500F99E3F /* Album List */,
 				7561EDD820331CFE00F99E3F /* Album */,
 				845B92201AF94BC400365239 /* Cells */,
@@ -405,6 +420,7 @@
 				84C2B9371ADB0A580034786C /* CJMAListTableViewCell.m in Sources */,
 				84A7695A1ADAE39F00DE6741 /* CJMAppDelegate.m in Sources */,
 				84A769571ADAE39F00DE6741 /* main.m in Sources */,
+				751497DA21769137001E6D52 /* PHNImportAlbumsVC.m in Sources */,
 				84C2B9301ADB022E0034786C /* CJMAListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
