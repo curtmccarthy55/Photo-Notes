@@ -155,19 +155,19 @@
         <scene sceneID="L8e-gh-bBZ">
             <objects>
                 <viewController storyboardIdentifier="CJMPopover" id="esm-W3-GvC" customClass="CJMPopoverViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="p66-3a-ldh">
+                    <view key="view" contentMode="scaleToFill" id="p66-3a-ldh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mh0-Hf-3Oq">
-                                <rect key="frame" x="8" y="52.000000000000007" width="102.33333333333333" height="20.333333333333336"/>
+                                <rect key="frame" x="8" y="52" width="102.33333333333333" height="20.333333333333329"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1KJ-0Y-CbB">
-                                <rect key="frame" x="323" y="46.333333333333336" width="44" height="30.000000000000007"/>
+                                <rect key="frame" x="323" y="46.666666666666664" width="44" height="29.999999999999993"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="jAW-Vh-CA3"/>
                                 </constraints>
@@ -181,7 +181,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Detail Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="LvU-oV-Mvv">
-                                <rect key="frame" x="3" y="74.333333333333343" width="369" height="36"/>
+                                <rect key="frame" x="3" y="74.333333333333329" width="369" height="36"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
@@ -219,7 +219,7 @@
         <scene sceneID="6dO-Q8-3nc">
             <objects>
                 <viewController id="jJn-j5-MU1" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="pKY-Rf-TPL">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="pKY-Rf-TPL">
                         <rect key="frame" x="0.0" y="0.0" width="300" height="90"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -236,7 +236,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5Zv-vL-0s2">
-                                <rect key="frame" x="16" y="108.33333333333333" width="268" height="2"/>
+                                <rect key="frame" x="16" y="108.33333333333334" width="268" height="2"/>
                             </progressView>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -544,9 +544,10 @@
                                             <constraint firstItem="pWS-x4-vhI" firstAttribute="top" secondItem="9uP-UI-3Gl" secondAttribute="bottom" id="YxC-rI-tLb"/>
                                             <constraint firstItem="9uP-UI-3Gl" firstAttribute="leading" secondItem="INM-E8-0PE" secondAttribute="leading" id="l2v-kS-Yhh"/>
                                         </constraints>
+                                        <viewLayoutGuide key="safeArea" id="9YB-dI-lYx"/>
                                     </stackView>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
-                                        <rect key="frame" x="4" y="64" width="367" height="652"/>
+                                        <rect key="frame" x="4" y="64" width="367" height="622"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -557,24 +558,25 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="INM-E8-0PE" secondAttribute="trailing" constant="8" id="A3o-v5-XBe"/>
-                                    <constraint firstItem="INM-E8-0PE" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="8" id="Jrm-1X-AVs"/>
+                                    <constraint firstItem="o30-X7-LRJ" firstAttribute="trailing" secondItem="INM-E8-0PE" secondAttribute="trailing" constant="8" id="A3o-v5-XBe"/>
+                                    <constraint firstItem="INM-E8-0PE" firstAttribute="leading" secondItem="o30-X7-LRJ" secondAttribute="leading" constant="8" id="Jrm-1X-AVs"/>
                                     <constraint firstItem="c5T-Ao-Wwn" firstAttribute="top" secondItem="INM-E8-0PE" secondAttribute="bottom" constant="2" id="Uo0-lx-7X6"/>
-                                    <constraint firstAttribute="bottom" secondItem="c5T-Ao-Wwn" secondAttribute="bottom" constant="8" id="c6m-cq-xkB"/>
-                                    <constraint firstAttribute="trailing" secondItem="c5T-Ao-Wwn" secondAttribute="trailing" constant="4" id="eDY-kG-ysU"/>
-                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="leading" secondItem="rlx-cQ-nGb" secondAttribute="leading" constant="4" id="kyF-Kg-2xp"/>
+                                    <constraint firstItem="o30-X7-LRJ" firstAttribute="bottom" secondItem="c5T-Ao-Wwn" secondAttribute="bottom" constant="4" id="c6m-cq-xkB"/>
+                                    <constraint firstItem="o30-X7-LRJ" firstAttribute="trailing" secondItem="c5T-Ao-Wwn" secondAttribute="trailing" constant="4" id="eDY-kG-ysU"/>
+                                    <constraint firstItem="c5T-Ao-Wwn" firstAttribute="leading" secondItem="o30-X7-LRJ" secondAttribute="leading" constant="4" id="kyF-Kg-2xp"/>
                                     <constraint firstItem="INM-E8-0PE" firstAttribute="centerX" secondItem="rlx-cQ-nGb" secondAttribute="centerX" id="lrn-CH-Cev"/>
-                                    <constraint firstItem="INM-E8-0PE" firstAttribute="top" secondItem="rlx-cQ-nGb" secondAttribute="top" id="u4o-i1-Zzt"/>
+                                    <constraint firstItem="INM-E8-0PE" firstAttribute="top" secondItem="o30-X7-LRJ" secondAttribute="top" id="u4o-i1-Zzt"/>
                                 </constraints>
+                                <viewLayoutGuide key="safeArea" id="o30-X7-LRJ"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="YHm-Bw-1Pv" firstAttribute="trailing" secondItem="657-po-rB3" secondAttribute="trailing" id="18q-4L-iht"/>
+                            <constraint firstAttribute="trailing" secondItem="657-po-rB3" secondAttribute="trailing" id="18q-4L-iht"/>
                             <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="YHm-Bw-1Pv" secondAttribute="bottom" constant="-44" id="FVW-KF-XEn"/>
                             <constraint firstAttribute="width" secondItem="rlx-cQ-nGb" secondAttribute="width" id="WJS-3w-Z15"/>
                             <constraint firstItem="YHm-Bw-1Pv" firstAttribute="centerX" secondItem="rlx-cQ-nGb" secondAttribute="centerX" id="YkM-Nt-NKo"/>
-                            <constraint firstItem="657-po-rB3" firstAttribute="leading" secondItem="YHm-Bw-1Pv" secondAttribute="leading" id="bcM-Ia-vJM"/>
+                            <constraint firstItem="657-po-rB3" firstAttribute="leading" secondItem="ulg-px-Jgm" secondAttribute="leading" id="bcM-Ia-vJM"/>
                             <constraint firstItem="rlx-cQ-nGb" firstAttribute="top" secondItem="ulg-px-Jgm" secondAttribute="top" priority="999" id="c1j-KL-Cmu"/>
                             <constraint firstAttribute="bottom" secondItem="657-po-rB3" secondAttribute="bottom" id="e1a-z9-0uA"/>
                             <constraint firstItem="rlx-cQ-nGb" firstAttribute="height" secondItem="657-po-rB3" secondAttribute="height" id="gFK-OZ-kWU" userLabel="superViewHeight"/>
