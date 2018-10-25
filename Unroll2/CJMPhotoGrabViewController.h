@@ -18,5 +18,6 @@
 @property (nonatomic, strong) UIColor *userColor;
 @property (nonatomic, strong) NSNumber *userColorTag;
 @property (nonatomic) BOOL singleSelection;
+@property (nonatomic, strong) PHFetchResult *fetchResult;
 
 @end

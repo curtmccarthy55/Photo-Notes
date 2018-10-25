@@ -12,6 +12,7 @@
 #import "CJMPhotoAlbum.h"
 #import "CJMImage.h"
 #import "CJMServices.h"
+#import "PHNImportAlbumsVC.h"
 
 @import SafariServices;
 @import MessageUI;
@@ -264,6 +265,17 @@ typedef enum {
 #pragma mark - CJMPhotoGrabber Methods and Delegate
 
 - (void)presentPhotoGrabViewController {
+    NSString * storyboardName = @"Main";
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+    UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
+    PHNImportAlbumsVC *vc = (PHNImportAlbumsVC *)[navigationVC topViewController];
+    vc.delegate = self;
+    vc.userColor = self.userColor;
+    vc.userColorTag = self.userColorTag;
+    vc.singleSelection = YES;
+    
+    [self presentViewController:navigationVC animated:YES completion:nil];
+    /*
     NSString *storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
@@ -274,6 +286,7 @@ typedef enum {
     vc.singleSelection = YES;
     
     [self presentViewController:navigationVC animated:YES completion:nil];
+     */
 }
 
 - (void)photoGrabSceneDidCancel {

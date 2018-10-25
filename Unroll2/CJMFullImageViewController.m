@@ -85,11 +85,9 @@
     [self.noteSection setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:self.noteOpacity]];
     
     self.imageView.image = self.fullImage ? self.fullImage : [UIImage imageNamed:@"InAppIcon"];
-    if (@available(iOS 11.0, *)) {
-        self.imageView.accessibilityIgnoresInvertColors = YES;
-        self.noteSection.accessibilityIgnoresInvertColors = YES;
-        self.scrollView.accessibilityIgnoresInvertColors = YES;
-    }
+    self.imageView.accessibilityIgnoresInvertColors = YES;
+    self.noteSection.accessibilityIgnoresInvertColors = YES;
+    self.scrollView.accessibilityIgnoresInvertColors = YES;
     self.scrollView.delegate = self;
 }
 

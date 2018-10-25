@@ -18,6 +18,7 @@
 #import "CJMHudView.h"
 #import "CJMFileSerializer.h"
 #import "PHNPhotoGrabCompletionDelegate.h"
+#import "PHNImportAlbumsVC.h"
 #import <AVFoundation/AVFoundation.h>
 #import <dispatch/dispatch.h>
 
@@ -395,11 +396,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UINavigationController *navigationVC = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"NavPhotoGrabViewController"];
-    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)[navigationVC topViewController];
+    PHNImportAlbumsVC *vc = (PHNImportAlbumsVC *)[navigationVC topViewController];
     vc.delegate = self;
     vc.userColor = self.userColor;
     vc.userColorTag = self.userColorTag;
     vc.singleSelection = NO;
+    
     [self presentViewController:navigationVC animated:YES completion:nil];
 }
 

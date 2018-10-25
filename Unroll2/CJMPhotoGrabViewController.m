@@ -16,7 +16,6 @@
 @interface CJMPhotoGrabViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
-@property (nonatomic, strong) PHFetchResult *fetchResult;
 @property (strong) PHCachingImageManager *imageManager;
 
 @end
@@ -36,13 +35,10 @@ static NSString * const reuseIdentifier = @"GrabCell";
     }
     //cjm album fetch.  PHAsset fetch call made here.
     self.imageManager = [[PHCachingImageManager alloc] init];
-    self.fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:nil];
+//    self.fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:nil];
     self.navigationItem.title = @"Select Photos";
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
-                                                                             style:UIBarButtonItemStylePlain
-                                                                            target:self
-                                                                            action:@selector(cancelPressed)];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelPressed)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                               style:UIBarButtonItemStyleDone
                                                                              target:self
@@ -64,7 +60,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
     [self.navigationController.navigationBar setBarTintColor:self.userColor];
     [self.navigationController.toolbar setBarTintColor:self.userColor];
     
-    //scroll to bottom before displaying
+    //scroll to bottom before displaying.  TODO: this can be improved.
     CGSize pageSize = self.view.bounds.size;
     CGPoint contentOffset = CGPointMake(0, pageSize.height * self.fetchResult.count - 1);
     [self.collectionView setContentOffset:contentOffset animated:NO];

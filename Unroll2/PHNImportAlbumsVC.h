@@ -15,5 +15,6 @@
 @property (nonatomic, weak) id <PHNPhotoGrabCompletionDelegate> delegate;
 @property (nonatomic, strong) UIColor *userColor;
 @property (nonatomic, strong) NSNumber *userColorTag;
+@property (nonatomic) BOOL singleSelection;
 
 @end

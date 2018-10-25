@@ -43,9 +43,9 @@ typedef enum {
     UINib *nib = [UINib nibWithNibName:@"CJMAListTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CJMAListCellIdentifier];
     self.tableView.rowHeight = 80;
-    
+    self.navigationItem.title = @"Photos";
     self.imageManager = [PHCachingImageManager new];
-    self.sectionLocalizedTitles = @[@"", @"Smart Albums", @"Albums"];
+    self.sectionLocalizedTitles = @[@"", @"Library", @"My Albums"];
     
     //Create a PHFetchResult object for each section in the table view.
     self.ascendingOptions = [PHFetchOptions new];
@@ -112,12 +112,16 @@ typedef enum {
         
         [cell configureWithTitle:assetCollection.localizedTitle withAlbumCount:(int)result.count];
     } else if (indexPath.section == 2) {
-        NSLog(@"fetching collection from self.userCollections[%ld]", (long)indexPath.row);
-        //            PHCollection *collection = self.userCollections[indexPath.row];
-        //            cell.textLabel.text = collection.localizedTitle;
-        //
-        //            PHFetchResult *result = []
-        //            asset = result.firstObject;
+        PHCollection *collection = self.userCollections[indexPath.row];
+        if ([collection isKindOfClass:[PHAssetCollection class]]) {
+            PHAssetCollection *assetCollection = (PHAssetCollection *)collection;
+            PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:self.ascendingOptions];
+            asset = result.lastObject;
+            
+            [cell configureWithTitle:assetCollection.localizedTitle withAlbumCount:(int)result.count];
+        } else if ([collection isKindOfClass:[PHCollectionList class]]) {
+            
+        }
     }
     
     [self.imageManager requestImageForAsset:asset
@@ -125,7 +129,11 @@ typedef enum {
                                 contentMode:PHImageContentModeAspectFill
                                     options:nil
                               resultHandler:^(UIImage *result, NSDictionary *info) {
-                                  cell.cellThumbnail.image = result;
+                                  if (result != nil) {
+                                      cell.cellThumbnail.image = result;
+                                  } else {
+                                      cell.cellThumbnail.image = [UIImage imageNamed:@"NoImage"];
+                                  }
                               }];
     
     return cell;
@@ -143,43 +151,32 @@ typedef enum {
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender { //cjm album fetch
-    if ([segue.identifier isEqualToString:SEGUE_IDENTIFIER]) {
-        CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)segue.destinationViewController;
-        //         vc.title =
-         vc.delegate = self.delegate;
-        vc.userColor = self.userColor;
-        vc.userColorTag = self.userColorTag;
-        vc.singleSelection = NO;
-    }
+    CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)segue.destinationViewController;
+    vc.delegate = self.delegate;
+    vc.userColor = self.userColor;
+    vc.userColorTag = self.userColorTag;
+    vc.singleSelection = self.singleSelection;
     
-    
-    
-    
-    /*
-    destination.title = cell.textLabel?.text
-    
-    switch SegueIdentifier(rawValue: segue.identifier!)! {
-    case .showAllPhotos:
-        destination.fetchResult = allPhotos
-    case .showCollection:
-        // Fetch the asset collection for the selected row.
-        let indexPath = tableView.indexPath(for: cell)!
-        let collection: PHCollection
-        switch Section(rawValue: indexPath.section)! {
-        case .smartAlbums:
-            collection = smartAlbums.object(at: indexPath.row)
-        case .userCollections:
-            collection = userCollections.object(at: indexPath.row)
-        default: return // The default indicates that other segues have already handled the photos section.
+    if (self.selectedIndex.section == 0) {
+        NSLog(@"should be showing All Photos cell");
+        vc.fetchResult = self.allPhotos;
+        vc.title = @"All Photos";
+    } else if (self.selectedIndex.section == 1) {
+        PHAssetCollection *assetCollection = self.smartAlbums[self.selectedIndex.row];
+        PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:self.ascendingOptions];
+        vc.fetchResult = result;
+        vc.title = assetCollection.localizedTitle;
+    } else if (self.selectedIndex.section == 2) {
+        PHCollection *collection = self.userCollections[self.selectedIndex.row];
+        if ([collection isKindOfClass:[PHAssetCollection class]]) {
+            PHAssetCollection *assetCollection = (PHAssetCollection *)collection;
+            PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:self.ascendingOptions];
+            vc.fetchResult = result;
+            vc.title = assetCollection.localizedTitle;
+        } else if ([collection isKindOfClass:[PHCollectionList class]]) {
+            
         }
-        
-        // configure the view controller with the asset collection
-        guard let assetCollection = collection as? PHAssetCollection
-        else { fatalError("Expected an asset collection.") }
-        destination.fetchResult = PHAsset.fetchAssets(in: assetCollection, options: nil)
-        destination.assetCollection = assetCollection
     }
-    */
 }
 
 @end
