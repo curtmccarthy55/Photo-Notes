@@ -652,14 +652,15 @@
 //    TODO: Use PHAsset instead of UIImage. cjm album fetch
 //    PHAsset *newAsset = [info objectForKey:UIImagePickerControllerPHAsset];
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
-    NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
+//    NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
+    NSData *nPhotoData = UIImagePNGRepresentation(newPhoto);
     UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:CGSizeMake(120.0, 120.0)];
     
     //cjm album fetch
     NSDictionary *metaDic = [info objectForKey:UIImagePickerControllerMediaMetadata];
     NSLog(@"metaDic == %@", metaDic);
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[newPhotoData, thumbnail] forKeys:@[@"newImage", @"newThumbnail"]];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[nPhotoData, thumbnail] forKeys:@[@"newImage", @"newThumbnail"]];
     
     if (!self.pickerPhotos) {
         self.pickerPhotos = [[NSMutableArray alloc] init];

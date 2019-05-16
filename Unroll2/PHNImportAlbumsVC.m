@@ -50,8 +50,16 @@ typedef enum {
     //Create a PHFetchResult object for each section in the table view.
     self.ascendingOptions = [PHFetchOptions new];
     self.ascendingOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
+    
     self.allPhotos = [PHAsset fetchAssetsWithOptions:self.ascendingOptions];
     self.smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil]; //PHAssetCollection
+    /*
+     TODO we should remove Recently Deleted and All Photos from this collection.  Need to see what All Photos collection name actually is though.
+     We'll need to set up a fetchOption that excludes these albums and include that in the smartAlbums fetch.
+     I should also filter out FetchResults that have count == 0.
+     */
+    
+    
     self.userCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil]; //PHCollectionList
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelPressed)];
