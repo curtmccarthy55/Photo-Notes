@@ -57,7 +57,7 @@
     UINib *nib = [UINib nibWithNibName:@"CJMAListTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CJMAListCellIdentifier];
     
-    self.tableView.rowHeight = 80;
+    self.tableView.rowHeight = 120; /// was 80
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -142,7 +142,7 @@
     CJMPhotoAlbum *album = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
     [cell configureWithTitle:album.albumTitle withAlbumCount:(int)album.albumPhotos.count];
     [cell configureThumbnailForCell:cell forAlbum:album];
-    cell.accessoryType = UITableViewCellAccessoryDetailButton;
+//    cell.accessoryType = UITableViewCellAccessoryDetailButton;
     cell.showsReorderControl = YES;
     
     return cell;

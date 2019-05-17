@@ -14,6 +14,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *cellAlbumName;
 @property (weak, nonatomic) IBOutlet UILabel *cellAlbumCount;
+@property (weak, nonatomic) IBOutlet UIView *subContentView;
 
 @end
 
@@ -22,6 +23,16 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+//    self.cellThumbnail.layer.cornerRadius = 4.0;
+//    self.cellThumbnail.layer.borderColor = UIColor.grayColor.CGColor;
+//    self.cellThumbnail.layer.borderWidth = 1.0;
+    self.backgroundColor = UIColor.clearColor;
+    self.contentView.backgroundColor = UIColor.clearColor;
+    self.subContentView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.90];
+    self.subContentView.layer.cornerRadius = 8.0;
+    self.subContentView.layer.borderColor = UIColor.blackColor.CGColor;
+    self.subContentView.layer.borderWidth = 1.0;
+    self.subContentView.clipsToBounds = true;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

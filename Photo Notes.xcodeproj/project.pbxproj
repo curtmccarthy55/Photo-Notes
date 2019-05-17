@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		750F7A47228DFD5900CA7E01 /* PHNAlbumListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F7A46228DFD5900CA7E01 /* PHNAlbumListCell.swift */; };
+		750F7A49228E022300CA7E01 /* CJMAListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 750F7A48228E022300CA7E01 /* CJMAListTableViewCell.xib */; };
 		751497DA21769137001E6D52 /* PHNImportAlbumsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 751497D921769137001E6D52 /* PHNImportAlbumsVC.m */; };
 		755558CA203240B3005A9478 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C8203240B2005A9478 /* Fabric.framework */; };
 		755558CB203240B3005A9478 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C9203240B3005A9478 /* Crashlytics.framework */; };
@@ -24,7 +26,6 @@
 		84A769711ADAE3A000DE6741 /* Unroll2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769701ADAE3A000DE6741 /* Unroll2Tests.m */; };
 		84C2B9301ADB022E0034786C /* CJMAListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B92F1ADB022E0034786C /* CJMAListViewController.m */; };
 		84C2B9371ADB0A580034786C /* CJMAListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9351ADB0A580034786C /* CJMAListTableViewCell.m */; };
-		84C2B9381ADB0A580034786C /* CJMAListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C2B9361ADB0A580034786C /* CJMAListTableViewCell.xib */; };
 		84C2B93B1ADB35C30034786C /* CJMAlbumManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B93A1ADB35C30034786C /* CJMAlbumManager.m */; };
 		84C2B93E1ADB38880034786C /* CJMPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B93D1ADB38880034786C /* CJMPhotoAlbum.m */; };
 		84C2B9411ADC2F750034786C /* CJMImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9401ADC2F750034786C /* CJMImage.m */; };
@@ -50,6 +51,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		750F7A45228DFD5900CA7E01 /* Unroll2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Unroll2-Bridging-Header.h"; sourceTree = "<group>"; };
+		750F7A46228DFD5900CA7E01 /* PHNAlbumListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumListCell.swift; sourceTree = "<group>"; };
+		750F7A48228E022300CA7E01 /* CJMAListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CJMAListTableViewCell.xib; sourceTree = "<group>"; };
 		751497D821769137001E6D52 /* PHNImportAlbumsVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHNImportAlbumsVC.h; sourceTree = "<group>"; };
 		751497D921769137001E6D52 /* PHNImportAlbumsVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PHNImportAlbumsVC.m; sourceTree = "<group>"; };
 		751497DC217FD894001E6D52 /* PHNPhotoGrabCompletionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHNPhotoGrabCompletionDelegate.h; sourceTree = "<group>"; };
@@ -81,7 +85,6 @@
 		84C2B92E1ADB022E0034786C /* CJMAListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMAListViewController.h; sourceTree = "<group>"; };
 		84C2B92F1ADB022E0034786C /* CJMAListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAListViewController.m; sourceTree = "<group>"; };
 		84C2B9351ADB0A580034786C /* CJMAListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAListTableViewCell.m; sourceTree = "<group>"; };
-		84C2B9361ADB0A580034786C /* CJMAListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CJMAListTableViewCell.xib; sourceTree = "<group>"; };
 		84C2B9391ADB35C30034786C /* CJMAlbumManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMAlbumManager.h; sourceTree = "<group>"; };
 		84C2B93A1ADB35C30034786C /* CJMAlbumManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAlbumManager.m; sourceTree = "<group>"; };
 		84C2B93C1ADB38880034786C /* CJMPhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPhotoAlbum.h; sourceTree = "<group>"; };
@@ -189,7 +192,9 @@
 				84F1FDB11AEF21A60092D424 /* CJMGrabCell.m */,
 				75A1E4322180E7FE00F740C1 /* CJMAListTableViewCell.h */,
 				84C2B9351ADB0A580034786C /* CJMAListTableViewCell.m */,
-				84C2B9361ADB0A580034786C /* CJMAListTableViewCell.xib */,
+				750F7A48228E022300CA7E01 /* CJMAListTableViewCell.xib */,
+				750F7A46228DFD5900CA7E01 /* PHNAlbumListCell.swift */,
+				750F7A45228DFD5900CA7E01 /* Unroll2-Bridging-Header.h */,
 				84401F3D1B3092F100B4FB89 /* CJMHudView.h */,
 				84401F3E1B3092F100B4FB89 /* CJMHudView.m */,
 			);
@@ -330,6 +335,7 @@
 					84A769501ADAE39F00DE6741 = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = KGV8B36NV2;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					84A769691ADAE3A000DE6741 = {
@@ -343,6 +349,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -362,7 +369,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84C2B9381ADB0A580034786C /* CJMAListTableViewCell.xib in Resources */,
+				750F7A49228E022300CA7E01 /* CJMAListTableViewCell.xib in Resources */,
 				84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */,
 				840852A61B5DA49E00664849 /* no_image.jpg in Resources */,
 				758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */,
@@ -422,6 +429,7 @@
 				84A769571ADAE39F00DE6741 /* main.m in Sources */,
 				751497DA21769137001E6D52 /* PHNImportAlbumsVC.m in Sources */,
 				84C2B9301ADB022E0034786C /* CJMAListViewController.m in Sources */,
+				750F7A47228DFD5900CA7E01 /* PHNAlbumListCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,6 +552,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -559,6 +568,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Unroll2/Unroll2-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -567,6 +579,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -582,6 +595,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Unroll2/Unroll2-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -589,6 +604,7 @@
 		84A769781ADAE3A000DE6741 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -609,6 +625,7 @@
 		84A769791ADAE3A000DE6741 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
