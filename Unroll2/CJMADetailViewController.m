@@ -65,6 +65,10 @@
     
     [self.navigationController.navigationBar setBarTintColor:self.userColor];
     [self.navigationController.toolbar setBarTintColor:self.userColor];
+    
+    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"AlbumListBackground"]];
+    backgroundView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.tableView setBackgroundView:backgroundView];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

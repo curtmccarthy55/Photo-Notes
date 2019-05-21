@@ -70,6 +70,10 @@
     [self.navigationController.navigationBar setPrefersLargeTitles:YES];
     [self.navigationController.navigationBar setTranslucent:YES];
     
+    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"AlbumListBackground"]];
+    backgroundView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.tableView setBackgroundView:backgroundView];
+    
     [self noAlbumsPopUp];
     [self.tableView reloadData];
 }
@@ -148,13 +152,24 @@
     return cell;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1.0, 1.0)];
+    return view;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 4.0;
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {//replaces blank rows with blank space in the tableView
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1.0, 1.0)];
     return view;
 }
 
-                          
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 4.0;
+}
 
 #pragma mark - tableView delegate methods
 

@@ -151,6 +151,12 @@ typedef enum {
     return self.sectionLocalizedTitles[section];
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:UIColor.whiteColor];
+    header.backgroundColor = UIColor.clearColor;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.selectedIndex = indexPath;
     [self performSegueWithIdentifier:SEGUE_IDENTIFIER sender:nil];

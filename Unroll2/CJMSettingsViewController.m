@@ -115,6 +115,10 @@ typedef enum {
     [self.navigationController.navigationBar setPrefersLargeTitles:YES];
     [self.navigationController.navigationBar setTranslucent:YES];
     [self displayQNThumnail];
+    
+    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"AlbumListBackground"]];
+    backgroundView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.tableView setBackgroundView:backgroundView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -458,6 +462,11 @@ typedef enum {
         [alert addAction:actionDismiss];
         [self presentViewController:alert animated:YES completion:nil];
     }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:UIColor.whiteColor];
 }
 
 @end

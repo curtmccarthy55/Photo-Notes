@@ -23,9 +23,6 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-//    self.cellThumbnail.layer.cornerRadius = 4.0;
-//    self.cellThumbnail.layer.borderColor = UIColor.grayColor.CGColor;
-//    self.cellThumbnail.layer.borderWidth = 1.0;
     self.backgroundColor = UIColor.clearColor;
     self.contentView.backgroundColor = UIColor.clearColor;
     self.subContentView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.90];
