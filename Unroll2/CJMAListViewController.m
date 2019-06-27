@@ -43,8 +43,6 @@
 @property (nonatomic, strong) NSMutableArray *pickerPhotos;
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
 
-
-
 @end
 
 @implementation CJMAListViewController
