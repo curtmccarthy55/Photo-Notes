@@ -34,17 +34,14 @@ class PhotoNote: NSObject, NSCoding {
     weak var photoImage: UIImage?
     var originalAlbum: String?
     var photoFavorited = false
-    /*
-    - (void)toggleSelectCoverHidden;
-    - (void)setInitialValuesForCJMImage:(CJMImage *)cjmImage inAlbum:(NSString *)album;
- */
-    //MARK: - Set up
+    
+    //MARK: - Set Up
     override init() {
         photoID = UUID()
         super.init()
     }
     
-    //MARK: - Property modifiers
+    //MARK: - Property Modifiers
     //previously - (void)setInitialValuesForCJMImage:(CJMImage *)cjmImage inAlbum:(NSString *)album
     func setInitialValuesWithAlbum(_ album: String) {
         photoTitle = "No Title Created "
@@ -86,55 +83,19 @@ class PhotoNote: NSObject, NSCoding {
         aCoder.encode(photoFavorited, forKey: CodingKeys.photoFavorited.rawValue)
         aCoder.encode(originalAlbum, forKey: CodingKeys.originalAlbum.rawValue)
     }
-    /*
-     - (void)encodeWithCoder:(NSCoder *)aCoder {
-     //    [aCoder encodeObject:self.name forKey:@"Name"]; TODO: we should be able to remove this.
-     //    [aCoder encodeBool:self.local forKey:@"Local"]; TODO: we should be able to remove this.
-     //    NSLog(@"local == %d", self.local);
-     [aCoder encodeObject:self.photoID forKey:@"photoID"];
-     [aCoder encodeObject:self.photoTitle forKey:@"Title"];
-     [aCoder encodeObject:self.photoNote forKey:@"Note"];
-     [aCoder encodeObject:self.photoCreationDate forKey:@"CreationDate"];
-     //[aCoder encodeObject:self.photoLocation forKey:@"Location"];
-     [aCoder encodeBool:self.isAlbumPreview forKey:@"AlbumPreview"];
-     [aCoder encodeBool:self.isFavoritePreview forKey:@"FavoritePreview"];
-     [aCoder encodeBool:self.thumbnailNeedsRedraw forKey:@"ThumbnailNeedsRedraw"];
-     [aCoder encodeBool:self.photoFavorited forKey:@"Favorited"]; //cjm favorites
-     [aCoder encodeObject:self.originalAlbum forKey:@"OriginalAlbum"];
-     }
- */
     
     required init?(coder aDecoder: NSCoder) {
-        <#code#>
+        name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
+        local = aDecoder.decodeObject(forKey: CodingKeys.local.rawValue) as? Bool
+        photoID = aDecoder.decodeObject(forKey: CodingKeys.photoID.rawValue) as! UUID
+        photoTitle = aDecoder.decodeObject(forKey: CodingKeys.title.rawValue) as? String
+        photoNote = aDecoder.decodeObject(forKey: CodingKeys.note.rawValue) as? String
+        photoCreationDate = aDecoder.decodeObject(forKey: CodingKeys.photoCreationDate.rawValue) as? Date
+//        photoLocation = aDecoder.decodeObject(forKey: CodingKeys.photoLocation.rawValue) as? CLLocation
+        isAlbumPreview = aDecoder.decodeObject(forKey: CodingKeys.isAlbumPreview.rawValue) as? Bool ?? false
+        isFavoritePreview = aDecoder.decodeObject(forKey: CodingKeys.isFavoritePreview.rawValue) as? Bool ?? false
+        thumbnailNeedsRedraw = aDecoder.decodeObject(forKey: CodingKeys.thumbnailNeedsRedraw.rawValue) as? Bool ?? false
+        photoFavorited = aDecoder.decodeObject(forKey: CodingKeys.photoFavorited.rawValue) as? Bool ?? false
+        originalAlbum = aDecoder.decodeObject(forKey: CodingKeys.originalAlbum.rawValue) as? String
     }
-/*
-    - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [self init];
-    if(self) {
-    //        self.name = [aDecoder decodeObjectForKey:@"Name"];  TODO: we should be able to remove this.
-    //        self.local = [aDecoder decodeBoolForKey:@"Local"];  TODO: we should be able to remove this.
-    self.photoID = [aDecoder decodeObjectForKey:@"photoID"];
-    self.photoTitle = [aDecoder decodeObjectForKey:@"Title"];
-    self.photoNote = [aDecoder decodeObjectForKey:@"Note"];
-    self.photoCreationDate = [aDecoder decodeObjectForKey:@"CreationDate"];
-    //self.photoLocation = [aDecoder decodeObjectForKey:@"Location"];
-    self.isAlbumPreview = [aDecoder decodeBoolForKey:@"AlbumPreview"];
-    self.isFavoritePreview = [aDecoder decodeBoolForKey:@"FavoritePreview"];
-    self.thumbnailNeedsRedraw = [aDecoder decodeBoolForKey:@"ThumbnailNeedsRedraw"];
-    self.photoFavorited = [aDecoder decodeBoolForKey:@"Favorited"]; //cjm favorites
-    self.selectCoverHidden = YES;
-    self.originalAlbum = [aDecoder decodeObjectForKey:@"OriginalAlbum"];
-    
-    if (!self.isAlbumPreview)
-    self.isAlbumPreview = NO;
-    
-    if (!self.isFavoritePreview)
-    self.isFavoritePreview = NO;
-    
-    if (!self.photoFavorited)
-    self.photoFavorited = NO;
-    }
-    return self;
-    }
- */
 }

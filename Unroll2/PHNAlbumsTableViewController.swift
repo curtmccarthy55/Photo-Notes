@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 /*
 open class CJMAListViewController : UITableViewController, CJMADetailViewControllerDelegate, CJMFullImageViewControllerDelegate {
     
@@ -17,41 +18,94 @@ open class CJMAListViewController : UITableViewController, CJMADetailViewControl
 
 class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControllerDelegate, CJMFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, CJMPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CJMAListPickerDelegate {
     
+//    #define CJMAListCellIdentifier @"AlbumCell"
+    let PHNAlbumsCellIdentifier = "AlbumCell"
+    
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     private var popoverPresent = false
     var userColor: UIColor?
     var userColorTag: Int? // was NSNumber
     var selectedPhotos: [PhotoNote]?
-    /*
-    @property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
-    @property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraButton;
-    @property (nonatomic) BOOL popoverPresent;
-    @property (nonatomic, strong) UIColor *userColor;
-    @property (nonatomic, strong) NSNumber *userColorTag;
-    @property (nonatomic, strong) NSArray *selectedPhotos;
     
-    @property (nonatomic, strong) UIImagePickerController *imagePicker;
-    @property (nonatomic, strong) UIButton *flashButton;
-    @property (nonatomic, strong) UIButton *doneButton;
-    @property (nonatomic, strong) UIImageView *capturedPhotos;
-    @property (nonatomic, strong) UIButton *cameraCancelButton;
-    @property (nonatomic, strong) UIButton *cameraFlipButton;
-    @property (nonatomic) UIDeviceOrientation lastOrientation;
+    var imagePicker: UIImagePickerController?
+    var flashButton: UIButton?
+    var doneButton: UIButton?
+    var capturedPhotos: UIImageView?
+    var cameraCancelButton: UIButton?
+    var cameraFlipButton: UIButton?
+    var lastOrientation: UIDeviceOrientation?
     
-    @property (nonatomic, strong) NSMutableArray *pickerPhotos;
-    @property (nonatomic, strong) PHCachingImageManager *imageManager;
- */
+    var pickerPhotos: [[String : Any?]]?
+    var imageManager: PHCachingImageManager
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        let nib = UINib(nibName: "CJMAListTableViewCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: PHNAlbumsCellIdentifier)
+        tableView.rowHeight = 120 // was 80
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        userColors()
+        navigationController?.toolbar.isHidden = false
+        navigationController?.toolbar.isTranslucent = true
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.isTranslucent = true
+        
+        let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
+        backgroundView.contentMode = .scaleAspectFill
+        tableView.backgroundView = backgroundView
+        
+        noAlbumsPopUp()
+        tableView.reloadData()
+    }
+    
+    func userColors() {
+        var tag = 0
+        var red, green, blue: NSNumber
+        if let dic = UserDefaults.standard.value(forKey: "PhotoNotesColor") as? [String : NSNumber] {
+            red = dic["PhotoNotesRed"]!
+            green = dic["PhotoNotesGreen"]!
+            blue = dic["PhotoNotesBlue"]!
+            tag = dic["PhotoNotesColorTag"] as! Int
+            
+            userColor = UIColor(red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha: 1.0)
+            userColorTag = tag
+        } else {
+            userColor = UIColor(red: 60.0/255.0, green: 128.0/255.0, blue: 194.0/255.0, alpha: 1.0)
+            userColorTag = tag
+        }
+        if (tag != 5) && (tag != 7) { // Yellow or White theme will require dark text and icons.
+            navigationController?.navigationBar.barStyle = .black
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.toolbar.tintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        } else { // Darker color themese will require light text and icons.
+            navigationController?.navigationBar.barStyle = .default
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.toolbar.tintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+        }
+        
+        navigationController?.navigationBar.tintColor = userColor
+        navigationController?.toolbar.tintColor = userColor
+    }
+    
+    func noAlbumsPopUp() { //If there are no albums, prompt the user to create one after a delay.
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            if PHNAlbumManager.shared.allAlbums.count == 0 {
+                self?.navigationItem.prompt = "Tap + below to create a new Photo Notes album."
+            } else {
+                self?.navigationItem.prompt = nil
+            }
+        }
+    }
+    
 
     // MARK: - Table view data source
 
