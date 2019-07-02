@@ -42,13 +42,14 @@ static CJMAlbumManager *__sharedInstance;
     }
     return self;
 }
-
+// func handleFirstTime()
 - (void)handleFirstTime {
     BOOL firstTime = [[NSUserDefaults standardUserDefaults] boolForKey:@"FirstTime"];
     BOOL favorites = [[NSUserDefaults standardUserDefaults] boolForKey:@"FavoritesReserved"];
     
     if (firstTime) {
-        CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"My Photo Notes" andNote:@"Tap Edit to customize the album name and note."];
+        CJMPhotoAlbum *album = [[CJMPhotoAlbum alloc] initWithName:@"My Photo Notes"
+                                                           andNote:@"Tap Edit to customize the album name and note."];
         [self addAlbum:album];
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FirstTime"];
     }
@@ -61,7 +62,7 @@ static CJMAlbumManager *__sharedInstance;
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FavoritesReserved"];
     }
 }
-
+// func registerDefaults()
 - (void)registerDefaults {
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"FirstTime" : @YES , @"FavoritesReserved" : @NO /*, @"QuickNoteMade" : @NO*/ }];
 }
@@ -131,7 +132,7 @@ static CJMAlbumManager *__sharedInstance;
 
 
 #pragma mark - Content management
-
+// func addAlbum(_ album: PHNPhotoAlbum) {
 - (void)addAlbum:(CJMPhotoAlbum *)album {
     if ([album.albumTitle isEqualToString:@"Favorites"]) {
         [self.allAlbumsEdit insertObject:self.favAlbumEdit atIndex:0];
@@ -143,6 +144,7 @@ static CJMAlbumManager *__sharedInstance;
     [self save];
 }
 
+// func removeAlbumAtIndex(_ index: Int) {
 - (void)removeAlbumAtIndex:(NSUInteger)index {
     CJMPhotoAlbum *doomedAlbum = [self.allAlbumsEdit objectAtIndex:index];
     [self albumWithName:doomedAlbum.albumTitle deleteImages:doomedAlbum.albumPhotos];
@@ -157,7 +159,7 @@ static CJMAlbumManager *__sharedInstance;
     [self.allAlbumsEdit removeObject:doomedAlbum];
     [self checkFavoriteCount];
 }
-
+//func replaceAlbumAtIndex(_ atIndex: Int, withAlbumAtIndex fromIndex: Int) {
 - (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex { //cjm 01/04
     CJMPhotoAlbum *uQN = [self userQuickNote];
     [self.allAlbumsEdit removeObject:uQN];
@@ -168,6 +170,7 @@ static CJMAlbumManager *__sharedInstance;
     [self.allAlbumsEdit insertObject:movingAlbum atIndex:toIndex];
 }
 
+//func existingAlbum(named: String) -> PHNPhotoAlbum? {
 - (BOOL)containsAlbumNamed:(NSString *)name {
     __block BOOL exists = NO;
     [self.allAlbumsEdit enumerateObjectsUsingBlock:^(CJMPhotoAlbum *obj, NSUInteger idx, BOOL *stop) {
@@ -178,6 +181,7 @@ static CJMAlbumManager *__sharedInstance;
     return exists;
 }
 
+//func existingAlbum(named: String) -> PHNPhotoAlbum? {
 - (CJMPhotoAlbum *)scanForAlbumWithName:(NSString *)name {
     CJMPhotoAlbum *foundAlbum;
     for (CJMPhotoAlbum *album in self.allAlbumsEdit) {
@@ -191,6 +195,7 @@ static CJMAlbumManager *__sharedInstance;
 
 #pragma mark - Requests to album manager
 
+//func albumWithName(_ name: String, createPreviewFromImage image: PhotoNote) {
 - (void)albumWithName:(NSString *)name createPreviewFromCJMImage:(CJMImage *)image {
     CJMPhotoAlbum *album = [self scanForAlbumWithName:name];
     if (album == self.favPhotosAlbum) {
@@ -204,6 +209,7 @@ static CJMAlbumManager *__sharedInstance;
     album.albumPreviewImage = image;
 }
 
+//func albumWithName(_ name: String, createPreviewFromImage image: PhotoNote) {
 - (CJMImage *)albumWithName:(NSString *)name returnImageAtIndex:(NSInteger)index {
     CJMPhotoAlbum *album = [self scanForAlbumWithName:name];
     
@@ -214,6 +220,7 @@ static CJMAlbumManager *__sharedInstance;
     }
 }
 
+//func albumWithName(_ albumName: String, removeImageWithUUID fileName: String) {
 - (void)albumWithName:(NSString *)albumName removeImageWithUUID:(NSString *)fileName {
     CJMPhotoAlbum *shrinkingAlbum = [self scanForAlbumWithName:albumName];
     
@@ -225,7 +232,7 @@ static CJMAlbumManager *__sharedInstance;
     }
 }
 
-//  cjm 12/27: removes each CJMImage in the images array from the original and favorites albums, then deletes the CJMImage from the disk.
+//func albumWithName(_ name: String, deleteImages images: [PhotoNote]) {
 - (void)albumWithName:(NSString *)albumName deleteImages:(NSArray *)images {
     CJMPhotoAlbum *album = [self scanForAlbumWithName:albumName];
     for (CJMImage *doomedImage in [images reverseObjectEnumerator]) {
@@ -246,6 +253,7 @@ static CJMAlbumManager *__sharedInstance;
 
 #pragma mark - PhotoAlbum Delegate
 
+//func checkFavoriteCount()
 - (void)checkFavoriteCount {
     if (self.favPhotosAlbum.albumPhotos.count < 1) {
         [self.allAlbumsEdit removeObject:self.favAlbumEdit];
@@ -259,6 +267,7 @@ static CJMAlbumManager *__sharedInstance;
 
 #pragma mark - Album saving
 
+//func save() -> Bool
 - (BOOL)save {
     return [self.fileSerializer writeObject:self.allAlbumsEdit toRelativePath:CJMAlbumFileName];
 }

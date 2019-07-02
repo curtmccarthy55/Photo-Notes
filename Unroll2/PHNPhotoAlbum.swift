@@ -13,6 +13,7 @@ protocol PHNPhotoAlbumDelegate: class {
 }
 
 class PHNPhotoAlbum: NSObject, NSCoding, NSCopying {
+    //MARK: - Properties
     var albumTitle: String
     var albumNote: String?
 //    var privateAlbum = false //TODO: implement private albums.
@@ -23,7 +24,7 @@ class PHNPhotoAlbum: NSObject, NSCoding, NSCopying {
     var albumPreviewImage: PhotoNote?
     weak var delegate: PHNPhotoAlbumDelegate?
     
-    //MARK: - Set up
+    //MARK: - Set Up
     
     init(withName name: String, andNote note: String?) {
         albumTitle = name
@@ -35,16 +36,19 @@ class PHNPhotoAlbum: NSObject, NSCoding, NSCopying {
         self.init(withName: name, andNote: nil)
     }
     
-    //MARK: - Requests
-    func checkFavoriteCount() {
-        
-    }
+    //MARK: - Content Management
     
     func add(_ photoNote: PhotoNote) {
         albumEditablePhotos.append(photoNote)
         if albumTitle == "Favorites" {
             delegate?.checkFavoriteCount()
         }
+    }
+    
+    func addMultiple(_ photoNotes: [PhotoNote]) {
+        // Sort by ascending creation date.
+        let sortedNewImages = photoNotes.sorted { $0.photoCreationDate! < $1.photoCreationDate! }
+        albumEditablePhotos.append(contentsOf: sortedNewImages)
     }
     
     /// Search for and remove the passed in PhotoNote.
@@ -57,14 +61,13 @@ class PHNPhotoAlbum: NSObject, NSCoding, NSCopying {
         }
     }
     
-    func addMultiple(_ photoNotes: [PhotoNote]) {
-        // Sort by ascending creation date.
-        let sortedNewImages = photoNotes.sorted { $0.photoCreationDate! < $1.photoCreationDate! }
-        albumEditablePhotos.append(contentsOf: sortedNewImages)
-    }
-    
-    func removeAtIndices(_ indcies: IndexSet) {
+    func removeAtIndices(_ indices: IndexSet) {
+        var arr = Array(albumEditablePhotos.enumerated())
+        arr.removeAll { indices.contains($0.offset) }
+        albumEditablePhotos = arr.map { $0.element }
         
+        // Below line is O(n^2) since remove(at:) also has to loop through the array.
+//        for i in indices.sorted(by: >) { albumEditablePhotos.remove(at: i) }
     }
     
     func description() -> String {
@@ -91,10 +94,10 @@ class PHNPhotoAlbum: NSObject, NSCoding, NSCopying {
         albumTitle = aDecoder.decodeObject(forKey: CodingKeys.albumTitle.rawValue) as! String
         albumNote = aDecoder.decodeObject(forKey: CodingKeys.albumNote.rawValue) as? String
         albumEditablePhotos = aDecoder.decodeObject(forKey: CodingKeys.albumEditablePhotos.rawValue) as! [PhotoNote]
-        albumPreviewImage = aDecoder.decodeObject(forKey: CodingKeys.albumPreviewImage.rawValue) as! PhotoNote
+        albumPreviewImage = aDecoder.decodeObject(forKey: CodingKeys.albumPreviewImage.rawValue) as? PhotoNote
     }
     
-    func copy(with zone: NSZone? = nil) -> Any /*PHNPhotoAlbum*/ {
+    func copy(with zone: NSZone? = nil) -> Any /* -> PHNPhotoAlbum causes compiler error*/ {
         let albumCopy = PHNPhotoAlbum(withName: albumTitle, andNote: albumNote)
         albumCopy.albumEditablePhotos = albumEditablePhotos
         albumCopy.albumPreviewImage = albumPreviewImage

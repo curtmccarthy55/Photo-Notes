@@ -68,6 +68,7 @@
     return self;
 }
 
+// func setInitialValuesWithAlbum(_ album: String) {
 - (void)setInitialValuesForCJMImage:(CJMImage *)cjmImage inAlbum:(NSString *)album {
     cjmImage.photoTitle = @"No Title Created ";
     cjmImage.photoNote = @"Tap Edit to change the title and note!";
@@ -86,6 +87,7 @@
 
 #pragma mark - Selected
 
+// func toggleSelectCoverHidden() {
 - (void)toggleSelectCoverHidden {
     self.selectCoverHidden = !self.selectCoverHidden;
 }

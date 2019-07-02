@@ -74,6 +74,7 @@
     return [self.albumEditablePhotos array];
 }
 
+// func add(_ photoNote: PhotoNote) {
 - (void)addCJMImage:(CJMImage *)image { //cjm favorites add
     [self.albumEditablePhotos addObject:image];
     if ([self.albumTitle isEqualToString:@"Favorites"]) {
@@ -81,16 +82,19 @@
     }
 }
 
+// func remove(_ photoNote: PhotoNote) {
 - (void)removeCJMImage:(CJMImage *)image {
     [self.albumEditablePhotos removeObject:image];
 }
 
+// func addMultiple(_ photoNotes: [PhotoNote]) {
 - (void)addMultipleCJMImages:(NSArray *)newImages {
     NSArray *sortedNewImages = [newImages sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"photoCreationDate" ascending:YES]]];
     
     [self.albumEditablePhotos addObjectsFromArray:sortedNewImages];
 }
 
+// func removeAtIndices(_ indices: IndexSet) {
 - (void)removeCJMImagesAtIndexes:(NSIndexSet *)indexSet {
     [self.albumEditablePhotos removeObjectsAtIndexes:indexSet];
 }
