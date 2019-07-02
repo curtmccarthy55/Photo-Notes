@@ -10,4 +10,74 @@ import UIKit
 
 class PHNFileSerializer: NSObject {
 
+    func readObjectFromRelativePath(_ path: String) -> Any? {
+        let absolutePath = absolutePathFromRelativePath(path)
+        var object: Any? = nil
+        if FileManager.default.fileExists(atPath: absolutePath) {
+            object = NSKeyedUnarchiver.unarchiveObject(withFile: absolutePath)
+        }
+        return object
+    }
+    
+    /// Returns UIImage? read from a given file path on disk.
+    func readImageFromRelativePath(_ path: String) -> UIImage? {
+        if let data = readObjectFromRelativePath(path) {
+            let imageData = UIImage(data: (data as! NSData) as Data) //TODO why all the casting?
+            return imageData
+        } else {
+            return nil
+        }
+        
+    }
+    
+    @discardableResult
+    func writeObject(_ data: Any?, toRelativePath path: String) -> Bool {
+        let filePath = absolutePathFromRelativePath(path)
+        print("filePath == \(filePath)")
+        return NSKeyedArchiver.archiveRootObject(data, toFile: filePath)
+    }
+    
+    @discardableResult
+    func writeImage(_ image: UIImage, toRelativePath path: String) -> Bool {
+        // this method is just to maintain API balance with readImageFromRelativePath
+        return writeObject(image, toRelativePath: path)
+    }
+    
+    func deleteImageWithFileName(_ fileName: String) {
+        let fileManager = FileManager.default
+        
+        let filePath = absolutePathFromRelativePath(fileName)
+        let thumbnailFilePath = filePath.appending("_sm")
+        
+        do {
+            try fileManager.removeItem(atPath: filePath)
+            print("Full image file deleted successfully!")
+        }
+        catch {
+            print("Could not delete full image file: \(error.localizedDescription)")
+        }
+        
+        do {
+            try fileManager.removeItem(atPath: thumbnailFilePath)
+            print("Thumbnail deleted successfully!")
+        }
+        catch {
+            print("Could not delete thumbnail file: \(error.localizedDescription)")
+        }
+    }
+    
+    //MARK: - File Pathing
+    func documentsDirectory() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths.first
+        
+        return documentsDirectory!
+    }
+    
+    func absolutePathFromRelativePath(_ path: String) -> String {
+        let directory = documentsDirectory()
+        let absolutePath = directory.appending(path)
+        
+        return absolutePath
+    }
 }

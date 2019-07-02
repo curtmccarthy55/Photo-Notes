@@ -13,6 +13,7 @@
 
 #pragma mark - read/write/delete
 
+// func readObjectFromRelativePath(_ path: String) -> Any? {
 - (id)readObjectFromRelativePath:(NSString *)path {
     NSString *absolutePath = [self absolutePathFromRelativePath:path];
     id object = nil;
@@ -22,6 +23,7 @@
     return object;
 }
 
+// func readImageFromRelativePath(_ path: String) -> UIImage? {
 - (UIImage *)readImageFromRelativePath:(NSString *)path
 {
     id data = [self readObjectFromRelativePath:path];
@@ -31,6 +33,7 @@
         return nil;
 }
 
+// func writeObject(_ data: Any?, toRelativePath path: String) -> Bool {
 - (BOOL)writeObject:(id)data toRelativePath:(NSString *)path {
     //cjm favorites album [CJMAlbumManager save] calls [fileSerializer writeObject:allAlbumsEdit toRelativePath:@"Unroll.plist"]
     NSString *filePath = [self absolutePathFromRelativePath:path];
@@ -38,12 +41,14 @@
     return [NSKeyedArchiver archiveRootObject:data toFile:filePath];
 }
 
+// func writeImage(_ image: UIImage, toRelativePath path: String) -> Bool {
 - (BOOL)writeImage:(UIImage *)image toRelativePath:(NSString *)path
 {
     //this method is just to maintain API balance with readImageFromRelativePath
     return [self writeObject:image toRelativePath:path];
 }
 
+// func deleteImageWithFileName(_ fileName: String) {
 - (void)deleteImageWithFileName:(NSString *)fileName {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
@@ -71,6 +76,7 @@
 }
 
 #pragma mark - File pathing
+// func documentsDirectory() -> String {
 - (NSString *)documentsDirectory
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -79,6 +85,7 @@
     return documentsDirectory;
 }
 
+// func absolutePathFromRelativePath(_ path: String) -> String {
 - (NSString *)absolutePathFromRelativePath:(NSString *)path
 {
     return [[self documentsDirectory] stringByAppendingPathComponent:path];

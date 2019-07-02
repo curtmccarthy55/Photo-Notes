@@ -19,7 +19,7 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
     private lazy var allAlbumsEdit: [PHNPhotoAlbum] = { //was NSMutableOrderedSet
         if let set = fileSerializer.readObjectFromRelativePath(CJMAlbumFileName) as? NSMutableOrderedSet {
             let arr = set.array as? [PHNPhotoAlbum]
-            return arr
+            return arr ?? []
         }
         return []
     }()
@@ -220,22 +220,3 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
         }
     }
 }
-
-/*
- @interface CJMAlbumManager : NSObject <CJMPhotoAlbumDelegate>
- 
- @property (nonatomic, readonly) NSArray *allAlbums;
- @property (nonatomic, readonly) CJMPhotoAlbum *favPhotosAlbum; //cjm favorites album
- - (void)removeAlbumAtIndex:(NSUInteger)index;
- - (void)replaceAlbumAtIndex:(NSInteger)toIndex withAlbumFromIndex:(NSInteger)fromIndex;
- - (BOOL)containsAlbumNamed:(NSString *)name;
- - (CJMImage *)albumWithName:(NSString *)name returnImageAtIndex:(NSInteger)index;
- - (void)albumWithName:(NSString *)albumName removeImageWithUUID:(NSString *)fileName;
- - (void)albumWithName:(NSString *)name createPreviewFromCJMImage:(CJMImage *)image;
- - (void)albumWithName:(NSString *)albumName deleteImages:(NSArray *)images;
- - (CJMPhotoAlbum *)userQuickNote;
- 
- - (BOOL)save;
- 
- @end
- */
