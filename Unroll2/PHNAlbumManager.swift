@@ -144,7 +144,7 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
         guard let album = existingAlbum(named: name) else { return }
         
         for doomedImage in images.reversed() {
-            PHNServices.sharedInstance.deleteImage(doomedImage)
+            PHNServices.sharedInstance.deleteImageFrom(photoNote: doomedImage)
             if doomedImage.photoFavorited {
                 if album.albumTitle != "Favorites" {
                     favPhotosAlbum?.remove(doomedImage)

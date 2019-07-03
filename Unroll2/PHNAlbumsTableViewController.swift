@@ -98,7 +98,7 @@ class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControl
     func noAlbumsPopUp() { //If there are no albums, prompt the user to create one after a delay.
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            if PHNAlbumManager.shared.allAlbums.count == 0 {
+            if PHNAlbumManager.sharedInstance.allAlbums.count == 0 {
                 self?.navigationItem.prompt = "Tap + below to create a new Photo Notes album."
             } else {
                 self?.navigationItem.prompt = nil

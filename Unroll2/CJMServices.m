@@ -26,7 +26,7 @@ static CJMServices *__sharedInstance;
 
 @implementation CJMServices
 
-
+// static let sharedInstance = PHNServices()
 + (instancetype)sharedInstance
 {
     static dispatch_once_t onceToken;
@@ -37,6 +37,7 @@ static CJMServices *__sharedInstance;
     return __sharedInstance;
 }
 
+/// default initializer suffices
 - (instancetype)init
 {
     self = [super init];
@@ -49,8 +50,8 @@ static CJMServices *__sharedInstance;
 
 # pragma mark - Internal
 
-- (void)fetchimageWithName:(NSString *)name asData:(BOOL)asData handler:(CJMImageCompletionHandler)handler
-{
+// func fetchImageWithName(_ name: String, asData: Bool, handler: CJMImageCompletionHandler?) {
+- (void)fetchimageWithName:(NSString *)name asData:(BOOL)asData handler:(CJMImageCompletionHandler)handler {
     if([self.cache objectForKey:name]) {
         handler([self.cache objectForKey:name]);
     } else {
@@ -73,6 +74,7 @@ static CJMServices *__sharedInstance;
     }
 }
 
+// func deleteImageFrom(photoNote: PhotoNote) {
 - (void)deleteImage:(CJMImage *)userImage {
     if ([self.cache objectForKey:userImage.fileName]) {
         [self.cache removeObjectForKey:userImage.fileName];
@@ -85,6 +87,7 @@ static CJMServices *__sharedInstance;
     [self.fileSerializer deleteImageWithFileName:userImage.fileName];
 }
 
+// func removeImageFromCache(_ photoNote: PhotoNote) {
 - (void)removeImageFromCache:(CJMImage *)image {
     if ([self.cache objectForKey:image.fileName]) {
         [self.cache removeObjectForKey:image.fileName];
@@ -96,7 +99,7 @@ static CJMServices *__sharedInstance;
 }
 
 # pragma mark - Interface
-
+// func fetchUserAlbums(handler: CJMCompletionHandler?) {
 - (void)fetchUserAlbums:(CJMCompletionHandler)handler
 {
     if(handler)
@@ -104,17 +107,17 @@ static CJMServices *__sharedInstance;
 }
 
 #pragma mark - Image fetching and deletion
-
+// func fetchImage(photoNote: PhotoNote, handler: CJMImageCompletionHandler?) {
 - (void)fetchImage:(CJMImage *)image handler:(CJMImageCompletionHandler)handler
 {
     return [self fetchimageWithName:image.fileName asData:YES handler:handler];
 }
-
+// func fetchThumbnailForImage(photoNote: PhotoNote, handler: CJMImageCompletionHandler?) {
 - (void)fetchThumbnailForImage:(CJMImage *)image handler:(CJMImageCompletionHandler)handler
 {
     return [self fetchimageWithName:image.thumbnailFileName asData:NO handler:handler];
 }
-
+// func saveApplicationData() -> Bool {
 - (BOOL)saveApplicationData
 {
     BOOL savedAlbums = [[CJMAlbumManager sharedInstance] save];
@@ -124,7 +127,7 @@ static CJMServices *__sharedInstance;
 @end
 
 @implementation CJMServices (Debugging)
-
+// func beginReportingMemoryToConsole(withInterval interval: TimeInterval) {
 - (void)beginReportingMemoryToConsoleWithInterval:(NSTimeInterval)interval
 { //cjm 09/05
     if(self.debug_memoryReportingTimer)
@@ -134,7 +137,7 @@ static CJMServices *__sharedInstance;
     
     self.debug_memoryReportingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(memoryReportingTic) userInfo:nil repeats:YES];
 }
-
+// func endReportingMemoryToConsole() {
 - (void)endReportingMemoryToConsole
 {
     [self.debug_memoryReportingTimer invalidate];
@@ -142,13 +145,14 @@ static CJMServices *__sharedInstance;
 }
 
 # pragma mark - Memory
-
+// func memoryReportingTic()
 - (void)memoryReportingTic
 {
     [self reportMemoryToConsoleWithReferrer:@"Memory Report Loop"];
 }
 
 #ifdef DEBUG
+// func reportMemoryToConsole(withReferrer: String) {
 - (void)reportMemoryToConsoleWithReferrer:(NSString *)referrer
 { //cjm 09/05
     struct task_basic_info kerBasicInfo;
@@ -180,6 +184,7 @@ static CJMServices *__sharedInstance;
 }
 #else
 //if not in debug mode, lets collect less information & by default not print to console, print to crash reporting framework
+// func reportMemoryToConsole(withReferrer: String) {
 - (void)reportMemoryToConsoleWithReferrer:(NSString *)referrer
 {
     struct task_basic_info info;
