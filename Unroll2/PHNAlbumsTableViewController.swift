@@ -39,6 +39,10 @@ class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControl
     var pickerPhotos: [[String : Any?]]?
     var imageManager: PHCachingImageManager
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,28 +110,87 @@ class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControl
         }
     }
     
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+        if popoverPresent {
+            dismiss(animated: true, completion: nil)
+            popoverPresent = false
+        }
     }
+    
+    // MARK: - TableView Data Source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return PHNAlbumManager.sharedInstance.allAlbums.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: PHNAlbumsCellIdentifier, for: indexPath) as! PHNAlbumListTableViewCell
+        let album = PHNAlbumManager.sharedInstance.allAlbums[indexPath.row]
+        cell.configureWithTitle(album.albumTitle, count: album.albumPhotos.count)
+        cell.configureThumbnail(forAlbum: album)
+//        cell.accessoryType = .detailButton
+        cell.showsReorderControl = true
+        
         return cell
     }
-    */
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 1.0, height: 1.0))
+        return view
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 4.0
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 1.0, height: 1.0))
+        return view
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 4.0
+    }
+    
+    //MARK: - TableView Delegate
+    
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+//        performSegue(withIdentifier: "EditAlbum", sender: tableView.cellForRow(at: indexPath))
+        
+        let sbName = "Main"
+        let sb = UIStoryboard(name: sbName, bundle: nil)
+        
+    }
+    
+    /*
+ - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+     //    [self performSegueWithIdentifier:@"EditAlbum" sender:[tableView cellForRowAtIndexPath:indexPath]];
+     
+     //cjm 12/07
+     NSString *sbName = @"Main";
+     UIStoryboard *sb = [UIStoryboard storyboardWithName:sbName bundle:nil];
+     CJMPopoverViewController *popVC = (CJMPopoverViewController *)[sb instantiateViewControllerWithIdentifier:@"CJMPopover"];
+     CJMPhotoAlbum *album = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
+     popVC.name = album.albumTitle;
+     popVC.note = album.albumNote;
+     popVC.indexPath = indexPath;
+     popVC.delegate = self;
+     
+     popVC.modalPresentationStyle = UIModalPresentationPopover;
+     UIPopoverPresentationController *popController = popVC.popoverPresentationController;
+     popController.delegate = self;
+     popController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+     [popController setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.67]];
+     
+     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+     popController.sourceView = cell;
+     popController.sourceRect = CGRectMake(cell.bounds.size.width - 33.0, cell.bounds.size.height / 2.0, 1.0, 1.0);
+     
+     self.popoverPresent = YES;
+     [self presentViewController:popVC animated:YES completion:nil];
+ }
+ */
 
     /*
     // Override to support conditional editing of the table view.

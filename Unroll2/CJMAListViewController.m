@@ -48,7 +48,7 @@
 @implementation CJMAListViewController
 
 #pragma mark - view prep and display
-
+// override func viewDidLoad() {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -58,6 +58,7 @@
     self.tableView.rowHeight = 120; /// was 80
 }
 
+// override func viewWillAppear(_ animated: Bool) {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -76,6 +77,7 @@
     [self.tableView reloadData];
 }
 
+// func userColors() {
 - (void)userColors {
     NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:@"PhotoNotesColor"];
     NSNumber *tag = [dic valueForKey:@"PhotoNotesColorTag"];
@@ -118,12 +120,12 @@
         [self.navigationItem setPrompt:nil];
     }
 }
-
+// override var preferredStatusBarStyle: UIStatusBarStyle {
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
-
+// override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     if (self.popoverPresent) {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -132,12 +134,12 @@
 }
 
 #pragma mark - tableView data source
-
+// override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 { 
     return [[CJMAlbumManager sharedInstance] allAlbums].count;
 }
-
+// override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CJMAListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CJMAListCellIdentifier forIndexPath:indexPath];
     
@@ -149,22 +151,22 @@
     
     return cell;
 }
-
+// override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1.0, 1.0)];
     return view;
 }
-
+// override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 4.0;
 }
-
+// override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {//replaces blank rows with blank space in the tableView
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1.0, 1.0)];
     return view;
 }
-
+// override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 4.0;
 }

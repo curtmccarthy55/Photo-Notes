@@ -19,7 +19,7 @@
 @end
 
 @implementation CJMAListTableViewCell
-
+// override func awakeFromNib() {
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
@@ -51,7 +51,7 @@
     }
     self.cellAlbumCount.text = albumCountText;
 }
-
+// func configureThumbnail(forAlbum album: PHNPhotoAlbum) {
 - (void)configureThumbnailForCell:(CJMAListTableViewCell *)cell forAlbum:(CJMPhotoAlbum *)album {
     [[CJMServices sharedInstance] fetchThumbnailForImage:album.albumPreviewImage
                                                  handler:^(UIImage *thumbnail) {
