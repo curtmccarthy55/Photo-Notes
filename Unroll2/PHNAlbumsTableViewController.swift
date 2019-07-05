@@ -16,7 +16,7 @@ open class CJMAListViewController : UITableViewController, CJMADetailViewControl
 }
  */
 
-class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControllerDelegate, CJMFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, CJMPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CJMAListPickerDelegate {
+class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControllerDelegate, CJMFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, PHNPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CJMAListPickerDelegate {
     
 //    #define CJMAListCellIdentifier @"AlbumCell"
     let PHNAlbumsCellIdentifier = "AlbumCell"
@@ -156,41 +156,272 @@ class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControl
     //MARK: - TableView Delegate
     
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-//        performSegue(withIdentifier: "EditAlbum", sender: tableView.cellForRow(at: indexPath))
+        let popVC = PHNPopoverViewController()
+        let album = PHNAlbumManager.sharedInstance.allAlbums[indexPath.row]
+        popVC.name = album.albumTitle
+        popVC.note = album.albumNote
+        popVC.indexPath = indexPath
+        popVC.delegate = self
         
-        let sbName = "Main"
-        let sb = UIStoryboard(name: sbName, bundle: nil)
+        popVC.modalPresentationStyle = .popover
+        let popController = popVC.popoverPresentationController
+        popController?.delegate = self
+        popController?.permittedArrowDirections = .any
+        popController?.backgroundColor = UIColor(white: 0.0, alpha: 0.67)
         
+        let cell = tableView.cellForRow(at: indexPath)!
+        popController?.sourceView = cell
+        popController?.sourceRect = CGRect(x: cell.bounds.size.width - 33.0, y: cell.bounds.size.height / 2.0, width: 1.0, height: 1.0)
+        popoverPresent = true
+        present(popVC, animated: true, completion: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "ViewGallery", sender: tableView.cellForRow(at: indexPath))
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    //MARK: - Photo Fetch
+    
+    func getCenterMaxSquareImageByCroppingImage(_ image: UIImage, andShrinkToSize newSize: CGSize) -> UIImage {
+        // Get crop bounds
+        var centerSquareSize: CGSize
+        let originalImageWidth = CGFloat(image.cgImage!.width)
+        let originalImageHeight = CGFloat(image.cgImage!.height)
+        if originalImageHeight <= originalImageWidth {
+            centerSquareSize.width = originalImageHeight
+            centerSquareSize.height = originalImageHeight
+        } else {
+            centerSquareSize.width = originalImageWidth
+            centerSquareSize.height = originalImageWidth
+        }
+        
+        // Determine crop origin
+        let x = (originalImageWidth - centerSquareSize.width) / 2.0
+        let y = (originalImageHeight - centerSquareSize.height) / 2.0
+        
+        // Crop and create CGImageRef. This is where future improvement likely lies.
+        let cropRect = CGRect(x: x, y: y, width: centerSquareSize.width, height: centerSquareSize.height)
+        let imageRef = image.cgImage!.cropping(to: cropRect)!//CGImageCreateWithImageInRect(image.cgImage!, cropRect)
+        let cropped = UIImage(cgImage: imageRef, scale: 0.0, orientation: image.imageOrientation)
+        
+        // Scale the image down to the smaller file size and return.
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+        cropped.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
+    }
+    
+    @IBAction func photoGrab() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        // Access camera
+        let cameraAction = UIAlertAction(title: "Take Photo", style: .default, handler: { [weak self] action in
+            self?.openCamera()
+        })
+        // Access photo library
+        let libraryAction = UIAlertAction(title: "Choose From Library", style: .default, handler: { [weak self] action in
+            self?.photosFromLibrary()
+        })
+        // Cancel
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(cameraAction)
+        alert.addAction(libraryAction)
+        alert.addAction(cancel)
+        
+        alert.popoverPresentationController?.barButtonItem = cameraButton
+        alert.popoverPresentationController?.permittedArrowDirections = .down
+        alert.popoverPresentationController?.sourceView = self.view
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func photosFromLibrary() {
+        PHPhotoLibrary.requestAuthorization { [weak self] status in
+            if status != .authorized {
+                let adjustPrivacyController = UIAlertController(title: "Denied access to Photos", message: "You will need to give Photo Notes permission to import from your Photo Library.\nPlease allow Photo Notes access to your Photo Library by going to Settings>Privacy>Photos", preferredStyle: .alert)
+                let dismiss = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
+                adjustPrivacyController.addAction(dismiss)
+                
+                self?.present(adjustPrivacyController, animated: true, completion: nil)
+            } else {
+                self?.presentPhotoGrabViewController()
+            }
+        }
+    }
+    
+    /// Present users photo library.
+    func presentPhotoGrabViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let navigationVC = storyboard.instantiateViewController(withIdentifier: "NavPhotoGrabViewController") as! UINavigationController
+        let vc = navigationVC.topViewController as! PHNImportAlbumsVC
+        vc.delegate = self
+        vc.userColor = userColor
+        vc.userColorTag = userColorTag
+        vc.singleSelection = false
+        
+        present(navigationVC, animated: true, completion: nil)
+    }
+    
+    //MARK: - Photo Grab Scene Delegate
+    
+    func photoGrabSceneDidCancel() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset]) {
+        var newImages = [PhotoNote]()
+        // Pull the images, image creation dates, and image locations from each PHAsset in the received array.
+        let fileSerializer = PHNFileSerializer()
+        
+        if imageManager == nil {
+            imageManager = PHCachingImageManager()
+        }
+        
+        let imageLoadGroup = DispatchGroup()
+        for asset in photos {
+            var assetImage = PhotoNote()
+            
+            let options = PHImageRequestOptions()
+            options.isNetworkAccessAllowed = true
+            options.version = .current
+            
+            imageLoadGroup.enter()
+            autoreleasepool(invoking: {
+                imageManager.requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) in
+                    if let cInfo = info,
+                        let degraded = cInfo[PHImageResultIsDegradedKey] as? Bool,
+                        !degraded {
+                        fileSerializer.writeObject(imageData, toRelativePath: assetImage.fileName)
+//                        imageLoadGroup.leave()
+                    }
+                    imageLoadGroup.leave()
+                })
+            })
+            
+            imageLoadGroup.enter()
+            autoreleasepool(invoking: { [weak self] in
+                self?.imageManager.requestImage(for: asset, targetSize: CGSize(width: 120.0, height: 120.0), contentMode: .aspectFill, options: options, resultHandler: { (result, info) in
+                    if let cResult = result,
+                        let cInfo = info,
+                        let degraded = cInfo[PHImageResultIsDegradedKey] as? Bool,
+                        !degraded {
+                        fileSerializer.writeImage(cResult, toRelativePath: assetImage.thumbnailFileName)
+                        assetImage.thumbnailNeedsRedraw = false
+                        
+//                        imageLoadGroup.leave()
+                    }
+                    imageLoadGroup.leave()
+                })
+            })
+            assetImage.photoCreationDate = asset.creationDate
+            newImages.append(assetImage)
+        }
+        
+        selectedPhotos = Array(newImages)
+        
+        imageLoadGroup.notify(queue: .main) { [weak self] in
+            self?.navigationController?.view.isUserInteractionEnabled = true
+            self?.dismiss(animated: true, completion: nil)
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let navVC = storyboard.instantiateViewController(withIdentifier: "AListPickerViewController") as! UINavigationController
+            let aListPickerVC = navVC.topViewController as! PHNAListPickerViewController
+            aListPickerVC.delegate = self
+            aListPickerVC.title = "Select Destination"
+            aListPickerVC.currentAlbumName = nil
+            aListPickerVC.userColor = self?.userColor;
+            aListPickerVC.userColorTag = self?.userColorTag;
+            
+            self?.present(aListPickerVC, animated: true, completion: nil)
+        }
     }
     
     /*
- - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-     //    [self performSegueWithIdentifier:@"EditAlbum" sender:[tableView cellForRowAtIndexPath:indexPath]];
+ - (void)photoGrabSceneDidFinishSelectingPhotos:(NSArray *)photos {
+     NSMutableArray *newImages = [[NSMutableArray alloc] init];
+     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
+     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
      
-     //cjm 12/07
-     NSString *sbName = @"Main";
-     UIStoryboard *sb = [UIStoryboard storyboardWithName:sbName bundle:nil];
-     CJMPopoverViewController *popVC = (CJMPopoverViewController *)[sb instantiateViewControllerWithIdentifier:@"CJMPopover"];
-     CJMPhotoAlbum *album = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
-     popVC.name = album.albumTitle;
-     popVC.note = album.albumNote;
-     popVC.indexPath = indexPath;
-     popVC.delegate = self;
+     if (!self.imageManager) {
+         self.imageManager = [[PHCachingImageManager alloc] init];
+     }
+ 
+     __block NSInteger counter = [photos count];
+ //    __weak CJMGalleryViewController *weakSelf = self;
+ 
+     dispatch_group_t imageLoadGroup = dispatch_group_create();
+     for (int i = 0; i < photos.count; i++) {
+         __block CJMImage *assetImage = [[CJMImage alloc] init];
+         PHAsset *asset = (PHAsset *)photos[i];
      
-     popVC.modalPresentationStyle = UIModalPresentationPopover;
-     UIPopoverPresentationController *popController = popVC.popoverPresentationController;
-     popController.delegate = self;
-     popController.permittedArrowDirections = UIPopoverArrowDirectionAny;
-     [popController setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.67]];
+         PHImageRequestOptions *options = [PHImageRequestOptions new];
+         options.networkAccessAllowed = YES;
+         options.version = PHImageRequestOptionsVersionCurrent;
      
-     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-     popController.sourceView = cell;
-     popController.sourceRect = CGRectMake(cell.bounds.size.width - 33.0, cell.bounds.size.height / 2.0, 1.0, 1.0);
+         dispatch_group_enter(imageLoadGroup);
+         @autoreleasepool {
+             [self.imageManager requestImageDataForAsset:asset
+             options:options
+             resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+ 
+                 counter--;
+                 if(![info[PHImageResultIsDegradedKey] boolValue]) {
+                     [fileSerializer writeObject:imageData toRelativePath:assetImage.fileName];
+                     dispatch_group_leave(imageLoadGroup);
+                 }
+             }];
+         }
+ 
+         dispatch_group_enter(imageLoadGroup);
+         @autoreleasepool {
+             [self.imageManager requestImageForAsset:asset targetSize:CGSizeMake(120.0, 120.0) contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage *result, NSDictionary *info) {
+                 if(![info[PHImageResultIsDegradedKey] boolValue]) {
+                     [fileSerializer writeImage:result toRelativePath:assetImage.thumbnailFileName];
+                     assetImage.thumbnailNeedsRedraw = NO;
      
-     self.popoverPresent = YES;
-     [self presentViewController:popVC animated:YES completion:nil];
+                     dispatch_group_leave(imageLoadGroup);
+                 }
+             }];
+         }
+ 
+         assetImage.photoCreationDate = [asset creationDate];
+     
+         [newImages addObject:assetImage];
+     }
+ 
+ 
+     //cjm 01/12
+     //We need to basically execute a Transfer of the selected images to the AListPickerVC once the newImages array is done being loaded.
+     self.selectedPhotos = [NSArray arrayWithArray:newImages];
+     
+     
+     dispatch_group_notify(imageLoadGroup, dispatch_get_main_queue(), ^{
+         self.navigationController.view.userInteractionEnabled = YES;
+         [self dismissViewControllerAnimated:YES completion:nil];
+     
+         NSString *storyboardName = @"Main";
+         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+         UINavigationController *vc = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"AListPickerViewController"];
+         CJMAListPickerViewController *aListPickerVC = (CJMAListPickerViewController *)[vc topViewController];
+         aListPickerVC.delegate = self;
+         aListPickerVC.title = @"Select Destination";
+         aListPickerVC.currentAlbumName = nil;
+         aListPickerVC.userColor = self.userColor;
+         aListPickerVC.userColorTag = self.userColorTag;
+         [self presentViewController:vc animated:YES completion:nil];
+     });
  }
  */
+    
+    
+    
+    
+    
+    
+    
 
     /*
     // Override to support conditional editing of the table view.

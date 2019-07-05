@@ -19,6 +19,7 @@
 
 @implementation CJMPopoverViewController
 
+// override func viewDidLoad() {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -29,12 +30,12 @@
         [self.textView setText:self.note];
     }
 }
-
+// override func viewDidLayoutSubviews() {
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [self.textView setContentOffset:CGPointZero animated:NO]; //scrollView displays top of contents
 }
-
+// override func viewWillAppear(_ animated: Bool) {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if ([self.name isEqualToString:@"Favorites"]) {
@@ -64,6 +65,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+// @IBAction func btnEditAction() {
 - (IBAction)btnEditAction:(id)sender {
     [self.delegate editTappedForIndexPath:self.indexPath];
 }

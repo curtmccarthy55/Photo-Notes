@@ -19,11 +19,13 @@
 		7540EA9A22CD07C50000D60E /* PHNCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EA9922CD07C50000D60E /* PHNCache.swift */; };
 		7540EA9C22CD545C0000D60E /* PHNAlbumListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EA9B22CD545C0000D60E /* PHNAlbumListTableViewCell.swift */; };
 		7540EA9E22CD5D180000D60E /* PHNPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EA9D22CD5D180000D60E /* PHNPopoverViewController.swift */; };
+		7540EAA022CFA8AE0000D60E /* PHNPopoverViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7540EA9F22CFA8AE0000D60E /* PHNPopoverViewController.xib */; };
+		7540EAAC22CFCA030000D60E /* PHNAlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EAAA22CFCA030000D60E /* PHNAlbumPickerViewController.swift */; };
+		7540EAAD22CFCA030000D60E /* PHNAlbumPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7540EAAB22CFCA030000D60E /* PHNAlbumPickerViewController.xib */; };
 		755558CA203240B3005A9478 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C8203240B2005A9478 /* Fabric.framework */; };
 		755558CB203240B3005A9478 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C9203240B3005A9478 /* Crashlytics.framework */; };
 		758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 758F55181E22AAC40023F869 /* IconStoryboard.storyboard */; };
 		75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */; };
-		75EF2D451DF7361400557EDA /* CJMPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EF2D441DF7361400557EDA /* CJMPopoverViewController.m */; };
 		840852A61B5DA49E00664849 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 840852A51B5DA49E00664849 /* no_image.jpg */; };
 		84401F0A1B2CAA0D00B4FB89 /* CJMAListPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */; };
 		84401F3F1B3092F100B4FB89 /* CJMHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84401F3E1B3092F100B4FB89 /* CJMHudView.m */; };
@@ -68,6 +70,9 @@
 		7540EA9922CD07C50000D60E /* PHNCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNCache.swift; sourceTree = "<group>"; };
 		7540EA9B22CD545C0000D60E /* PHNAlbumListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumListTableViewCell.swift; sourceTree = "<group>"; };
 		7540EA9D22CD5D180000D60E /* PHNPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPopoverViewController.swift; sourceTree = "<group>"; };
+		7540EA9F22CFA8AE0000D60E /* PHNPopoverViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PHNPopoverViewController.xib; sourceTree = "<group>"; };
+		7540EAAA22CFCA030000D60E /* PHNAlbumPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumPickerViewController.swift; sourceTree = "<group>"; };
+		7540EAAB22CFCA030000D60E /* PHNAlbumPickerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PHNAlbumPickerViewController.xib; sourceTree = "<group>"; };
 		755558C8203240B2005A9478 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		755558C9203240B3005A9478 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
 		758F55181E22AAC40023F869 /* IconStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IconStoryboard.storyboard; sourceTree = "<group>"; };
@@ -175,6 +180,7 @@
 				75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */,
 				75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */,
 				7540EA9D22CD5D180000D60E /* PHNPopoverViewController.swift */,
+				7540EA9F22CFA8AE0000D60E /* PHNPopoverViewController.xib */,
 				75EF2D431DF7361400557EDA /* CJMPopoverViewController.h */,
 				75EF2D441DF7361400557EDA /* CJMPopoverViewController.m */,
 			);
@@ -186,6 +192,8 @@
 			children = (
 				84C2B9481ADCBB420034786C /* CJMGalleryViewController.h */,
 				84C2B9491ADCBB420034786C /* CJMGalleryViewController.m */,
+				7540EAAA22CFCA030000D60E /* PHNAlbumPickerViewController.swift */,
+				7540EAAB22CFCA030000D60E /* PHNAlbumPickerViewController.xib */,
 				84401F081B2CAA0D00B4FB89 /* CJMAListPickerViewController.h */,
 				84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */,
 				845B90CD1AF42BC300365239 /* CJMPageImageViewController.h */,
@@ -348,7 +356,7 @@
 		84A769491ADAE39F00DE6741 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = CJM;
+				CLASSPREFIX = PHN;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Bluewraith;
 				TargetAttributes = {
@@ -390,10 +398,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				750F7A49228E022300CA7E01 /* PHNAlbumListTableViewCell.xib in Resources */,
+				7540EAAD22CFCA030000D60E /* PHNAlbumPickerViewController.xib in Resources */,
 				84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */,
 				840852A61B5DA49E00664849 /* no_image.jpg in Resources */,
 				758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */,
 				84A769621ADAE39F00DE6741 /* Images.xcassets in Resources */,
+				7540EAA022CFA8AE0000D60E /* PHNPopoverViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,7 +444,6 @@
 				75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */,
 				7540EA9E22CD5D180000D60E /* PHNPopoverViewController.swift in Sources */,
 				84401F0A1B2CAA0D00B4FB89 /* CJMAListPickerViewController.m in Sources */,
-				75EF2D451DF7361400557EDA /* CJMPopoverViewController.m in Sources */,
 				84401F3F1B3092F100B4FB89 /* CJMHudView.m in Sources */,
 				84F1FDAD1AEAF57A0092D424 /* CJMFullImageViewController.m in Sources */,
 				84C2B9981AE441CE0034786C /* CJMPhotoCell.m in Sources */,
@@ -447,6 +456,7 @@
 				84A7695A1ADAE39F00DE6741 /* CJMAppDelegate.m in Sources */,
 				7540EA9A22CD07C50000D60E /* PHNCache.swift in Sources */,
 				7540EA9622CC0DD20000D60E /* PHNFileSerializer.swift in Sources */,
+				7540EAAC22CFCA030000D60E /* PHNAlbumPickerViewController.swift in Sources */,
 				84A769571ADAE39F00DE6741 /* main.m in Sources */,
 				751497DA21769137001E6D52 /* PHNImportAlbumsVC.m in Sources */,
 				84C2B9301ADB022E0034786C /* CJMAListViewController.m in Sources */,
@@ -586,6 +596,7 @@
 				INFOPLIST_FILE = Unroll2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Desdinova.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -613,6 +624,7 @@
 				INFOPLIST_FILE = Unroll2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Desdinova.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

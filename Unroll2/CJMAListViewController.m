@@ -172,7 +172,7 @@
 }
 
 #pragma mark - tableView delegate methods
-
+// override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 //    [self performSegueWithIdentifier:@"EditAlbum" sender:[tableView cellForRowAtIndexPath:indexPath]];
     
@@ -199,14 +199,14 @@
     self.popoverPresent = YES;
     [self presentViewController:popVC animated:YES completion:nil];
 }
-
+// override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self performSegueWithIdentifier:@"ViewGallery" sender:[tableView cellForRowAtIndexPath:indexPath]];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Photo Grab
-
+// func getCenterMaxSquareImageByCroppingImage(_ image: UIImage, andShrinkToSize newSize: CGSize) -> UIImage {
 - (UIImage *)getCenterMaxSquareImageByCroppingImage:(UIImage *)image andShrinkToSize:(CGSize)newSize
 {
     //Get crop bounds
@@ -238,7 +238,7 @@
     return newImage;
     
 }
-
+// IBAction func photoGrab() {
 - (IBAction)photoGrab:(id)sender {
     //__weak CJMGalleryViewController *weakSelf = self;
     
@@ -270,7 +270,7 @@
     
     [self presentViewController:alertController animated:YES completion:nil];
 }
-
+// func photosFromLibrary() {
 - (void)photosFromLibrary {
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
         if (status != PHAuthorizationStatusAuthorized) {
@@ -288,6 +288,7 @@
 }
 
 //Present users photo library
+// func presentPhotoGrabViewController() {
 - (void)presentPhotoGrabViewController { //cjm album fetch
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
@@ -302,6 +303,7 @@
 }
 
 #pragma mark - Photo Grab Scene Delegate
+// func photoGrabSceneDidCancel() {
 - (void)photoGrabSceneDidCancel {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

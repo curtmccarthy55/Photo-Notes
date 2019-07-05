@@ -155,20 +155,20 @@
         <!--Popover View Controller-->
         <scene sceneID="L8e-gh-bBZ">
             <objects>
-                <viewController storyboardIdentifier="CJMPopover" id="esm-W3-GvC" customClass="CJMPopoverViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="p66-3a-ldh">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
+                <viewController storyboardIdentifier="PHNPopover" id="esm-W3-GvC" customClass="CJMPopoverViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="p66-3a-ldh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="90"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mh0-Hf-3Oq">
-                                <rect key="frame" x="8" y="52.000000000000007" width="102.33333333333333" height="20.333333333333336"/>
+                                <rect key="frame" x="8" y="52" width="102.33333333333333" height="0.0"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1KJ-0Y-CbB">
-                                <rect key="frame" x="323" y="46.333333333333336" width="44" height="30.000000000000007"/>
+                                <rect key="frame" x="323" y="46.666666666666664" width="44" height="29.999999999999993"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="jAW-Vh-CA3"/>
                                 </constraints>
@@ -182,7 +182,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Detail Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="LvU-oV-Mvv">
-                                <rect key="frame" x="3" y="74.333333333333343" width="369" height="36"/>
+                                <rect key="frame" x="3" y="54" width="369" height="0.0"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
@@ -205,7 +205,7 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="375" height="67"/>
+                    <size key="freeformSize" width="375" height="90"/>
                     <connections>
                         <outlet property="btnEdit" destination="1KJ-0Y-CbB" id="qmL-yq-w2w"/>
                         <outlet property="lblName" destination="Mh0-Hf-3Oq" id="a90-aZ-V4M"/>
