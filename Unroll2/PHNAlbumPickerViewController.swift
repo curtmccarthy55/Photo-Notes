@@ -8,83 +8,120 @@
 
 import UIKit
 
+protocol PHNAlbumPickerDelegate: class {
+    func albumPickerViewControllerDidCancel(_ controller: PHNAlbumPickerViewController)
+    func albumPickerViewController(_ controller: PHNAlbumPickerViewController, didFinishPicking album: PHNPhotoAlbum)
+}
+
+private let CELL_REUSE_IDENTIFIER = "AlbumCell"
+private let CELL_NIB_NAME = "PHNAlbumListTableViewCell"
+
 class PHNAlbumPickerViewController: UITableViewController {
-        
+    weak var delegate: PHNAlbumPickerDelegate?
+    var currentAlbumName: String?
+    var userColor: UIColor?
+    var userColorTag: Int?
+    
+    private var selectedAlbum: PHNPhotoAlbum?
+    private var transferAlbums = [PHNPhotoAlbum]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        let nib = UINib(nibName: CELL_NIB_NAME, bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: CELL_REUSE_IDENTIFIER)
+        tableView.rowHeight = 120 // was 80
+        
+        let albumArray = PHNAlbumManager.sharedInstance.allAlbums
+        for album in albumArray {
+            if (album.albumTitle != "Favorites") && (album.albumTitle != "CJMQuickNote") {
+                transferAlbums.append(album)
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel",
+                                                           style: .plain,
+                                                          target: self,
+                                                          action: #selector(cancelTapped))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done",
+                                                            style: .done,
+                                                            target: self,
+                                                            action: #selector(doneTapped))
+        
+        if userColorTag != 5 && userColorTag != 7 {
+            navigationController?.navigationBar.barStyle = .black
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.toolbar.tintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        } else {
+            navigationController?.navigationBar.barStyle = .default
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.toolbar.tintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+        }
+        
+        navigationController?.navigationBar.barTintColor = userColor
+        navigationController?.toolbar.barTintColor = userColor
+    }
+    
+    //MARK: - Button Actions
+    
+    @objc func cancelTapped() {
+        delegate?.albumPickerViewControllerDidCancel(self)
+    }
+    
+    /// If user picks the current album, display an alert.  Otherwise, move photos to new album.
+    @objc func doneTapped() {
+        guard selectedAlbum != nil else {
+            let alert = UIAlertController(title: "Selection Error", message: "An error occurred with the selection.  Please select an album and tap 'Done' again.", preferredStyle: .alert)
+            let dismiss = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alert.addAction(dismiss)
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        if selectedAlbum!.albumTitle == currentAlbumName {
+            let alert = UIAlertController(title: "Choose A Different Album", message: "Your current selection already exists in \(selectedAlbum?.albumTitle ?? "this album").\nPlease select a different album or tap Cancel to exit.", preferredStyle: .alert)
+            let dismissAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alert.addAction(dismissAction)
+            
+            present(alert, animated: true, completion: nil)
+        } else {
+            delegate?.albumPickerViewController(self, didFinishPicking: selectedAlbum!)
+        }
     }
 
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
+    // MARK: - TableView Data Source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return transferAlbums.count;
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: CELL_REUSE_IDENTIFIER, for: indexPath) as! PHNAlbumListTableViewCell
+        
+        let album = transferAlbums[indexPath.row]
+        cell.configureWithTitle(album.albumTitle, count: album.albumPhotos.count)
+        cell.configureThumbnail(forAlbum: album)
+        
         return cell
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        // replaces blank bottom rows with blank space in the tableView
+        return UIView()
+    }
+    
+    //MARK: - TableView Delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        selectedAlbum = transferAlbums[indexPath.row]
+    }
 }

@@ -27,7 +27,6 @@
 		758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 758F55181E22AAC40023F869 /* IconStoryboard.storyboard */; };
 		75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */; };
 		840852A61B5DA49E00664849 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 840852A51B5DA49E00664849 /* no_image.jpg */; };
-		84401F0A1B2CAA0D00B4FB89 /* CJMAListPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */; };
 		84401F3F1B3092F100B4FB89 /* CJMHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84401F3E1B3092F100B4FB89 /* CJMHudView.m */; };
 		845B90CF1AF42BC300365239 /* CJMPageImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845B90CE1AF42BC300365239 /* CJMPageImageViewController.m */; };
 		84A769571ADAE39F00DE6741 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769561ADAE39F00DE6741 /* main.m */; };
@@ -443,7 +442,6 @@
 				7540EA8E22C67CE60000D60E /* PHNAlbumsTableViewController.swift in Sources */,
 				75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */,
 				7540EA9E22CD5D180000D60E /* PHNPopoverViewController.swift in Sources */,
-				84401F0A1B2CAA0D00B4FB89 /* CJMAListPickerViewController.m in Sources */,
 				84401F3F1B3092F100B4FB89 /* CJMHudView.m in Sources */,
 				84F1FDAD1AEAF57A0092D424 /* CJMFullImageViewController.m in Sources */,
 				84C2B9981AE441CE0034786C /* CJMPhotoCell.m in Sources */,

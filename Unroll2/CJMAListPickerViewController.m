@@ -21,7 +21,7 @@
 @end
 
 @implementation CJMAListPickerViewController
-
+// override func viewDidLoad() {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -37,7 +37,7 @@
         }
     }
 }
-
+// override func viewWillAppear(_ animated: Bool) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
@@ -76,13 +76,13 @@
 }
 
 #pragma mark - Table view data source
-
+// override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 //    return [[[CJMAlbumManager sharedInstance] allAlbums] count] - 1;
     return self.transferAlbums.count;
 }
-
+// override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CJMAListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CJMAListCellIdentifier forIndexPath:indexPath];
     
@@ -95,27 +95,29 @@
     return cell;
 }
 
-//replaces blank rows with blank space in the tableView
+// override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
+    //replaces blank rows with blank space in the tableView
     UIView *view = [[UIView alloc] init];
     return view;
 }
 
 #pragma mark - tableView delegate
-
+// override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.navigationItem.rightBarButtonItem setEnabled:YES];
     self.selectedAlbum = [self.transferAlbums objectAtIndex:indexPath.row];
 }
 
 #pragma mark - Buttons actions
-
+// @objc func cancelTapped() {
 - (void)cancelPressed {
     [self.delegate aListPickerViewControllerDidCancel:self];
 }
 
 //If user picks the current album, display an alert.  Otherwise, move photos to new album.
+// @objc func doneTapped() {
 - (void)donePressed {
     if ([self.selectedAlbum.albumTitle isEqual:self.currentAlbumName]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Choose Alternate Album" message:@"The selected Photo Notes are already in this album.\n  Please choose a different album." preferredStyle:UIAlertControllerStyleAlert];

@@ -307,7 +307,7 @@
 - (void)photoGrabSceneDidCancel {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
+// func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset]) {
 - (void)photoGrabSceneDidFinishSelectingPhotos:(NSArray *)photos {
     NSMutableArray *newImages = [[NSMutableArray alloc] init];
     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
@@ -390,13 +390,13 @@
         [self presentViewController:vc animated:YES completion:nil];
     });
 }
-
+// func albumPickerViewControllerDidCancel(_ controller: PHNAlbumPickerViewController) {
 - (void)aListPickerViewControllerDidCancel:(CJMAListPickerViewController *)controller {
     self.selectedPhotos = nil;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
+// func albumPickerViewController(_ controller: PHNAlbumPickerViewController, didFinishPicking album: PHNPhotoAlbum) {
 - (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album { //cjm 01/12
     [self.selectedPhotos enumerateObjectsUsingBlock:^(CJMImage *image, NSUInteger count, BOOL *stop) {
         image.selectCoverHidden = YES;
@@ -422,7 +422,7 @@
 }
 
 #pragma mark - image picker delegate and controls
-
+// func openCamera() {
 - (void)openCamera { //cjm 01/12
     NSString *mediaType = AVMediaTypeVideo;
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
@@ -448,7 +448,7 @@
         [self prepAndDisplayCamera];
     }
 }
-
+// func prepAndDisplayCamera() {
 - (void)prepAndDisplayCamera {
     self.imagePicker = [[UIImagePickerController alloc] init];
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -494,7 +494,7 @@
         [self rotateCameraViews];
     }];
 }
-
+// @objc func rotateCameraViews() {
 - (void)rotateCameraViews { //cjm 10/05
     UIDeviceOrientation orientation = UIDevice.currentDevice.orientation;
     double rotation = 1;
@@ -535,7 +535,7 @@
 //        }
 //    }
 }
-
+// func cameraOverlayWithFrame(_ overlayFrame: CGRect, containerHeight barHeight: CGFloat) -> UIView {
 - (UIView *)cameraOverlayWithFrame:(CGRect)overlayFrame containerHeight:(CGFloat)barHeight {
     UIView *mainOverlay = [[UIView alloc] initWithFrame:overlayFrame];
     
@@ -660,7 +660,8 @@
     return mainOverlay;
 }
 
-//Converting photo captured by in-app camera to CJMImage.
+// func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+/// Converting photo captured by in-app camera to CJMImage.
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info //cjm 01/12
 {
     [self.doneButton setEnabled:YES];
@@ -684,7 +685,7 @@
     }
     [self.pickerPhotos addObject:dic];
 }
-
+// @objc func photoCaptureFinished() {
 - (void)photoCaptureFinished { //camera Done button selector
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     NSMutableArray *tempAlbum = [[NSMutableArray alloc] init];
@@ -720,11 +721,11 @@
     
     [[CJMAlbumManager sharedInstance] save];
 }
-
+// @objc func shutterPressed() {
 - (void)shutterPressed { //cjm 01/12
     [self.imagePicker takePicture];
 }
-
+// @objc func updateFlashMode() {
 - (void)updateFlashMode {
     if (self.imagePicker.cameraFlashMode == UIImagePickerControllerCameraFlashModeOff) {
         [self.imagePicker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOn];
@@ -734,7 +735,7 @@
         [self.flashButton setImage:[UIImage imageNamed:@"FlashOff"] forState:UIControlStateNormal];
     }
 }
-
+// @objc func reverseCamera() {
 - (void)reverseCamera {
     if (self.imagePicker.cameraDevice == UIImagePickerControllerCameraDeviceRear) {
         self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
@@ -742,7 +743,7 @@
         self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
     }
 }
-
+// @objc func cancelCamera() {
 - (void)cancelCamera { 
     self.pickerPhotos = nil;
     self.imagePicker = nil;
@@ -763,7 +764,7 @@
 
 
 #pragma mark - Editing the list
-
+// @IBAction func editTableView() {
 - (IBAction)editTableView:(id)sender
 {
     if ([self.editButton.title isEqual:@"Edit"]) {
@@ -776,7 +777,7 @@
         [[CJMAlbumManager sharedInstance] save];
     }
 }
-
+// override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance].allAlbums objectAtIndex:indexPath.row];
     if ([album.albumTitle isEqualToString:@"Favorites"]) {
@@ -811,7 +812,7 @@
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
-
+// override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
     [[CJMAlbumManager sharedInstance] replaceAlbumAtIndex:toIndexPath.row withAlbumFromIndex:fromIndexPath.row];
 }

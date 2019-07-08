@@ -418,10 +418,10 @@
             </objects>
             <point key="canvasLocation" x="2724" y="340"/>
         </scene>
-        <!--List Picker View Controller-->
+        <!--Album Picker View Controller-->
         <scene sceneID="iOs-mv-XPQ">
             <objects>
-                <tableViewController id="iLj-A4-P8U" customClass="CJMAListPickerViewController" sceneMemberID="viewController">
+                <tableViewController id="iLj-A4-P8U" customClass="PHNAlbumPickerViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="o4K-3W-NQj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
