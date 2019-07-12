@@ -55,7 +55,7 @@
 static NSString * const reuseIdentifier = @"GalleryCell";
 
 #pragma mark - Scene set up
-
+// override func viewDidLoad() {
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.toolbarHidden = NO;
@@ -67,7 +67,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     CGPoint contentOffset = CGPointMake(0, viewSize.height * self.album.albumPhotos.count - 1);
     [self.collectionView setContentOffset:contentOffset animated:NO];
 }
-
+// var cellSize: CGSize { get }
 - (CGSize)cellSize {
     CGFloat columnSpaces;
     if (UIScreen.mainScreen.bounds.size.height > UIScreen.mainScreen.bounds.size.width) {
@@ -83,12 +83,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     CGSize returnSize = CGSizeMake(sideLength, sideLength);
     return returnSize;
 }
-
+// override var prefersStatusBarHidden: Bool {
 -(BOOL)prefersStatusBarHidden {
     NSLog(@"GalleryVC prefersStatusBarHidden called.");
     return NO;
 }
 
+// override func viewWillAppear(_ animated: Bool) {
 //Make sure nav bars and associated controls are visible whenever the gallery appears.
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -110,7 +111,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         }
     }
 }
-
+// func photoCellForWidth(_ saWidth: CGFloat) {
 - (void)photoCellForWidth:(CGFloat)saWidth { //cjm cellSize
     CGFloat cellsPerRow = 0.0;
 //    CGFloat cellSpacing = 1.0;
@@ -132,6 +133,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self.collectionViewLayout invalidateLayout];
 }
 
+// override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 //Add photo count footer to gallery.
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
@@ -154,6 +156,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [super didReceiveMemoryWarning];
 }
 
+// override func viewWillDisappear(_ animated: Bool) {
 //If any cells are selected when exiting the gallery, set their cellSelectCover property back to hidden.
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -168,13 +171,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 #pragma mark - collectionView data source
-
+// override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return [self.album.albumPhotos count];
 }
 
 //Add thumbnail to image and, if it's currently selected for editing, reveal it's cellSelectCover.
+// override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMPhotoCell *cell = (CJMPhotoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
@@ -205,6 +209,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 //If in editing mode, mark cell as selected and reveal cellCover and enable delete/transfer buttons.
 //Otherwise, segue to full image.
+// override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.editMode == NO) {
@@ -226,6 +231,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Hide cellSelectCover and, if this was the last selected cell, disable the delete/transfer buttons.
+// override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMPhotoCell *deselectedCell = (CJMPhotoCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
@@ -240,6 +246,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //For all currently selected cells, switch their selected status to NO and hide cellSelectCovers.
+// func clearCellSelections() {
 - (void)clearCellSelections
 {
     for (NSIndexPath *indexPath in [self.collectionView indexPathsForSelectedItems])
@@ -864,6 +871,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 //Holy Grail of of thumbnail creation.  Well... Holy Dixie Cup may be more appropriate.
 //Takes full UIImage and compresses to thumbnail with size ~100KB.
+// func getCenterMaxSquareImageByCroppingImage(_ image: UIImage, andShrinkToSize newSize: CGSize) -> UIImage {
 - (UIImage *)getCenterMaxSquareImageByCroppingImage:(UIImage *)image andShrinkToSize:(CGSize)newSize
 {
     //Get crop bounds

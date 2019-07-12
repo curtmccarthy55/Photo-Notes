@@ -57,7 +57,9 @@ class PHNServices: NSObject {
         fileSerializer.deleteImageWithFileName(photoNote.fileName)
     }
     
-    func removeImageFromCache(_ photoNote: PhotoNote) {
+    func removeImageFromCache(_ photoNote: PhotoNote?) {
+        guard let photoNote = photoNote else { return }
+        
         if cache.object(forKey: photoNote.fileName as NSString) != nil {
             cache.removeObject(forKey: photoNote.fileName as NSString)
         }

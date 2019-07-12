@@ -789,8 +789,22 @@ class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControl
         switch identifier {
         case SEGUE_VIEW_GALLERY:
             let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
+            let sentAlbum = PHNAlbumManager.sharedInstance.allAlbums[indexPath!.row]
+            sentAlbum.delegate = PHNAlbumManager.sharedInstance
+            let galleryVC = segue.destination as! PHNGalleryViewController
+            galleryVC.album = sentAlbum
+            galleryVC.userColor = userColor
+            galleryVC.userColorTag = userColorTag
         case SEGUE_EDIT_ALBUM:
-            
+            let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
+            let sentAbum = PHNAlbumManager.sharedInstance.allAlbums[indexPath!.row]
+            let navVC = segue.destination as! UINavigationController
+            let detailVC = navVC.viewControllers[0] as! PHNADetailViewController
+            detailVC.albumToEdit = sentAlbum
+            detailVC.title = "Album Info"
+            detailVC.delegate = self
+            detailVC.userColor = userColor
+            detailVC.userColorTag = userColorTag
         case SEGUE_ADD_ALBUM:
             
         case SEGUE_QUICK_NOTE:
@@ -803,14 +817,6 @@ class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControl
     }
     /*
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"ViewGallery"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        CJMPhotoAlbum *sentAlbum = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
-        sentAlbum.delegate = [CJMAlbumManager sharedInstance];
-        CJMGalleryViewController *galleryVC = (CJMGalleryViewController *)segue.destinationViewController;
-        galleryVC.album = sentAlbum;
-        galleryVC.userColor = self.userColor;
-        galleryVC.userColorTag = self.userColorTag;
     } else if ([segue.identifier isEqualToString:@"EditAlbum"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         CJMPhotoAlbum *sentAlbum = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
