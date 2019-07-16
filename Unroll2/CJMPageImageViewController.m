@@ -20,7 +20,7 @@
 @end
 
 @implementation CJMPageImageViewController
-
+// override func viewDidLoad() {
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.currentIndex = self.initialIndex;
@@ -38,7 +38,7 @@
                     animated:NO
                   completion:NULL];
 }
-
+// override func viewWillDisappear(_ animated: Bool) {
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.navigationController.navigationBar setPrefersLargeTitles:YES];
@@ -74,7 +74,7 @@
 }
 
 #pragma mark UIPageViewControllerDataSource
-
+// func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: PHNFullImageViewController) -> UIViewController? {
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(CJMFullImageViewController *)currentImageVC {
     NSInteger previousIndex = currentImageVC.index - 1;
     return [self fullImageViewControllerForIndex:previousIndex];

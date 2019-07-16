@@ -260,7 +260,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 #pragma mark - Navigation
-
+// override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ViewPhoto"]) {
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
@@ -270,12 +270,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         vc.initialIndex = indexPath.item;
     }
 }
-
+// var album: PHNPhotoAlbum { didSet { navigationItem.title = album.albumTitle } }
 - (void)setAlbum:(CJMPhotoAlbum *)album {
     _album = album;
     self.navigationItem.title = album.albumTitle;
 }
-
+// override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (self.editMode == YES) {
         return NO;
@@ -285,7 +285,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 #pragma mark - NavBar items
-
+// @IBAction func toggleEditAction() {
 - (IBAction)toggleEditMode:(id)sender {
     if ([self.editButton.title isEqualToString:@"Select"]) {
         [self.editButton setTitle:@"Cancel"];
@@ -303,6 +303,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Changing navBar buttons based on current edit status.
+// func toggleEditControls {
 - (void)toggleEditControls {
     if (self.editMode == YES) {
         self.cameraButton.enabled = NO;
@@ -320,7 +321,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         self.exportButton.enabled = NO;
     }
 }
-
+// func confirmEditButtonEnabled() {
 - (void)confirmEditButtonEnabled {
     if (self.album.albumPhotos.count == 0) {
         self.editButton.enabled = NO;
@@ -349,6 +350,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Acquire photo library permission and provide paths to user camera and photo library for photo import.
+// @IBAction func photoGrab() {
 - (IBAction)photoGrab:(id)sender {
     //__weak CJMGalleryViewController *weakSelf = self;
     
@@ -380,7 +382,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     [self presentViewController:alertController animated:YES completion:nil];
 }
-
+// func photosFromLibrary() {
 - (void)photosFromLibrary {
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
         if (status != PHAuthorizationStatusAuthorized) {
@@ -399,6 +401,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 
 
 //Present users photo library
+// func presentPhotoGrabViewController() {
 - (void)presentPhotoGrabViewController { //cjm album fetch
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];

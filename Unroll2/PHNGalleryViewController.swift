@@ -14,7 +14,9 @@ private let reuseIdentifier = "GalleryCell"
 private let SEGUE_VIEW_PHOTO = "ViewPhoto"
 
 class PHNGalleryViewController: UICollectionViewController, PHNPhotoGrabCompletionDelegate, PHNAListPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var album: PHNPhotoAlbum
+    var album: PHNPhotoAlbum {
+        didSet { navigationItem.title = album.albumTitle }
+    }
     var userColor: UIColor?
     var userColorTag: Int?
     
@@ -222,25 +224,209 @@ class PHNGalleryViewController: UICollectionViewController, PHNPhotoGrabCompleti
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SEGUE_VIEW_PHOTO, let cell = sender as? PHNPhotoCell {
             let indexPath = collectionView.indexPath(for: cell)
-            /* cjm migration incomplete
             let vc = segue.destination as! PHNPageImageViewController
             vc.albumName = album.albumTitle
             vc.albumCount = album.albumPhotos.count
             vc.initialIndex = indexPath!.item
- */
         }
     }
-    /*
-#pragma mark - Navigation
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"ViewPhoto"]) {
-        NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-        CJMPageImageViewController *vc = (CJMPageImageViewController *)segue.destinationViewController;
-        vc.albumName = self.album.albumTitle;
-        vc.albumCount = self.album.albumPhotos.count;
-        vc.initialIndex = indexPath.item;
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if editMode {
+            return false
+        }
+        return true
     }
+    
+    //MARK: - NavBar Items
+    
+    @IBAction func toggleEditAction() {
+        if editButton.title == "Select" {
+            editButton.title = "Cancel"
+            editMode = true
+            toggleEditControls()
+            collectionView.allowsMultipleSelection = true
+        } else if editButton.title == "Cancel" {
+            editMode.title = "Select"
+            editMode = false
+            clearCellSelections()
+            toggleEditControls()
+            selectedCells = nil
+            collectionView.allowsMultipleSelection = false
+        }
+    }
+    
+    /// Change NavigationBar buttons based on current edit status.
+    func toggleEditControls() {
+        if editMode {
+            cameraButton.isEnabled = false
+            deleteButton.title = "Delete"
+            deleteButton.isEnabled = false
+            exportButton.title = "Transfer"
+            exportButton.isEnabled = false
+        } else {
+            if album.albumTitle != "Favorites" { cameraButton.isEnabled = true }
+            deleteButton.title = nil
+            deleteButton.isEnabled = false
+            exportButton.title = nil
+            exportButton.isEnabled = false
+        }
+    }
+    
+    func confirmEditButtonEnabled() {
+        if album.albumPhotos.count == 0 {
+            editButton.isEnabled = false
+            if album.albumPhotos != "Favorites" {
+                let noPhotosAlert = UIAlertController(title: "No Photos Added Yet",
+                                                      message: "Tap the camera button below to add photos",
+                                                      preferredStyle: .alert)
+                let actionCamera = UIAlertAction(title: "Take Picture", style: .default) { [weak self] (_) in
+                    self?.openCamera()
+                }
+                let actionFetch = UIAlertAction(title: "Choose From Library", style: .default) { [weak self] (_) in
+                    self?.photosFromLibrary()
+                }
+                let actionDismiss = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
+                
+                noPhotosAlert.addAction(actionCamera)
+                noPhotosAlert.addAction(actionFetch)
+                noPhotosAlert.addAction(actionDismiss)
+                present(noPhotosAlert, animated: true, completion: nil)
+            }
+        } else {
+            editButton.isEnabled = true
+        }
+    }
+    
+    /// Acquire photo library permission and provide paths to user camera and photo library for photo import.
+    @IBAction func photoGrab() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        // Access camera
+        let actionCamera = UIAlertAction(title: "Take Photo", style: .default) { [weak self] (_) in
+            self?.openCamera()
+        }
+        
+        // Access photo library
+        let actionFetch = UIAlertAction(title: "Choose From Library", style: .default) { [weak self] (_) in
+            self?.photosFromLibrary()
+        }
+        
+        let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(actionCamera)
+        alertController.addAction(actionFetch)
+        alertController.addAction(actionCancel)
+        
+        alertController.popoverPresentationController?.barButtonItem = cameraButton
+        alertController.popoverPresentationController?.permittedArrowDirections = .down
+        alertController.popoverPresentationController?.sourceView = view
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func photosFromLibrary() {
+        PHPhotoLibrary.requestAuthorization { (status) in
+            if status != .authorized {
+                let adjustPrivacyController = UIAlertController(title: "Denied Access to Photos", message: "Please allow Photo Notes permission to use the camera.", preferredStyle: .alert)
+                
+                if let settingsUrl = URL(string: UIApplication.openSettingsURLString),
+                    UIApplication.shared.canOpenURL(settingsUrl)
+                {
+                    let actionSettings = UIAlertAction(title: "Open Settings", style: .default, handler: { (_) in
+                        UIApplication.shared.open(settingsUrl) { (success) in
+                            #if DEBUG
+                            print("Settings opened: \(success)")
+                            #endif
+                        }
+                    })
+                    adjustPrivacyController.addAction(actionSettings)
+                }
+                
+                let actionDismiss = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
+                
+                adjustPrivacyController.addAction(actionDismiss)
+                present(adjustPrivacyController, animated: true, completion: nil)
+            } else {
+                presentPhotoGrabViewController()
+            }
+        }
+    }
+    
+    /// Present users photo library.
+    func presentPhotoGrabViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let navigationVC = storyboard.instantiateViewController(withIdentifier: "NavPhotoGrabViewController") as! UINavigationController
+        let vc = navigationVC.topViewController as! PHNImportAlbumsVC
+        vc.delegate = self
+        vc.userColor = userColor
+        vc.userColorTag = userColorTag
+        vc.singleSelection = false
+        
+        present(navigationVC, animated: true, completion: nil)
+    }
+    
+    @IBAction func deleteSelected() {
+        guard selectedCells = Array(collectionView.indexPathsForSelectedItems) else {
+            let alert = UIAlertController(title: "No Photos Selected", message: "You must select some photos to delete first", preferredStyle: .alert)
+            let dismiss = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alert.addAction(dismiss)
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        let alertController = UIAlertController(title: "Delete Photos?", message: "You cannot recover these photo notes after deleting.", preferredStyle: .actionSheet)
+        
+        // IMPROVING AND ADDING LATER : functionality for mass export and delete on images.
+        // TODO: Save selected photos to Photos app and then delete.
+        // UIAlertAction *saveThenDeleteAction = [UIAlertAction actionWithTitle:@"Save to Photos app and then delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete){ ...
+        
+        // Delete photos without saving to Photos app.
+        let deleteAction = UIAlertAction(title: "Delete Photos Permanently", style: .destructive) { [unowned self] (_) in
+            var doomedArray = [PhotoNote]()
+            for itemPath in selectedCells {
+                let doomedImage = album.albumPhotos[itemPath.row]
+                doomedArray.append(doomedImage)
+            }
+            PHNAlbumManager.sharedInstance.albumWithName(self.album.albumTitle, deleteImages: doomedArray)
+            
+        }
+    }
+    
+    /*
+/Mass delete options
+- (IBAction)deleteSelcted:(id)sender {
+    //Delete photos without saving to Photos app
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete Photos Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
+            NSMutableArray *doomedArray = [NSMutableArray new];
+            for (NSIndexPath *itemPath in self.selectedCells) {
+                CJMImage *doomedImage = [self.album.albumPhotos objectAtIndex:itemPath.row];
+                [doomedArray addObject:doomedImage];
+            }
+            [[CJMAlbumManager sharedInstance] albumWithName:self.album.albumTitle
+            deleteImages:doomedArray];
+            [[CJMAlbumManager sharedInstance] checkFavoriteCount];
+            [[CJMAlbumManager sharedInstance] save];
+            if (self.album.albumPhotos.count < 1) {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            [self.collectionView deleteItemsAtIndexPaths:self.selectedCells];
+            [self toggleEditMode:self];
+            [self confirmEditButtonEnabled];
+            [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.4];
+    }];
+
+
+UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
+
+//    [alertController addAction:saveThenDeleteAction];
+[alertController addAction:deleteAction];
+[alertController addAction:cancel];
+
+alertController.popoverPresentationController.barButtonItem = self.deleteButton;
+alertController.popoverPresentationController.sourceView = self.view;
+[alertController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionDown];
+
+[self presentViewController:alertController animated:YES completion:nil];
 }
  */
     

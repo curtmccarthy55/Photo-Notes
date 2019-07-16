@@ -223,7 +223,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "630"
             endingLineNumber = "630"
-            landmarkName = "-rotateCameraViews"
+            landmarkName = "-prepAndDisplayCamera"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
