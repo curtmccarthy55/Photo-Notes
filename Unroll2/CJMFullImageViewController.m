@@ -53,7 +53,7 @@
 @implementation CJMFullImageViewController
 
 #pragma mark - View preparation and display
-
+// override func viewDidLoad() {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -90,7 +90,7 @@
     self.scrollView.accessibilityIgnoresInvertColors = YES;
     self.scrollView.delegate = self;
 }
-
+// override func viewWillAppear(_ animated: Bool) {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -168,7 +168,7 @@
         }
     }
 }
-
+// override func viewDidAppear(_ animated: Bool) {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self updateZoom];
@@ -177,14 +177,14 @@
         [self shiftNote:nil];
     }
 }
-
+// func prepareWithAlbumNamed(_ name: String, andIndex index: Int) {
 - (void)prepareWithAlbumNamed:(NSString *)name andIndex:(NSInteger)index {
     CJMImage *image = [[CJMAlbumManager sharedInstance] albumWithName:name returnImageAtIndex:index];
     self.index = index;
     self.cjmImage = image;
     self.imageIsFavorite = image.photoFavorited; //cjm favorites ImageVC set up
 }
-
+// override func viewWillDisappear(_ animated: Bool) {
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     if (self.displayingNote) {
@@ -201,11 +201,11 @@
         [self handleFavoriteDidChange];
     }
 }
-
+// deinit {
 - (void)dealloc {
     [NSNotificationCenter.defaultCenter removeObserver:self];
 }
-
+// func handleFavoriteDidChange() {
 - (void)handleFavoriteDidChange {
     if (self.favoriteChanged == NO) { //cjm favorites adding new photos to [CJMAlbumManager sharedInstance].favPhotosAlbum
         self.cjmImage.photoFavorited = NO;
@@ -235,6 +235,7 @@
 // Update zoom scale and constraints
 // It will also animate because willAnimateRotationToInterfaceOrientation
 // is called from within an animation block
+// override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
     [super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
     
@@ -247,12 +248,12 @@
 //    }
 //    [self.noteSection setNeedsUpdateConstraints];
 }
-
+// override func scrollViewDidZoom(_ scrollView: UIScrollView) {
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
     [self updateConstraints];
 }
-
+// func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
 {
     if (self.initialZoomScale < self.scrollView.zoomScale) {
@@ -261,7 +262,7 @@
         self.scrollView.scrollEnabled = NO;
     }
 }
-
+// func updateConstraints() {
 - (void)updateConstraints
 { //cjm note shift.  Image position is bouncing around when zoomed in and showing/hiding the top and bottom bars.
     float imageWidth = self.imageView.image.size.width;
@@ -292,6 +293,7 @@
 }
 
 // Zoom to show as much image as possible unless image is smaller than screen
+// func updateZoom() {
 - (void)updateZoom
 {
     float minZoom = MIN(self.view.bounds.size.width / self.imageView.image.size.width,
@@ -307,7 +309,7 @@
     self.lastZoomScale = self.scrollView.zoomScale = minZoom;
     self.scrollView.zoomScale = minZoom -= 0.000001;  //TODO: see if we can remove this +/- tweak.  Was in place to make sure scrollview content corrected itself, but probably shouldn't be necessary.
 }
-
+// func viewForZooming(in scrollView: UIScrollView) -> UIView? {
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return self.imageView;
@@ -317,6 +319,7 @@
 
 //first button press: Slide the note section up so it touches the bottom of the navbar
 //second button press: Slide the note section back down to just above the toolbar
+// @IBAction func shiftNote(_ sender: Any?) {
 - (IBAction)shiftNote:(id)sender { //cjm note shift
     if (!self.displayingNote) {
         self.noteTitle.text = self.cjmImage.photoTitle;
@@ -346,7 +349,7 @@
         [self handleNoteSectionDismissal];
     }
 }
-
+// left out of swift class since this just assigns the new value and prints a statement.
 - (void)setDisplayingNote:(BOOL)shown { //cjm note shift
     _displayingNote = shown;
     /*
@@ -362,7 +365,7 @@
     
     NSLog(@"UIScreen Height == %f", UIScreen.mainScreen.bounds.size.height);
 }
-
+// func handleNoteSectionDismissal() {
 - (void)handleNoteSectionDismissal { //cjm note shift
     if ([self.editNoteButton.titleLabel.text isEqual:@"Done"]) {
         [self enableEdit:self];
@@ -385,7 +388,7 @@
         [self.photoLocAndDate setAlpha:0.0];
     }];
 }
-
+// @IBAction func dismissQuickNote(_ sender: Any?) {
 - (IBAction)dismissQuickNote:(id)sender {
     if ([self.seeNoteButton.titleLabel.text isEqualToString:@"Dismiss"]) {
         [self handleNoteSectionDismissal];
@@ -394,18 +397,19 @@
 }
 
 #pragma mark - Nav Bar adjustments
+// func hideBars() {
 - (void)hideBars {
     self.barsVisible = NO;
     [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
     [self.editNoteButton setHidden:NO];
 }
-
+// func showBars() {
 - (void)showBars {
     self.barsVisible = YES;
     [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
     [self.editNoteButton setHidden:YES];
 }
-
+// override var prefersStatusBarHidden: Bool {
 - (BOOL)prefersStatusBarHidden {
     NSLog(@"fullImageVC prefersStatusBarHidden called");
     if (!self.barsVisible) {

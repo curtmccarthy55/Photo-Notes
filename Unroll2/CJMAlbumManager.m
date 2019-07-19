@@ -209,7 +209,7 @@ static CJMAlbumManager *__sharedInstance;
     album.albumPreviewImage = image;
 }
 
-//func albumWithName(_ name: String, createPreviewFromImage image: PhotoNote) {
+// func albumWithName(_ name: String, returnImageAtIndex index: Int) -> PhotoNote? {
 - (CJMImage *)albumWithName:(NSString *)name returnImageAtIndex:(NSInteger)index {
     CJMPhotoAlbum *album = [self scanForAlbumWithName:name];
     

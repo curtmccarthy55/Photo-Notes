@@ -198,6 +198,16 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
         album.albumPreviewImage = image
     }
     
+    func albumWithName(_ name: String, returnImageAtIndex index: Int) -> PhotoNote? {
+        guard let album = existingAlbum(named: name) else { return nil }
+        
+        if album.albumPhotos.count < (index + 1) {
+            return nil
+        } else {
+            return album.albumPhotos[index]
+        }
+    }
+
     //MARK: - PHNPhotoAlbumDelegate
     
     /**

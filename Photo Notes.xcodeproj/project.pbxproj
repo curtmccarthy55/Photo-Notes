@@ -13,6 +13,8 @@
 		751F2DF522D804A500DDCBEF /* PHNPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751F2DF322D804A500DDCBEF /* PHNPhotoCell.swift */; };
 		751F2DF622D804A500DDCBEF /* PHNPhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 751F2DF422D804A500DDCBEF /* PHNPhotoCell.xib */; };
 		752A624B22DD27F800E4A84D /* PHNPageImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A624A22DD27F800E4A84D /* PHNPageImageViewController.swift */; };
+		752A624D22E0C03400E4A84D /* PHNFullImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 752A624C22E0C03300E4A84D /* PHNFullImageViewController.xib */; };
+		752A624F22E0E0B900E4A84D /* PHNFullImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A624E22E0E0B900E4A84D /* PHNFullImageViewController.swift */; };
 		7540EA8E22C67CE60000D60E /* PHNAlbumsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EA8D22C67CE60000D60E /* PHNAlbumsTableViewController.swift */; };
 		7540EA9022C67EEB0000D60E /* PhotoNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EA8F22C67EEB0000D60E /* PhotoNote.swift */; };
 		7540EA9222CA7A430000D60E /* PHNPhotoAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EA9122CA7A430000D60E /* PHNPhotoAlbum.swift */; };
@@ -65,6 +67,8 @@
 		751F2DF322D804A500DDCBEF /* PHNPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPhotoCell.swift; sourceTree = "<group>"; };
 		751F2DF422D804A500DDCBEF /* PHNPhotoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PHNPhotoCell.xib; sourceTree = "<group>"; };
 		752A624A22DD27F800E4A84D /* PHNPageImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPageImageViewController.swift; sourceTree = "<group>"; };
+		752A624C22E0C03300E4A84D /* PHNFullImageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PHNFullImageViewController.xib; sourceTree = "<group>"; };
+		752A624E22E0E0B900E4A84D /* PHNFullImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNFullImageViewController.swift; sourceTree = "<group>"; };
 		7540EA8D22C67CE60000D60E /* PHNAlbumsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumsTableViewController.swift; sourceTree = "<group>"; };
 		7540EA8F22C67EEB0000D60E /* PhotoNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoNote.swift; sourceTree = "<group>"; };
 		7540EA9122CA7A430000D60E /* PHNPhotoAlbum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPhotoAlbum.swift; sourceTree = "<group>"; };
@@ -204,8 +208,10 @@
 				752A624A22DD27F800E4A84D /* PHNPageImageViewController.swift */,
 				845B90CD1AF42BC300365239 /* CJMPageImageViewController.h */,
 				845B90CE1AF42BC300365239 /* CJMPageImageViewController.m */,
+				752A624E22E0E0B900E4A84D /* PHNFullImageViewController.swift */,
 				84F1FDAB1AEAF57A0092D424 /* CJMFullImageViewController.h */,
 				84F1FDAC1AEAF57A0092D424 /* CJMFullImageViewController.m */,
+				752A624C22E0C03300E4A84D /* PHNFullImageViewController.xib */,
 			);
 			name = Album;
 			sourceTree = "<group>";
@@ -406,6 +412,7 @@
 				750F7A49228E022300CA7E01 /* PHNAlbumListTableViewCell.xib in Resources */,
 				751F2DF622D804A500DDCBEF /* PHNPhotoCell.xib in Resources */,
 				7540EAAD22CFCA030000D60E /* PHNAlbumPickerViewController.xib in Resources */,
+				752A624D22E0C03400E4A84D /* PHNFullImageViewController.xib in Resources */,
 				84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */,
 				840852A61B5DA49E00664849 /* no_image.jpg in Resources */,
 				758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */,
@@ -456,6 +463,7 @@
 				7540EA9C22CD545C0000D60E /* PHNAlbumListTableViewCell.swift in Sources */,
 				7540EA9222CA7A430000D60E /* PHNPhotoAlbum.swift in Sources */,
 				845B90CF1AF42BC300365239 /* CJMPageImageViewController.m in Sources */,
+				752A624F22E0E0B900E4A84D /* PHNFullImageViewController.swift in Sources */,
 				84C2B9471ADC51280034786C /* CJMADetailViewController.m in Sources */,
 				751AE8B822D7CB75007CF2FE /* PHNGalleryViewController.swift in Sources */,
 				7540EA9022C67EEB0000D60E /* PhotoNote.swift in Sources */,
