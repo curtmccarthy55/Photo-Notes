@@ -418,7 +418,7 @@
         return NO;
     }
 }
-
+// func updateForBarVisibility(visible: Bool, animated: Bool) {
 - (void)updateForBarVisibility:(BOOL)visible animated:(BOOL)animated {
     //if called from viewWillAppear: animated == false, else animated == true
     NSTimeInterval duration = 0.0;//animated ? 0.2 : 0.0;
@@ -453,14 +453,14 @@
 }
 
 #pragma mark - Buttons and taps
-
+// func clearNote() {
 - (void)clearNote {
     self.cjmImage.photoTitle = @"";
     self.cjmImage.photoNote = @"";
     [self.noteTitle setText:@""];
     [self.noteEntry setText:@""];
 }
-
+// override var prefersHomeIndicatorAutoHidden: Bool {
 - (BOOL)prefersHomeIndicatorAutoHidden {
     if (self.noteHidden == YES) {
         return YES;
@@ -473,6 +473,7 @@
 //Note down, bars hidden: button displays "Hide".  Tapping in this state hides the note section.
 //Note up, text edit disabled: button displays  "Edit".  Tapping enables note section text fields, makes note text field first responsder, changes button text to "Done".
 //Note up, text edit enabled: button displays "Done".  Tapping disables text fields, all fields are checked for text with values being loaded into appropriate cjmImage variables.
+// @IBAction func enableEdit(sender: Any?) {
 - (IBAction)enableEdit:(id)sender {
     if ([self.editNoteButton.titleLabel.text isEqualToString:@"Hide"]) {
         [self.noteSection setHidden:YES];
@@ -512,7 +513,7 @@
         [[CJMAlbumManager sharedInstance] save];
     }
 }
-
+// @IBAction func imageViewTapped(sender: Any?) {
 - (IBAction)imageViewTapped:(id)sender {
     NSLog(@"****IMAGEVIEW TAPPED****");
     if (self.isQuickNote) {
@@ -530,6 +531,7 @@
 }
 
 //double tap to zoom in/zoom out
+// @IBAction func imageViewDoubleTApped(_ gestureRecognizer: UITapGestureRecognizer) {
 - (IBAction)imageViewDoubleTapped:(UITapGestureRecognizer *)gestureRecognizer
 {
     if (self.scrollView.zoomScale == self.initialZoomScale) {
@@ -568,7 +570,7 @@
 
 
 #pragma mark - Button responses
-
+// func showPopUpMenu() {
 - (void)showPopUpMenu {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                          message:nil preferredStyle:UIAlertControllerStyleActionSheet];

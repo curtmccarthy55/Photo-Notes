@@ -397,40 +397,257 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     }
     
     func updateForBarVisibility(visible: Bool, animated: Bool) {
+        // if called from viewWillAppear: animated == false, else animated == true
+        let duration = 0.0 //animated ? 0.2 : 0.0
+        if visible {
+            if isQuickNote == nil || isQuickNote == false {
+                delegate?.makeHomeIndicatorVisible(true)
+            }
+            UIView.animate(withDuration: duration) { [unowned self] in
+                // Toggle bars
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
+                self.navigationController?.setToolbarHidden(false, animated: true)
+                
+                // Update not appearance.
+                self.scrollView.backgroundColor = .groupTableViewBackground
+                self.noteSection.isHidden = false
+                self.noteHidden = false
+                self.editNoteButton.setTitle("Edit", for: .normal)
+                self.editNoteButton.isHidden = true
+            }
+        } else {
+            UIView.animate(withDuration: duration) { [unowned self] in
+                // Toggle bars
+                self.navigationController?.setNavigationBarHidden(true, animated: true)
+                self.navigationController?.setToolbarHidden(true, animated: true)
+                
+                // Update note appearance
+                self.scrollView.backgroundColor = .black
+                self.editNoteButton.setTitle("Hide", for: .normal)
+                self.editNoteButton.isHidden = false
+            }
+        }
+    }
+    
+    //MARK: - Buttons and Taps
+    
+    func clearNote() {
+        photoNote?.photoTitle = ""
+        photoNote?.photoNote = ""
+        noteTitle.text = ""
+        noteEntry.text = ""
+    }
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        if noteHidden == true {
+            return true
+        }
+        return false
+    }
+    
+    //Implements control states for the note section:
+    //Note down, bars visible: button is hidden.
+    //Note down, bars hidden: button displays "Hide".  Tapping in this state hides the note section.
+    //Note up, text edit disabled: button displays  "Edit".  Tapping enables note section text fields, makes note text field first responsder, changes button text to "Done".
+    //Note up, text edit enabled: button displays "Done".  Tapping disables text fields, all fields are checked for text with values being loaded into appropriate cjmImage variables.
+    @IBAction func enableEdit(sender: Any?) {
+        if editNoteButton.titleLabel.text == "Hide" {
+            noteSection.isHidden = true
+            noteHidden = true
+            if isQuickNote == nil || isQuickNote == false {
+                delegate?.makeHomeIndicatorVisible(false)
+            }
+        } else if editNoteButton.titleLabel?.text == "Edit" {
+            registerForKeyboardNotifications()
+            noteTitle.isEnabled = true
+            noteEntry.isEditable = true
+            noteEntry.isSelectable = true
+            editNoteButton.setTitle("Done", for: .normal)
+            noteEntry.becomeFirstResponder()
+            noteEntry.selectedRange = NSMakeRange(noteEntry.text.length, 0)
+        } else {
+            confirmTextFieldNotBlank()
+            confirmTextViewNotBlank()
+            photoNote?.photoTitle = noteTitle.text
+            photoNote?.photoNote = noteEntry.text
+            if isQuickNote == true {
+                let date = Date()
+                photoNote?.photoCreationDate = date
+                let formatter = DateFormatter()
+                formatter.dateStyle = .full
+                formatter.timeStyle = .none
+                photoLocAndDate.text = "Note edited \(formatter.string(from: date))"
+            }
+            noteTitle.isEnabled = false
+            noteEntry.isEditable = false
+            noteEntry.isSelectable = false
+            editNoteButton.setTitle("Edit", for: .normal)
+            editNoteButton.sizeToFit()
+//            NotificationCenter.default.removeObserver(self)
+            NotificationCenter.default.removeObserver( self,
+                                                 name: UIKeyboardDidShowNotification,
+                                               object: nil)
+            NotificationCenter.default.removeObserver( self,
+                                                 name: UIKeyboardWillHideNotification,
+                                               object: nil)
+            
+            PHNAlbumManager.sharedInstance.save()
+        }
+    }
+    
+    @IBAction func imageViewTapped(sender: Any?) {
+        #if DEBUG
+        print("****IMAGEVIEW TAPPED****")
+        #endif
+        if isQuickNote == true {
+            if let nav = navigationController, nav.navigationBar.isHidden {
+                navigationController?.setNavigationBarHidden(false, animated: true)
+            } else {
+                navigationController?.setNavigationBarHidden(true, animated: true)
+            }
+        } else {
+            let updateBars = !barsVisible!
+            barsVisible = updateBars
+            updateForBarVisibility(visible: barsVisible!, animated: true)
+            delegate?.updateBarsHidden(barsVisible!)
+        }
+    }
+    
+    @IBAction func imageViewDoubleTApped(_ gestureRecognizer: UITapGestureRecognizer) {
+        if scrollView.zoomScale == initialZoomScale! {
+            let centerPoint = gestureRecognizer.location(in: scrollView)
+            
+            // Current content size back to content scale of 1.0f
+            var contentSize: CGSize
+            contentSize.width = scrollView.contentSize.width / initialZoomScale!
+            contentSize.height = scrollView.contentSize.height / initialZoomScale!
+            
+            // Translate the zoom point to relative to the content rect
+            centerPoint.x = (centerPoint.x / scrollView.bounds.size.width) * contentSize.width
+            centerPoint.y = (centerPoint.y / scrollView.bounds.size.height) * contentSize.height
+            
+            // Get the size of the region to zoom to
+            var zoomSize: CGSize
+            zoomSize.width = scrollView.bounds.size.width / (initialZoomScale! * 4.0)
+            zoomSize.height = scrollView.bounds.size.height / (initialZoomScale! * 4.0)
+            
+            // Offset the zoom rect so the actual zoom point is in  the middle of the rectangle.
+            var zoomRect: CGRect
+            zoomRect.origin.x = centerPoint.x - zoomSize.width / 2.0
+            zoomRect.origin.y = centerPoint.y - zoomSize.height / 2.0
+            zoomRect.size.width = zoomSize.width
+            zoomRect.size.height = zoomSize.height
+            
+            // Resize
+            scrollView.zoom(to: zoomRect, animated: true)
+        } else {
+            UIView.animate(withDuration: 0.25) { [weak self] in
+                self?.updateZoom()
+            }
+            scrollView.isScrollEnabled = false
+        }
+    }
+    
+    //MARK: - Button Responses
+    
+    func showPopUpMenu() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
+        let setPreviewImage = UIAlertAction(title: "Use For Album List Thumbnail", style: .default) { [unowned self] (_) in
+            PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, createPreviewFromImage: self.photoNote!)
+            PHNAlbumManager.sharedInstance.save()
+            
+            let hudView = PHNHudView.hud(inView: self.navigationController!.view,
+                                       withType: "Success",
+                                       animated: true)
+            hudView.text = "Done!"
+//            hudView.perform(#selector(removeFromSuperview), with: nil, afterDelay: 1.5)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { [weak self] in
+                hudView.removeFromSuperview()
+                self?.navigationController?.view.isUserInteractionEnabled = true
+            })
+        }
+        
+        let saveImageAction = UIAlertAction(title: "Save To Camera Roll", style: .default) { [unowned self] (_) in
+            UIImageWriteToSavedPhotosAlbum(self.fullImage!, nil, nil, nil)
+            
+            let hudView = PHNHudView.hud(inView: self.navigationController!.view, withType: "Success", animated: true)
+            hudView.text = "Done"
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { [weak self] in
+                hudView.removeFromSuperview()
+                self?.navigationController?.view.isUserInteractionEnabled = true
+            })
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(saveImageAction)
+        alert.addAction(setPreviewImage)
+        alert.addAction(cancelAction)
+        
+        alert.popoverPresentationController?.sourceRect = CGRect(x: view.frame.size.width - 27.0, y: view.frame.size.height - 40.0, width: 1.0, height: 1.0)
+        alert.popoverPresentationController?.permittedArrowDirections = .down
+        alert.popoverPresentationController?.sourceView = view
+        
+        present(alert, animated: true, completion: nil)
     }
     /*
-- (void)updateForBarVisibility:(BOOL)visible animated:(BOOL)animated {
-    //if called from viewWillAppear: animated == false, else animated == true
-    NSTimeInterval duration = 0.0;//animated ? 0.2 : 0.0;
-    if (visible) {
-        if (!self.isQuickNote) {
-            [self.delegate makeHomeIndicatorVisible:YES];
-        }
-        [UIView animateWithDuration:duration animations:^{
-            //toggleBars
-            [self.navigationController setNavigationBarHidden:NO animated:YES];
-            [self.navigationController setToolbarHidden:NO animated:YES];
+- (void)confirmImageDelete {
+    BOOL albumIsFavorites = [self.albumName isEqualToString:@"Favorites"];
+    NSString *message = albumIsFavorites ? @"Delete from all albums or unfavorite?" : @"You cannot recover this photo after deleting";
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete Photo?"
+    message:message
+    preferredStyle:UIAlertControllerStyleActionSheet];
 
-            //update note appearance
-            self.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-            [self.noteSection setHidden:NO];
-            self.noteHidden = NO;
-            [self.editNoteButton setTitle:@"Edit" forState:UIControlStateNormal];
-            [self.editNoteButton setHidden:YES];
-        }];
-    } else if (!visible)  {
-        [UIView animateWithDuration:duration animations:^{
-            //toggleBars
-            [self.navigationController setNavigationBarHidden:YES animated:YES];
-            [self.navigationController setToolbarHidden:YES animated:YES];
+    UIAlertAction *saveToPhotosAndDelete = [UIAlertAction actionWithTitle:@"Save To Camera Roll And Then Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete) {
+    UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
+    self.favoriteChanged = NO;
+    [self.delegate photoIsFavorited:NO];
+    [[CJMServices sharedInstance] deleteImage:self.cjmImage];
+    [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
+    if (albumIsFavorites)
+    [[CJMAlbumManager sharedInstance] albumWithName:self.cjmImage.originalAlbum removeImageWithUUID:self.cjmImage.fileName];
 
-            //update note appearance
-            self.scrollView.backgroundColor = [UIColor blackColor];
-            [self.editNoteButton setTitle:@"Hide" forState:UIControlStateNormal];
-            [self.editNoteButton setHidden:NO];
-        }];
-    }
+    [[CJMAlbumManager sharedInstance] checkFavoriteCount];
+    [[CJMAlbumManager sharedInstance] save];
+
+    [self.delegate viewController:self deletedImageAtIndex:self.index];
+    }];
+
+    UIAlertAction *deletePhoto = [UIAlertAction actionWithTitle:@"Delete Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
+    self.favoriteChanged = NO;
+    [self.delegate photoIsFavorited:NO];
+
+    [[CJMServices sharedInstance] deleteImage:self.cjmImage];
+    [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
+    if (albumIsFavorites)
+    [[CJMAlbumManager sharedInstance] albumWithName:self.cjmImage.originalAlbum removeImageWithUUID:self.cjmImage.fileName];
+
+    [[CJMAlbumManager sharedInstance] checkFavoriteCount];
+    [[CJMAlbumManager sharedInstance] save];
+    [self.delegate viewController:self deletedImageAtIndex:self.index];
+    }];
+
+    UIAlertAction *unfavoritePhoto = [UIAlertAction actionWithTitle:@"Unfavorite and Remove" style:UIAlertActionStyleDefault handler:^(UIAlertAction *unfavAction) {
+    self.favoriteChanged = NO;
+    [self.delegate photoIsFavorited:NO];
+    [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
+    [self.delegate viewController:self deletedImageAtIndex:self.index];
+    }];
+
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
+
+    [alertController addAction:saveToPhotosAndDelete];
+    [alertController addAction:deletePhoto];
+    if (albumIsFavorites)
+    [alertController addAction:unfavoritePhoto];
+    [alertController addAction:cancel];
+
+    alertController.popoverPresentationController.sourceRect = CGRectMake(26.0, self.view.frame.size.height - 40.0, 1.0, 1.0);
+    [alertController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionDown];
+    alertController.popoverPresentationController.sourceView = self.view;
+
+    [self presentViewController:alertController animated:YES completion:nil];
 }
  */
     
@@ -447,4 +664,18 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     func clearNote() {
         
     }
+    
+    //Below methods make sure the note section isn't covered by the keyboard.
+    func registerForKeyboardNotifications() {
+        
+    }
+    
+    func confirmTextFieldNotBlank() {
+        
+    }
+    
+    func confirmTextViewNotBlank() {
+        
+    }
+    
 }

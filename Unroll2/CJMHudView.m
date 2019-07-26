@@ -9,7 +9,7 @@
 #import "CJMHudView.h"
 
 @implementation CJMHudView
-
+// class func hud(inView view: UIView, withType type: String?, animated: Bool) -> HudView {
 + (instancetype)hudInView:(UIView *)view withType:(NSString *)type animated:(BOOL)animated
 {
     CJMHudView *hudView = [[CJMHudView alloc] initWithFrame:view.bounds];
@@ -24,7 +24,7 @@
     
     return hudView;
 }
-
+// override func draw(_ rect: CGRect) {
 - (void)drawRect:(CGRect)rect
 {
     const CGFloat boxWidth = 96.0f;
@@ -74,7 +74,7 @@
     
     [self.text drawAtPoint:textPoint withAttributes:attributes];
 }
-
+// func show(animated: Bool) {
 - (void)showAnimated:(BOOL)animated
 {
     if (animated) {
@@ -89,7 +89,7 @@
     
     [self performSelector:@selector(removeHudView:) withObject:self afterDelay:0.7];
 }
-
+// func removeHudView(_ hudView: PHNHudView) {
 - (void)removeHudView:(CJMHudView *)hudView
 {
     [UIView animateWithDuration:0.5 animations:^{
