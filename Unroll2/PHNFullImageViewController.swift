@@ -591,91 +591,126 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
         
         present(alert, animated: true, completion: nil)
     }
-    /*
-- (void)confirmImageDelete {
-    BOOL albumIsFavorites = [self.albumName isEqualToString:@"Favorites"];
-    NSString *message = albumIsFavorites ? @"Delete from all albums or unfavorite?" : @"You cannot recover this photo after deleting";
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete Photo?"
-    message:message
-    preferredStyle:UIAlertControllerStyleActionSheet];
-
-    UIAlertAction *saveToPhotosAndDelete = [UIAlertAction actionWithTitle:@"Save To Camera Roll And Then Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToSaveThenDelete) {
-    UIImageWriteToSavedPhotosAlbum(self.fullImage, nil, nil, nil);
-    self.favoriteChanged = NO;
-    [self.delegate photoIsFavorited:NO];
-    [[CJMServices sharedInstance] deleteImage:self.cjmImage];
-    [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
-    if (albumIsFavorites)
-    [[CJMAlbumManager sharedInstance] albumWithName:self.cjmImage.originalAlbum removeImageWithUUID:self.cjmImage.fileName];
-
-    [[CJMAlbumManager sharedInstance] checkFavoriteCount];
-    [[CJMAlbumManager sharedInstance] save];
-
-    [self.delegate viewController:self deletedImageAtIndex:self.index];
-    }];
-
-    UIAlertAction *deletePhoto = [UIAlertAction actionWithTitle:@"Delete Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
-    self.favoriteChanged = NO;
-    [self.delegate photoIsFavorited:NO];
-
-    [[CJMServices sharedInstance] deleteImage:self.cjmImage];
-    [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
-    if (albumIsFavorites)
-    [[CJMAlbumManager sharedInstance] albumWithName:self.cjmImage.originalAlbum removeImageWithUUID:self.cjmImage.fileName];
-
-    [[CJMAlbumManager sharedInstance] checkFavoriteCount];
-    [[CJMAlbumManager sharedInstance] save];
-    [self.delegate viewController:self deletedImageAtIndex:self.index];
-    }];
-
-    UIAlertAction *unfavoritePhoto = [UIAlertAction actionWithTitle:@"Unfavorite and Remove" style:UIAlertActionStyleDefault handler:^(UIAlertAction *unfavAction) {
-    self.favoriteChanged = NO;
-    [self.delegate photoIsFavorited:NO];
-    [[CJMAlbumManager sharedInstance] albumWithName:self.albumName removeImageWithUUID:self.cjmImage.fileName];
-    [self.delegate viewController:self deletedImageAtIndex:self.index];
-    }];
-
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
-
-    [alertController addAction:saveToPhotosAndDelete];
-    [alertController addAction:deletePhoto];
-    if (albumIsFavorites)
-    [alertController addAction:unfavoritePhoto];
-    [alertController addAction:cancel];
-
-    alertController.popoverPresentationController.sourceRect = CGRectMake(26.0, self.view.frame.size.height - 40.0, 1.0, 1.0);
-    [alertController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionDown];
-    alertController.popoverPresentationController.sourceView = self.view;
-
-    [self presentViewController:alertController animated:YES completion:nil];
-}
- */
     
-    func prepareWithAlbumNamed(_ name: String, andIndex index: Int) {
+    func confirmImageDelete() {
+        let albumIsFavorites = albumName == "Favorites"
+        let message = albumIsFavorites ? "Delete from all albums or unfavorite?" : "You cannot recover this photo after deleting."
+        let alertController = UIAlertController(title: "Delete Photo?",
+                                              message: message,
+                                       preferredStyle: .actionSheet)
+        let saveToPhotosAndDelete = UIAlertAction(title: "Save To Camera Roll And Then Delete", style: .default) { [unowned self] (_) in
+            UIImageWriteToSavedPhotosAlbum(self.fullImage!, nil, nil, nil)
+            self.favoriteChanged = false
+            self.delegate?.photoIsFavorited(false)
+            PHNServices.sharedInstance.deleteImageFrom(photoNote: self.photoNote!)
+            PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, removeImageWithUUID: self.photoNote!.fileName)
+            if albumIsFavorites {
+                PHNAlbumManager.sharedInstance.albumWithName(self.photoNote!.originalAlbum, removeImageWithUUID: self.photoNote!.fileName)
+            }
+            
+            PHNAlbumManager.sharedInstance.checkFavoriteCount()
+            PHNAlbumManager.sharedInstance.save()
+            
+            self.delegate?.viewController(self, deletedImageAtIndex: self.index!)
+        }
         
+        let deletePhoto = UIAlertAction(title: "Delete Permanently", style: .default) { [unowned self] (_) in
+            self.favoriteChanged = false
+            self.delegate?.photoIsFavorited(false)
+            
+            PHNServices.sharedInstance.deleteImageFrom(photoNote: self.photoNote!)
+            PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, removeImageWithUUID: self.photoNote!.fileName)
+            if albumIsFavorites {
+                PHNAlbumManager.sharedInstance.albumWithName(self.photoNote!.originalAlbum, removeImageWithUUID: self.photoNote!.fileName)
+            }
+            
+            PHNAlbumManager.sharedInstance.checkFavoriteCount()
+            PHNAlbumManager.sharedInstance.save()
+            self.delegate?.viewController(self, deletedImageAtIndex: self.index!)
+        }
+        
+        let unfavoritePhoto = UIAlertAction(title: "Unfavorite And Remove", style: .default) { [unowned self] (_) in
+            self.favoriteChanged = false
+            self.delegate?.photoIsFavorited(false)
+            PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, removeImageWithUUID: self.photoNote!.file)
+            self.delegate?.viewController(self, deletedImageAtIndex: self.index!)
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(saveToPhotosAndDelete)
+        alertController.addAction(deletePhoto)
+        if albumIsFavorites { alertController.addAction(unfavoritePhoto) }
+        alertController.addAction(cancel)
+        
+        alertController.popoverPresentationController?.sourceRect = CGRect(x: 26.0, y: view.frame.size.height - 40.0, width: 1.0, height: 1.0)
+        alertController.popoverPresentationController?.permittedArrowDirections = .down
+        alertController.popoverPresentationController?.sourceView = view
+        
+        present(alertController, animated: true, completion: nil)
     }
     
-    
-    //- (void)updateForBarVisibility:(BOOL)visible animated:(BOOL)animated {
-    func updateForBarVisibility(visible: Bool, animated: Bool) {
+    func actionFavorite(_ userFavorited: Bool) {
+        favoriteChanged = userFavorited
         
+        if albumName == "Favorites" {
+            handleFavoriteDidChange()
+            delegate?.viewController(self, deletedImageAtIndex: index!)
+        }
     }
     
-    func clearNote() {
-        
-    }
+    //MARK: - TextView and TextField Delegate
     
-    //Below methods make sure the note section isn't covered by the keyboard.
-    func registerForKeyboardNotifications() {
-        
-    }
-    
-    func confirmTextFieldNotBlank() {
-        
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Tap Edit to change the title and note!" {
+            textView.text = nil
+        }
     }
     
     func confirmTextViewNotBlank() {
-        
+        if noteEntry.text.count == 0 {
+            noteEntry.text = "Tap Edit to change the title and note!"
+        }
     }
     
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.text == "No Title Created " {
+            textField.text = nil
+        }
+    }
+    
+    func confirmTextFieldNotBlank() {
+        if noteTitle.text.count == 0 {
+            noteTitle.text = "No Title Created "
+        }
+    }
+    
+    //MARK: - Keyboard Shift
+    
+    //Below methods make sure the note section isn't covered by the keyboard.
+    func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver( self,
+                                      selector: #selector(keyboardWasShown),
+                                          name: UIResponder.keyboardDidShowNotification,
+                                        object: nil)
+        NotificationCenter.default.addObserver( self,
+                                      selector: #selector(keyboardWillBeHidden),
+                                          name: UIResponder.keyboardWillHideNotification,
+                                        object: nil)
+    }
+    
+    @objc func keyboardWasShown(aNotification: Notification) {
+        let info = aNotification.userInfo!
+        let keyboardSize = (info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
+        
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize!.height - 20.0, right: 0)
+        noteEntry.contentInset = contentInsets
+        noteEntry.scrollIndicatorInsets = contentInsets
+    }
+    
+    @objc func keyboardWillBeHidden(aNotification: Notification) {
+        let contentInsets = UIEdgeInsets.zero
+        noteEntry.contentInset = contentInsets
+        noteEntry.scrollIndicatorInsets = contentInsets
+    }
 }

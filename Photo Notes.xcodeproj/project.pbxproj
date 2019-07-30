@@ -44,7 +44,6 @@
 		84C2B94A1ADCBB420034786C /* CJMGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9491ADCBB420034786C /* CJMGalleryViewController.m */; };
 		84C2B9951AE42E040034786C /* CJMPhotoGrabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */; };
 		84C2B9981AE441CE0034786C /* CJMPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9971AE441CE0034786C /* CJMPhotoCell.m */; };
-		84F1FDAD1AEAF57A0092D424 /* CJMFullImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1FDAC1AEAF57A0092D424 /* CJMFullImageViewController.m */; };
 		84F1FDB21AEF21A60092D424 /* CJMGrabCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1FDB11AEF21A60092D424 /* CJMGrabCell.m */; };
 /* End PBXBuildFile section */
 
@@ -459,7 +458,6 @@
 				7540EA8E22C67CE60000D60E /* PHNAlbumsTableViewController.swift in Sources */,
 				75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */,
 				7540EA9E22CD5D180000D60E /* PHNPopoverViewController.swift in Sources */,
-				84F1FDAD1AEAF57A0092D424 /* CJMFullImageViewController.m in Sources */,
 				84C2B9981AE441CE0034786C /* CJMPhotoCell.m in Sources */,
 				7540EA9C22CD545C0000D60E /* PHNAlbumListTableViewCell.swift in Sources */,
 				7540EA9222CA7A430000D60E /* PHNPhotoAlbum.swift in Sources */,

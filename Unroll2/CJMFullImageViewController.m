@@ -634,7 +634,7 @@
     
     [self presentViewController:alertController animated:YES completion:nil];
 }
-
+// func confirmImageDelete() {
 - (void)confirmImageDelete {
     BOOL albumIsFavorites = [self.albumName isEqualToString:@"Favorites"];
     NSString *message = albumIsFavorites ? @"Delete from all albums or unfavorite?" : @"You cannot recover this photo after deleting";
@@ -692,7 +692,7 @@
     
     [self presentViewController:alertController animated:YES completion:nil];
 }
-
+// func actionFavorite(_ userFavorited: Bool) {
 - (void)actionFavorite:(BOOL)userFavorited { //cjm favorites PageVC -> ImageVC
     self.favoriteChanged = userFavorited;
     
@@ -703,28 +703,28 @@
 }
 
 #pragma mark - TextView and TextField Delegate
-
+// func textViewDidBeginEditing(_ textView: UITextView) {
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     if ([textView.text isEqual:@"Tap Edit to change the title and note!"]) {
         textView.text = @"";
     }
 }
-
+// func confirmTextViewNotBlank() {
 - (void)confirmTextViewNotBlank
 {
     if ([self.noteEntry.text length] == 0) {
         self.noteEntry.text = @"Tap Edit to change the title and note!";
     }
 }
-
+// func textFieldDidBeginEditing(_ textField: UITextField) {
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     if ([textField.text isEqual:@"No Title Created "]) {
         textField.text = @"";
     }
 }
-
+// func confirmTextFieldNotBlank()
 - (void)confirmTextFieldNotBlank
 {
     if ([self.noteTitle.text length] == 0) {
@@ -735,6 +735,7 @@
 #pragma mark - Keyboard shift
 
 //Below methods make sure the note section isn't covered by the keyboard.
+// func registerForKeyboardNotifications() {
 - (void)registerForKeyboardNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -746,7 +747,7 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
 }
-
+// @objc func keyboardWasShown(aNotification: Notification) {
 - (void)keyboardWasShown:(NSNotification *)aNotification
 {
     NSDictionary *info = [aNotification userInfo];
@@ -756,7 +757,7 @@
     self.noteEntry.contentInset = contentInsets;
     self.noteEntry.scrollIndicatorInsets = contentInsets;
 }
-
+// @objc func keyboardWillBeHidden(aNotification: Notification) {
 - (void)keyboardWillBeHidden:(NSNotification *)aNotification
 {
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
