@@ -74,33 +74,106 @@ class PHNPageImageViewController: UIPageViewController, UIPageViewControllerData
     
     //MARK: - UIPageViewController DataSource
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: PHNFullImageViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore currentImageVC: PHNFullImageViewController) -> UIViewController? {
         let previousIndex = viewController.index - 1
         return fullImageViewControllerForIndex(previousIndex)
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: PHNFullImageViewController) -> UIViewController? {
-        <#code#>
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter currentImageVC: PHNFullImageViewController) -> UIViewController? {
+        let nextIndex = currentImageVC.index! + 1
+        return fullImageViewControllerForIndex(nextIndex)
     }
-    /*
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(CJMFullImageViewController *)currentImageVC {
-    NSInteger nextIndex = currentImageVC.index + 1;
-    return [self fullImageViewControllerForIndex:nextIndex];
-}
-     */
     
-    
-    /*
-     
- */
-    
-    /*
-//MARK: - Initializers and Scene Set Up (from PDRScope PDRInvoiceViewController)
-    init(viewModel: PDRInvoiceViewModel) {
-        self.viewModel = viewModel
-        estimateDetailRowData = viewModel.estimateDetailRowData()
-        super.init(nibName: "PDRInvoiceViewController", bundle: nil)
+    func fullImageViewControllerForIndex(_ index: Int) -> PHNFullImageViewController? {
+        if index >= albumCount || index < 0 {
+            return nil
+        } else {
+            currentIndex = index
+            let fullImageController = storyboard!.instantiateViewController(withIdentifier: "FullImageVC") as! PHNFullImageViewController
+            fullImageController.index = index
+            fullImageController.albumName = albumName
+            fullImageController.delegate = self
+            fullImageController.noteOpacity = noteOpacity
+            fullImageController.barsVisible = makeViewsVisible
+            
+            return fullImageController
+        }
     }
- */
-
+    
+    //MARK: - UIPageViewControllerDelegate
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        if completed {
+            // currentIndex should match the new vc's index.
+        } else {
+            // currentIndex should match the original vc's index.
+        }
+    }
+    
+    //MARK: - NavBar and Toolbar Buttons
+    
+    @IBAction func favoriteImage(_ sender: UIBarButtonItem) {
+        let currentVC = viewControllers![0] as! PHNFullImageViewController
+        
+        if sender.image == UIImage(named: "WhiteStarEmpty") {
+            sender.image = UIImage(named: "WhiteStarFull")
+            currentVC.actionFavorite(true)
+        } else {
+            sender.image = UIImage(named: "WhiteStarEmpty")
+            currentVC.actionFavorite(false)
+        }
+    }
+    
+    @IBAction func currentPhotoOptions(_ sender: Any) {
+        let currentVC = viewControllers![0] as! PHNFullImageViewController
+        currentVC.showPopUpMenu()
+    }
+    
+    @IBAction func deleteCurrentPhoto(_ sender: Any) {
+        let currentVC = viewControllers![0] as! PHNFullImageViewController
+        currentVC.confirmImageDelete()
+    }
+    
+    //MARK: - PHNFUllImageVC Delegate Methods
+    
+    func updateBarsHidden(_ setting: Bool) {
+        makeViewsVisible = setting
+        setNeedsStatusBarAppearanceUpdate()
+        if makeViewsVisible {
+            NotificationCenter.default.post(name: Notification.Name("ImageShowBars"), object: nil)
+        } else {
+            NotificationCenter.default.post(name: Notification.Name("ImageHideBars"), object: nil)
+        }
+    }
+    
+    func makeHomeIndicatorVisible(_ visible: Bool) {
+        makeHomeVisible = visible
+        setNeedsUpdateOfHomeIndicatorAutoHidden()
+    }
+    
+    /// Deletes the currently displayed image and updates screen based on position in album
+    func viewController(_ currentVC: PHNFullImageViewController, deletedImageAtIndex imageIndex: Int) {
+        if (albumCount - 1) == 0 {
+            navigationController?.popViewController(animated: true)
+        } else if (imageIndex + 1) >= albumCount {
+            let previousVC = pageViewController(self, viewControllerBefore: currentVC) as! PHNFullImageViewController
+            albumCount -= 1
+            
+            setViewControllers([previousVC], direction: .reverse, animated: true, completion: nil)
+        } else {
+            let nextVC = pageViewController(self, viewControllerAfter: currentVC) as! PHNFullImageViewController
+            nextVC.index = imageIndex
+            albumCount -= 1
+            
+            setViewControllers([nextVC], direction: .forward, animated: true, completion: nil)
+        }
+    }
+    
+    func photoIsFavorited(_ isFavorited: Bool) {
+        if !isFavorited {
+            barButtonFavorite.image = UIImage(named: "WhiteStarEmpty")
+        } else {
+            barButtonFavorite.image = UIImage(named: "WhiteStarFull")
+        }
+    }
 }

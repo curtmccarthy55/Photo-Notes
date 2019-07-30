@@ -52,7 +52,7 @@
 - (void)dealloc {
 //    NSLog(@"PageVC deallocated!");
 }
-
+// override var prefersStatusBarHidden: Bool {
 -(BOOL)prefersStatusBarHidden {
     if (!self.makeViewsVisible || self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
         NSLog(@"PageImageVC prefersStatusBarHidden returned YES");
@@ -62,7 +62,7 @@
         return NO;
     }
 }
-
+// override var prefersHomeIndicatorAutoHidden: Bool {
 - (BOOL)prefersHomeIndicatorAutoHidden {
     if (!self.makeViewsVisible && !self.makeHomeVisible) { //if bars aren't visible or 
         NSLog(@"PageImageVC prefersHomeIndicatorAutoHidden returned YES");
@@ -84,7 +84,7 @@
     NSInteger nextIndex = currentImageVC.index + 1;
     return [self fullImageViewControllerForIndex:nextIndex];
 }
-
+// func fullImageViewControllerForIndex(_ index: Int) -> PHNFullImageViewController? {
 - (CJMFullImageViewController *)fullImageViewControllerForIndex:(NSInteger)index {
     if (index >= self.albumCount || index < 0) {
         return nil;
@@ -102,7 +102,7 @@
 }
 
 #pragma mark - UIPageViewControllerDelegate
-
+// func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed {
     if (completed) {
         //currentIndex should match the new vc's index.
@@ -112,7 +112,7 @@
 }
 
 #pragma mark - navBar and toolbar buttons
-
+// @IBAction func favoriteImage(_ sender: UIBarButtonItem) {
 - (IBAction)favoriteImage:(UIBarButtonItem *)sender { //cjm favorites PageVC -> ImageVC
     CJMFullImageViewController *currentVC = (CJMFullImageViewController *)self.viewControllers[0];
     
@@ -125,13 +125,13 @@
     }
 }
 
-
+// @IBAction func currentPhotoOptions(_ sender: Any) {
 - (IBAction)currentPhotoOptions:(id)sender {
     CJMFullImageViewController *currentVC = (CJMFullImageViewController *)self.viewControllers[0];
     
     [currentVC showPopUpMenu];
 }
-
+// @IBAction func deleteCurrentPhoto(_ sender: Any) {
 - (IBAction)deleteCurrentPhoto:(id)sender {
     CJMFullImageViewController *currentVC = (CJMFullImageViewController *)self.viewControllers[0];
     
@@ -139,7 +139,7 @@
 }
 
 #pragma mark - CJMFullImageVC Delegate Methods
-
+// func updateBarsHidden(_ setting: Bool) {
 - (void)updateBarsHidden:(BOOL)setting {
     self.makeViewsVisible = setting;
     [self setNeedsStatusBarAppearanceUpdate];
@@ -149,13 +149,14 @@
         [NSNotificationCenter.defaultCenter postNotificationName:@"ImageHideBars" object:nil];
     }
 }
-
+// func makeHomeIndicatorVisible(_ visible: Bool) {
 - (void)makeHomeIndicatorVisible:(BOOL)visible {
     self.makeHomeVisible = visible;
     [self setNeedsUpdateOfHomeIndicatorAutoHidden];
 }
 
 //deletes the currently displayed image and updates screen based on position in album
+// func viewController(_ currentVC: PHNFullImageViewController, deletedImageAtIndex imageIndex: Int) {
 - (void)viewController:(CJMFullImageViewController *)currentVC deletedImageAtIndex:(NSInteger)imageIndex {
     if (self.albumCount - 1 == 0) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -178,7 +179,7 @@
                       completion:NULL];
     }
 }
-
+// func photoIsFavorited(_ isFavorited: Bool) {
 - (void)photoIsFavorited:(BOOL)isFavorited { //cjm favorites ImageVC -> PageVC
     if (!isFavorited) {
         [self.barButtonFavorite setImage:[UIImage imageNamed:@"WhiteStarEmpty"]];
