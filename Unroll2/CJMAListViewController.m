@@ -470,11 +470,9 @@
         longDimension = screenWidth;
         shortDimension = screenHeight;
     }
-    CGSize cameraFrame;
     CGFloat aspectRatio = 4.0 / 3.0;
-    cameraFrame = CGSizeMake(shortDimension, shortDimension * aspectRatio);
+    CGSize cameraFrame = CGSizeMake(shortDimension, shortDimension * aspectRatio);
     CGRect portraitFrame = CGRectMake(0, 0, shortDimension, longDimension);
-    
     if (longDimension > 800) {
         //determine remaining space for bottom buttons
         longDimension -= 44.0; //subtract top bar
@@ -667,11 +665,12 @@
     [self.doneButton setEnabled:YES];
     [self.doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
-//    TODO: Use PHAsset instead of UIImage. cjm album fetch
+    //    TODO: Use PHAsset instead of UIImage. cjm album fetch
 //    PHAsset *newAsset = [info objectForKey:UIImagePickerControllerPHAsset];
     UIImage *newPhoto = [info objectForKey:UIImagePickerControllerOriginalImage];
 //    NSData *newPhotoData = UIImageJPEGRepresentation(newPhoto, 1.0);
     NSData *nPhotoData = UIImagePNGRepresentation(newPhoto);
+//    CJMImage *newImage = [[CJMImage alloc] init];
     UIImage *thumbnail = [self getCenterMaxSquareImageByCroppingImage:newPhoto andShrinkToSize:CGSizeMake(120.0, 120.0)];
     
     //cjm album fetch

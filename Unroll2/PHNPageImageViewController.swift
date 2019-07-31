@@ -47,8 +47,6 @@ class PHNPageImageViewController: UIPageViewController, UIPageViewControllerData
     }
     
     //MARK: - Scene Set Up
-    
-    //MARK: - Scene Set Up
     override func viewDidLoad() {
         super.viewDidLoad()
         

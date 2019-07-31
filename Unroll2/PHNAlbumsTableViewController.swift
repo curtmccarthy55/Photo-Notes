@@ -474,9 +474,6 @@ class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControl
             self?.rotateCameraViews()
         }
     }
-    /*
-     
- */
     
     @objc func rotateCameraViews() {
         let orientation = UIDevice.current.orientation

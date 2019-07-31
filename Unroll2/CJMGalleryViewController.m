@@ -416,6 +416,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Mass delete options
+// @IBAction func deleteSelected() {
 - (IBAction)deleteSelcted:(id)sender {
     self.selectedCells = [NSArray arrayWithArray:[self.collectionView indexPathsForSelectedItems]];
     
@@ -498,6 +499,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Mass transfer options
+// @IBAction func exportSelected() {
 - (IBAction)exportSelected:(id)sender
 {
     self.selectedCells = [NSArray arrayWithArray:[self.collectionView indexPathsForSelectedItems]];
@@ -559,11 +561,10 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     alertController.popoverPresentationController.sourceView = self.view;
     
     [self presentViewController:alertController animated:YES completion:nil];
-    
 }
 
 #pragma mark - image picker delegate and controls
-
+// func openCamera() {
 - (void)openCamera { //cjm camera ui
     NSString *mediaType = AVMediaTypeVideo;
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
@@ -587,7 +588,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [self prepAndDisplayCamera];
     }
 }
-
+// func prepAndDisplayCamera() {
 - (void)prepAndDisplayCamera {
     self.imagePicker = [[UIImagePickerController alloc] init];
     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -624,16 +625,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [self.imagePicker setCameraOverlayView:overlay];
     self.imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     
-    
     self.lastOrientation = UIDevice.currentDevice.orientation;
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(rotateCameraViews) name:UIDeviceOrientationDidChangeNotification object:nil]; //cjm 10/05
-    
     
     [self presentViewController:self.imagePicker animated:YES completion:^{
         [self rotateCameraViews];
     }];
 }
-
+// @objc func rotateCameraViews() {
 - (void)rotateCameraViews { //cjm 10/05
     UIDeviceOrientation orientation = UIDevice.currentDevice.orientation;
     double rotation = 1;
@@ -664,7 +663,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
     self.lastOrientation = orientation;
 }
-
+// func cameraOverlayWithFrame(_ overlayFrame: CGRect, containerHeight barHeight: CGFloat) -> UIView {
 - (UIView *)cameraOverlayWithFrame:(CGRect)overlayFrame containerHeight:(CGFloat)barHeight {
     UIView *mainOverlay = [[UIView alloc] initWithFrame:overlayFrame];
     
@@ -790,6 +789,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 //Converting photo captured by in-app camera to CJMImage.  Called whenever takePicture is called.
+// func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info //cjm 01/12
 {
     [self.doneButton setEnabled:YES];

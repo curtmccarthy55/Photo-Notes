@@ -365,9 +365,10 @@ class PHNGalleryViewController: UICollectionViewController, PHNPhotoGrabCompleti
         present(navigationVC, animated: true, completion: nil)
     }
     
+    // Mass delete options.
     @IBAction func deleteSelected() {
-        guard selectedCells = Array(collectionView.indexPathsForSelectedItems) else {
-            let alert = UIAlertController(title: "No Photos Selected", message: "You must select some photos to delete first", preferredStyle: .alert)
+        guard selectedCells = collectionView.indexPathsForSelectedItems else {
+            let alert = UIAlertController(title: "No Photos Selected", message: "You must select some photos to delete first.", preferredStyle: .alert)
             let dismiss = UIAlertAction(title: "OK", style: .cancel, handler: nil)
             alert.addAction(dismiss)
             present(alert, animated: true, completion: nil)
@@ -383,50 +384,382 @@ class PHNGalleryViewController: UICollectionViewController, PHNPhotoGrabCompleti
         // Delete photos without saving to Photos app.
         let deleteAction = UIAlertAction(title: "Delete Photos Permanently", style: .destructive) { [unowned self] (_) in
             var doomedArray = [PhotoNote]()
-            for itemPath in selectedCells {
+            for itemPath in self.selectedCells! {
                 let doomedImage = album.albumPhotos[itemPath.row]
                 doomedArray.append(doomedImage)
             }
             PHNAlbumManager.sharedInstance.albumWithName(self.album.albumTitle, deleteImages: doomedArray)
+            PHNAlbumManager.sharedInstance.checkFavoriteCount()
+            PHNAlbumManager.sharedInstance.save()
+            if self.album.albumPhotos.count < 1 {
+                self.navigationController?.popViewController(animated: true)
+            }
+            self.collectionView.deleteItems(at: self.selectedCells!)
+            self.toggleEditAction()
+            self.confirmEditButtonEnabled()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
+                self.collectionView.reloadData()
+            })
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+//        alertController.addAction(saveThenDeleteAction)
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancel)
+        
+        alertController.popoverPresentationController?.barButtonItem = deleteButton
+        alertController.popoverPresentationController?.sourceView = view
+        alertController.popoverPresentationController?.permittedArrowDirections = .down
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    // Mass transfer options
+    @IBAction func exportSelected() {
+        guard selectedCells = collectionView.indexPathsForSelectedItems else {
+            let alert = UIAlertController(title: "No Photos Selected", message: "You must select some photos to transfer first.", preferredStyle: .alert)
+            let dismiss = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alert.addAction(dismiss)
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        let alertController = UIAlertController(title: "Transfer", message: nil, preferredStyle: .actionSheet)
+        
+        // IMPROVING AND ADDING LATER : functionality for mass copy of selected photos
+        //TODO: Copy selected photos to Camera Roll in the Photos app.
+        
+        // Copy the selected photos to another album within Photo Notes
+        let alternateAlbumExport = UIAlertAction(title: "Photos And Notes To Alternate Album", style: .default) { [weak self] (_) in
+            let storyboardName = "Main"
+            let storyboard = UIStoryboard(name: storyboardName, bundle: nil)
+            let navVC = storyboard.instantiateViewController(withIdentifier: "AListPickerViewController") as! UINavigationController
+            let albumPickerVC = navVC.topViewController as! PHNAlbumPickerViewController
+            albumPickerVC.delegate = self
+            albumPickerVC.title = "Select Destination"
+            albumPickerVC.currentAlbumName = album.albumTitle
+            albumPickerVC.userColor = userColor
+            albumPickerVC.userColorTag = userColorTag
+            self?.present(navVC, animated: true, completion: nil)
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+//        alertController.addAction(photosAppExport)
+        alertController.addAction(alternateAlbumExport)
+        alertController.addAction(cancel)
+        alertController.popoverPresentationController?.barButtonItem = exportButton
+        alertController.popoverPresentationController?.permittedArrowDirections = .down
+        alertController.popoverPresentationController?.sourceView = view
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    //MARK: - Image Picker Delegate and Controls
+    
+    func openCamera() {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            let alert = UIAlertController(title: "No Camera Available", message: "There's no camera available for Photo Notes to use.", preferredStyle: .alert)
+            let dismiss = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alert.addAction(dismiss)
+            present(alert, animated: true, completion: nil)
             
+            return
+        }
+        
+        let mediaType = AVMediaType.video
+        let authStatus = AVCaptureDevice.authorizationStatus(for: mediaType)
+        if authStatus != .authorized {
+            AVCaptureDevice.requestAccess(for: .video) { [weak self] (granted) in
+                if granted {
+                    #if DEBUG
+                    print("Permission for camera access granted")
+                    #endif
+                    self?.prepAndDisplayCamera()
+                } else {
+                    let alert = UIAlertController(title: "Camera Access Denied", message: "Please allow Photo Notes permission to use the camera.", preferredStyle: .alert)
+                    
+                    if let settingsUrl = URL(string: UIApplication.openSettingsURLString),
+                        UIApplication.shared.canOpenURL(settingsUrl)
+                    {
+                        let actionSettings = UIAlertAction(title: "Open Settings",
+                                                           style: .default,
+                                                           handler: { (_) in
+                                                            UIApplication.shared.open(settingsUrl) { (success) in
+                                                                #if DEBUG
+                                                                print("Settings opened: \(success)")
+                                                                #endif
+                                                            }
+                        })
+                        alert.addAction(actionSettings)
+                    }
+                    
+                    let actionDismiss = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
+                    alert.addAction(actionDismiss)
+                    
+                    self?.present(alert, animated: true, completion: nil)
+                }
+            }
+        } else {
+            prepAndDisplayCamera()
         }
     }
     
+    func prepAndDisplayCamera() {
+        imagePicker = UIImagePickerController()
+        imagePicker?.sourceType = UIImagePickerController.SourceType.camera
+        imagePicker?.showsCameraControls = false
+        imagePicker?.allowsEditing = false
+        imagePicker?.delegate = self
+        imagePicker?.cameraFlashMode = .off
+        imagePicker?.cameraDevice = .rear
+        
+        // Determine if viewport needs translation, and find bottom bar height.
+        let screenHeight = UIScreen.main.bounds.size.height
+        let screenWidth = UIScreen.main.bounds.size.width
+        var longDimension: CGFloat
+        var shortDimension: CGFloat
+        if screenHeight > screenWidth {
+            longDimension = screenHeight
+            shortDimension = screenWidth
+        } else {
+            longDimension = screenWidth
+            shortDimension = screenHeight
+        }
+        var cameraFrame: CGSize
+        let aspectRatio = CGFloat(4.0 / 3.0)
+        cameraFrame = CGSize(width: shortDimension, height: shortDimension * aspectRatio)
+        let portraitFrame = CGRect(x: 0, y: 0, width: shortDimension, height: longDimension)
+        
+        if longDimension > 800 {
+            // Determine remaining space for bottom buttons.
+            longDimension -= 44.0 // subtract top bar
+            let adjustHeight = CGAffineTransform(translationX: 0.0, y: 44.0)
+            imagePicker?.cameraViewTransform = adjustHeight
+        }
+        let bottomBarHeight = longDimension - cameraFrame.height // Subtract viewport.
+        
+        let overlay = cameraOverlayWithFrame(portraitFrame, containerHeight: bottomBarHeight)
+        imagePicker?.cameraOverlayView = overlay
+        imagePicker?.modalTransitionStyle = .coverVertical
+        
+        lastOrientation = UIDevice.current.orientation
+        NotificationCenter.default.addObserver(self, selector: #selector(rotateCameraViews), name: UIDevice.orientationDidChangeNotification, object: nil)
+        
+        present(imagePicker!, animated: true) { [weak self] in
+            self?.rotateCameraViews()
+        }
+    }
+    
+    @objc func rotateCameraViews() {
+        let orientation = UIDevice.current.orientation
+        var rotation: Double = 1
+        switch orientation {
+        case .portrait:
+            rotation = 0
+        case .landscapeLeft:
+            rotation = Double.pi / 2
+        case .landscapeRight:
+            rotation = -(Double.pi / 2)
+        default:
+            break
+        }
+        if rotation != 1 {
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                let transform = CGAffineTransform(rotationAngle: CGFloat(rotation))
+                self?.capturedPhotos?.transform = transform
+                self?.flashButton?.transform = transform
+                self?.cameraFlipButton?.transform = transform
+                self?.doneButton?.transform = transform
+                self?.cameraCancelButton?.transform = transform
+            }
+        }
+        lastOrientation = orientation
+    }
+    
+    // TODO replace with nib based overlay view?
+    func cameraOverlayWithFrame(_ overlayFrame: CGRect, containerHeight barHeight: CGFloat) -> UIView {
+        let mainOverlay = UIView(frame: overlayFrame)
+        
+        // Create container view for buttons.
+        let buttonBar = UIView()
+        buttonBar.backgroundColor = .clear
+        buttonBar.clipsToBounds = true
+        buttonBar.translatesAutoresizingMaskIntoConstraints = false
+        mainOverlay.addSubview(buttonBar)
+        buttonBar.centerXAnchor.constraint(equalTo: mainOverlay.centerXAnchor).isActive = true
+        buttonBar.bottomAnchor.constraint(equalTo: mainOverlay.bottomAnchor).isActive = true
+        buttonBar.widthAnchor.constraint(equalTo: mainOverlay.widthAnchor).isActive = true
+        buttonBar.heightAnchor.constraint(equalToConstant: barHeight).isActive = true
+        let saGuide = buttonBar.safeAreaLayoutGuide
+        
+        // Add container view to hold the top row of buttons.
+        let topRow = UIView()
+        topRow.backgroundColor = .clear
+        topRow.translatesAutoresizingMaskIntoConstraints = false
+        mainOverlay.addSubview(topRow)
+        topRow.centerXAnchor.constraint(equalTo: saGuide.centerXAnchor).isActive = true
+        topRow.leadingAnchor.constraint(equalTo: saGuide.leadingAnchor).isActive = true
+        topRow.topAnchor.constraint(equalTo: saGuide.topAnchor).isActive = true
+        topRow.trailingAnchor.constraint(equalTo: saGuide.trailingAnchor).isActive = true
+        topRow.bottomAnchor.constraint(equalTo: saGuide.centerYAnchor).isActive = true
+        let topGuide = topRow.safeAreaLayoutGuide
+        
+        // Add captured photos thumbnail
+        capturedPhotos = UIImageView()
+        capturedPhotos!.layer.borderColor = UIColor.lightGray.cgColor
+        capturedPhotos!.layer.borderWidth = 1.0
+        capturedPhotos!.layer.cornerRadius = 5.0
+        capturedPhotos!.translatesAutoresizingMaskIntoConstraints = false
+        capturedPhotos!.contentMode = .scaleAspectFit
+        capturedPhotos!.image = UIImage(named: "NoImage")
+        topRow.addSubview(capturedPhotos!)
+        capturedPhotos!.widthAnchor.constraint(equalTo: topGuide.heightAnchor, multiplier: 0.7).isActive = true
+        capturedPhotos!.heightAnchor.constraint(equalTo: topGuide.heightAnchor, multiplier: 0.7).isActive = true
+        capturedPhotos!.centerXAnchor.constraint(equalTo: topGuide.centerXAnchor).isActive = true
+        //        capturedPhotos!.topAnchor.constraint(equalTo: saGuide.topAnchor, constant: 16.0).isActive = true
+        capturedPhotos!.centerYAnchor.constraint(equalTo: topGuide.centerYAnchor).isActive = true
+        
+        // Add flash button
+        var currentFlash: UIImage
+        if imagePicker!.cameraFlashMode == .on {
+            currentFlash = UIImage(named: "FlashOn")!
+        } else {
+            currentFlash = UIImage(named: "FlashOff")!
+        }
+        flashButton =  UIButton(type: .custom)
+        flashButton!.addTarget(self, action: #selector(updateFlashMode), for: .touchUpInside)
+        flashButton!.setImage(currentFlash, for: .normal)
+        flashButton!.tintColor = .white
+        flashButton!.translatesAutoresizingMaskIntoConstraints = false
+        topRow.addSubview(flashButton!)
+        flashButton!.topAnchor.constraint(equalTo: topGuide.topAnchor, constant: 8.0).isActive = true
+        //        flashButton!.centerYAnchor.constraint(equalTo: topGuide.centerYAnchor).isActive = true
+        flashButton!.leadingAnchor.constraint(equalTo: topGuide.leadingAnchor, constant: 8.0).isActive = true
+        flashButton!.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
+        flashButton!.widthAnchor.constraint(equalToConstant: 44.0).isActive = true
+        
+        // Add button for front/back camera toggle.
+        cameraFlipButton = UIButton(type: .custom)
+        cameraFlipButton!.setImage(UIImage(named: "CamFlip"), for: .normal)
+        cameraFlipButton!.addTarget(self, action: #selector(reverseCamera), for: .touchUpInside)
+        cameraFlipButton!.tintColor = .white
+        cameraFlipButton!.translatesAutoresizingMaskIntoConstraints = false
+        topRow.addSubview(cameraFlipButton!)
+        cameraFlipButton!.topAnchor.constraint(equalTo: saGuide.topAnchor, constant: 8.0).isActive = true
+        //        cameraFlipButton!.centerYAnchor.constraint(equalTo: topGuide.centerYAnchor).isActive = true
+        cameraFlipButton!.trailingAnchor.constraint(equalTo: topGuide.trailingAnchor, constant: -8.0).isActive = true
+        cameraFlipButton!.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
+        cameraFlipButton!.widthAnchor.constraint(equalToConstant: 44.0).isActive = true
+        
+        // Add container view to hold the bottom row of buttons.
+        let bottomRow = UIView()
+        bottomRow.backgroundColor = .clear
+        bottomRow.translatesAutoresizingMaskIntoConstraints = false
+        mainOverlay.addSubview(bottomRow)
+        bottomRow.centerXAnchor.constraint(equalTo: saGuide.centerXAnchor).isActive = true
+        bottomRow.leadingAnchor.constraint(equalTo: saGuide.leadingAnchor).isActive = true
+        bottomRow.topAnchor.constraint(equalTo: saGuide.centerYAnchor).isActive = true
+        bottomRow.trailingAnchor.constraint(equalTo: saGuide.trailingAnchor).isActive = true
+        bottomRow.bottomAnchor.constraint(equalTo: saGuide.bottomAnchor).isActive = true
+        let bottomGuide = bottomRow.safeAreaLayoutGuide
+        
+        // Add camera shutter button.
+        let cameraButton = UIButton(type: .roundedRect)
+        cameraButton.setImage(UIImage(named: "CameraShutter"), for: .normal)
+        cameraButton.setImage(UIImage(named: "PressedCameraShutter"), for: .highlighted) // TODO: not triggering
+        cameraButton.tintColor = .white
+        cameraButton.addTarget(self, action: #selector(shutterPressed), for: .touchUpInside)
+        cameraButton.translatesAutoresizingMaskIntoConstraints = false
+        bottomRow.addSubview(cameraButton)
+        cameraButton.centerXAnchor.constraint(equalTo: bottomGuide.centerXAnchor).isActive = true
+        cameraButton.centerYAnchor.constraint(equalTo: bottomGuide.centerYAnchor).isActive = true
+        
+        // Add done button.
+        doneButton = UIButton(type: .custom)
+        doneButton!.setTitle("Done", for: .normal)
+        doneButton!.setTitleColor(.darkGray, for: .normal)
+        doneButton!.addTarget(self, action: #selector(photoCaptureFinished), for: .touchUpInside)
+        doneButton!.translatesAutoresizingMaskIntoConstraints = false
+        bottomRow.addSubview(doneButton!)
+        doneButton!.isEnabled = false
+        doneButton!.bottomAnchor.constraint(equalTo: bottomGuide.bottomAnchor, constant: -8.0).isActive = true
+        //        doneButton!.bottomAnchor.constraint(equalTo: bottomGuide.centerYAnchor).isActive = true
+        doneButton!.trailingAnchor.constraint(equalTo: bottomGuide.trailingAnchor, constant: -8.0).isActive = true
+        
+        // Add cancel button.
+        cameraCancelButton = UIButton(type: .custom)
+        cameraCancelButton!.setTitle("Cancel", for: .normal)
+        cameraCancelButton!.translatesAutoresizingMaskIntoConstraints = false
+        cameraCancelButton!.addTarget(self, action: #selector(cancelCamera), for: .touchUpInside)
+        bottomRow.addSubview(cameraCancelButton!)
+        cameraCancelButton!.bottomAnchor.constraint(equalTo: bottomGuide.bottomAnchor, constant: -8.0).isActive = true
+        //        cameraCancelButton!.centerYAnchor.constraint(equalTo: bottomGuide.centerYAnchor).isActive = true
+        cameraCancelButton!.leadingAnchor.constraint(equalTo: bottomGuide.leadingAnchor, constant: -8.0).isActive = true
+        
+        return mainOverlay
+    }
+    
+    // Converting photo captured by in-app camera to PhotoNote.
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        doneButton?.isEnabled = true
+        doneButton?.setTitleColor(.white, for: .normal)
+        
+        //        TODO: Use PHAsset instead of UIImage. cjm album fetch
+        //        let newAsset = info[UIImagePickerController.InfoKey.phAsset]
+        let newPhoto = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        //        let newPhotoData = newPhoto?.jpegData(compressionQuality: 1.0)
+        let newPhotoData = newPhoto?.pngData()
+        let thumbnail = getCenterMaxSquareImageByCroppingImage(newPhoto!, andShrinkToSize: CGSize(width: 120.0, height: 120.0))
+        
+        //cjm album fetch
+        let metaDic = info[UIImagePickerController.InfoKey.mediaMetadata]
+        #if DEBUG
+        print("metaDic == \(metaDic ?? "nil")")
+        #endif
+        
+        let dic: [String : Any?] = [ "newImage" : newPhotoData,
+                                     "newThumbnail" : thumbnail ]
+        
+        if pickerPhotos == nil {
+            pickerPhotos = []
+        }
+        pickerPhotos?.append(dic)
+    }
+    
+    func photoCaptureFinished() {
+        
+    }
     /*
-/Mass delete options
-- (IBAction)deleteSelcted:(id)sender {
-    //Delete photos without saving to Photos app
-    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete Photos Permanently" style:UIAlertActionStyleDefault handler:^(UIAlertAction *actionToDeletePermanently) {
-            NSMutableArray *doomedArray = [NSMutableArray new];
-            for (NSIndexPath *itemPath in self.selectedCells) {
-                CJMImage *doomedImage = [self.album.albumPhotos objectAtIndex:itemPath.row];
-                [doomedArray addObject:doomedImage];
-            }
-            [[CJMAlbumManager sharedInstance] albumWithName:self.album.albumTitle
-            deleteImages:doomedArray];
-            [[CJMAlbumManager sharedInstance] checkFavoriteCount];
-            [[CJMAlbumManager sharedInstance] save];
-            if (self.album.albumPhotos.count < 1) {
-                [self.navigationController popViewControllerAnimated:YES];
-            }
-            [self.collectionView deleteItemsAtIndexPaths:self.selectedCells];
-            [self toggleEditMode:self];
-            [self confirmEditButtonEnabled];
-            [self.collectionView performSelector:@selector(reloadData) withObject:nil afterDelay:0.4];
-    }];
+- (void)photoCaptureFinished { //cjm 01/12
+CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
+
+for (NSDictionary *dic in self.pickerPhotos) {
+NSData *newPhotoData = [dic valueForKey:@"newImage"];
+UIImage *thumbnail = [dic valueForKey:@"newThumbnail"];
+CJMImage *newImage = [[CJMImage alloc] init];
+
+[fileSerializer writeObject:newPhotoData toRelativePath:newImage.fileName];
+[fileSerializer writeImage:thumbnail toRelativePath:newImage.thumbnailFileName];
 
 
-UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *cancelAction) {} ];
+[newImage setInitialValuesForCJMImage:newImage inAlbum:self.album.albumTitle];
+newImage.photoCreationDate = [NSDate date];
+newImage.thumbnailNeedsRedraw = NO;
+[self.album addCJMImage:newImage];
+}
+self.flashButton = nil;
+self.capturedPhotos = nil;
+self.cameraCancelButton = nil;
+self.cameraFlipButton = nil;
+self.doneButton = nil;
+self.imagePicker = nil;
+self.pickerPhotos = nil;
+[NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+[self dismissViewControllerAnimated:YES completion:nil];
 
-//    [alertController addAction:saveThenDeleteAction];
-[alertController addAction:deleteAction];
-[alertController addAction:cancel];
-
-alertController.popoverPresentationController.barButtonItem = self.deleteButton;
-alertController.popoverPresentationController.sourceView = self.view;
-[alertController.popoverPresentationController setPermittedArrowDirections:UIPopoverArrowDirectionDown];
-
-[self presentViewController:alertController animated:YES completion:nil];
+[[CJMAlbumManager sharedInstance] save];
 }
  */
     
@@ -463,6 +796,4 @@ alertController.popoverPresentationController.sourceView = self.view;
         
         return newImage!
     }
-    
-
 }
