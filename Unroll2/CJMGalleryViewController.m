@@ -810,7 +810,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
     [self.pickerPhotos addObject:dic];
 }
-
+// func photoCaptureFinished() {
 - (void)photoCaptureFinished { //cjm 01/12
     CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
     
@@ -840,12 +840,12 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     
     [[CJMAlbumManager sharedInstance] save];
 }
-
+// func shutterPressed() {
 - (void)shutterPressed { //cjm 01/12
     NSLog(@"TAKE THE PICTURE");
     [self.imagePicker takePicture];
 }
-
+// func updateFlashMode() {
 - (void)updateFlashMode {
     if (self.imagePicker.cameraFlashMode == UIImagePickerControllerCameraFlashModeOff) {
         [self.imagePicker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOn];
@@ -855,7 +855,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         [self.flashButton setImage:[UIImage imageNamed:@"FlashOff"] forState:UIControlStateNormal];
     }
 }
-
+// func reverseCamera() {
 - (void)reverseCamera {
     if (self.imagePicker.cameraDevice == UIImagePickerControllerCameraDeviceRear) {
         self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
@@ -863,7 +863,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
         self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
     }
 }
-
+// func cancelCamera() {
 - (void)cancelCamera { //cjm 01/12
     self.pickerPhotos = nil;
     self.imagePicker = nil;

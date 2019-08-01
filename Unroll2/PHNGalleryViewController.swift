@@ -729,40 +729,71 @@ class PHNGalleryViewController: UICollectionViewController, PHNPhotoGrabCompleti
     }
     
     func photoCaptureFinished() {
+        let serializer = PHNFileSerializer()
         
+        guard pickerPhotos != nil else {
+            // TODO some alert saying pickerPhotos is empty, followed by cleanup, and return.
+        }
+        for dic in pickerPhotos! {
+            let newPhotoData = dic["newImage"]! as! Data
+            let thumbnail = dic["newThumbnail"]! as! UIImage
+            let newPhotoNote = PhotoNote()
+            
+            serializer.writeObject(newPhotoData, toRelativePath: newPhotoNote.fileName)
+            serializer.writeImage(thumbnail, toRelativePath: newPhotoNote.thumbnailFileName)
+            
+            newPhotoNote.setInitialValuesWithAlbum(album.albumTitle)
+            newPhotoNote.photoCreationDate = Date()
+            newPhotoNote.thumbnailNeedsRedraw = false
+            album.add(newPhotoNote)
+        }
+        
+        flashButton = nil
+        capturedPhotos = nil
+        cameraCancelButton = nil
+        cameraFlipButton = nil
+        doneButton = nil
+        imagePicker = nil
+        pickerPhotos = nil
+        NotificationCenter.default.removeObserver( self,
+                                             name: UIDevice.orientationDidChangeNotification,
+                                           object: nil)
+        dismiss(animated: true, completion: nil)
+        PHNAlbumManager.sharedInstance.save()
     }
-    /*
-- (void)photoCaptureFinished { //cjm 01/12
-CJMFileSerializer *fileSerializer = [[CJMFileSerializer alloc] init];
-
-for (NSDictionary *dic in self.pickerPhotos) {
-NSData *newPhotoData = [dic valueForKey:@"newImage"];
-UIImage *thumbnail = [dic valueForKey:@"newThumbnail"];
-CJMImage *newImage = [[CJMImage alloc] init];
-
-[fileSerializer writeObject:newPhotoData toRelativePath:newImage.fileName];
-[fileSerializer writeImage:thumbnail toRelativePath:newImage.thumbnailFileName];
-
-
-[newImage setInitialValuesForCJMImage:newImage inAlbum:self.album.albumTitle];
-newImage.photoCreationDate = [NSDate date];
-newImage.thumbnailNeedsRedraw = NO;
-[self.album addCJMImage:newImage];
-}
-self.flashButton = nil;
-self.capturedPhotos = nil;
-self.cameraCancelButton = nil;
-self.cameraFlipButton = nil;
-self.doneButton = nil;
-self.imagePicker = nil;
-self.pickerPhotos = nil;
-[NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-[self dismissViewControllerAnimated:YES completion:nil];
-
-[[CJMAlbumManager sharedInstance] save];
-}
- */
     
+    func shutterPressed() {
+        #if DEBUG
+        print("SHUTTER PRESSED")
+        #endif
+        imagePicker?.takePicture()
+    }
+    
+    func updateFlashMode() {
+        if imagePicker?.cameraFlashMode == .off {
+            imagePicker?.cameraFlashMode = .on
+            flashButton?.setImage(UIImage(named: "FlashOn"), for: .normal)
+        } else {
+            imagePicker?.cameraFlashMode = .off
+            flashButton?.setImage(UIImage(named: "FlashOff"), for: .normal)
+        }
+    }
+    
+    func reverseCamera() {
+        if imagePicker?.cameraDevice == .rear {
+            imagePicker?.cameraDevice = .front
+        } else {
+            imagePicker?.cameraDevice = .rear
+        }
+    }
+    
+    func cancelCamera() {
+        pickerPhotos = nil
+        imagePicker = nil
+        dismiss(animated: true, completion: nil)
+    }
+    
+    //MARK: - New Photo Note Prep
     
     // Holy Grail of of thumbnail creation.  Well... Holy Dixie Cup may be more appropriate.
     /// Takes full UIImage and compresses to thumbnail with size ~100KB.
@@ -796,4 +827,17 @@ self.pickerPhotos = nil;
         
         return newImage!
     }
+    
+    //MARK: - PHNPhotoGrabDelegate
+    
+    func photoGrabSceneDidCancel() {
+        
+    }
+    /*
+     #pragma mark - PHNPhotoGrabDelegate Delegate
+     
+     - (void)photoGrabSceneDidCancel {
+     [self dismissViewControllerAnimated:YES completion:nil];
+     }
+*/
 }

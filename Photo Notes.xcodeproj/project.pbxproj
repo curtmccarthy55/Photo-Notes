@@ -31,6 +31,7 @@
 		755558CA203240B3005A9478 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C8203240B2005A9478 /* Fabric.framework */; };
 		755558CB203240B3005A9478 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C9203240B3005A9478 /* Crashlytics.framework */; };
 		758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 758F55181E22AAC40023F869 /* IconStoryboard.storyboard */; };
+		75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */; };
 		75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */; };
 		840852A61B5DA49E00664849 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 840852A51B5DA49E00664849 /* no_image.jpg */; };
 		84A769571ADAE39F00DE6741 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769561ADAE39F00DE6741 /* main.m */; };
@@ -84,6 +85,7 @@
 		755558C9203240B3005A9478 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
 		758F55181E22AAC40023F869 /* IconStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IconStoryboard.storyboard; sourceTree = "<group>"; };
 		75A1E4322180E7FE00F740C1 /* CJMAListTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CJMAListTableViewCell.h; sourceTree = "<group>"; };
+		75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNImportAlbumsViewController.swift; sourceTree = "<group>"; };
 		75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMSettingsViewController.h; sourceTree = "<group>"; };
 		75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMSettingsViewController.m; sourceTree = "<group>"; };
 		75EF2D431DF7361400557EDA /* CJMPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPopoverViewController.h; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 		751497D72176904B001E6D52 /* Image Import */ = {
 			isa = PBXGroup;
 			children = (
+				75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */,
 				751497DC217FD894001E6D52 /* PHNPhotoGrabCompletionDelegate.h */,
 				751497D821769137001E6D52 /* PHNImportAlbumsVC.h */,
 				751497D921769137001E6D52 /* PHNImportAlbumsVC.m */,
@@ -463,6 +466,7 @@
 				752A624F22E0E0B900E4A84D /* PHNFullImageViewController.swift in Sources */,
 				84C2B9471ADC51280034786C /* CJMADetailViewController.m in Sources */,
 				751AE8B822D7CB75007CF2FE /* PHNGalleryViewController.swift in Sources */,
+				75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */,
 				7540EA9022C67EEB0000D60E /* PhotoNote.swift in Sources */,
 				7540EA9822CC172E0000D60E /* PHNServices.swift in Sources */,
 				752A624B22DD27F800E4A84D /* PHNPageImageViewController.swift in Sources */,

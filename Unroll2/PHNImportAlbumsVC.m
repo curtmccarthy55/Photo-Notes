@@ -79,17 +79,17 @@ typedef enum {
     [self.navigationController.navigationBar setBarTintColor:self.userColor];
     [self.navigationController.toolbar setBarTintColor:self.userColor];
 }
-
+// func cancelPressed() {
 - (void)cancelPressed {
     [self.delegate photoGrabSceneDidCancel];
 }
 
 #pragma mark - Table view data source
-
+// override func numberOfSections(in tableView: UITableView) -> Int {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
 }
-
+// override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0:
