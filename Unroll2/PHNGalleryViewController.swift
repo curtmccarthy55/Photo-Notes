@@ -831,7 +831,7 @@ class PHNGalleryViewController: UICollectionViewController, PHNPhotoGrabCompleti
     //MARK: - PHNPhotoGrabDelegate
     
     func photoGrabSceneDidCancel() {
-        
+        dismiss(animated: true, completion: nil)
     }
     /*
      #pragma mark - PHNPhotoGrabDelegate Delegate

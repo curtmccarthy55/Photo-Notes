@@ -114,50 +114,92 @@ class PHNImportAlbumsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        let cell = tableView.dequeueReusableCell(withIdentifier: CELL_IDENTIFIER, for: indexPath) as! PHNAlbumListTableViewCell
+        
+        var asset: PHAsset?
+        if indexPath.section == 0 {
+            #if DEBUG
+            print("Should be showing All Photos cell")
+            #endif
+            cell.configureWithTitle("All Photos", count: (allPhotos?.count ?? 0))
+            asset = allPhotos?.lastObject
+        } else if indexPath.section == 1 {
+            let assetCollection = smartAlbums?[indexPath.row]
+            let result = PHAsset.fetchAssets(in: assetCollection!, options: ascendingOptions)
+            asset = result.lastObject
+            
+            cell.configureWithTitle(assetCollection!.localizedTitle!, count: result.count)
+        } else if indexPath.section == 2 {
+            let collection = userCollections![indexPath.row]
+            if collection is PHAssetCollection {
+                let assetCollection = collection as! PHAssetCollection
+                let result = PHAsset.fetchAssets(in: assetCollection, options: ascendingOptions)
+                asset = result.lastObject
+                
+                cell.configureWithTitle(assetCollection.localizedTitle!, count: result.count)
+            } else if collection is PHCollectionList {
+                // TODO
+            }
+        }
+        imageManager.requestImage(for: asset!, targetSize: cell.frame.size, contentMode: .aspectFill, options: nil) { (result, info) in
+            if result != nil {
+                cell.cellThumbnail.image = result
+            } else {
+                cell.cellThumbnail.image = UIImage(named: "NoImage")
+            }
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sectionLocalizedTitles![section]
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as? UITableViewHeaderFooterView
+        header?.textLabel?.textColor = .white
+        header?.backgroundColor = .clear
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedIndex = indexPath
+        performSegue(withIdentifier: SEGUE_IDENTIFIER, sender: nil)
+    }
+    
+    //MARK: - Navigation
+    
+    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! PHNPhotoGrabViewController
+        vc.delgate = delegate
+        vc.userColor = userColor
+        vc.userColorTag = userColorTag
+        vc.singleSelection = singleSelection
+        
+        if selectedIndex.section == 0 {
+            #if DEBUG
+            print("should be showing All Photos cell")
+            #endif
+            vc.fetchResult = allPhotos
+            vc.title = "All Photos"
+        } else if selectedIndex.section == 1 {
+            let assetCollection = smartAlbums![selectedIndex!.row]
+            let result = PHAsset.fetchAssets(in: assetCollection, options: ascendingOptions)
+            vc.fetchResult = result
+            vc.title = assetCollection.localizedTitle!
+        } else if selectedIndex.section == 2 {
+            let collection = userCollections![selectedIndex!.row]
+            if collection is PHAssetCollection {
+                let assetCollection = collection as! PHAssetCollection
+                let result = PHAsset.fetchAssets(in: assetCollection, options: ascendingOptions)
+                vc.fetchREsult = result
+                vc.title = assetCollection.localizedTitle!
+            } else if collection is PHCollectionList {
+                // TODO
+            }
+        }
     }
     /*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CJMAListTableViewCell *cell = (CJMAListTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CJMAListCellIdentifier forIndexPath:indexPath];
-
-    PHAsset *asset;
-    if (indexPath.section == 0) {
-        NSLog(@"should be showing All Photos cell");
-        [cell configureWithTitle:@"All Photos" withAlbumCount:(int)self.allPhotos.count];
-        asset = self.allPhotos.lastObject;
-    } else if (indexPath.section == 1) {
-        PHAssetCollection *assetCollection = self.smartAlbums[indexPath.row];
-        PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:self.ascendingOptions];
-        asset = result.lastObject;
-
-        [cell configureWithTitle:assetCollection.localizedTitle withAlbumCount:(int)result.count];
-    } else if (indexPath.section == 2) {
-        PHCollection *collection = self.userCollections[indexPath.row];
-        if ([collection isKindOfClass:[PHAssetCollection class]]) {
-            PHAssetCollection *assetCollection = (PHAssetCollection *)collection;
-            PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:self.ascendingOptions];
-            asset = result.lastObject;
-
-            [cell configureWithTitle:assetCollection.localizedTitle withAlbumCount:(int)result.count];
-        } else if ([collection isKindOfClass:[PHCollectionList class]]) {
-
-        }
-    }
-
-    [self.imageManager requestImageForAsset:asset
-    targetSize:cell.frame.size
-    contentMode:PHImageContentModeAspectFill
-    options:nil
-    resultHandler:^(UIImage *result, NSDictionary *info) {
-        if (result != nil) {
-            cell.cellThumbnail.image = result;
-        } else {
-            cell.cellThumbnail.image = [UIImage imageNamed:@"NoImage"];
-        }
-    }];
-
-    return cell;
-}
+     
  */
     
 

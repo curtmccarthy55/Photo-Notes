@@ -104,7 +104,7 @@ typedef enum {
     }
 }
 
-
+// override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CJMAListTableViewCell *cell = (CJMAListTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CJMAListCellIdentifier forIndexPath:indexPath];
     
@@ -146,24 +146,24 @@ typedef enum {
     
     return cell;
 }
-
+// func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return self.sectionLocalizedTitles[section];
 }
-
+// func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     [header.textLabel setTextColor:UIColor.whiteColor];
     header.backgroundColor = UIColor.clearColor;
 }
-
+// func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.selectedIndex = indexPath;
     [self performSegueWithIdentifier:SEGUE_IDENTIFIER sender:nil];
 }
 
 #pragma mark - Navigation
-
+// func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender { //cjm album fetch
     CJMPhotoGrabViewController *vc = (CJMPhotoGrabViewController *)segue.destinationViewController;
     vc.delegate = self.delegate;

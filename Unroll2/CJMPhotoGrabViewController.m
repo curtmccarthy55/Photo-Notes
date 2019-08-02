@@ -24,7 +24,7 @@
 @implementation CJMPhotoGrabViewController
 
 static NSString * const reuseIdentifier = @"GrabCell";
-
+// override func viewDidLoad() {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -85,14 +85,14 @@ static NSString * const reuseIdentifier = @"GrabCell";
 }
 
 #pragma mark - collection view data source
-
+// func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     NSInteger count = [self.fetchResult count];
     return count;
 }
 
-
+// func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMGrabCell *cell = (CJMGrabCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
@@ -121,7 +121,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
     return cell;
 }
 
-
+// func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMGrabCell *selectedCell = (CJMGrabCell *)[collectionView cellForItemAtIndexPath:indexPath];
@@ -130,7 +130,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
         self.navigationItem.rightBarButtonItem.enabled = YES;
     }
 }
-
+// func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CJMGrabCell *selectedCell = (CJMGrabCell *)[collectionView cellForItemAtIndexPath:indexPath];
@@ -141,12 +141,12 @@ static NSString * const reuseIdentifier = @"GrabCell";
 }
 
 #pragma mark - Actions
-
+// func cancelPressed() {
 - (void)cancelPressed
 {
     [self.delegate photoGrabSceneDidCancel];
 }
-
+// func donePressed() {
 - (void)donePressed
 {
     CJMHudView *hudView = [CJMHudView hudInView:self.view withType:@"Pending" animated:YES];
@@ -165,7 +165,7 @@ static NSString * const reuseIdentifier = @"GrabCell";
 }
 
 #pragma mark UICollectionViewFlowLayoutDelegate
-
+// func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
@@ -178,13 +178,14 @@ static NSString * const reuseIdentifier = @"GrabCell";
         return CGSizeMake(cellWidth, cellWidth);
     }
 }
-
+// func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(1, 1, 1, 1);
 }
 
 //resizes collectionView cells per sizeForItemAtIndexPath when user rotates device.
+// func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
