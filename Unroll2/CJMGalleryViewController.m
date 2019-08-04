@@ -125,7 +125,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     self.newCellSize = (saWidth - (cellsPerRow + 1.0)/* * cellSpacing*/) / cellsPerRow;
     NSLog(@"photoCellForWidth newCellSize == %f", self.newCellSize);
 }
-
+// override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator { //cjm cellSize
     NSLog(@"viewWillTransitionToSize size.width == %f, size.height == %f", size.width, size.height);
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
@@ -156,8 +156,8 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     [super didReceiveMemoryWarning];
 }
 
-// override func viewWillDisappear(_ animated: Bool) {
 //If any cells are selected when exiting the gallery, set their cellSelectCover property back to hidden.
+// override func viewWillDisappear(_ animated: Bool) {
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -285,7 +285,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 #pragma mark - NavBar items
-// @IBAction func toggleEditAction() {
+// @IBAction func toggleEditMode() {
 - (IBAction)toggleEditMode:(id)sender {
     if ([self.editButton.title isEqualToString:@"Select"]) {
         [self.editButton setTitle:@"Cancel"];
@@ -907,12 +907,13 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 }
 
 #pragma mark - PHNPhotoGrabDelegate Delegate
-
+// func photoGrabSceneDidCancel() {
 - (void)photoGrabSceneDidCancel {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 //iterate through array of selected photos, convert them to CJMImages, and add to the current album.
+// func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset]) {
 - (void)photoGrabSceneDidFinishSelectingPhotos:(NSArray *)photos {
     NSMutableArray *newImages = [[NSMutableArray alloc] init]; //Will hold the images, image creation dates, and image locations from each PHAsset in the received array.
     
@@ -995,12 +996,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 #pragma mark - CJMAListPicker Delegate
 
 //Dismiss list of albums to transfer photos to and deselect previously selected photos.
+// func albumPickerViewControllerDidCancel(_ controller: PHNAlbumPickerViewController) {
 - (void)aListPickerViewControllerDidCancel:(CJMAListPickerViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self toggleEditMode:self];
 }
 
 //take CJMImages in selected cells in current album and transfer them to the picked album.
+// func albumPickerViewController(_ controller: PHNAlbumPickerViewController, didFinishPicking album: PHNPhotoAlbum) {
 - (void)aListPickerViewController:(CJMAListPickerViewController *)controller didFinishPickingAlbum:(CJMPhotoAlbum *)album {
     NSMutableArray *transferringImages = [NSMutableArray new];
     
@@ -1050,6 +1053,7 @@ static NSString * const reuseIdentifier = @"GalleryCell";
 #pragma mark - collectionViewFlowLayout Delegate
 
 //Establishes cell size based on device screen size.  4 cells across in portrait, 5 cells across in landscape.
+// func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 { //cjm cellSize
     if (self.newCellSize == 0.0) {
@@ -1058,13 +1062,14 @@ static NSString * const reuseIdentifier = @"GalleryCell";
     }
     return CGSizeMake(self.newCellSize, self.newCellSize);
 }
-
+// func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(1, 1, 1, 1);
 }
 
 //resizes collectionView cells per sizeForItemAtIndexPath when user rotates device.
+// func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     [self.collectionView.collectionViewLayout invalidateLayout];

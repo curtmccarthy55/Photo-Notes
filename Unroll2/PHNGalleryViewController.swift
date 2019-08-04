@@ -13,7 +13,7 @@ private let reuseIdentifier = "GalleryCell"
 
 private let SEGUE_VIEW_PHOTO = "ViewPhoto"
 
-class PHNGalleryViewController: UICollectionViewController, PHNPhotoGrabCompletionDelegate, PHNAListPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class PHNGalleryViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, PHNPhotoGrabCompletionDelegate, PHNAlbumPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var album: PHNPhotoAlbum {
         didSet { navigationItem.title = album.albumTitle }
     }
@@ -240,7 +240,7 @@ class PHNGalleryViewController: UICollectionViewController, PHNPhotoGrabCompleti
     
     //MARK: - NavBar Items
     
-    @IBAction func toggleEditAction() {
+    @IBAction func toggleEditMode() {
         if editButton.title == "Select" {
             editButton.title = "Cancel"
             editMode = true
@@ -395,7 +395,7 @@ class PHNGalleryViewController: UICollectionViewController, PHNPhotoGrabCompleti
                 self.navigationController?.popViewController(animated: true)
             }
             self.collectionView.deleteItems(at: self.selectedCells!)
-            self.toggleEditAction()
+            self.toggleEditMode()
             self.confirmEditButtonEnabled()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
                 self.collectionView.reloadData()
@@ -833,11 +833,144 @@ class PHNGalleryViewController: UICollectionViewController, PHNPhotoGrabCompleti
     func photoGrabSceneDidCancel() {
         dismiss(animated: true, completion: nil)
     }
-    /*
-     #pragma mark - PHNPhotoGrabDelegate Delegate
-     
-     - (void)photoGrabSceneDidCancel {
-     [self dismissViewControllerAnimated:YES completion:nil];
-     }
-*/
+    
+    /// Iterate through array of selected photos, convert them to CJMImages, and add to the current album.
+    func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset]) {
+        var newImages = [PhotoNote]()
+        let fileSerializer = PHNFileSerializer()
+        if imageManager == nil { imageManager = PHCachingImageManager() }
+        
+        let imageLoadGroup = DispatchGroup()
+        for asset in photos {
+            let assetImage = PhotoNote()
+            
+            let options = PHImageRequestOptions()
+            options.isNetworkAccessAllowed = true
+            options.version = .current
+            
+            imageLoadGroup.enter()
+            autoreleasepool(invoking: {
+                imageManager!.requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) in
+                    if let cInfo = info,
+                        let degraded = cInfo[PHImageResultIsDegradedKey] as? Bool,
+                        !degraded {
+                        fileSerializer.writeObject(imageData, toRelativePath: assetImage.fileName)
+                        //                        imageLoadGroup.leave()
+                    }
+                    imageLoadGroup.leave()
+                })
+            })
+            
+            imageLoadGroup.enter()
+            autoreleasepool(invoking: {
+                imageManager!.requestImage(for: asset, targetSize: CGSize(width: 120.0, height: 120.0), contentMode: .aspectFill, options: options, resultHandler: { (result, info) in
+                    if let cResult = result,
+                        let cInfo = info,
+                        let degraded = cInfo[PHImageResultIsDegradedKey] as? Bool,
+                        !degraded {
+                        fileSerializer.writeImage(cResult, toRelativePath: assetImage.thumbnailFileName)
+                        assetImage.thumbnailNeedsRedraw = false
+                        
+                        //                        imageLoadGroup.leave()
+                    }
+                    imageLoadGroup.leave()
+                })
+            })
+            assetImage.setInitialValuesWithAlbum(album.albumTitle)
+            assetImage.photoCreationDate = asset.creationDate
+            
+            newImages.append(assetImage)
+        }
+        
+        album.addMultiple(newImages)
+        
+        imageLoadGroup.notify(queue: .main) { [weak self] in
+            self?.navigationController?.view.isUserInteractionEnabled = true
+            self?.collectionView.reloadData()
+            self?.dismiss(animated: true, completion: nil)
+            PHNAlbumManager.sharedInstance.save()
+            self?.navigationController?.view.isUserInteractionEnabled = true // TODO why repeat call?
+        }
+    }
+    
+    //MAKR: - PHNAlbumPicker Delegate
+    
+    // Dismiss list of albums to transfer photos to and deselect previously selected photos.
+    func albumPickerViewControllerDidCancel(_ controller: PHNAlbumPickerViewController) {
+        dismiss(animated: true, completion: nil)
+        toggleEditMode()
+    }
+    
+    func albumPickerViewController(_ controller: PHNAlbumPickerViewController, didFinishPicking album: PHNPhotoAlbum) {
+        guard selectedCells != nil else {
+            //error message about no selections and return
+            #if DEBUG
+            print("selectedCells == nil")
+            #endif
+            return
+        }
+        var transferringImages = [PhotoNote]()
+        
+        for indexPath in selectedCells! {
+            let imageToTranser = album.albumPhotos[indexPath.row]
+            imageToTranser.selectCoverHidden = true
+            if imageToTranser.isAlbumPreview == true {
+                imageToTranser.isAlbumPreview = false
+                album.albumPreviewImage = nil
+            }
+            transferringImages.append(imageToTranser)
+        }
+        
+        album.addMultiple(transferringImages)
+        
+        var indexSet = IndexSet()
+        for indexPath in selectedCells! {
+            indexSet.insert(indexPath.row)
+        }
+        album.removeAtIndices(indexSet)
+        
+        if album.albumPreviewImage == nil && album.albumPhotos.count > 0 {
+            PHNAlbumManager.sharedInstance.albumWithName(album.albumTitle, createPreviewFromImage: album.albumPhotos[0])
+        }
+        
+        PHNAlbumManager.sharedInstance.save()
+        if album.albumPhotos.count < 1 {
+            navigationController?.popViewController(animated: true)
+        }
+        collectionView.deleteItems(at: selectedCells!)
+        toggleEditMode()
+        collectionView.reloadData()
+        dismiss(animated: true, completion: nil)
+        confirmEditButtonEnabled()
+        
+        // Present and dismiss HUD, confirming action complete.
+        let hudView = PHNHudView.hud(inView: navigationController!.view, withType: "Success", animated: true)
+        hudView.text = "Done!"
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { [weak self] in
+            hudView.removeFromSuperview()
+            collectionView.reloadData()
+            self?.navigationController?.view.isUserInteractionEnabled = true
+        })
+    }
+    
+    //MARK: - CollectionViewFlowLayout Delegate
+    
+    // Establishes cell size based on device screen size.  4 cells across in portrait, 5 cells across in landscape.
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if newCellSize == 0.0 {
+            let cvSize = collectionView.safeAreaLayoutGuide.layoutFrame.size.width
+            photoCellForWidth(cvSize)
+        }
+        return CGSize(width: newCellSize!, height: newCellSize!)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
+    }
+    
+    // Resizes collectionView cells per sizeForItemAtIndexPath when user rotates device.
+    func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+        super.willRotate(to: toInterfaceOrientation, duration: duration)
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
 }

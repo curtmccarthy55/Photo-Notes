@@ -43,8 +43,6 @@
 		84A769711ADAE3A000DE6741 /* Unroll2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769701ADAE3A000DE6741 /* Unroll2Tests.m */; };
 		84C2B9301ADB022E0034786C /* CJMAListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B92F1ADB022E0034786C /* CJMAListViewController.m */; };
 		84C2B9471ADC51280034786C /* CJMADetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9461ADC51280034786C /* CJMADetailViewController.m */; };
-		84C2B94A1ADCBB420034786C /* CJMGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9491ADCBB420034786C /* CJMGalleryViewController.m */; };
-		84C2B9951AE42E040034786C /* CJMPhotoGrabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */; };
 		84C2B9981AE441CE0034786C /* CJMPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9971AE441CE0034786C /* CJMPhotoCell.m */; };
 		84F1FDB21AEF21A60092D424 /* CJMGrabCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1FDB11AEF21A60092D424 /* CJMGrabCell.m */; };
 /* End PBXBuildFile section */
@@ -460,9 +458,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84C2B9951AE42E040034786C /* CJMPhotoGrabViewController.m in Sources */,
 				84F1FDB21AEF21A60092D424 /* CJMGrabCell.m in Sources */,
-				84C2B94A1ADCBB420034786C /* CJMGalleryViewController.m in Sources */,
 				7540EA8E22C67CE60000D60E /* PHNAlbumsTableViewController.swift in Sources */,
 				75D6433F22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift in Sources */,
 				75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */,
