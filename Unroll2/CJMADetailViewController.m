@@ -23,7 +23,7 @@
     //cjm SourceTree test
     
 }
-
+// override func viewDidLoad() {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -31,7 +31,7 @@
     gestureRecognizer.cancelsTouchesInView = NO;
     [self.tableView addGestureRecognizer:gestureRecognizer];
 }
-
+// override func viewWillAppear(_ animated: Bool) {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
@@ -70,7 +70,7 @@
     backgroundView.contentMode = UIViewContentModeScaleAspectFill;
     [self.tableView setBackgroundView:backgroundView];
 }
-
+// override func viewDidAppear(_ animated: Bool) {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:YES];
     [self.nameField becomeFirstResponder];
@@ -81,13 +81,13 @@
 }
 
 #pragma mark - NavBar Button Actions
-
+// @objc func cancelPressed() {
 - (void)cancelPressed {
     [self.nameField resignFirstResponder];
     [self.noteField resignFirstResponder];
     [self.delegate albumDetailViewControllerDidCancel:self];
 }
-
+// @objc func donePressed() {
 - (void)donePressed {
     if (!self.albumToEdit) {
         NSString *name = self.nameField.text;
@@ -118,7 +118,7 @@
 //        }
     }
 }
-
+// func confirmNameNonDuplicate(_ name: String) -> Bool {
 - (BOOL)confirmNameNonDuplicate:(NSString *)name {//prevent the user from making an album with the same name as another album or using "Favorites"
     if ([name isEqualToString:@"Favorites"]) {
         UIAlertController *favoritesAlert = [UIAlertController alertControllerWithTitle:@"Cannot Use \"Favorites\"" message:@"The album name \"Favorites\" is reserved for when you favorite existing Photo Notes." preferredStyle:UIAlertControllerStyleAlert];
@@ -142,7 +142,7 @@
 }
 
 #pragma mark - keyboard dismissal
-
+// @objc func hideKeyboard(_ gestureRecognizer: UIGestureRecognizer) {
 - (void)hideKeyboard:(UIGestureRecognizer *)gestureRecognizer
 {
     CGPoint point = [gestureRecognizer locationInView:self.tableView];
@@ -158,7 +158,7 @@
         [self.nameField resignFirstResponder];
     }
 }
-
+// func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self.noteField becomeFirstResponder];
@@ -166,19 +166,19 @@
 }
 
 #pragma mark - tableView data source
-
+// override func numberOfSections(in tableView: UITableView) -> Int {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 2;
 }
-
+// override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 1;
 }
 
 #pragma mark - tableView delegate
-
+// func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -189,14 +189,14 @@
         //cjm 12/13
     }
 }
-
+// func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return nil;
 }
 
 #pragma mark - textView delegate
-
+// func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     NSString *currentTitleText = [self.nameField.text stringByReplacingCharactersInRange:range

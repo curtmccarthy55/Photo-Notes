@@ -16,7 +16,7 @@ open class CJMAListViewController : UITableViewController, CJMADetailViewControl
 }
  */
 
-class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControllerDelegate, CJMFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, PHNPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHNAlbumPickerDelegate {
+class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewControllerDelegate, PHNFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, PHNPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHNAlbumPickerDelegate {
     
 //    #define CJMAListCellIdentifier @"AlbumCell"
     private let PHNAlbumsCellIdentifier = "AlbumCell"
@@ -106,8 +106,8 @@ class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControl
         navigationController?.toolbar.tintColor = userColor
     }
     
-    func noAlbumsPopUp() { //If there are no albums, prompt the user to create one after a delay.
-        
+    //If there are no albums, prompt the user to create one after a delay.
+    func noAlbumsPopUp() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             if PHNAlbumManager.sharedInstance.allAlbums.count == 0 {
                 self?.navigationItem.prompt = "Tap + below to create a new Photo Notes album."
@@ -796,58 +796,77 @@ class PHNAlbumsTableViewController: UITableViewController, CJMADetailViewControl
             let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
             let sentAbum = PHNAlbumManager.sharedInstance.allAlbums[indexPath!.row]
             let navVC = segue.destination as! UINavigationController
-            let detailVC = navVC.viewControllers[0] as! PHNADetailViewController
+            let detailVC = navVC.viewControllers[0] as! PHNAlbumDetailViewController
             detailVC.albumToEdit = sentAlbum
             detailVC.title = "Album Info"
             detailVC.delegate = self
             detailVC.userColor = userColor
             detailVC.userColorTag = userColorTag
         case SEGUE_ADD_ALBUM:
-            
+            let navVC = segue.destination as! UINavigationController
+            let detailVC = navVC.viewControllers[0] as! PHNAlbumDetailViewController
+            detailVC.delegate = self
+            detailVC.title = "Create Album"
+            detailVC.userColor = userColor
+            detailVC.userColorTag = userColorTag
         case SEGUE_QUICK_NOTE:
-            
-        case SEGUE_VIEW_SETTINGS:
-            
+            let album = PHNAlbumManager.sharedInstance.userQuickNote
+            let navVC = segue.destination as! UINavigationController
+            let vc = navVC.viewControllers[0] as! PHNFullImageViewController
+            vc.delegate = self
+            vc.index = 0
+            vc.albumName = album.albumTitle
+            vc.isQuickNote = true
+            vc.userColor = userColor
+            vc.userColorTag = userColorTag
+            vc.barsVisible = true
+            let numOpac = UserDefaults.standard.value(forKey: "noteOpacity") as? NSNumber
+            vc.noteOpacity = (numOpac != nil) ? numOpac!.floatValue : 0.75
+//        case SEGUE_VIEW_SETTINGS:
         default:
             print("PHNAlbumsTableViewController performing segue with identifier: \(identifier)")
         }
     }
-    /*
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    } else if ([segue.identifier isEqualToString:@"EditAlbum"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        CJMPhotoAlbum *sentAlbum = [[[CJMAlbumManager sharedInstance] allAlbums] objectAtIndex:indexPath.row];
-        UINavigationController *navigationController = segue.destinationViewController;
-        CJMADetailViewController *detailVC = (CJMADetailViewController *)navigationController.viewControllers[0];
-        detailVC.albumToEdit = sentAlbum;
-        detailVC.title = @"Album Info";
-        detailVC.delegate = self;
-        detailVC.userColor = self.userColor;
-        detailVC.userColorTag = self.userColorTag;
-    } else if ([segue.identifier isEqualToString:@"AddAlbum"]) {
-        UINavigationController *navigationController = segue.destinationViewController;
-        CJMADetailViewController *detailVC = navigationController.viewControllers[0];
-        detailVC.title = @"Create Album";
-        detailVC.delegate = self;
-        detailVC.userColor = self.userColor;
-        detailVC.userColorTag = self.userColorTag;
-    } else if ([segue.identifier isEqualToString:@"ViewQuickNote"]) {
-        CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance] userQuickNote];
-        UINavigationController *nav = segue.destinationViewController;
-        CJMFullImageViewController *vc = nav.viewControllers[0];
-        vc.index = 0;
-        vc.albumName = album.albumTitle;
-        vc.delegate = self;
-        vc.isQuickNote = YES;
-        vc.userColor = self.userColor;
-        vc.userColorTag = self.userColorTag;
-        vc.barsVisible = YES;
-        NSNumber *numOpac = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
-        vc.noteOpacity = numOpac ? numOpac.floatValue : 0.75;
-    } else if ([segue.identifier isEqualToString:@"ViewSettings"]) {
-        //cjm quicknote
+    
+    //MARK: - DetailViewController Delegate
+    
+    func albumDetailViewControllerDidCancel(_ controller: PHNAlbumDetailViewController) {
+        dismiss(animated: true, completion: nil)
     }
-}
- */
+    
+    func albumDetailViewController(_ controller: PHNAlbumDetailViewController, didFinishAddingAlbum album: PHNPhotoAlbum) {
+        let newRowIndex = PHNAlbumManager.sharedInstance.allAlbums.count
+        
+        PHNAlbumManager.sharedInstance.addAlbum(album)
+        
+        let indexPath = IndexPath(row: newRowIndex, section: 0)
+        let indexPaths = [indexPath]
+        tableView.insertRows(at: indexPaths, with: .automatic)
+        
+        PHNAlbumManager.sharedInstance.save()
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func albumDetailViewController(_ controller: PHNAlbumDetailViewController, didFinishEditingAlbum album: PHNPhotoAlbum) {
+        tableView.reloadData()
+        PHNAlbumManager.sharedInstance.save()
+        dismiss(animated: true, completion: nil)
+    }
+    
+    //MARK: - Popover Delegate
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
+    }
+    
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        popoverPresent = false
+    }
+    
+    func editTappedForIndexPath(_ indexPath: IndexPath) {
+        dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: SEGUE_EDIT_ALBUM, sender: tableView.cellForRow(at: indexPath))
+    }
     
 }

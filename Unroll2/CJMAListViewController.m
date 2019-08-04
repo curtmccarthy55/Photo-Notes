@@ -108,7 +108,7 @@
     [self.navigationController.navigationBar setBarTintColor:self.userColor];
     [self.navigationController.toolbar setBarTintColor:self.userColor];
 }
-
+// func noAlbumsPopUp() {
 - (void)noAlbumsPopUp
 {//If there are no albums, prompt the user to create one after a delay.
     dispatch_time_t waitTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC));
@@ -817,7 +817,7 @@
 }
 
 #pragma mark - Navigation
-
+// override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ViewGallery"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
@@ -863,11 +863,11 @@
 }
 
 #pragma mark - DetailVC delegate methods
-
+// func albumDetailViewControllerDidCancel(_ controller: PHNAlbumDetailViewController) {
 - (void)albumDetailViewControllerDidCancel:(CJMADetailViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
+// func albumDetailViewController(_ controller: PHNAlbumDetailViewController, didFinishAddingAlbum album: PHNPhotoAlbum) {
 - (void)albumDetailViewController:(CJMADetailViewController *)controller didFinishAddingAlbum:(CJMPhotoAlbum *)album {
     NSInteger newRowIndex = [[[CJMAlbumManager sharedInstance] allAlbums] count];
     
@@ -881,7 +881,7 @@
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
+// func albumDetailViewController(_ controller: PHNAlbumDetailViewController, didFinishEditingAlbum album: PHNPhotoAlbum) {
 - (void)albumDetailViewController:(CJMADetailViewController *)controller didFinishEditingAlbum:(CJMPhotoAlbum *)album {
     [self.tableView reloadData];
     [[CJMAlbumManager sharedInstance] save];
@@ -889,15 +889,15 @@
 }
 
 #pragma mark - Popover Delegates
-
+// func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller traitCollection:(UITraitCollection *)traitCollection {
     return UIModalPresentationNone;
 }
-
+// func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
 - (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
     self.popoverPresent = NO;
 }
-
+// func editTappedForIndexPath(_ indexPath: IndexPath) {
 - (void)editTappedForIndexPath:(NSIndexPath *)indexPath {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self performSegueWithIdentifier:@"EditAlbum" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
