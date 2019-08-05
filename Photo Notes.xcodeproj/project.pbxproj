@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		750F7A49228E022300CA7E01 /* PHNAlbumListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 750F7A48228E022300CA7E01 /* PHNAlbumListTableViewCell.xib */; };
-		751497DA21769137001E6D52 /* PHNImportAlbumsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 751497D921769137001E6D52 /* PHNImportAlbumsVC.m */; };
+		751A7D3A22F8D67000F612DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751A7D3922F8D67000F612DD /* AppDelegate.swift */; };
 		751ADCAD22E8BF950053EC90 /* PHNHudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751ADCAC22E8BF950053EC90 /* PHNHudView.swift */; };
 		751AE8B822D7CB75007CF2FE /* PHNGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751AE8B722D7CB75007CF2FE /* PHNGalleryViewController.swift */; };
 		751F2DF522D804A500DDCBEF /* PHNPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751F2DF322D804A500DDCBEF /* PHNPhotoCell.swift */; };
@@ -33,17 +33,15 @@
 		758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 758F55181E22AAC40023F869 /* IconStoryboard.storyboard */; };
 		75BD865A22F4E232006F4B91 /* PHNGrabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BD865922F4E232006F4B91 /* PHNGrabCell.swift */; };
 		75BD865C22F73F12006F4B91 /* PHNAlbumDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */; };
+		75BD865E22F78721006F4B91 /* PHNSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BD865D22F78721006F4B91 /* PHNSettingsViewController.swift */; };
 		75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */; };
 		75D6433F22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */; };
-		75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */; };
 		840852A61B5DA49E00664849 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 840852A51B5DA49E00664849 /* no_image.jpg */; };
 		84A769571ADAE39F00DE6741 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769561ADAE39F00DE6741 /* main.m */; };
 		84A7695A1ADAE39F00DE6741 /* CJMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769591ADAE39F00DE6741 /* CJMAppDelegate.m */; };
 		84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84A7695E1ADAE39F00DE6741 /* Main.storyboard */; };
 		84A769621ADAE39F00DE6741 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84A769611ADAE39F00DE6741 /* Images.xcassets */; };
 		84A769711ADAE3A000DE6741 /* Unroll2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769701ADAE3A000DE6741 /* Unroll2Tests.m */; };
-		84C2B9981AE441CE0034786C /* CJMPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C2B9971AE441CE0034786C /* CJMPhotoCell.m */; };
-		84F1FDB21AEF21A60092D424 /* CJMGrabCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1FDB11AEF21A60092D424 /* CJMGrabCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +59,7 @@
 		751497D821769137001E6D52 /* PHNImportAlbumsVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHNImportAlbumsVC.h; sourceTree = "<group>"; };
 		751497D921769137001E6D52 /* PHNImportAlbumsVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PHNImportAlbumsVC.m; sourceTree = "<group>"; };
 		751497DC217FD894001E6D52 /* PHNPhotoGrabCompletionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHNPhotoGrabCompletionDelegate.h; sourceTree = "<group>"; };
+		751A7D3922F8D67000F612DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		751ADCAC22E8BF950053EC90 /* PHNHudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNHudView.swift; sourceTree = "<group>"; };
 		751AE8B722D7CB75007CF2FE /* PHNGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNGalleryViewController.swift; sourceTree = "<group>"; };
 		751F2DF322D804A500DDCBEF /* PHNPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPhotoCell.swift; sourceTree = "<group>"; };
@@ -86,6 +85,7 @@
 		75A1E4322180E7FE00F740C1 /* CJMAListTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CJMAListTableViewCell.h; sourceTree = "<group>"; };
 		75BD865922F4E232006F4B91 /* PHNGrabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNGrabCell.swift; sourceTree = "<group>"; };
 		75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumDetailViewController.swift; sourceTree = "<group>"; };
+		75BD865D22F78721006F4B91 /* PHNSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNSettingsViewController.swift; sourceTree = "<group>"; };
 		75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNImportAlbumsViewController.swift; sourceTree = "<group>"; };
 		75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPhotoGrabViewController.swift; sourceTree = "<group>"; };
 		75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMSettingsViewController.h; sourceTree = "<group>"; };
@@ -176,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				84A7695E1ADAE39F00DE6741 /* Main.storyboard */,
+				751A7D3922F8D67000F612DD /* AppDelegate.swift */,
 				84A769581ADAE39F00DE6741 /* CJMAppDelegate.h */,
 				84A769591ADAE39F00DE6741 /* CJMAppDelegate.m */,
 			);
@@ -191,6 +192,7 @@
 				75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */,
 				84C2B9451ADC51280034786C /* CJMADetailViewController.h */,
 				84C2B9461ADC51280034786C /* CJMADetailViewController.m */,
+				75BD865D22F78721006F4B91 /* PHNSettingsViewController.swift */,
 				75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */,
 				75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */,
 				7540EA9D22CD5D180000D60E /* PHNPopoverViewController.swift */,
@@ -459,12 +461,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84F1FDB21AEF21A60092D424 /* CJMGrabCell.m in Sources */,
 				7540EA8E22C67CE60000D60E /* PHNAlbumsTableViewController.swift in Sources */,
 				75D6433F22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift in Sources */,
-				75E330921E1D55CB0006B8FB /* CJMSettingsViewController.m in Sources */,
 				7540EA9E22CD5D180000D60E /* PHNPopoverViewController.swift in Sources */,
-				84C2B9981AE441CE0034786C /* CJMPhotoCell.m in Sources */,
 				7540EA9C22CD545C0000D60E /* PHNAlbumListTableViewCell.swift in Sources */,
 				7540EA9222CA7A430000D60E /* PHNPhotoAlbum.swift in Sources */,
 				752A624F22E0E0B900E4A84D /* PHNFullImageViewController.swift in Sources */,
@@ -476,14 +475,15 @@
 				7540EA9822CC172E0000D60E /* PHNServices.swift in Sources */,
 				752A624B22DD27F800E4A84D /* PHNPageImageViewController.swift in Sources */,
 				84A7695A1ADAE39F00DE6741 /* CJMAppDelegate.m in Sources */,
+				75BD865E22F78721006F4B91 /* PHNSettingsViewController.swift in Sources */,
 				7540EA9A22CD07C50000D60E /* PHNCache.swift in Sources */,
 				7540EA9622CC0DD20000D60E /* PHNFileSerializer.swift in Sources */,
 				7540EAAC22CFCA030000D60E /* PHNAlbumPickerViewController.swift in Sources */,
 				84A769571ADAE39F00DE6741 /* main.m in Sources */,
-				751497DA21769137001E6D52 /* PHNImportAlbumsVC.m in Sources */,
 				751ADCAD22E8BF950053EC90 /* PHNHudView.swift in Sources */,
 				7540EA9422CABD630000D60E /* PHNAlbumManager.swift in Sources */,
 				751F2DF522D804A500DDCBEF /* PHNPhotoCell.swift in Sources */,
+				751A7D3A22F8D67000F612DD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

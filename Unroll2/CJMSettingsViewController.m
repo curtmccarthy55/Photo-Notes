@@ -54,7 +54,7 @@ typedef enum {
 @end
 
 @implementation CJMSettingsViewController
-
+// override func viewDidLoad() {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -109,7 +109,7 @@ typedef enum {
     self.noteView.accessibilityIgnoresInvertColors = YES;
     self.sampleImage.accessibilityIgnoresInvertColors = YES;
 }
-
+// override func viewWillAppear(_ animated: Bool) {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setPrefersLargeTitles:YES];
@@ -127,7 +127,7 @@ typedef enum {
 }
 
 #pragma mark - Buttons
-
+// @IBAction func doneAction(_ sender: Any?) {
 - (IBAction)doneAction:(id)sender {
     NSNumber *opacity = [[NSUserDefaults standardUserDefaults] valueForKey:@"noteOpacity"];
     if (opacity.floatValue != self.sldOpacity.value) {
@@ -142,11 +142,11 @@ typedef enum {
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
-
+// @IBAction func cancelAction(_ sender: Any?) {
 - (IBAction)cancelAction:(id)sender {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
-
+// @IBAction func standardColor(_ sender: UIButton) {
 - (IBAction)standardColor:(UIButton *)sender {
     if (self.btnDone.enabled == NO) {
         [self.btnDone setEnabled:YES];
@@ -186,7 +186,7 @@ typedef enum {
     [self.navigationController.navigationBar setBarTintColor:self.userColor];
 //    [self.sldOpacity setThumbTintColor:userColor];
 }
-
+// func selectedColorWithTag(_ tag: Int) -> NSDictionary {
 - (NSDictionary *)selectedColorWithTag:(NSInteger)tag {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSNumber *red, *green, *blue;
@@ -253,7 +253,7 @@ typedef enum {
 }
 
 #pragma mark - Opacity Slider
-
+// @IBAction func slider(_ sender: UISlider) {
 - (IBAction)slider:(UISlider*)sender {
     float oVal = sender.value;
     [self.lblOpacity setText:[NSString stringWithFormat:@"%.f%%", roundf(oVal)]];
@@ -267,7 +267,7 @@ typedef enum {
 
 
 #pragma mark - CJMPhotoGrabber Methods and Delegate
-
+// func presentPhotoGrabViewController() {
 - (void)presentPhotoGrabViewController {
     NSString * storyboardName = @"Main";
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
@@ -292,7 +292,7 @@ typedef enum {
     [self presentViewController:navigationVC animated:YES completion:nil];
      */
 }
-
+// func photoGrabSceneDidCancel() {
 - (void)photoGrabSceneDidCancel {
     [self dismissViewControllerAnimated:YES completion:nil];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
@@ -300,6 +300,7 @@ typedef enum {
 }
 
 //iterate through array of selected photos, convert them to CJMImages, and add to the current album.
+// func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset]) {
 - (void)photoGrabSceneDidFinishSelectingPhotos:(NSArray *)photos {
     NSMutableArray *newImages = [[NSMutableArray alloc] init];
     //Pull the images, image creation dates, and image locations from each PHAsset in the received array.
@@ -383,7 +384,7 @@ typedef enum {
         self.navigationController.view.userInteractionEnabled = YES;
     });
 }
-
+// func displayQNThumbnail() {
 - (void)displayQNThumnail {
     CJMPhotoAlbum *album = [[CJMAlbumManager sharedInstance] userQuickNote];
     if (album.albumPhotos.count > 0) {
@@ -402,7 +403,7 @@ typedef enum {
         [self.qnThumbnail setImage:[UIImage imageNamed:@"QuickNote PN Background"]];
     }
 }
-
+// func photosFromLibrary() {
 - (void)photosFromLibrary {
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status){
         if (status != PHAuthorizationStatusAuthorized) {
@@ -420,7 +421,7 @@ typedef enum {
 }
 
 #pragma mark - Table view delegate
-
+// func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 1) {
         [self photosFromLibrary];
@@ -451,7 +452,7 @@ typedef enum {
 }
 
 #pragma mark - Safari and Mail delegates
-
+// func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     if (result == MFMailComposeResultCancelled || result == MFMailComposeResultSent) {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -463,7 +464,7 @@ typedef enum {
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
-
+// func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     [header.textLabel setTextColor:UIColor.whiteColor];
