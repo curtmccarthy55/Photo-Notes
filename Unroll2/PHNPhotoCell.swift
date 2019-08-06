@@ -11,7 +11,7 @@ import UIKit
 class PHNPhotoCell: UICollectionViewCell {
     @IBOutlet private weak var cellImage: UIImageView!
     @IBOutlet weak var cellSelectCover: UIView!
-    private(set) var photoNote: PhotoNote
+    private(set) var photoNote: PhotoNote!
 //    var photoNote: PhotoNote {
 //        return privatePhotoNote
 //    }
@@ -19,7 +19,7 @@ class PHNPhotoCell: UICollectionViewCell {
     private var thumbnailImage: UIImage?
 
     func updateWith(photoNote: PhotoNote) {
-        photoNote = photoNote
+        self.photoNote = photoNote
         PHNServices.sharedInstance.fetchThumbnailForImage(photoNote: photoNote) { [weak self] (thumbnail) in
             // if thumbnail not properly captured during import, create one.
             if let cThumbnail = thumbnail {

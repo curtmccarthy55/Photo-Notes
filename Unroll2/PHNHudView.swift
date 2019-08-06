@@ -32,26 +32,34 @@ class PHNHudView: UIView {
         let boxWidth: CGFloat = 96
         let boxHeight: CGFloat = 96
         
-        let boxRect = CGRect(x: round((bounds.size.width - boxWidth) / 2), y: round((bounds.size.height - boxHeight) / 2), width: boxWidth, height: boxHeight)
+        let boxRect = CGRect(x: round((bounds.size.width - boxWidth) / 2),
+                             y: round((bounds.size.height - boxHeight) / 2),
+                         width: boxWidth,
+                        height: boxHeight)
         let roundedRect = UIBezierPath(roundedRect: boxRect, cornerRadius: 10)
         UIColor(white: 0.3, alpha: 0.8).setFill()
         roundedRect.fill()
         
         if type == "Success" {
             let image = UIImage(named: "Checkmark")!
-            
-            let imagePoint = CGPoint(x: center.x - roundf(image.size.width / 2.0), y: center.y - roundf(image.size.height / 2.0) - boxHeight / 8.0)
+            let imagePoint = CGPoint(x: center.x - round(image.size.width / 2.0),
+                                     y: center.y - round(image.size.height / 2.0) - boxHeight / 8.0)
+//            let imagePoint = CGPoint(x: center.x - CGFloat(roundf(Float(image.size.width / 2.0))), y: center.y - CGFloat(roundf(Float(image.size.height / 2.0))) - boxHeight / 8.0)
             image.draw(at: imagePoint)
         } else if type == "Pending" {
             let activityIndicator =  UIActivityIndicatorView()
-            activityIndicator.frame = CGRect(x: bounds.origin.x, y: bounds.origin.y - (boxHeight / 8.0), width: bounds.size.width, height: bounds.size.height)
+            activityIndicator.frame = CGRect(x: bounds.origin.x,
+                                             y: bounds.origin.y - (boxHeight / 8.0),
+                                         width: bounds.size.width,
+                                        height: bounds.size.height)
             activityIndicator.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
             addSubview(activityIndicator)
             activityIndicator.startAnimating()
         }
         // Draw checkmark
         if let image = UIImage(named: "Checkmark") {
-            let imagePoint = CGPoint(x: center.x - round(image.size.width / 2), y: center.y - round(image.size.height / 2) - boxHeight / 8)
+            let imagePoint = CGPoint(x: center.x - round(image.size.width / 2),
+                                     y: center.y - round(image.size.height / 2) - boxHeight / 8)
             image.draw(at: imagePoint)
         }
         // Draw the text
@@ -81,7 +89,7 @@ class PHNHudView: UIView {
 //        removeFromSuperview()
 //    }
     
-    func removeHudView(_ hudView: PHNHudView) {
+    @objc func removeHudView(_ hudView: PHNHudView) {
         UIView.animate(withDuration: 0.5) {
             hudView.alpha = 0
         }

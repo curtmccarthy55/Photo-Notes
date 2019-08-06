@@ -17,10 +17,10 @@ class PHNPhotoGrabViewController: UIViewController, UICollectionViewDataSource, 
     //MARK: Internal Properties
     
     weak var delegate: PHNPhotoGrabCompletionDelegate?
-    var userColor: UIColor
-    var userColorTag: Int // Was NSNumber
-    var singleSelection: Bool
-    var fetchResult: PHFetchResult?
+    var userColor: UIColor!
+    var userColorTag: Int! // Was NSNumber
+    var singleSelection: Bool!
+    var fetchResult: PHFetchResult<PHAsset>?
     
     //MARK: Private Properties
     
@@ -58,7 +58,7 @@ class PHNPhotoGrabViewController: UIViewController, UICollectionViewDataSource, 
         
         // Scroll to bottom before displaying.  TODO: this can be improved.
         let pageSize = view.bounds.size
-        let contentOffSet = CGPoint(x: 0, y: pageSize.height * fetchResult!.count - 1)
+        let contentOffSet = CGPoint(x: 0, y: pageSize.height * CGFloat(integerLiteral: fetchResult!.count - 1))
         collectionView.setContentOffset(contentOffSet, animated: false)
     }
     
@@ -73,8 +73,10 @@ class PHNPhotoGrabViewController: UIViewController, UICollectionViewDataSource, 
         cell.cellSelectCover.isHidden = true
         
         // Check if indexPath has been selected and reveal its cell's selectCover if it has been.
-        if collectionView.indexPathsForSelectedItems.count > 0 && collectionView.indexPathsForSelectedItems?.contains(indexPath) {
-            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .none)
+        if let paths = collectionView.indexPathsForSelectedItems,
+          paths.count > 0,
+          paths.contains(indexPath) {
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: []/*.none*/)
             cell.cellSelectCover.isHidden = false
         }
         
@@ -98,7 +100,7 @@ class PHNPhotoGrabViewController: UIViewController, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let selectedCell = collectionView.cellForItem(at: indexPath) as! PHNGrabCell
         selectedCell.cellSelectCover.isHidden = true
-        if collectionView.indexPathsForSelectedItems.count == 0 {
+        if collectionView.indexPathsForSelectedItems?.count == 0 {
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
     }
@@ -109,7 +111,7 @@ class PHNPhotoGrabViewController: UIViewController, UICollectionViewDataSource, 
         delegate?.photoGrabSceneDidCancel()
     }
     
-    func donePressed() {
+    @objc func donePressed() {
         let hudView = PHNHudView.hud(inView: view, withType: "Pending", animated: true)
         hudView.text = "Importing"
         
@@ -144,7 +146,7 @@ class PHNPhotoGrabViewController: UIViewController, UICollectionViewDataSource, 
     }
     
     // Resizes collectionView cells per sizeForItemAtIndexPath when user rotates device.
-    func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         super.willRotate(to: toInterfaceOrientation, duration: duration)
         collectionView.collectionViewLayout.invalidateLayout()
     }

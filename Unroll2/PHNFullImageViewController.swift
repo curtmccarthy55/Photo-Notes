@@ -17,6 +17,14 @@ protocol PHNFullImageViewControllerDelegate: class {
     func photoIsFavorited(_ isFavorited: Bool)
 }
 
+// This extension only necessary because of FullImageVC needing a delegate, and PHNAlbumsTableVC having to fulfill that.  Figure out how to change this circumstance.
+extension PHNFullImageViewControllerDelegate {
+    func updateBarsHidden(_ setting: Bool) {}
+    func makeHomeIndicatorVisible(_ visible: Bool) {}
+    func viewController(_ currentVC: PHNFullImageViewController, deletedImageAtIndex imageIndex: Int) {}
+    func photoIsFavorited(_ isFavorited: Bool) {}
+}
+
 class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
     //MARK: - Properties
@@ -58,7 +66,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     
     //MARK: Functionality Variables
     private var lastZoomScale: CGFloat?
-    private var initialZoomScale: Float?
+    private var initialZoomScale: CGFloat?
     private var favoriteChanged: Bool?
     private var displayingNote: Bool?
     private var noteHidden: Bool?
@@ -78,11 +86,11 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
         
         NotificationCenter.default.addObserver( self,
                                       selector: #selector(showBars),
-                                          name: "ImageShowBars",
+                                          name: NSNotification.Name(rawValue: "ImageShowBars"),
                                         object: nil)
         NotificationCenter.default.addObserver( self,
                                       selector: #selector(hideBars),
-                                          name: "ImageHideBars",
+                                          name: NSNotification.Name(rawValue: "ImageHideBars"),
                                         object: nil)
         
         // This line prevents the image from jumping around when nav bars are hidden/shown.
@@ -174,12 +182,12 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
                 navigationController?.navigationBar.barStyle = .black
                 navigationController?.navigationBar.tintColor = .white
                 navigationController?.toolbar.tintColor = .white
-                navigationController?.navigationBar.titleTextAttributes = [ NSForegroundColorAttributeName : UIColor.white ]
+                navigationController?.navigationBar.titleTextAttributes = [ NSAttributedString.Key.foregroundColor : UIColor.white ]
             } else {
                 navigationController?.navigationBar.barStyle = .default
                 navigationController?.navigationBar.tintColor = .black
                 navigationController?.toolbar.tintColor = .black
-                navigationController?.navigationBar.titleTextAttributes = [ NSForegroundColorAttributeName : UIColor.black ]
+                navigationController?.navigationBar.titleTextAttributes = [ NSAttributedString.Key.foregroundColor : UIColor.black ]
             }
             navigationController?.navigationBar.barTintColor = userColor
             
@@ -249,7 +257,10 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
         
         if let favAlbum = PHNAlbumManager.sharedInstance.favPhotosAlbum,
             albumName == "Favorites" && favAlbum.albumPhotos.count < 1 {
-            guard let array = navigationController?.viewControllers else { dismiss(animated: true, completion: nil) }
+            guard let array = navigationController?.viewControllers else {
+                dismiss(animated: true, completion: nil)
+                return
+            }
             navigationController?.popToViewController(array[0], animated: true)
         }
     }
@@ -265,7 +276,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
         initialZoomScale = scrollView.zoomScale
     }
     
-    override func scrollViewDidZoom(_ scrollView: UIScrollView) {
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateConstraints()
     }
     
@@ -274,14 +285,14 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     }
     
     func updateConstraints() {
-        let imageWidth: Float = imageView.image!.size.width
-        let imageHeight: Float = imageView.image!.size.height
+        let imageWidth = imageView.image!.size.width
+        let imageHeight = imageView.image!.size.height
         
-        let viewWidth: Float = view.bounds.size.width
-        let viewHeight: Float = view.bounds.size.height
+        let viewWidth = view.bounds.size.width
+        let viewHeight = view.bounds.size.height
         
         // Center image if it is smaller than the screen.
-        var horizontalPadding: Float = (viewWidth - scrollView.zoomScale * imageWidth) / 2
+        var horizontalPadding = (viewWidth - scrollView.zoomScale * imageWidth) / 2
         if horizontalPadding < 0 {
             horizontalPadding = 0
         }
@@ -303,16 +314,21 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     
     // Zoom to show as much image as possible unless image is smaller than screen.
     func updateZoom() {
-        let minZoom: Float = min(view.bounds.size.width / imageView.image!.size.width,
-                                 view.bounds.size.height / imageView.image!.size.height)
+        var minZoom = min(view.bounds.size.width / imageView.image!.size.width,
+                          view.bounds.size.height / imageView.image!.size.height)
         if minZoom > 1 { minZoom = 1 }
         scrollView.minimumZoomScale = minZoom
         
         // Force scrollViewDidZoom to fire if zoom did not change
         if minZoom == lastZoomScale { minZoom += 0.00001 }
         
-        lastZoomScale = scrollView.zoomScale = minZoom
-        scrollView.zoomScale = minZoom -= 0.00001 // TODO see if we can remove this +/- tweak.  In place to make sure scrollView content corrected itself, but probably shouldn't be necessary.
+        scrollView.zoomScale = minZoom
+        lastZoomScale = scrollView.zoomScale
+//        lastZoomScale = scrollView.zoomScale = minZoom
+        
+        minZoom -= 0.00001 // TODO see if we can remove this +/- tweak.  In place to make sure scrollView content corrected itself, but probably shouldn't be necessary.
+        scrollView.zoomScale = minZoom
+//        scrollView.zoomScale = minZoom -= 0.00001
     }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -384,13 +400,13 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     
     //MARK: - Navigation Bar Adjustments
     
-    func hideBars() {
+    @objc func hideBars() {
         barsVisible = false
         editNoteButton.setTitle("Hide", for: .normal)
         editNoteButton.isHidden = false
     }
     
-    func showBars() {
+    @objc func showBars() {
         barsVisible = true
         editNoteButton.setTitle("Edit", for: .normal)
         editNoteButton.isHidden = true
@@ -431,7 +447,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     
     //MARK: - Buttons and Taps
     
-    func clearNote() {
+    @objc func clearNote() {
         photoNote?.photoTitle = ""
         photoNote?.photoNote = ""
         noteTitle.text = ""
@@ -450,8 +466,8 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     //Note down, bars hidden: button displays "Hide".  Tapping in this state hides the note section.
     //Note up, text edit disabled: button displays  "Edit".  Tapping enables note section text fields, makes note text field first responsder, changes button text to "Done".
     //Note up, text edit enabled: button displays "Done".  Tapping disables text fields, all fields are checked for text with values being loaded into appropriate cjmImage variables.
-    @IBAction func enableEdit(sender: Any?) {
-        if editNoteButton.titleLabel.text == "Hide" {
+    @IBAction func enableEdit(_ sender: Any?) {
+        if editNoteButton.titleLabel?.text == "Hide" {
             noteSection.isHidden = true
             noteHidden = true
             if isQuickNote == nil || isQuickNote == false {
@@ -464,7 +480,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             noteEntry.isSelectable = true
             editNoteButton.setTitle("Done", for: .normal)
             noteEntry.becomeFirstResponder()
-            noteEntry.selectedRange = NSMakeRange(noteEntry.text.length, 0)
+            noteEntry.selectedRange = NSMakeRange(noteEntry.text.count, 0)
         } else {
             confirmTextFieldNotBlank()
             confirmTextViewNotBlank()
@@ -485,10 +501,10 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             editNoteButton.sizeToFit()
 //            NotificationCenter.default.removeObserver(self)
             NotificationCenter.default.removeObserver( self,
-                                                 name: UIKeyboardDidShowNotification,
+                                                       name: UIResponder.keyboardDidShowNotification,
                                                object: nil)
             NotificationCenter.default.removeObserver( self,
-                                                 name: UIKeyboardWillHideNotification,
+                                                       name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
             
             PHNAlbumManager.sharedInstance.save()
@@ -515,10 +531,10 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     
     @IBAction func imageViewDoubleTApped(_ gestureRecognizer: UITapGestureRecognizer) {
         if scrollView.zoomScale == initialZoomScale! {
-            let centerPoint = gestureRecognizer.location(in: scrollView)
+            var centerPoint = gestureRecognizer.location(in: scrollView)
             
             // Current content size back to content scale of 1.0f
-            var contentSize: CGSize
+            var contentSize: CGSize = .zero
             contentSize.width = scrollView.contentSize.width / initialZoomScale!
             contentSize.height = scrollView.contentSize.height / initialZoomScale!
             
@@ -527,12 +543,12 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             centerPoint.y = (centerPoint.y / scrollView.bounds.size.height) * contentSize.height
             
             // Get the size of the region to zoom to
-            var zoomSize: CGSize
+            var zoomSize = CGSize.zero
             zoomSize.width = scrollView.bounds.size.width / (initialZoomScale! * 4.0)
             zoomSize.height = scrollView.bounds.size.height / (initialZoomScale! * 4.0)
             
             // Offset the zoom rect so the actual zoom point is in  the middle of the rectangle.
-            var zoomRect: CGRect
+            var zoomRect = CGRect.zero
             zoomRect.origin.x = centerPoint.x - zoomSize.width / 2.0
             zoomRect.origin.y = centerPoint.y - zoomSize.height / 2.0
             zoomRect.size.width = zoomSize.width
@@ -605,7 +621,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             PHNServices.sharedInstance.deleteImageFrom(photoNote: self.photoNote!)
             PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, removeImageWithUUID: self.photoNote!.fileName)
             if albumIsFavorites {
-                PHNAlbumManager.sharedInstance.albumWithName(self.photoNote!.originalAlbum, removeImageWithUUID: self.photoNote!.fileName)
+                PHNAlbumManager.sharedInstance.albumWithName(self.photoNote!.originalAlbum!, removeImageWithUUID: self.photoNote!.fileName)
             }
             
             PHNAlbumManager.sharedInstance.checkFavoriteCount()
@@ -621,7 +637,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             PHNServices.sharedInstance.deleteImageFrom(photoNote: self.photoNote!)
             PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, removeImageWithUUID: self.photoNote!.fileName)
             if albumIsFavorites {
-                PHNAlbumManager.sharedInstance.albumWithName(self.photoNote!.originalAlbum, removeImageWithUUID: self.photoNote!.fileName)
+                PHNAlbumManager.sharedInstance.albumWithName(self.photoNote!.originalAlbum!, removeImageWithUUID: self.photoNote!.fileName)
             }
             
             PHNAlbumManager.sharedInstance.checkFavoriteCount()
@@ -632,7 +648,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
         let unfavoritePhoto = UIAlertAction(title: "Unfavorite And Remove", style: .default) { [unowned self] (_) in
             self.favoriteChanged = false
             self.delegate?.photoIsFavorited(false)
-            PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, removeImageWithUUID: self.photoNote!.file)
+            PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, removeImageWithUUID: self.photoNote!.fileName)
             self.delegate?.viewController(self, deletedImageAtIndex: self.index!)
         }
         
@@ -680,7 +696,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     }
     
     func confirmTextFieldNotBlank() {
-        if noteTitle.text.count == 0 {
+        if noteTitle.text?.count == 0 {
             noteTitle.text = "No Title Created "
         }
     }

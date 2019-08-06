@@ -192,7 +192,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     
     func getCenterMaxSquareImageByCroppingImage(_ image: UIImage, andShrinkToSize newSize: CGSize) -> UIImage {
         // Get crop bounds
-        var centerSquareSize: CGSize
+        var centerSquareSize: CGSize = .zero
         let originalImageWidth = CGFloat(image.cgImage!.width)
         let originalImageHeight = CGFloat(image.cgImage!.height)
         if originalImageHeight <= originalImageWidth {
@@ -263,7 +263,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     func presentPhotoGrabViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let navigationVC = storyboard.instantiateViewController(withIdentifier: "NavPhotoGrabViewController") as! UINavigationController
-        let vc = navigationVC.topViewController as! PHNImportAlbumsVC
+        let vc = navigationVC.topViewController as! PHNImportAlbumsViewController
         vc.delegate = self
         vc.userColor = userColor
         vc.userColorTag = userColorTag
@@ -354,6 +354,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     func albumPickerViewController(_ controller: PHNAlbumPickerViewController, didFinishPicking album: PHNPhotoAlbum) {
         guard selectedPhotos != nil, !selectedPhotos!.isEmpty else {
             dismiss(animated: true, completion: nil)
+            return
         }
         
         for image in selectedPhotos! {
@@ -794,7 +795,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             galleryVC.userColorTag = userColorTag
         case SEGUE_EDIT_ALBUM:
             let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
-            let sentAbum = PHNAlbumManager.sharedInstance.allAlbums[indexPath!.row]
+            let sentAlbum = PHNAlbumManager.sharedInstance.allAlbums[indexPath!.row]
             let navVC = segue.destination as! UINavigationController
             let detailVC = navVC.viewControllers[0] as! PHNAlbumDetailViewController
             detailVC.albumToEdit = sentAlbum
@@ -821,7 +822,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             vc.userColorTag = userColorTag
             vc.barsVisible = true
             let numOpac = UserDefaults.standard.value(forKey: "noteOpacity") as? NSNumber
-            vc.noteOpacity = (numOpac != nil) ? numOpac!.floatValue : 0.75
+            vc.noteOpacity = (numOpac != nil) ? CGFloat(exactly: numOpac!) : 0.75
 //        case SEGUE_VIEW_SETTINGS:
         default:
             print("PHNAlbumsTableViewController performing segue with identifier: \(identifier)")

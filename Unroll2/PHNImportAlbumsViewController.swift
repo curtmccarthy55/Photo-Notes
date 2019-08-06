@@ -88,7 +88,7 @@ class PHNImportAlbumsViewController: UITableViewController {
  */
     }
     
-    func cancelPressed() {
+    @objc func cancelPressed() {
         delegate?.photoGrabSceneDidCancel()
     }
 
@@ -151,47 +151,47 @@ class PHNImportAlbumsViewController: UITableViewController {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionLocalizedTitles![section]
     }
     
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as? UITableViewHeaderFooterView
         header?.textLabel?.textColor = .white
         header?.backgroundColor = .clear
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndex = indexPath
         performSegue(withIdentifier: SEGUE_IDENTIFIER, sender: nil)
     }
     
     //MARK: - Navigation
     
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination as! PHNPhotoGrabViewController
-        vc.delgate = delegate
-        vc.userColor = userColor
-        vc.userColorTag = userColorTag
-        vc.singleSelection = singleSelection
+        vc.delegate = delegate
+        vc.userColor = userColor!
+        vc.userColorTag = userColorTag!
+        vc.singleSelection = singleSelection!
         
-        if selectedIndex.section == 0 {
+        if selectedIndex?.section == 0 {
             #if DEBUG
             print("should be showing All Photos cell")
             #endif
             vc.fetchResult = allPhotos
             vc.title = "All Photos"
-        } else if selectedIndex.section == 1 {
+        } else if selectedIndex?.section == 1 {
             let assetCollection = smartAlbums![selectedIndex!.row]
             let result = PHAsset.fetchAssets(in: assetCollection, options: ascendingOptions)
             vc.fetchResult = result
             vc.title = assetCollection.localizedTitle!
-        } else if selectedIndex.section == 2 {
+        } else if selectedIndex?.section == 2 {
             let collection = userCollections![selectedIndex!.row]
             if collection is PHAssetCollection {
                 let assetCollection = collection as! PHAssetCollection
                 let result = PHAsset.fetchAssets(in: assetCollection, options: ascendingOptions)
-                vc.fetchREsult = result
+                vc.fetchResult = result
                 vc.title = assetCollection.localizedTitle!
             } else if collection is PHCollectionList {
                 // TODO
