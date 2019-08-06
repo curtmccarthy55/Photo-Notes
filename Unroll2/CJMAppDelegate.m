@@ -22,7 +22,7 @@
 @end
 
 @implementation CJMAppDelegate
-
+// func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [Fabric with:@[[Crashlytics class]]];
 
@@ -50,14 +50,14 @@
     //application(_:performActionForShortcutItem:completionHandler:) from being called
     return !launchedFromShortCut;
 }
-
+// func applicationWillResignActive(_ application: UIApplication) {
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     
     [[CJMAlbumManager sharedInstance] save];
 }
-
+// func applicationDidEnterBackground(_ application: UIApplication) {
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -65,14 +65,14 @@
     [[CJMServices sharedInstance] endReportingMemoryToConsole];
     self.launchDic = nil;
 }
-
+// func applicationWillEnterForeground(_ application: UIApplication) {
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 #ifdef DEBUG
     [[CJMServices sharedInstance] beginReportingMemoryToConsoleWithInterval:5.f];
 #endif
 }
-
+// func applicationDidBecomeActive(_ application: UIApplication) {
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     UIApplicationShortcutItem *shortcutItem = [self.launchDic objectForKey:UIApplicationLaunchOptionsShortcutItemKey];
@@ -81,7 +81,7 @@
         [self handleShortCutItem:shortcutItem];
     }
 }
-
+// func applicationWillTerminate(_ application: UIApplication) {
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [[CJMAlbumManager sharedInstance] save];
@@ -93,7 +93,7 @@
     
     completionHandler(handledShortcut);
 }
-
+// func handleShortcutItem(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
 - (BOOL)handleShortCutItem:(UIApplicationShortcutItem *)shortcutItem {
     BOOL handled = NO;
     

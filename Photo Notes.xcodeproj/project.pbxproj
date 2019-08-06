@@ -37,8 +37,6 @@
 		75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */; };
 		75D6433F22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */; };
 		840852A61B5DA49E00664849 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 840852A51B5DA49E00664849 /* no_image.jpg */; };
-		84A769571ADAE39F00DE6741 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769561ADAE39F00DE6741 /* main.m */; };
-		84A7695A1ADAE39F00DE6741 /* CJMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769591ADAE39F00DE6741 /* CJMAppDelegate.m */; };
 		84A769601ADAE39F00DE6741 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84A7695E1ADAE39F00DE6741 /* Main.storyboard */; };
 		84A769621ADAE39F00DE6741 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84A769611ADAE39F00DE6741 /* Images.xcassets */; };
 		84A769711ADAE3A000DE6741 /* Unroll2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A769701ADAE3A000DE6741 /* Unroll2Tests.m */; };
@@ -474,12 +472,10 @@
 				7540EA9022C67EEB0000D60E /* PhotoNote.swift in Sources */,
 				7540EA9822CC172E0000D60E /* PHNServices.swift in Sources */,
 				752A624B22DD27F800E4A84D /* PHNPageImageViewController.swift in Sources */,
-				84A7695A1ADAE39F00DE6741 /* CJMAppDelegate.m in Sources */,
 				75BD865E22F78721006F4B91 /* PHNSettingsViewController.swift in Sources */,
 				7540EA9A22CD07C50000D60E /* PHNCache.swift in Sources */,
 				7540EA9622CC0DD20000D60E /* PHNFileSerializer.swift in Sources */,
 				7540EAAC22CFCA030000D60E /* PHNAlbumPickerViewController.swift in Sources */,
-				84A769571ADAE39F00DE6741 /* main.m in Sources */,
 				751ADCAD22E8BF950053EC90 /* PHNHudView.swift in Sources */,
 				7540EA9422CABD630000D60E /* PHNAlbumManager.swift in Sources */,
 				751F2DF522D804A500DDCBEF /* PHNPhotoCell.swift in Sources */,
