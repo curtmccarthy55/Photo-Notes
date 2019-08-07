@@ -95,6 +95,7 @@ class PHNPhotoAlbum: NSObject, NSCoding, NSCopying {
         albumNote = aDecoder.decodeObject(forKey: CodingKeys.albumNote.rawValue) as? String
         albumEditablePhotos = aDecoder.decodeObject(forKey: CodingKeys.albumEditablePhotos.rawValue) as! [PhotoNote]
         albumPreviewImage = aDecoder.decodeObject(forKey: CodingKeys.albumPreviewImage.rawValue) as? PhotoNote
+        print("PHNPhotoAlbum.init?(coder:) complete")
     }
     
     func copy(with zone: NSZone? = nil) -> Any /* -> PHNPhotoAlbum causes compiler error*/ {

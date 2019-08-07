@@ -53,7 +53,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let nib = UINib(nibName: "CJMAListTableViewCell", bundle: nil)
+        let nib = UINib(nibName: "PHNAlbumListTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: PHNAlbumsCellIdentifier)
         tableView.rowHeight = 120 // was 80
     }
@@ -102,8 +102,8 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
         }
         
-        navigationController?.navigationBar.tintColor = userColor
-        navigationController?.toolbar.tintColor = userColor
+        navigationController?.navigationBar.barTintColor = userColor
+        navigationController?.toolbar.barTintColor = userColor
     }
     
     //If there are no albums, prompt the user to create one after a delay.

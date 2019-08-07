@@ -69,10 +69,10 @@
             </objects>
             <point key="canvasLocation" x="990" y="340"/>
         </scene>
-        <!--Detail View Controller-->
+        <!--Album Detail View Controller-->
         <scene sceneID="gFj-lg-Zlh">
             <objects>
-                <tableViewController id="f3N-Zz-OdE" customClass="CJMADetailViewController" sceneMemberID="viewController">
+                <tableViewController id="f3N-Zz-OdE" customClass="PHNAlbumDetailViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="UL2-Jf-cyX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -220,7 +220,7 @@
         <scene sceneID="6dO-Q8-3nc">
             <objects>
                 <viewController id="jJn-j5-MU1" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="pKY-Rf-TPL">
+                    <view key="view" contentMode="scaleToFill" id="pKY-Rf-TPL">
                         <rect key="frame" x="0.0" y="0.0" width="300" height="90"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -237,7 +237,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5Zv-vL-0s2">
-                                <rect key="frame" x="16" y="108.33333333333334" width="268" height="2"/>
+                                <rect key="frame" x="16" y="108.33333333333333" width="268" height="2"/>
                             </progressView>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -267,7 +267,7 @@
         <!--Gallery View Controller-->
         <scene sceneID="Aeb-Yn-XIE">
             <objects>
-                <collectionViewController id="uLg-8C-qq2" customClass="CJMGalleryViewController" sceneMemberID="viewController">
+                <collectionViewController id="uLg-8C-qq2" customClass="PHNGalleryViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" id="9nl-h9-yxM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="641"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -386,7 +386,7 @@
         <!--Page Image View Controller-->
         <scene sceneID="p0c-Zt-0qb">
             <objects>
-                <pageViewController storyboardIdentifier="PageController" autoresizesArchivedViewToFullSize="NO" extendedLayoutIncludesOpaqueBars="YES" transitionStyle="scroll" pageSpacing="5" navigationOrientation="horizontal" spineLocation="none" id="auB-ij-Inv" customClass="CJMPageImageViewController" sceneMemberID="viewController">
+                <pageViewController storyboardIdentifier="PageController" autoresizesArchivedViewToFullSize="NO" extendedLayoutIncludesOpaqueBars="YES" transitionStyle="scroll" pageSpacing="5" navigationOrientation="horizontal" spineLocation="none" id="auB-ij-Inv" customClass="PHNPageImageViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems>
                         <barButtonItem systemItem="trash" id="5xp-wP-xfs">
                             <inset key="imageInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -440,7 +440,7 @@
         <!--QuickNote-->
         <scene sceneID="PdM-rG-10i">
             <objects>
-                <viewController storyboardIdentifier="FullImageVC" id="9ae-Ea-iTf" customClass="CJMFullImageViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FullImageVC" id="9ae-Ea-iTf" customClass="PHNFullImageViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ulg-px-Jgm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -631,7 +631,7 @@
         <!--Import Photos-->
         <scene sceneID="1wi-Ff-VJa">
             <objects>
-                <viewController storyboardIdentifier="PhotoGrabViewController" id="6po-Ut-l1R" customClass="CJMPhotoGrabViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoGrabViewController" id="6po-Ut-l1R" customClass="PHNPhotoGrabViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OBw-hS-hva">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -756,7 +756,7 @@
         <!--Settings-->
         <scene sceneID="p0k-Fz-9mP">
             <objects>
-                <tableViewController id="AXu-8r-XFG" customClass="CJMSettingsViewController" sceneMemberID="viewController">
+                <tableViewController id="AXu-8r-XFG" customClass="PHNSettingsViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="static" style="grouped" separatorStyle="default" rowHeight="120" sectionHeaderHeight="1" sectionFooterHeight="1" id="tlv-Dk-BZJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1167,10 +1167,10 @@
             </objects>
             <point key="canvasLocation" x="268" y="1803"/>
         </scene>
-        <!--Import AlbumsVC-->
+        <!--Import Albums View Controller-->
         <scene sceneID="ss9-1W-ale">
             <objects>
-                <tableViewController id="I72-QS-OoS" customClass="PHNImportAlbumsVC" sceneMemberID="viewController">
+                <tableViewController id="I72-QS-OoS" customClass="PHNImportAlbumsViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ny8-dk-O68">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

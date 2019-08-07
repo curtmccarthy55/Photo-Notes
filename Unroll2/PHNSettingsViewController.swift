@@ -86,6 +86,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         }
         
         navigationController?.navigationBar.barTintColor = userColor
+        navigationController?.toolbar.barTintColor = userColor
         
         // Set current opacity.
         var opacity: CGFloat
@@ -190,6 +191,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
             userColor = UIColor(red: 60.0/255.0, green: 128.0/255.0, blue: 194.0/255.0, alpha: 1.0)
         }
         navigationController?.navigationBar.barTintColor = userColor
+        navigationController?.toolbar.barTintColor = userColor
 //        sldOpacity.thumbTintColor = userColor
     }
     

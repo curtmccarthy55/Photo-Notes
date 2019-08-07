@@ -46,7 +46,7 @@ class PHNImportAlbumsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let nib = UINib(nibName: "CJMAListTableViewCell", bundle: nil)
+        let nib = UINib(nibName: "PHNAlbumListTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: CELL_IDENTIFIER)
         tableView.rowHeight = 80
         navigationItem.title = "Photos"

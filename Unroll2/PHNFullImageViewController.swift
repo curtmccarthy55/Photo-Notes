@@ -190,6 +190,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
                 navigationController?.navigationBar.titleTextAttributes = [ NSAttributedString.Key.foregroundColor : UIColor.black ]
             }
             navigationController?.navigationBar.barTintColor = userColor
+            navigationController?.toolbar.barTintColor = userColor
             
             if isQuickNote != nil, isQuickNote! {
                 navigationController?.setToolbarHidden(true, animated: false)
