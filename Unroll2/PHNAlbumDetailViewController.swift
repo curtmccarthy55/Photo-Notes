@@ -150,7 +150,7 @@ class PHNAlbumDetailViewController: UITableViewController, UIImagePickerControll
     
     //MARK: - Table View Delegate
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             nameField.becomeFirstResponder()
         } else if indexPath.section == 1 {
@@ -158,7 +158,7 @@ class PHNAlbumDetailViewController: UITableViewController, UIImagePickerControll
         }
     }
     
-    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return nil
     }
     

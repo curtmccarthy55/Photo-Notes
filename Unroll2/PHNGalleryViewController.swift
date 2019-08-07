@@ -14,7 +14,7 @@ private let reuseIdentifier = "GalleryCell"
 private let SEGUE_VIEW_PHOTO = "ViewPhoto"
 
 class PHNGalleryViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, PHNPhotoGrabCompletionDelegate, PHNAlbumPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var album: PHNPhotoAlbum {
+    var album: PHNPhotoAlbum! {
         didSet { navigationItem.title = album.albumTitle }
     }
     var userColor: UIColor?
@@ -29,7 +29,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     @IBOutlet weak var exportButton: UIBarButtonItem!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     var selectedCells: [IndexPath]?
-    var pickerPhotos: [String : Any?]?
+    var pickerPhotos: [[String : Any?]]?
     
     var imagePicker: UIImagePickerController?
     var flashButton: UIButton?
@@ -157,12 +157,13 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         
         if imageForCell.thumbnailNeedsRedraw {
             let fileSerializer = PHNFileSerializer()
-            var tempFullImage = UIImage()
+            
+            var tempFullImage: UIImage?
             PHNServices.sharedInstance.fetchImage(photoNote: imageForCell) { (fetchedImage) in
                 tempFullImage = fetchedImage
             }
-            let thumbnail = getCenterMaxSquareImageByCroppingImage(tempFullImage, andShrinkToSize: cellSize)
-            imageForCell.thumbnailNeedsRedraw = false
+            let thumbnail = getCenterMaxSquareImageByCroppingImage((tempFullImage ?? UIImage(named: "NoImage")!) , andShrinkToSize: cellSize)
+            imageForCell.thumbnailNeedsRedraw = (tempFullImage == nil)
             fileSerializer.writeImage(thumbnail, toRelativePath: imageForCell.thumbnailFileName)
             cell.updateWith(photoNote: imageForCell)
             PHNAlbumManager.sharedInstance.save()
@@ -185,7 +186,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
             selectedImage.selectCoverHidden = false
             selectedCell.cellSelectCover.isHidden = selectedImage.selectCoverHidden
             deleteButton.isEnabled = true
-            exportButton.isEnabled = (album.albumPhotos == "Favorites") ? false : true
+            exportButton.isEnabled = (album.albumTitle == "Favorites") ? false : true
         } else {
             let selectedImage = album.albumPhotos[indexPath.item]
             selectedImage.selectCoverHidden = true
@@ -247,7 +248,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
             toggleEditControls()
             collectionView.allowsMultipleSelection = true
         } else if editButton.title == "Cancel" {
-            editMode.title = "Select"
+            editButton.title = "Select"
             editMode = false
             clearCellSelections()
             toggleEditControls()
@@ -276,7 +277,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     func confirmEditButtonEnabled() {
         if album.albumPhotos.count == 0 {
             editButton.isEnabled = false
-            if album.albumPhotos != "Favorites" {
+            if album.albumTitle != "Favorites" {
                 let noPhotosAlert = UIAlertController(title: "No Photos Added Yet",
                                                       message: "Tap the camera button below to add photos",
                                                       preferredStyle: .alert)
@@ -325,7 +326,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     }
     
     func photosFromLibrary() {
-        PHPhotoLibrary.requestAuthorization { (status) in
+        PHPhotoLibrary.requestAuthorization { [weak self] (status) in
             if status != .authorized {
                 let adjustPrivacyController = UIAlertController(title: "Denied Access to Photos", message: "Please allow Photo Notes permission to use the camera.", preferredStyle: .alert)
                 
@@ -345,9 +346,9 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
                 let actionDismiss = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
                 
                 adjustPrivacyController.addAction(actionDismiss)
-                present(adjustPrivacyController, animated: true, completion: nil)
+                self?.present(adjustPrivacyController, animated: true, completion: nil)
             } else {
-                presentPhotoGrabViewController()
+                self?.presentPhotoGrabViewController()
             }
         }
     }
@@ -356,7 +357,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     func presentPhotoGrabViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let navigationVC = storyboard.instantiateViewController(withIdentifier: "NavPhotoGrabViewController") as! UINavigationController
-        let vc = navigationVC.topViewController as! PHNImportAlbumsVC
+        let vc = navigationVC.topViewController as! PHNImportAlbumsViewController
         vc.delegate = self
         vc.userColor = userColor
         vc.userColorTag = userColorTag
@@ -367,13 +368,14 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     
     // Mass delete options.
     @IBAction func deleteSelected() {
-        guard selectedCells = collectionView.indexPathsForSelectedItems else {
+        guard let paths = collectionView.indexPathsForSelectedItems else {
             let alert = UIAlertController(title: "No Photos Selected", message: "You must select some photos to delete first.", preferredStyle: .alert)
             let dismiss = UIAlertAction(title: "OK", style: .cancel, handler: nil)
             alert.addAction(dismiss)
             present(alert, animated: true, completion: nil)
             return
         }
+        selectedCells = paths
         
         let alertController = UIAlertController(title: "Delete Photos?", message: "You cannot recover these photo notes after deleting.", preferredStyle: .actionSheet)
         
@@ -385,7 +387,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         let deleteAction = UIAlertAction(title: "Delete Photos Permanently", style: .destructive) { [unowned self] (_) in
             var doomedArray = [PhotoNote]()
             for itemPath in self.selectedCells! {
-                let doomedImage = album.albumPhotos[itemPath.row]
+                let doomedImage = self.album.albumPhotos[itemPath.row]
                 doomedArray.append(doomedImage)
             }
             PHNAlbumManager.sharedInstance.albumWithName(self.album.albumTitle, deleteImages: doomedArray)
@@ -417,13 +419,14 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     
     // Mass transfer options
     @IBAction func exportSelected() {
-        guard selectedCells = collectionView.indexPathsForSelectedItems else {
+        guard let paths = collectionView.indexPathsForSelectedItems else {
             let alert = UIAlertController(title: "No Photos Selected", message: "You must select some photos to transfer first.", preferredStyle: .alert)
             let dismiss = UIAlertAction(title: "OK", style: .cancel, handler: nil)
             alert.addAction(dismiss)
             present(alert, animated: true, completion: nil)
             return
         }
+        selectedCells = paths
         
         let alertController = UIAlertController(title: "Transfer", message: nil, preferredStyle: .actionSheet)
         
@@ -438,9 +441,9 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
             let albumPickerVC = navVC.topViewController as! PHNAlbumPickerViewController
             albumPickerVC.delegate = self
             albumPickerVC.title = "Select Destination"
-            albumPickerVC.currentAlbumName = album.albumTitle
-            albumPickerVC.userColor = userColor
-            albumPickerVC.userColorTag = userColorTag
+            albumPickerVC.currentAlbumName = self?.album.albumTitle
+            albumPickerVC.userColor = self?.userColor
+            albumPickerVC.userColorTag = self?.userColorTag
             self?.present(navVC, animated: true, completion: nil)
         }
         
@@ -728,11 +731,12 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         pickerPhotos?.append(dic)
     }
     
-    func photoCaptureFinished() {
+    @objc func photoCaptureFinished() {
         let serializer = PHNFileSerializer()
         
         guard pickerPhotos != nil else {
             // TODO some alert saying pickerPhotos is empty, followed by cleanup, and return.
+            return
         }
         for dic in pickerPhotos! {
             let newPhotoData = dic["newImage"]! as! Data
@@ -762,14 +766,14 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         PHNAlbumManager.sharedInstance.save()
     }
     
-    func shutterPressed() {
+    @objc func shutterPressed() {
         #if DEBUG
         print("SHUTTER PRESSED")
         #endif
         imagePicker?.takePicture()
     }
     
-    func updateFlashMode() {
+    @objc func updateFlashMode() {
         if imagePicker?.cameraFlashMode == .off {
             imagePicker?.cameraFlashMode = .on
             flashButton?.setImage(UIImage(named: "FlashOn"), for: .normal)
@@ -779,7 +783,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         }
     }
     
-    func reverseCamera() {
+    @objc func reverseCamera() {
         if imagePicker?.cameraDevice == .rear {
             imagePicker?.cameraDevice = .front
         } else {
@@ -787,7 +791,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         }
     }
     
-    func cancelCamera() {
+    @objc func cancelCamera() {
         pickerPhotos = nil
         imagePicker = nil
         dismiss(animated: true, completion: nil)
@@ -798,10 +802,12 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     // Holy Grail of of thumbnail creation.  Well... Holy Dixie Cup may be more appropriate.
     /// Takes full UIImage and compresses to thumbnail with size ~100KB.
     func getCenterMaxSquareImageByCroppingImage(_ image: UIImage, andShrinkToSize newSize: CGSize) -> UIImage {
+        guard let imageCG = image.cgImage else { return UIImage(named: "NoImage")! }
         // Get crop bounds
-        var centerSquareSize: CGSize
-        var originalImageWidth: Double = CGImageGetWidth(image.cgImage)
-        var originalImageHeight: Double = CGImageGetHeight(image.cgImage)
+        var centerSquareSize = CGSize.zero
+        let originalImageWidth = CGFloat(imageCG.width)
+        let originalImageHeight = CGFloat(imageCG.height)
+//        var originalImageHeight: Double = CGImageGetHeight(image.cgImage)
         if originalImageHeight <= originalImageWidth {
             centerSquareSize.width = originalImageHeight
             centerSquareSize.height = originalImageHeight
@@ -814,16 +820,15 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         let y = (originalImageHeight - centerSquareSize.height) / 2.0
         
         // Crop and create CGImageRef.  This is where an improvement likely lies
-        var cropRect = CGRect(x: x, y: y, width: centerSquareSize.height, height: centerSquareSize.width)
-        var imageRef = CGImageCreateWithImageInRect([image.cgImage], cropRect)
+        let cropRect = CGRect(x: x, y: y, width: centerSquareSize.height, height: centerSquareSize.width)
+        let imageRef = imageCG.cropping(to: cropRect)!
         let cropped = UIImage(cgImage: imageRef, scale: 0.0, orientation: image.imageOrientation)
         
         // Scale the image down to the smaller file size and return.
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
-        cropped.drawInRect(CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+        cropped.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        CGImageRelease(imageRef)
         
         return newImage!
     }
@@ -948,7 +953,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         hudView.text = "Done!"
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { [weak self] in
             hudView.removeFromSuperview()
-            collectionView.reloadData()
+            self?.collectionView.reloadData()
             self?.navigationController?.view.isUserInteractionEnabled = true
         })
     }
@@ -969,7 +974,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     }
     
     // Resizes collectionView cells per sizeForItemAtIndexPath when user rotates device.
-    func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         super.willRotate(to: toInterfaceOrientation, duration: duration)
         collectionView.collectionViewLayout.invalidateLayout()
     }

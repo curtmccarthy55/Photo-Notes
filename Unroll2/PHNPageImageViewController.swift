@@ -9,17 +9,18 @@
 import UIKit
 
 class PHNPageImageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, PHNFullImageViewControllerDelegate {
+    
     //MARK: - Properties
-    var initialIndex: Int // was NSInteger
-    var albumName: String
+    var initialIndex: Int! // was NSInteger
+    var albumName: String!
 //    var pageViewController: UIPageViewController  // this shouldn't be necessary...
-    var albumCount: Int
+    var albumCount: Int!
     
     //MARK: Private Properties
     private var makeViewsVisible = true
     private var makeHomeVisible = false
-    private var noteOpacity: CGFloat
-    private var currentIndex: Int // was NSInteger
+    private var noteOpacity: CGFloat!
+    private var currentIndex: Int! // was NSInteger
     
     @IBOutlet weak var barButtonFavorite: UIBarButtonItem!
     @IBOutlet weak var barButtonOptions: UIBarButtonItem!
@@ -56,13 +57,14 @@ class PHNPageImageViewController: UIPageViewController, UIPageViewControllerData
         setNeedsStatusBarAppearanceUpdate()
         view.backgroundColor = .white
         if let numOpacity = UserDefaults.standard.value(forKey: "noteOpacity") as? NSNumber {
-            noteOpacity = numOpacity.floatValue
+            noteOpacity = CGFloat(exactly: numOpacity)!
         } else {
             noteOpacity = 0.75
         }
         
-        let fullImageVC = fullImageViewControllerForIndex(initialIndex)
-        setViewControllers([fullImageVC], direction: .forward, animated: false, completion: nil)
+        if let fullImageVC = fullImageViewControllerForIndex(initialIndex) {
+            setViewControllers([fullImageVC], direction: .forward, animated: false, completion: nil)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -72,12 +74,20 @@ class PHNPageImageViewController: UIPageViewController, UIPageViewControllerData
     
     //MARK: - UIPageViewController DataSource
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore currentImageVC: PHNFullImageViewController) -> UIViewController? {
-        let previousIndex = viewController.index - 1
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let imageVC = viewController as? PHNFullImageViewController else {
+            //TODO some other error handling?
+            return nil
+        }
+        let previousIndex = imageVC.index! - 1
         return fullImageViewControllerForIndex(previousIndex)
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter currentImageVC: PHNFullImageViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let currentImageVC = viewController as? PHNFullImageViewController else {
+            //TODO some other error handling?
+            return nil
+        }
         let nextIndex = currentImageVC.index! + 1
         return fullImageViewControllerForIndex(nextIndex)
     }

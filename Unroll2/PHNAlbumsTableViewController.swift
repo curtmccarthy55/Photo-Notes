@@ -191,10 +191,11 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     //MARK: - Photo Fetch
     
     func getCenterMaxSquareImageByCroppingImage(_ image: UIImage, andShrinkToSize newSize: CGSize) -> UIImage {
+        guard let imageCG = image.cgImage else { return UIImage(named: "NoImage")! }
         // Get crop bounds
         var centerSquareSize: CGSize = .zero
-        let originalImageWidth = CGFloat(image.cgImage!.width)
-        let originalImageHeight = CGFloat(image.cgImage!.height)
+        let originalImageWidth = CGFloat(imageCG.width)
+        let originalImageHeight = CGFloat(imageCG.height)
         if originalImageHeight <= originalImageWidth {
             centerSquareSize.width = originalImageHeight
             centerSquareSize.height = originalImageHeight
@@ -209,7 +210,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         
         // Crop and create CGImageRef. This is where future improvement likely lies.
         let cropRect = CGRect(x: x, y: y, width: centerSquareSize.width, height: centerSquareSize.height)
-        let imageRef = image.cgImage!.cropping(to: cropRect)!//CGImageCreateWithImageInRect(image.cgImage!, cropRect)
+        let imageRef = imageCG.cropping(to: cropRect)! //CGImageCreateWithImageInRect(image.cgImage!, cropRect)
         let cropped = UIImage(cgImage: imageRef, scale: 0.0, orientation: image.imageOrientation)
         
         // Scale the image down to the smaller file size and return.

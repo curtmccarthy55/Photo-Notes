@@ -33,7 +33,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     @IBOutlet weak var sampleImage: UIImageView!
     var finalVal: CGFloat?
     
-    var fetchResult: PHFetchResult?
+//    var fetchResult: PHFetchResult?
     var imageManager: PHCachingImageManager?
     
     @IBOutlet weak var whiteButton: UIButton!
@@ -54,13 +54,16 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
             if let red = dic.value(forKey: "PhotoNotesRed") as? NSNumber,
                 let green = dic.value(forKey: "PhotoNotesGreen") as? NSNumber,
                 let blue = dic.value(forKey: "PhotoNotesBlue") as? NSNumber {
-                userColor = UIColor(red: red.floatValue, green: green.floatValue, blue: blue.floatValue, alpha: 1.0)
+                userColor = UIColor(red: CGFloat(exactly: red) ?? 60.0/255.0,
+                                  green: CGFloat(exactly: green) ?? 128.0/255.0,
+                                   blue: CGFloat(exactly: blue) ?? 194.0/255.0,
+                                  alpha: 1.0)
             } else {
                 userColor = UIColor(red: 60.0/255.0, green: 128.0/255.0, blue: 194.0/255.0, alpha: 1.0)
             }
             
             if let number = dic.value(forKey: "PhotoNotesColorTag") as? NSNumber,
-                let currentTag = Int(exactly: number!) {
+                let currentTag = Int(exactly: number) {
                 userColorTag = currentTag
             } else {
                 userColorTag = 0
@@ -85,15 +88,16 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         navigationController?.navigationBar.barTintColor = userColor
         
         // Set current opacity.
-        var opacity: Float
+        var opacity: CGFloat
         if let currentOpacity = UserDefaults.standard.value(forKey: "noteOpacity") as? NSNumber {
-            opacity = currentOpacity.floatValue
+            opacity = CGFloat(exactly: currentOpacity) ?? 0.75
         } else {
             opacity = 0.75
         }
         noteView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: opacity)
-        lblOpacity.text = "\(roundf(opacity * 100))%"
-        sldOpacity.setValue((opacity * 100.0), animated: false)
+        lblOpacity.text = "\(roundf(Float(opacity * 100)))%"
+//        sldOpacity.setValue((opacity * 100.0), animated: false)
+        sldOpacity.setValue(Float(opacity * 100.0), animated: false)
         
         // Set current color
         whiteButton.layer.borderWidth = 1.0
@@ -175,63 +179,72 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         }
         
         let dic = selectedColorWithTag(sender.tag)
-        let red = dic.value(forKey: "PhotoNotesRed") as? NSNumber
-        let green = dic.value(forKey: "PhotoNotesGreen") as? NSNumber
-        let blue = dic.value(forKey: "PhotoNotesBlue") as? NSNumber
-        
-        userColor = UIColor(red: red!.floatValue, green: green!.floatValue, blue: blue!.floatValue, alpha: 1.0)
+        if let red = dic.value(forKey: "PhotoNotesRed") as? NSNumber,
+            let green = dic.value(forKey: "PhotoNotesGreen") as? NSNumber,
+            let blue = dic.value(forKey: "PhotoNotesBlue") as? NSNumber {
+            userColor = UIColor(red: CGFloat(exactly: red) ?? 60.0/255.0,
+                                green: CGFloat(exactly: green) ?? 128.0/255.0,
+                                blue: CGFloat(exactly: blue) ?? 194.0/255.0,
+                                alpha: 1.0)
+        } else {
+            userColor = UIColor(red: 60.0/255.0, green: 128.0/255.0, blue: 194.0/255.0, alpha: 1.0)
+        }
         navigationController?.navigationBar.barTintColor = userColor
 //        sldOpacity.thumbTintColor = userColor
     }
     
     func selectedColorWithTag(_ tag: Int) -> NSDictionary {
-        var dictionary = NSDictionary<String, NSNumber>()
+//        var dictionary = NSDictionary<String, NSNumber>()
+        var dictionary = NSDictionary()
         var red, green, blue: NSNumber
         var selectedTag: NSNumber
         
         switch tag {
-        case kPhotoNotesBlue.rawValue:
+        case ThemeColor.kPhotoNotesBlue.rawValue:
             red = NSNumber(value: 60.0/255.0)
             green = NSNumber(value: 128.0/255.0)
             blue = NSNumber(value: 194.0/255.0)
             selectedTag = 0
-        case kPhotoNotesRed.rawValue:
+        case ThemeColor.kPhotoNotesRed.rawValue:
             red = NSNumber(value: 0.81)
             green = NSNumber(value: 0.21)
             blue = NSNumber(value: 0.2)
             selectedTag = 1
-        case kPhotoNotesBlack.rawValue:
+        case ThemeColor.kPhotoNotesBlack.rawValue:
             red = NSNumber(value: 0.26)
             green = NSNumber(value: 0.26)
             blue = NSNumber(value: 0.26)
             selectedTag = 2
-        case kPhotoNotesPurple.rawValue:
+        case ThemeColor.kPhotoNotesPurple.rawValue:
             red = NSNumber(value: 0.67)
             green = NSNumber(value: 0.26)
             blue = NSNumber(value: 0.73)
             selectedTag = 3
-        case kPhotoNotesOrange.rawValue:
+        case ThemeColor.kPhotoNotesOrange.rawValue:
             red = NSNumber(value: 0.93)
             green = NSNumber(value: 0.55)
             blue = NSNumber(value: 0.01)
             selectedTag = 4
-        case kPhotoNotesYellow:
+        case ThemeColor.kPhotoNotesYellow.rawValue:
             red = NSNumber(value: 0.95)
             green = NSNumber(value: 0.95)
             blue = NSNumber(value: 0.34)
             selectedTag = 5
-        case kPhotoNotesGreen:
+        case ThemeColor.kPhotoNotesGreen.rawValue:
             red = NSNumber(value: -0.08)
             green = NSNumber(value: 0.56)
             blue = NSNumber(value: -0.01)
             selectedTag = 6
-        case kPhotoNotesWhite:
+        case ThemeColor.kPhotoNotesWhite.rawValue:
             red = NSNumber(value: 1.0)
             green = NSNumber(value: 1.0)
             blue = NSNumber(value: 1.0)
             selectedTag = 7
-        default:
-            break
+        default: // set to PhotoNotesBlue
+            red = NSNumber(value: 60.0/255.0)
+            green = NSNumber(value: 128.0/255.0)
+            blue = NSNumber(value: 194.0/255.0)
+            selectedTag = 0
         }
         
         dictionary.setValue(red, forKey: "PhotoNotesRed")
@@ -247,7 +260,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     @IBAction func slider(_ sender: UISlider) {
         let oVal = sender.value
         lblOpacity.text = "\(roundf(oVal))%"
-        noteView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: (oVal / 100))
+        noteView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: (CGFloat(oVal / 100)))
         lblOpacity.alpha = 1.0
         
         if !btnDone.isEnabled {
@@ -395,16 +408,16 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
                 let actionDismiss = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
                 
                 adjustPrivacyController.addAction(actionDismiss)
-                present(adjustPrivacyController, animated: true, completion: nil)
+                self?.present(adjustPrivacyController, animated: true, completion: nil)
             } else {
-                presentPhotoGrabViewController()
+                self?.presentPhotoGrabViewController()
             }
         }
     }
     
     //MARK: - Table View Delegate
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
             photosFromLibrary()
         } else if indexPath.section == 2 {
@@ -445,7 +458,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         }
     }
     
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as! UITableViewHeaderFooterView
         header.textLabel?.textColor = .white
     }
