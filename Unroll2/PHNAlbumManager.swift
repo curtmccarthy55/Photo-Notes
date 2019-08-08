@@ -17,9 +17,11 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
     lazy var fileSerializer = PHNFileSerializer()
     
     private lazy var allAlbumsEdit: [PHNPhotoAlbum] = { //was NSMutableOrderedSet
-        if let set = fileSerializer.readObjectFromRelativePath(CJMAlbumFileName) as? NSMutableOrderedSet {
-            let arr = set.array as? [PHNPhotoAlbum]
-            return arr ?? []
+        if let set = fileSerializer.readObjectFromRelativePath(CJMAlbumFileName) as? [PHNPhotoAlbum]/*as? NSMutableOrderedSet*/ {
+//            let arr = set.array as? [PHNPhotoAlbum]
+//            return arr ?? []
+            print(set)
+            return set
         }
         return []
     }()

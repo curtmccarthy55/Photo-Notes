@@ -141,13 +141,19 @@ class PHNImportAlbumsViewController: UITableViewController {
                 // TODO
             }
         }
-        imageManager.requestImage(for: asset!, targetSize: cell.frame.size, contentMode: .aspectFill, options: nil) { (result, info) in
-            if result != nil {
-                cell.cellThumbnail.image = result
-            } else {
-                cell.cellThumbnail.image = UIImage(named: "NoImage")
+        
+        if asset != nil {
+            imageManager.requestImage(for: asset!, targetSize: cell.frame.size, contentMode: .aspectFill, options: nil) { (result, info) in
+                if result != nil {
+                    cell.cellThumbnail.image = result
+                } else {
+                    cell.cellThumbnail.image = UIImage(named: "NoImage")
+                }
             }
+        } else {
+            cell.cellThumbnail.image = UIImage(named: "NoImage")
         }
+        
         return cell
     }
     
