@@ -876,9 +876,9 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
                         fileSerializer.writeImage(cResult, toRelativePath: assetImage.thumbnailFileName)
                         assetImage.thumbnailNeedsRedraw = false
                         
-                        //                        imageLoadGroup.leave()
+                                                imageLoadGroup.leave()
                     }
-                    imageLoadGroup.leave()
+//                    imageLoadGroup.leave()
                 })
             })
             assetImage.setInitialValuesWithAlbum(album.albumTitle)

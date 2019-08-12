@@ -17,7 +17,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="LAb-oi-MDb">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="641"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.1176470588" green="0.25098039220000001" blue="0.3803921569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                         <color key="separatorColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <connections>
@@ -28,7 +28,7 @@
                     <toolbarItems>
                         <barButtonItem title="Edit" id="zk0-Rl-znW">
                             <connections>
-                                <action selector="editTableView:" destination="NO4-kQ-OsT" id="yHa-Jj-eRP"/>
+                                <action selector="editTableView" destination="NO4-kQ-OsT" id="78n-Un-RBE"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="0Wj-Ry-7YY"/>
@@ -40,7 +40,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="rt5-SI-mbi"/>
                         <barButtonItem systemItem="camera" id="igR-0V-lHp">
                             <connections>
-                                <action selector="photoGrab:" destination="NO4-kQ-OsT" id="qj5-X6-kYg"/>
+                                <action selector="photoGrab" destination="NO4-kQ-OsT" id="U10-yZ-OnD"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
@@ -76,7 +76,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="UL2-Jf-cyX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.1176470588" green="0.25098039220000001" blue="0.3803921569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <sections>
                             <tableViewSection headerTitle="Album Name" id="TNv-4k-r0a">
                                 <cells>
@@ -125,7 +125,6 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="centerX" secondItem="tP9-kT-QRy" secondAttribute="centerX" id="7Iu-Ry-XPO"/>
-                                                <constraint firstAttribute="centerY" secondItem="tP9-kT-QRy" secondAttribute="centerY" id="Ctp-q2-FvS"/>
                                                 <constraint firstItem="tP9-kT-QRy" firstAttribute="top" secondItem="9bV-4I-mUg" secondAttribute="topMargin" constant="-4" id="DcO-AR-E2N"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="tP9-kT-QRy" secondAttribute="bottom" constant="-4" id="Yf4-HM-31C"/>
                                                 <constraint firstItem="tP9-kT-QRy" firstAttribute="trailing" secondItem="9bV-4I-mUg" secondAttribute="trailingMargin" constant="8" id="tCo-D2-YtO"/>
@@ -349,25 +348,25 @@
                     <toolbarItems>
                         <barButtonItem title="Select" id="zne-Rb-ioX">
                             <connections>
-                                <action selector="toggleEditMode:" destination="uLg-8C-qq2" id="xHv-Pj-5gp"/>
+                                <action selector="toggleEditMode" destination="uLg-8C-qq2" id="hi8-cQ-mxR"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="IDE-TX-idm"/>
                         <barButtonItem enabled="NO" title="Delete" id="wBf-Pk-UhX">
                             <connections>
-                                <action selector="deleteSelcted:" destination="uLg-8C-qq2" id="xUL-Xo-zi3"/>
+                                <action selector="deleteSelected" destination="uLg-8C-qq2" id="8rc-kO-bWa"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="VPv-qD-CsF"/>
                         <barButtonItem enabled="NO" title="Transfer" id="26C-DL-UK1">
                             <connections>
-                                <action selector="exportSelected:" destination="uLg-8C-qq2" id="LtV-uC-Hi5"/>
+                                <action selector="exportSelected" destination="uLg-8C-qq2" id="cRp-sg-fnU"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="vjI-ag-2pA"/>
                         <barButtonItem systemItem="camera" id="r9C-xl-G7l">
                             <connections>
-                                <action selector="photoGrab:" destination="uLg-8C-qq2" id="jOd-cG-Tvi"/>
+                                <action selector="photoGrab" destination="uLg-8C-qq2" id="rfM-nq-epU"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
@@ -760,7 +759,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="static" style="grouped" separatorStyle="default" rowHeight="120" sectionHeaderHeight="1" sectionFooterHeight="1" id="tlv-Dk-BZJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.1176470588" green="0.25098039220000001" blue="0.3803921569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <sections>
                             <tableViewSection headerTitle="Preferences" id="hbj-qL-Xgc">
@@ -1090,12 +1089,12 @@
                     <navigationItem key="navigationItem" title="Settings" id="Xcl-Od-lsT">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="j63-HQ-iEi">
                             <connections>
-                                <action selector="cancelAction:" destination="AXu-8r-XFG" id="1Yw-IH-K5C"/>
+                                <action selector="cancelAction:" destination="AXu-8r-XFG" id="0Z5-Re-l7a"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Save" id="YaD-cJ-6OL">
                             <connections>
-                                <action selector="doneAction:" destination="AXu-8r-XFG" id="Suq-fR-JQu"/>
+                                <action selector="doneAction:" destination="AXu-8r-XFG" id="uYs-VR-jrn"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1107,14 +1106,14 @@
                         <outlet property="sampleImage" destination="QGu-Bi-6S0" id="jDO-nm-5JR"/>
                         <outlet property="sldOpacity" destination="Jdf-R4-WXo" id="2NB-5G-wsd"/>
                         <outlet property="whiteButton" destination="IXK-Q1-CBc" id="8ac-hv-c8Y"/>
-                        <outletCollection property="colorButtons" destination="UOW-a1-Bam" id="I3Y-LB-pOV"/>
-                        <outletCollection property="colorButtons" destination="cbH-rK-9Em" id="CyX-Is-pw9"/>
-                        <outletCollection property="colorButtons" destination="zdA-6l-M8q" id="hbb-6i-Yl5"/>
-                        <outletCollection property="colorButtons" destination="m4o-58-Ivl" id="jAq-bG-nsG"/>
-                        <outletCollection property="colorButtons" destination="7TI-Rn-159" id="XrU-J8-1DG"/>
-                        <outletCollection property="colorButtons" destination="apw-eK-jM9" id="7fS-T9-NUU"/>
-                        <outletCollection property="colorButtons" destination="Gy7-LR-DNJ" id="Znf-GG-rgM"/>
-                        <outletCollection property="colorButtons" destination="IXK-Q1-CBc" id="mgi-Q0-Trb"/>
+                        <outletCollection property="colorButtons" destination="UOW-a1-Bam" collectionClass="NSMutableArray" id="z76-0J-Bb6"/>
+                        <outletCollection property="colorButtons" destination="cbH-rK-9Em" collectionClass="NSMutableArray" id="bYR-vp-YUW"/>
+                        <outletCollection property="colorButtons" destination="zdA-6l-M8q" collectionClass="NSMutableArray" id="JwL-S8-zMT"/>
+                        <outletCollection property="colorButtons" destination="m4o-58-Ivl" collectionClass="NSMutableArray" id="2wC-vl-cGl"/>
+                        <outletCollection property="colorButtons" destination="7TI-Rn-159" collectionClass="NSMutableArray" id="brI-YL-RU4"/>
+                        <outletCollection property="colorButtons" destination="apw-eK-jM9" collectionClass="NSMutableArray" id="pjB-ec-BMc"/>
+                        <outletCollection property="colorButtons" destination="Gy7-LR-DNJ" collectionClass="NSMutableArray" id="bdf-il-ije"/>
+                        <outletCollection property="colorButtons" destination="IXK-Q1-CBc" collectionClass="NSMutableArray" id="0DB-sb-rWc"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JkA-2z-Mze" userLabel="First Responder" sceneMemberID="firstResponder"/>

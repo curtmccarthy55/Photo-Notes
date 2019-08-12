@@ -38,7 +38,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     
     @IBOutlet weak var whiteButton: UIButton!
     
-    var colorButtons: [UIButton]!
+    @IBOutlet var colorButtons: [UIButton]!
     var userColorTag: Int? // was NSNumber
     var userColor: UIColor?
     var colorChanged = false
@@ -197,7 +197,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     
     func selectedColorWithTag(_ tag: Int) -> NSDictionary {
 //        var dictionary = NSDictionary<String, NSNumber>()
-        var dictionary = NSDictionary()
+        var dictionary = NSMutableDictionary()
         var red, green, blue: NSNumber
         var selectedTag: NSNumber
         
@@ -208,34 +208,34 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
             blue = NSNumber(value: 194.0/255.0)
             selectedTag = 0
         case ThemeColor.kPhotoNotesRed.rawValue:
-            red = NSNumber(value: 0.81)
-            green = NSNumber(value: 0.21)
-            blue = NSNumber(value: 0.2)
+            red = NSNumber(value: 150.0/255.0)     // 207/255 //-> 150/255.0
+            green = NSNumber(value: 0)   // 54/255  //-> 0/255.0
+            blue = NSNumber(value: 23.0/255.0)     // 51/255  //-> 23/255.0
             selectedTag = 1
         case ThemeColor.kPhotoNotesBlack.rawValue:
-            red = NSNumber(value: 0.26)
-            green = NSNumber(value: 0.26)
-            blue = NSNumber(value: 0.26)
+            red = NSNumber(value: 50.0/255.0)
+            green = NSNumber(value: 50.0/255.0)
+            blue = NSNumber(value: 50.0/255.0)
             selectedTag = 2
         case ThemeColor.kPhotoNotesPurple.rawValue:
-            red = NSNumber(value: 0.67)
-            green = NSNumber(value: 0.26)
-            blue = NSNumber(value: 0.73)
+            red = NSNumber(value: 130.0/255)
+            green = NSNumber(value: 0)
+            blue = NSNumber(value: 202.0/255.0)
             selectedTag = 3
         case ThemeColor.kPhotoNotesOrange.rawValue:
-            red = NSNumber(value: 0.93)
-            green = NSNumber(value: 0.55)
-            blue = NSNumber(value: 0.01)
+            red = NSNumber(value: 255.0/255.0)
+            green = NSNumber(value: 130.0/255.0)
+            blue = NSNumber(value: 0)
             selectedTag = 4
         case ThemeColor.kPhotoNotesYellow.rawValue:
-            red = NSNumber(value: 0.95)
-            green = NSNumber(value: 0.95)
-            blue = NSNumber(value: 0.34)
+            red = NSNumber(value: 242.0/255.0)
+            green = NSNumber(value: 242.0/255.0)
+            blue = NSNumber(value: 83.0/255.0)
             selectedTag = 5
         case ThemeColor.kPhotoNotesGreen.rawValue:
-            red = NSNumber(value: -0.08)
-            green = NSNumber(value: 0.56)
-            blue = NSNumber(value: -0.01)
+            red = NSNumber(value: 0)
+            green = NSNumber(value: 122.0/255.0)
+            blue = NSNumber(value: 39.0/255.0)
             selectedTag = 6
         case ThemeColor.kPhotoNotesWhite.rawValue:
             red = NSNumber(value: 1.0)

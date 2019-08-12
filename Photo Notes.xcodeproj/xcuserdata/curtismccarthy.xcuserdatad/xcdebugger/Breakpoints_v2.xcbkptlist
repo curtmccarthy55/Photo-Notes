@@ -426,7 +426,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/PHNGalleryViewController.swift"
-            timestampString = "586928401.221114"
+            timestampString = "587339619.394009"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "870"
@@ -442,7 +442,7 @@
                   moduleName = "Unroll2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/curtismccarthy/Documents/Programming/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/PHNGalleryViewController.swift"
-                  timestampString = "586928401.44262"
+                  timestampString = "587333556.365239"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "870"
@@ -457,7 +457,7 @@
                   moduleName = "Unroll2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/curtismccarthy/Documents/Programming/Blue%20Evolutions%20Projects/Photo%20Notes/Unroll2/PHNGalleryViewController.swift"
-                  timestampString = "586928401.444802"
+                  timestampString = "587333556.367756"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "871"
@@ -474,11 +474,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/PHNGalleryViewController.swift"
-            timestampString = "586928442.729917"
+            timestampString = "587339619.394141"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "881"
-            endingLineNumber = "881"
+            startingLineNumber = "882"
+            endingLineNumber = "882"
             landmarkName = "photoGrabSceneDidFinishSelectingPhotos(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -490,12 +490,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Unroll2/PHNGalleryViewController.swift"
-            timestampString = "586928445.122285"
+            timestampString = "587339619.39421"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "876"
             endingLineNumber = "876"
             landmarkName = "photoGrabSceneDidFinishSelectingPhotos(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Unroll2/PHNSettingsViewController.swift"
+            timestampString = "587339619.394276"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "252"
+            endingLineNumber = "252"
+            landmarkName = "selectedColorWithTag(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
