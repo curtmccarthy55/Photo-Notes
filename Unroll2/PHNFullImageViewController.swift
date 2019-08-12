@@ -61,8 +61,8 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     @IBOutlet private weak var seeNoteButton: UIButton!
     @IBOutlet private weak var editNoteButton: UIButton!
     // Note View Dynamic Constraints
-    @IBOutlet private weak var noteSectionDown: NSLayoutConstraint!
-    @IBOutlet private weak var noteSectionUp: NSLayoutConstraint!
+    @IBOutlet private var noteSectionDown: NSLayoutConstraint!
+    @IBOutlet private var noteSectionUp: NSLayoutConstraint!
     
     //MARK: Functionality Variables
     private var lastZoomScale: CGFloat?
@@ -512,7 +512,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
         }
     }
     
-    @IBAction func imageViewTapped(sender: Any?) {
+    @IBAction func imageViewTapped(_ sender: Any?) {
         #if DEBUG
         print("****IMAGEVIEW TAPPED****")
         #endif
@@ -530,7 +530,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
         }
     }
     
-    @IBAction func imageViewDoubleTApped(_ gestureRecognizer: UITapGestureRecognizer) {
+    @IBAction func imageViewDoubleTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         if scrollView.zoomScale == initialZoomScale! {
             var centerPoint = gestureRecognizer.location(in: scrollView)
             

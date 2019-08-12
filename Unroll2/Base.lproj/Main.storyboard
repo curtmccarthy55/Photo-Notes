@@ -599,7 +599,7 @@
                         <outlet property="leftConstraint" destination="2aF-os-TrH" id="kMt-rq-Hft"/>
                         <outlet property="noteEntry" destination="c5T-Ao-Wwn" id="I8u-10-JSN"/>
                         <outlet property="noteSection" destination="rlx-cQ-nGb" id="uT1-tT-pd3"/>
-                        <outlet property="noteSectionDown" destination="FVW-KF-XEn" id="4zT-Jd-XYh"/>
+                        <outlet property="noteSectionDown" destination="FVW-KF-XEn" id="3Yr-zZ-uyC"/>
                         <outlet property="noteSectionUp" destination="c1j-KL-Cmu" id="Lvv-ne-cNa"/>
                         <outlet property="noteTitle" destination="upp-GS-1zm" id="X3Z-dK-8dH"/>
                         <outlet property="oneTap" destination="PKx-nw-LUR" id="WDx-Id-La1"/>

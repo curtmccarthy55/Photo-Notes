@@ -55,7 +55,7 @@ class PHNPageImageViewController: UIPageViewController, UIPageViewControllerData
         currentIndex = initialIndex
         prefersStatusBarHidden
         setNeedsStatusBarAppearanceUpdate()
-        view.backgroundColor = .white
+        view.backgroundColor = .groupTableViewBackground //.white
         if let numOpacity = UserDefaults.standard.value(forKey: "noteOpacity") as? NSNumber {
             noteOpacity = CGFloat(exactly: numOpacity)!
         } else {
@@ -148,8 +148,10 @@ class PHNPageImageViewController: UIPageViewController, UIPageViewControllerData
         makeViewsVisible = setting
         setNeedsStatusBarAppearanceUpdate()
         if makeViewsVisible {
+            view.backgroundColor = .groupTableViewBackground
             NotificationCenter.default.post(name: Notification.Name("ImageShowBars"), object: nil)
         } else {
+            view.backgroundColor = .black
             NotificationCenter.default.post(name: Notification.Name("ImageHideBars"), object: nil)
         }
     }
