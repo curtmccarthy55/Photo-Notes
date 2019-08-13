@@ -93,7 +93,12 @@ class PHNPhotoAlbum: NSObject, NSCoding, NSCopying {
     required init?(coder aDecoder: NSCoder) {
         albumTitle = aDecoder.decodeObject(forKey: CodingKeys.albumTitle.rawValue) as! String
         albumNote = aDecoder.decodeObject(forKey: CodingKeys.albumNote.rawValue) as? String
-        albumEditablePhotos = aDecoder.decodeObject(forKey: CodingKeys.albumEditablePhotos.rawValue) as! [PhotoNote]
+        
+        if let storedPhotos = aDecoder.decodeObject(forKey: CodingKeys.albumEditablePhotos.rawValue) as? NSMutableOrderedSet {
+            albumEditablePhotos = storedPhotos.array as! [PhotoNote]
+        } else {
+            albumEditablePhotos = aDecoder.decodeObject(forKey: CodingKeys.albumEditablePhotos.rawValue) as! [PhotoNote]
+        }
         albumPreviewImage = aDecoder.decodeObject(forKey: CodingKeys.albumPreviewImage.rawValue) as? PhotoNote
         print("PHNPhotoAlbum.init?(coder:) complete")
     }

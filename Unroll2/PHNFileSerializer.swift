@@ -9,6 +9,13 @@
 import UIKit
 
 class PHNFileSerializer: NSObject {
+    
+    override init() {
+        super.init()
+        
+        NSKeyedUnarchiver.setClass(PHNPhotoAlbum.self, forClassName: "CJMPhotoAlbum")
+        NSKeyedUnarchiver.setClass(PhotoNote.self, forClassName: "CJMImage")
+    }
 
     func readObjectFromRelativePath(_ path: String) -> Any? {
         let absolutePath = absolutePathFromRelativePath(path)
@@ -75,7 +82,7 @@ class PHNFileSerializer: NSObject {
     }
     
     func absolutePathFromRelativePath(_ path: String) -> String {
-        let directory = documentsDirectory()
+        let directory = documentsDirectory() + "/"
         let absolutePath = directory.appending(path)
         
         return absolutePath
