@@ -12,7 +12,7 @@ class PHNFileSerializer: NSObject {
     
     override init() {
         super.init()
-        
+        // PHASE OUT - model type transitions following Swift migration. Established post v2.1
         NSKeyedUnarchiver.setClass(PHNPhotoAlbum.self, forClassName: "CJMPhotoAlbum")
         NSKeyedUnarchiver.setClass(PhotoNote.self, forClassName: "CJMImage")
     }

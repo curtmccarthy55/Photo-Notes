@@ -17,26 +17,27 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
     lazy var fileSerializer = PHNFileSerializer()
     
     private lazy var allAlbumsEdit: [PHNPhotoAlbum] = { //was NSMutableOrderedSet
+        /*
+        if let set = fileSerializer.readObjectFromRelativePath(CJMAlbumFileName) as? [PHNPhotoAlbum] {
+            #if DEBUG
+            print("PHNPhotoAlbums fetched for album manager.")
+            #endif
+            return set
+        }
+        return []
+*/
+        // PHASE OUT - model type transitions following Swift migration. Established post v2.1. Replace with above.
         let set = fileSerializer.readObjectFromRelativePath(CJMAlbumFileName)
-        if set is NSMutableOrderedSet {
+        if set is [PHNPhotoAlbum] {
+            print("set is [PHNPhotoAlbum]")
+            return (set as! [PHNPhotoAlbum])
+        } else if set is NSMutableOrderedSet {
             print("set is nsmutableorderedset")
             if let arr = (set as! NSMutableOrderedSet).array as? [PHNPhotoAlbum] {
                 return arr
             }
-            
-        } else if set is [PHNPhotoAlbum] {
-            print("set is [PHNPhotoAlbum]")
-            return (set as! [PHNPhotoAlbum])
         }
-        
         return []
-        
-        
-//        if let set = fileSerializer.readObjectFromRelativePath(CJMAlbumFileName) as? [PHNPhotoAlbum] {
-//            print(set)
-//            return set
-//        }
-//        return []
     }()
     
     var allAlbums: [PHNPhotoAlbum] {
