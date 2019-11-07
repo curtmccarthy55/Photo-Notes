@@ -412,7 +412,10 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
                 adjustPrivacyController.addAction(actionDismiss)
                 self?.present(adjustPrivacyController, animated: true, completion: nil)
             } else {
-                self?.presentPhotoGrabViewController()
+                // requestAuthorization() is asynchronous. Must dispatch to main.
+                DispatchQueue.main.async {
+                    self?.presentPhotoGrabViewController()
+                }
             }
         }
     }

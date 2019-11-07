@@ -255,7 +255,10 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
                 
                 self?.present(adjustPrivacyController, animated: true, completion: nil)
             } else {
-                self?.presentPhotoGrabViewController()
+                // requestAuthorization() is asynchronous. Must dispatch to main.
+                DispatchQueue.main.async {
+                    self?.presentPhotoGrabViewController()
+                }
             }
         }
     }

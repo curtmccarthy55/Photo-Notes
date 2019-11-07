@@ -54,9 +54,6 @@
 
 /* Begin PBXFileReference section */
 		750F7A48228E022300CA7E01 /* PHNAlbumListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PHNAlbumListTableViewCell.xib; sourceTree = "<group>"; };
-		751497D821769137001E6D52 /* PHNImportAlbumsVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHNImportAlbumsVC.h; sourceTree = "<group>"; };
-		751497D921769137001E6D52 /* PHNImportAlbumsVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PHNImportAlbumsVC.m; sourceTree = "<group>"; };
-		751497DC217FD894001E6D52 /* PHNPhotoGrabCompletionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHNPhotoGrabCompletionDelegate.h; sourceTree = "<group>"; };
 		751A7D3922F8D67000F612DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		751ADCAC22E8BF950053EC90 /* PHNHudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNHudView.swift; sourceTree = "<group>"; };
 		751AE8B722D7CB75007CF2FE /* PHNGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNGalleryViewController.swift; sourceTree = "<group>"; };
@@ -80,60 +77,20 @@
 		755558C8203240B2005A9478 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		755558C9203240B3005A9478 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
 		758F55181E22AAC40023F869 /* IconStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IconStoryboard.storyboard; sourceTree = "<group>"; };
-		75A1E4322180E7FE00F740C1 /* CJMAListTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CJMAListTableViewCell.h; sourceTree = "<group>"; };
 		75BD865922F4E232006F4B91 /* PHNGrabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNGrabCell.swift; sourceTree = "<group>"; };
 		75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumDetailViewController.swift; sourceTree = "<group>"; };
 		75BD865D22F78721006F4B91 /* PHNSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNSettingsViewController.swift; sourceTree = "<group>"; };
 		75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNImportAlbumsViewController.swift; sourceTree = "<group>"; };
 		75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPhotoGrabViewController.swift; sourceTree = "<group>"; };
-		75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMSettingsViewController.h; sourceTree = "<group>"; };
-		75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMSettingsViewController.m; sourceTree = "<group>"; };
-		75EF2D431DF7361400557EDA /* CJMPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPopoverViewController.h; sourceTree = "<group>"; };
-		75EF2D441DF7361400557EDA /* CJMPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMPopoverViewController.m; sourceTree = "<group>"; };
 		840852A51B5DA49E00664849 /* no_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_image.jpg; sourceTree = "<group>"; };
-		84401F081B2CAA0D00B4FB89 /* CJMAListPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMAListPickerViewController.h; sourceTree = "<group>"; };
-		84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAListPickerViewController.m; sourceTree = "<group>"; };
-		84401F3D1B3092F100B4FB89 /* CJMHudView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMHudView.h; sourceTree = "<group>"; };
-		84401F3E1B3092F100B4FB89 /* CJMHudView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMHudView.m; sourceTree = "<group>"; };
-		845B90CD1AF42BC300365239 /* CJMPageImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPageImageViewController.h; sourceTree = "<group>"; };
-		845B90CE1AF42BC300365239 /* CJMPageImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMPageImageViewController.m; sourceTree = "<group>"; };
 		84A769511ADAE39F00DE6741 /* Unroll2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unroll2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A769551ADAE39F00DE6741 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84A769561ADAE39F00DE6741 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		84A769581ADAE39F00DE6741 /* CJMAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CJMAppDelegate.h; sourceTree = "<group>"; };
-		84A769591ADAE39F00DE6741 /* CJMAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CJMAppDelegate.m; sourceTree = "<group>"; };
 		84A7695F1ADAE39F00DE6741 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		84A769611ADAE39F00DE6741 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		84A7696A1ADAE3A000DE6741 /* Unroll2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Unroll2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A7696F1ADAE3A000DE6741 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84A769701ADAE3A000DE6741 /* Unroll2Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Unroll2Tests.m; sourceTree = "<group>"; };
-		84C2B92E1ADB022E0034786C /* CJMAListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMAListViewController.h; sourceTree = "<group>"; };
-		84C2B92F1ADB022E0034786C /* CJMAListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAListViewController.m; sourceTree = "<group>"; };
-		84C2B9351ADB0A580034786C /* CJMAListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAListTableViewCell.m; sourceTree = "<group>"; };
-		84C2B9391ADB35C30034786C /* CJMAlbumManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMAlbumManager.h; sourceTree = "<group>"; };
-		84C2B93A1ADB35C30034786C /* CJMAlbumManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMAlbumManager.m; sourceTree = "<group>"; };
-		84C2B93C1ADB38880034786C /* CJMPhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPhotoAlbum.h; sourceTree = "<group>"; };
-		84C2B93D1ADB38880034786C /* CJMPhotoAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMPhotoAlbum.m; sourceTree = "<group>"; };
-		84C2B93F1ADC2F750034786C /* CJMImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMImage.h; sourceTree = "<group>"; };
-		84C2B9401ADC2F750034786C /* CJMImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMImage.m; sourceTree = "<group>"; };
-		84C2B9451ADC51280034786C /* CJMADetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMADetailViewController.h; sourceTree = "<group>"; };
-		84C2B9461ADC51280034786C /* CJMADetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMADetailViewController.m; sourceTree = "<group>"; };
-		84C2B9481ADCBB420034786C /* CJMGalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMGalleryViewController.h; sourceTree = "<group>"; };
-		84C2B9491ADCBB420034786C /* CJMGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMGalleryViewController.m; sourceTree = "<group>"; };
-		84C2B94B1ADF39E60034786C /* CJMFileSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMFileSerializer.h; sourceTree = "<group>"; };
-		84C2B94C1ADF39E60034786C /* CJMFileSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMFileSerializer.m; sourceTree = "<group>"; };
-		84C2B94E1ADF4AA00034786C /* CJMServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMServices.h; sourceTree = "<group>"; };
-		84C2B94F1ADF4AA00034786C /* CJMServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMServices.m; sourceTree = "<group>"; };
-		84C2B9931AE42E040034786C /* CJMPhotoGrabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPhotoGrabViewController.h; sourceTree = "<group>"; };
-		84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMPhotoGrabViewController.m; sourceTree = "<group>"; };
-		84C2B9961AE441CE0034786C /* CJMPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMPhotoCell.h; sourceTree = "<group>"; };
-		84C2B9971AE441CE0034786C /* CJMPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMPhotoCell.m; sourceTree = "<group>"; };
-		84DC68F41B52B085000A2480 /* CJMCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMCache.h; sourceTree = "<group>"; };
-		84DC68F51B52B085000A2480 /* CJMCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMCache.m; sourceTree = "<group>"; };
-		84F1FDAB1AEAF57A0092D424 /* CJMFullImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMFullImageViewController.h; sourceTree = "<group>"; };
-		84F1FDAC1AEAF57A0092D424 /* CJMFullImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMFullImageViewController.m; sourceTree = "<group>"; };
-		84F1FDB01AEF21A60092D424 /* CJMGrabCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJMGrabCell.h; sourceTree = "<group>"; };
-		84F1FDB11AEF21A60092D424 /* CJMGrabCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJMGrabCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,12 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */,
-				751497DC217FD894001E6D52 /* PHNPhotoGrabCompletionDelegate.h */,
-				751497D821769137001E6D52 /* PHNImportAlbumsVC.h */,
-				751497D921769137001E6D52 /* PHNImportAlbumsVC.m */,
 				75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */,
-				84C2B9931AE42E040034786C /* CJMPhotoGrabViewController.h */,
-				84C2B9941AE42E040034786C /* CJMPhotoGrabViewController.m */,
 			);
 			name = "Image Import";
 			sourceTree = "<group>";
@@ -175,8 +127,6 @@
 			children = (
 				84A7695E1ADAE39F00DE6741 /* Main.storyboard */,
 				751A7D3922F8D67000F612DD /* AppDelegate.swift */,
-				84A769581ADAE39F00DE6741 /* CJMAppDelegate.h */,
-				84A769591ADAE39F00DE6741 /* CJMAppDelegate.m */,
 			);
 			name = "App Wide";
 			sourceTree = "<group>";
@@ -185,18 +135,10 @@
 			isa = PBXGroup;
 			children = (
 				7540EA8D22C67CE60000D60E /* PHNAlbumsTableViewController.swift */,
-				84C2B92E1ADB022E0034786C /* CJMAListViewController.h */,
-				84C2B92F1ADB022E0034786C /* CJMAListViewController.m */,
 				75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */,
-				84C2B9451ADC51280034786C /* CJMADetailViewController.h */,
-				84C2B9461ADC51280034786C /* CJMADetailViewController.m */,
 				75BD865D22F78721006F4B91 /* PHNSettingsViewController.swift */,
-				75E330901E1D55CB0006B8FB /* CJMSettingsViewController.h */,
-				75E330911E1D55CB0006B8FB /* CJMSettingsViewController.m */,
 				7540EA9D22CD5D180000D60E /* PHNPopoverViewController.swift */,
 				7540EA9F22CFA8AE0000D60E /* PHNPopoverViewController.xib */,
-				75EF2D431DF7361400557EDA /* CJMPopoverViewController.h */,
-				75EF2D441DF7361400557EDA /* CJMPopoverViewController.m */,
 			);
 			name = "Album List";
 			sourceTree = "<group>";
@@ -205,18 +147,10 @@
 			isa = PBXGroup;
 			children = (
 				751AE8B722D7CB75007CF2FE /* PHNGalleryViewController.swift */,
-				84C2B9481ADCBB420034786C /* CJMGalleryViewController.h */,
-				84C2B9491ADCBB420034786C /* CJMGalleryViewController.m */,
 				7540EAAA22CFCA030000D60E /* PHNAlbumPickerViewController.swift */,
 				7540EAAB22CFCA030000D60E /* PHNAlbumPickerViewController.xib */,
-				84401F081B2CAA0D00B4FB89 /* CJMAListPickerViewController.h */,
-				84401F091B2CAA0D00B4FB89 /* CJMAListPickerViewController.m */,
 				752A624A22DD27F800E4A84D /* PHNPageImageViewController.swift */,
-				845B90CD1AF42BC300365239 /* CJMPageImageViewController.h */,
-				845B90CE1AF42BC300365239 /* CJMPageImageViewController.m */,
 				752A624E22E0E0B900E4A84D /* PHNFullImageViewController.swift */,
-				84F1FDAB1AEAF57A0092D424 /* CJMFullImageViewController.h */,
-				84F1FDAC1AEAF57A0092D424 /* CJMFullImageViewController.m */,
 				752A624C22E0C03300E4A84D /* PHNFullImageViewController.xib */,
 			);
 			name = Album;
@@ -227,18 +161,10 @@
 			children = (
 				751F2DF322D804A500DDCBEF /* PHNPhotoCell.swift */,
 				751F2DF422D804A500DDCBEF /* PHNPhotoCell.xib */,
-				84C2B9961AE441CE0034786C /* CJMPhotoCell.h */,
-				84C2B9971AE441CE0034786C /* CJMPhotoCell.m */,
 				75BD865922F4E232006F4B91 /* PHNGrabCell.swift */,
-				84F1FDB01AEF21A60092D424 /* CJMGrabCell.h */,
-				84F1FDB11AEF21A60092D424 /* CJMGrabCell.m */,
 				7540EA9B22CD545C0000D60E /* PHNAlbumListTableViewCell.swift */,
 				750F7A48228E022300CA7E01 /* PHNAlbumListTableViewCell.xib */,
-				75A1E4322180E7FE00F740C1 /* CJMAListTableViewCell.h */,
-				84C2B9351ADB0A580034786C /* CJMAListTableViewCell.m */,
 				751ADCAC22E8BF950053EC90 /* PHNHudView.swift */,
-				84401F3D1B3092F100B4FB89 /* CJMHudView.h */,
-				84401F3E1B3092F100B4FB89 /* CJMHudView.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -247,14 +173,8 @@
 			isa = PBXGroup;
 			children = (
 				7540EA9322CABD630000D60E /* PHNAlbumManager.swift */,
-				84C2B9391ADB35C30034786C /* CJMAlbumManager.h */,
-				84C2B93A1ADB35C30034786C /* CJMAlbumManager.m */,
 				7540EA9122CA7A430000D60E /* PHNPhotoAlbum.swift */,
-				84C2B93C1ADB38880034786C /* CJMPhotoAlbum.h */,
-				84C2B93D1ADB38880034786C /* CJMPhotoAlbum.m */,
 				7540EA8F22C67EEB0000D60E /* PhotoNote.swift */,
-				84C2B93F1ADC2F750034786C /* CJMImage.h */,
-				84C2B9401ADC2F750034786C /* CJMImage.m */,
 			);
 			name = "Data Objects";
 			sourceTree = "<group>";
@@ -297,14 +217,8 @@
 			isa = PBXGroup;
 			children = (
 				7540EA9722CC172E0000D60E /* PHNServices.swift */,
-				84C2B94E1ADF4AA00034786C /* CJMServices.h */,
-				84C2B94F1ADF4AA00034786C /* CJMServices.m */,
 				7540EA9522CC0DD20000D60E /* PHNFileSerializer.swift */,
-				84C2B94B1ADF39E60034786C /* CJMFileSerializer.h */,
-				84C2B94C1ADF39E60034786C /* CJMFileSerializer.m */,
 				7540EA9922CD07C50000D60E /* PHNCache.swift */,
-				84DC68F41B52B085000A2480 /* CJMCache.h */,
-				84DC68F51B52B085000A2480 /* CJMCache.m */,
 				758F55181E22AAC40023F869 /* IconStoryboard.storyboard */,
 				84A769611ADAE39F00DE6741 /* Images.xcassets */,
 				84A769551ADAE39F00DE6741 /* Info.plist */,
