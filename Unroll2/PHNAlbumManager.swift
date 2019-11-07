@@ -86,10 +86,10 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
     override init() {
         super.init()
         registerDefaults()
-        handleFirstTime()
+        handleFirstLaunch()
     }
     
-    func handleFirstTime() {
+    func handleFirstLaunch() {
         let firstTime = UserDefaults.standard.bool(forKey: "FirstTime")
         let favorites = UserDefaults.standard.bool(forKey: "FavoritesReserved")
         

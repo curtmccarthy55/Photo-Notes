@@ -11,24 +11,23 @@ import UIKit
 public typealias CJMCompletionHandler = ([Any]?) -> Void
 public typealias CJMImageCompletionHandler = (UIImage?) -> Void
 
+/// Handles image fetch/cache/delete, album save, and memory reporting.
 class PHNServices: NSObject {
+    //MARK: - Properties
+    
     static let sharedInstance = PHNServices()
     
     var cache: PHNCache = PHNCache()
     var fileSerializer = PHNFileSerializer()
     var debug_memoryReportingTimer: Timer? //was NSTimer
     
-    //MARK: - Set Up
-    
-    
-    //MARK: - Requests
+    //MARK: - Image Fetch and Delete
     
     func fetchImageWithName(_ name: String, asData: Bool, handler: CJMImageCompletionHandler?) {
         if let image = cache.object(forKey: name as NSString) {
             handler?(image)
         } else {
             var returnImage: UIImage?
-            
             if asData {
                 returnImage = fileSerializer.readImageFromRelativePath(name)
             } else {
@@ -74,7 +73,6 @@ class PHNServices: NSObject {
         handler?(PHNAlbumManager.sharedInstance.allAlbums)
     }
     
-    //MARK: - Image Fetching and Deletion
     func fetchImage(photoNote: PhotoNote, handler: CJMImageCompletionHandler?) {
         return fetchImageWithName(photoNote.fileName, asData: true, handler: handler)
     }
@@ -82,6 +80,8 @@ class PHNServices: NSObject {
     func fetchThumbnailForImage(photoNote: PhotoNote, handler: CJMImageCompletionHandler?) {
         return fetchImageWithName(photoNote.thumbnailFileName, asData: false, handler: handler)
     }
+    
+    //MARK: - File Save
     
     @discardableResult
     func saveApplicationData() -> Bool {
@@ -91,6 +91,7 @@ class PHNServices: NSObject {
 }
     
 extension PHNServices {
+    //MARK: - Memory Reporting
     func beginReportingMemoryToConsole(withInterval interval: TimeInterval) {
         if debug_memoryReportingTimer != nil {
             endReportingMemoryToConsole()
@@ -99,23 +100,13 @@ extension PHNServices {
         memoryReportingTic()
         
         debug_memoryReportingTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(memoryReportingTic), userInfo: nil, repeats: true)
-        
-        /*
-         if(self.debug_memoryReportingTimer)
-            [self endReportingMemoryToConsole];
-         
-         [self memoryReportingTic];//call the first time
-         
-         self.debug_memoryReportingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(memoryReportingTic) userInfo:nil repeats:YES];
- */
     }
     
     func endReportingMemoryToConsole() {
         debug_memoryReportingTimer?.invalidate()
         debug_memoryReportingTimer = nil
     }
-    
-    //MARK: - Memory
+
     @objc func memoryReportingTic() {
         reportMemoryToConsole(withReferrer: "Memory Report Loop")
     }

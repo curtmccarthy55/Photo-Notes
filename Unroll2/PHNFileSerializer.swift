@@ -17,6 +17,8 @@ class PHNFileSerializer: NSObject {
         NSKeyedUnarchiver.setClass(PhotoNote.self, forClassName: "CJMImage")
     }
 
+    //MARK: - Read
+    
     func readObjectFromRelativePath(_ path: String) -> Any? {
         let absolutePath = absolutePathFromRelativePath(path)
         var object: Any? = nil
@@ -37,6 +39,7 @@ class PHNFileSerializer: NSObject {
         
     }
     
+    //MARK: - Write
     @discardableResult
     func writeObject(_ data: Any?, toRelativePath path: String) -> Bool {
         let filePath = absolutePathFromRelativePath(path)
@@ -49,6 +52,8 @@ class PHNFileSerializer: NSObject {
         // this method is just to maintain API balance with readImageFromRelativePath
         return writeObject(image, toRelativePath: path)
     }
+    
+    //MARK: - Delete
     
     func deleteImageWithFileName(_ fileName: String) {
         let fileManager = FileManager.default
@@ -74,6 +79,7 @@ class PHNFileSerializer: NSObject {
     }
     
     //MARK: - File Pathing
+    
     func documentsDirectory() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths.first
