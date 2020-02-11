@@ -360,6 +360,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     func presentPhotoGrabViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let navigationVC = storyboard.instantiateViewController(withIdentifier: "NavPhotoGrabViewController") as! UINavigationController
+        navigationVC.modalPresentationStyle = .fullScreen
         let vc = navigationVC.topViewController as! PHNImportAlbumsViewController
         vc.delegate = self
         vc.userColor = userColor
@@ -842,7 +843,7 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         dismiss(animated: true, completion: nil)
     }
     
-    /// Iterate through array of selected photos, convert them to CJMImages, and add to the current album.
+    /// Iterate through array of selected photos, convert them to PhotoNotes, and add to the current album.
     func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset]) {
         var newImages = [PhotoNote]()
         let fileSerializer = PHNFileSerializer()

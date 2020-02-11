@@ -42,7 +42,6 @@ class PhotoNote: NSObject, NSCoding {
     }
     
     //MARK: - Property Modifiers
-    //previously - (void)setInitialValuesForCJMImage:(CJMImage *)cjmImage inAlbum:(NSString *)album
     func setInitialValuesWithAlbum(_ album: String) {
         photoTitle = "No Title Created "
         photoNote = "Tap Edit to change the title and note!"

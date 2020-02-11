@@ -156,7 +156,6 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
         }
         initialZoomScale = scrollView.zoomScale
         
-        //cjm 09/25 nav bar handling
         updateForBarVisibility(visible: barsVisible!, animated: false)
         if barsVisible != nil, !barsVisible! {
             noteSection.isHidden = false
@@ -466,7 +465,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     //Note down, bars visible: button is hidden.
     //Note down, bars hidden: button displays "Hide".  Tapping in this state hides the note section.
     //Note up, text edit disabled: button displays  "Edit".  Tapping enables note section text fields, makes note text field first responsder, changes button text to "Done".
-    //Note up, text edit enabled: button displays "Done".  Tapping disables text fields, all fields are checked for text with values being loaded into appropriate cjmImage variables.
+    //Note up, text edit enabled: button displays "Done".  Tapping disables text fields, all fields are checked for text with values being loaded into appropriate photoNote variables.
     @IBAction func enableEdit(_ sender: Any?) {
         if editNoteButton.titleLabel?.text == "Hide" {
             noteSection.isHidden = true

@@ -8,17 +8,9 @@
 
 import UIKit
 import Photos
-/*
-open class CJMAListViewController : UITableViewController, CJMADetailViewControllerDelegate, CJMFullImageViewControllerDelegate {
-    
-    
-    open func openCamera()
-}
- */
 
 class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewControllerDelegate, PHNFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, PHNPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHNAlbumPickerDelegate {
     
-//    #define CJMAListCellIdentifier @"AlbumCell"
     private let PHNAlbumsCellIdentifier = "AlbumCell"
     private let PHNAlbumPickerNavigationIdentifier = "AListPickerViewController"
     // Segue identifiers

@@ -8,8 +8,8 @@
 
 import UIKit
 
-public typealias CJMCompletionHandler = ([Any]?) -> Void
-public typealias CJMImageCompletionHandler = (UIImage?) -> Void
+public typealias PHNCompletionHandler = ([Any]?) -> Void
+public typealias PHNImageCompletionHandler = (UIImage?) -> Void
 
 /// Handles image fetch/cache/delete, album save, and memory reporting.
 class PHNServices: NSObject {
@@ -23,7 +23,7 @@ class PHNServices: NSObject {
     
     //MARK: - Image Fetch and Delete
     
-    func fetchImageWithName(_ name: String, asData: Bool, handler: CJMImageCompletionHandler?) {
+    func fetchImageWithName(_ name: String, asData: Bool, handler: PHNImageCompletionHandler?) {
         if let image = cache.object(forKey: name as NSString) {
             handler?(image)
         } else {
@@ -69,15 +69,15 @@ class PHNServices: NSObject {
     }
     
     //TODO remove: may be able to remove, not called anywhere.
-    func fetchUserAlbums(handler: CJMCompletionHandler?) {
+    func fetchUserAlbums(handler: PHNCompletionHandler?) {
         handler?(PHNAlbumManager.sharedInstance.allAlbums)
     }
     
-    func fetchImage(photoNote: PhotoNote, handler: CJMImageCompletionHandler?) {
+    func fetchImage(photoNote: PhotoNote, handler: PHNImageCompletionHandler?) {
         return fetchImageWithName(photoNote.fileName, asData: true, handler: handler)
     }
     
-    func fetchThumbnailForImage(photoNote: PhotoNote, handler: CJMImageCompletionHandler?) {
+    func fetchThumbnailForImage(photoNote: PhotoNote, handler: PHNImageCompletionHandler?) {
         return fetchImageWithName(photoNote.thumbnailFileName, asData: false, handler: handler)
     }
     

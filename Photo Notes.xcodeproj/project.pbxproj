@@ -31,6 +31,7 @@
 		755558CA203240B3005A9478 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C8203240B2005A9478 /* Fabric.framework */; };
 		755558CB203240B3005A9478 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755558C9203240B3005A9478 /* Crashlytics.framework */; };
 		758F55191E22AAC40023F869 /* IconStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 758F55181E22AAC40023F869 /* IconStoryboard.storyboard */; };
+		75AAA4B223F2F9FA00F30F74 /* NetworkReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AAA4B123F2F9FA00F30F74 /* NetworkReachability.swift */; };
 		75BD865A22F4E232006F4B91 /* PHNGrabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BD865922F4E232006F4B91 /* PHNGrabCell.swift */; };
 		75BD865C22F73F12006F4B91 /* PHNAlbumDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */; };
 		75BD865E22F78721006F4B91 /* PHNSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BD865D22F78721006F4B91 /* PHNSettingsViewController.swift */; };
@@ -77,6 +78,7 @@
 		755558C8203240B2005A9478 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		755558C9203240B3005A9478 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
 		758F55181E22AAC40023F869 /* IconStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IconStoryboard.storyboard; sourceTree = "<group>"; };
+		75AAA4B123F2F9FA00F30F74 /* NetworkReachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkReachability.swift; sourceTree = "<group>"; };
 		75BD865922F4E232006F4B91 /* PHNGrabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNGrabCell.swift; sourceTree = "<group>"; };
 		75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumDetailViewController.swift; sourceTree = "<group>"; };
 		75BD865D22F78721006F4B91 /* PHNSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNSettingsViewController.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				84A769551ADAE39F00DE6741 /* Info.plist */,
 				84A769561ADAE39F00DE6741 /* main.m */,
 				840852A51B5DA49E00664849 /* no_image.jpg */,
+				75AAA4B123F2F9FA00F30F74 /* NetworkReachability.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */,
 				75BD865A22F4E232006F4B91 /* PHNGrabCell.swift in Sources */,
 				7540EA9022C67EEB0000D60E /* PhotoNote.swift in Sources */,
+				75AAA4B223F2F9FA00F30F74 /* NetworkReachability.swift in Sources */,
 				7540EA9822CC172E0000D60E /* PHNServices.swift in Sources */,
 				752A624B22DD27F800E4A84D /* PHNPageImageViewController.swift in Sources */,
 				75BD865E22F78721006F4B91 /* PHNSettingsViewController.swift in Sources */,

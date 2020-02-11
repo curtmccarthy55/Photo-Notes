@@ -8,7 +8,7 @@
 
 import UIKit
 
-let CJMAlbumFileName = "Unroll.plist"
+let PHNAlbumFileName = "Unroll.plist"
 
 class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
     static let sharedInstance = PHNAlbumManager()
@@ -26,8 +26,8 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
         }
         return []
 */
-        // PHASE OUT - model type transitions following Swift migration. Established post v2.1. Replace with above.
-        let set = fileSerializer.readObjectFromRelativePath(CJMAlbumFileName)
+        // TODO: PHASE OUT - model type transitions following Swift migration. Established post v2.1. Replace with above.
+        let set = fileSerializer.readObjectFromRelativePath(PHNAlbumFileName)
         if set is [PHNPhotoAlbum] {
             print("set is [PHNPhotoAlbum]")
             return (set as! [PHNPhotoAlbum])
@@ -190,7 +190,7 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
     //MARK: - Requests
     @discardableResult
     func save() -> Bool {
-        return fileSerializer.writeObject(allAlbumsEdit, toRelativePath: CJMAlbumFileName)
+        return fileSerializer.writeObject(allAlbumsEdit, toRelativePath: PHNAlbumFileName)
     }
     
     func existingAlbum(named: String) -> PHNPhotoAlbum? {
