@@ -67,6 +67,28 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         tableView.reloadData()
     }
     
+    func setPreferredColor() {
+        let themeColor = PHNUser.current.preferredThemeColor
+        userColor = themeColor.colorForTheme()
+        
+        switch themeColor {
+        case .white, .yellow:
+            navigationController?.navigationBar.barStyle = .default
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.toolbar.tintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+        case .custom(let red, let green, let blue, let _):
+            let average = (red + green + blue) / 3.0
+            
+            
+            if average >= 0.6 {
+                
+            }
+        default:
+            <#code#>
+        }
+    }
+    
     func userColors() {
         var tag = 0
         var red, green, blue: NSNumber
