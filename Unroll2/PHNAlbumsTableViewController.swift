@@ -53,7 +53,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        userColors()
+        appearanceForPreferredColor()
         navigationController?.toolbar.isHidden = false
         navigationController?.toolbar.isTranslucent = true
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -67,55 +67,28 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         tableView.reloadData()
     }
     
-    func setPreferredColor() {
+    /// Updates navigation bar style, tint, and color based on user selected theme color.
+    func appearanceForPreferredColor() {
         let themeColor = PHNUser.current.preferredThemeColor
         userColor = themeColor.colorForTheme()
         
-        switch themeColor {
-        case .white, .yellow:
+        let colorBrightness = themeColor.colorBrightness()
+        switch colorBrightness {
+        case .light:
+            // Light theme will require dark text and icons.
             navigationController?.navigationBar.barStyle = .default
             navigationController?.navigationBar.tintColor = .black
             navigationController?.toolbar.tintColor = .black
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
-        case .custom(let red, let green, let blue, let _):
-            let average = (red + green + blue) / 3.0
-            
-            
-            if average >= 0.6 {
-                
-            }
-        default:
-            <#code#>
-        }
-    }
-    
-    func userColors() {
-        var tag = 0
-        var red, green, blue: NSNumber
-        if let dic = UserDefaults.standard.value(forKey: "PhotoNotesColor") as? [String : NSNumber] {
-            red = dic["PhotoNotesRed"]!
-            green = dic["PhotoNotesGreen"]!
-            blue = dic["PhotoNotesBlue"]!
-            tag = dic["PhotoNotesColorTag"] as! Int
-            
-            userColor = UIColor(red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha: 1.0)
-            userColorTag = tag
-        } else {
-            userColor = UIColor(red: 60.0/255.0, green: 128.0/255.0, blue: 194.0/255.0, alpha: 1.0)
-            userColorTag = tag
-        }
-        if (tag != 5) && (tag != 7) { // Yellow or White theme will require dark text and icons.
-            navigationController?.navigationBar.barStyle = .black
-            navigationController?.navigationBar.tintColor = .white
-            navigationController?.toolbar.tintColor = .white
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        } else { // Darker color themese will require light text and icons.
+        case .dark:
+            // Dark color themes will require light text and icons.
             navigationController?.navigationBar.barStyle = .default
             navigationController?.navigationBar.tintColor = .black
             navigationController?.toolbar.tintColor = .black
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
         }
         
+//        userColorTag = tag // cjm modernize - figure out what needs to be done with userColorTag
         navigationController?.navigationBar.barTintColor = userColor
         navigationController?.toolbar.barTintColor = userColor
     }
