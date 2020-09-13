@@ -142,7 +142,7 @@ class PHNPageImageViewController: UIPageViewController, UIPageViewControllerData
         currentVC.confirmImageDelete()
     }
     
-    //MARK: - PHNFUllImageVC Delegate Methods
+    //MARK: - PHNFullImageVC Delegate Methods
     
     func updateBarsHidden(_ setting: Bool) {
         makeViewsVisible = setting
