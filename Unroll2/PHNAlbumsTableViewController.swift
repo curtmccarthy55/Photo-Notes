@@ -81,11 +81,11 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             navigationController?.toolbar.tintColor = .black
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
         case .dark:
-            // Dark color themes will require light text and icons.
+            // Dark themes will require light text and icons.
             navigationController?.navigationBar.barStyle = .default
-            navigationController?.navigationBar.tintColor = .black
-            navigationController?.toolbar.tintColor = .black
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.toolbar.tintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         }
         
 //        userColorTag = tag // cjm modernize - figure out what needs to be done with userColorTag
@@ -814,7 +814,10 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             vc.barsVisible = true
             let numOpac = UserDefaults.standard.value(forKey: "noteOpacity") as? NSNumber
             vc.noteOpacity = (numOpac != nil) ? CGFloat(exactly: numOpac!) : 0.75
-//        case SEGUE_VIEW_SETTINGS:
+        case SEGUE_VIEW_SETTINGS:
+            let navVC = segue.destination as! UINavigationController
+            navVC.modalPresentationStyle = .fullScreen
+//            let vc = navVC.viewControllers[0] as! PHNSettingsViewController
         default:
             print("PHNAlbumsTableViewController performing segue with identifier: \(identifier)")
         }

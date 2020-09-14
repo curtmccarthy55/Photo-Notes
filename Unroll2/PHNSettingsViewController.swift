@@ -38,9 +38,13 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     
     @IBOutlet weak var whiteButton: UIButton!
     
+    /// IBOutlet collection of color buttons.
     @IBOutlet var colorButtons: [UIButton]!
-    var userColorTag: Int? // was NSNumber
-    var userColor: UIColor?
+    /// Arrangement of color options for the color buttons.
+    var colorOptions: [NewThemeColor] = [ .blue, .red, .black, .purple, .orange, .yellow, .green, .white ]
+    /// Holds newly selected theme color until user selects Done and it's assigned as the user's preferred theme color.
+    var temporaryColorTheme: NewThemeColor?
+    /// Flag indicating if a new theme color has been selected.
     var colorChanged = false
     
     @IBOutlet weak var qnThumbnail: UIImageView!
@@ -48,45 +52,11 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Disable Done button until changes are made.
         btnDone.isEnabled = false
         
-        if let dic = UserDefaults.standard.value(forKey: "PhotoNotesColor") as? NSDictionary {
-            if let red = dic.value(forKey: "PhotoNotesRed") as? NSNumber,
-                let green = dic.value(forKey: "PhotoNotesGreen") as? NSNumber,
-                let blue = dic.value(forKey: "PhotoNotesBlue") as? NSNumber {
-                userColor = UIColor(red: CGFloat(exactly: red) ?? 60.0/255.0,
-                                  green: CGFloat(exactly: green) ?? 128.0/255.0,
-                                   blue: CGFloat(exactly: blue) ?? 194.0/255.0,
-                                  alpha: 1.0)
-            } else {
-                userColor = UIColor(red: 60.0/255.0, green: 128.0/255.0, blue: 194.0/255.0, alpha: 1.0)
-            }
-            
-            if let number = dic.value(forKey: "PhotoNotesColorTag") as? NSNumber,
-                let currentTag = Int(exactly: number) {
-                userColorTag = currentTag
-            } else {
-                userColorTag = 0
-            }
-        } else {
-            userColor = UIColor(red: 60.0/255.0, green: 128.0/255.0, blue: 194.0/255.0, alpha: 1.0)
-            userColorTag = 0
-        }
-        
-        if userColorTag != 5 && userColorTag != 7 {
-            navigationController?.navigationBar.barStyle = .black
-            navigationController?.navigationBar.tintColor = .white
-            navigationController?.toolbar.tintColor = .white
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        } else {
-            navigationController?.navigationBar.barStyle = .default
-            navigationController?.navigationBar.tintColor = .black
-            navigationController?.toolbar.tintColor = .black
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
-        }
-        
-        navigationController?.navigationBar.barTintColor = userColor
-        navigationController?.toolbar.barTintColor = userColor
+        // Update preferred colors.
+        appearanceForPreferredColor()
         
         // Set current opacity.
         var opacity: CGFloat
@@ -103,9 +73,11 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         // Set current color
         whiteButton.layer.borderWidth = 1.0
         whiteButton.layer.borderColor = UIColor.black.cgColor
-        let button = colorButtons[userColorTag!]
-        button.layer.borderWidth = 2.0
-        button.layer.borderColor = UIColor.green.cgColor
+        if let buttonIndex = colorOptions.firstIndex(of: PHNUser.current.preferredThemeColor) {
+            let button = colorButtons[buttonIndex]
+            button.layer.borderWidth = 2.0
+            button.layer.borderColor = UIColor.green.cgColor
+        }
         
         for btn in colorButtons {
             btn.accessibilityIgnoresInvertColors = true
@@ -126,6 +98,36 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         tableView.backgroundView = backgroundView
     }
     
+    /// Updates navigation bar style, tint, and color based on user selected theme color.
+    func appearanceForPreferredColor() {
+        var themeColor: NewThemeColor
+        if let tempTheme = temporaryColorTheme {
+            themeColor = tempTheme
+        } else {
+            themeColor = PHNUser.current.preferredThemeColor
+        }
+        let userColor = themeColor.colorForTheme()
+        
+        let colorBrightness = themeColor.colorBrightness()
+        switch colorBrightness {
+        case .light:
+            // Light theme will require dark text and icons.
+            navigationController?.navigationBar.barStyle = .default
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.toolbar.tintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+        case .dark:
+            // Dark themes will require light text and icons.
+            navigationController?.navigationBar.barStyle = .default
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.toolbar.tintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        }
+        
+        navigationController?.navigationBar.barTintColor = userColor
+        navigationController?.toolbar.barTintColor = userColor
+    }
+    
     //MARK: - IBActions
     
     @IBAction func doneAction(_ sender: Any?) {
@@ -135,9 +137,10 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
             UserDefaults.standard.set(newOpac, forKey: "noteOpacity") // TODO make Int?
         }
         
-        if colorChanged {
-            let dic = selectedColorWithTag(userColorTag!)
-            UserDefaults.standard.set(dic, forKey: "PhotoNotesColor")
+        // Update user color to selected theme color.
+        if colorChanged,
+            let themeColor = temporaryColorTheme {
+            PHNUser.current.preferredThemeColor = themeColor
         }
         
         presentingViewController?.dismiss(animated: true, completion: nil)
@@ -147,114 +150,41 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func standardColor(_ sender: UIButton) {
-        if !btnDone.isEnabled {
-            btnDone.isEnabled = true
-        }
+    @IBAction func selectedColor(_ sender: UIButton) {
+        // Changes made.
         colorChanged = true
+        btnDone.isEnabled = true
         
-        let currentcolor = colorButtons[userColorTag!]
-        if currentcolor.tag == 7 {
-            currentcolor.layer.borderWidth = 1.0
-            currentcolor.layer.borderColor = UIColor.black.cgColor
-        } else {
-            currentcolor.layer.borderWidth = 0.0
+        // Change the border for the previously selected and newly selected buttons.
+        let currentColor = PHNUser.current.preferredThemeColor
+        if let currentColorIndex = colorOptions.firstIndex(of: currentColor) {
+            // Until custom color implemented, check that the current color index does not exceed the last index of the colorButtons collection
+            if currentColorIndex <= colorButtons.count - 1 {
+                let currentButton = colorButtons[currentColorIndex]
+                if (currentColor == .white) ||
+                    (currentColor == .custom(1.0, 1.0, 1.0, 1.0)) {
+                    // White button needs black border to stand out from white background.
+                    currentButton.layer.borderWidth = 1.0
+                    currentButton.layer.borderColor = UIColor.black.cgColor
+                } else {
+                    // Non-white button doesn't need a border to stand out from white background.
+                    currentButton.layer.borderWidth = 0.0
+                }
+            }
         }
-        
+            
+        // Update border on newly selected color.
         sender.layer.borderWidth = 2.0
         sender.layer.borderColor = UIColor.green.cgColor
         
-        let numTag = NSNumber(integerLiteral: sender.tag)
-        userColorTag = numTag.intValue
+        // Update user color.
+        let selectedButtonInt = sender.tag
+        let selectedTheme = colorOptions[selectedButtonInt]
+        temporaryColorTheme = selectedTheme
+        PHNUser.current.preferredThemeColor = selectedTheme
         
-        if userColorTag != 5 && userColorTag != 7 {
-            navigationController?.navigationBar.barStyle = .black
-            navigationController?.navigationBar.tintColor = .white
-            navigationController?.toolbar.tintColor = .white
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        } else {
-            navigationController?.navigationBar.barStyle = .default
-            navigationController?.navigationBar.tintColor = .black
-            navigationController?.toolbar.tintColor = .black
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
-        }
-        
-        let dic = selectedColorWithTag(sender.tag)
-        if let red = dic.value(forKey: "PhotoNotesRed") as? NSNumber,
-            let green = dic.value(forKey: "PhotoNotesGreen") as? NSNumber,
-            let blue = dic.value(forKey: "PhotoNotesBlue") as? NSNumber {
-            userColor = UIColor(red: CGFloat(exactly: red) ?? 60.0/255.0,
-                                green: CGFloat(exactly: green) ?? 128.0/255.0,
-                                blue: CGFloat(exactly: blue) ?? 194.0/255.0,
-                                alpha: 1.0)
-        } else {
-            userColor = UIColor(red: 60.0/255.0, green: 128.0/255.0, blue: 194.0/255.0, alpha: 1.0)
-        }
-        navigationController?.navigationBar.barTintColor = userColor
-        navigationController?.toolbar.barTintColor = userColor
-//        sldOpacity.thumbTintColor = userColor
-    }
-    
-    func selectedColorWithTag(_ tag: Int) -> NSDictionary {
-//        var dictionary = NSDictionary<String, NSNumber>()
-        var dictionary = NSMutableDictionary()
-        var red, green, blue: NSNumber
-        var selectedTag: NSNumber
-        
-        switch tag {
-        case ThemeColor.kPhotoNotesBlue.rawValue:
-            red = NSNumber(value: 60.0/255.0)
-            green = NSNumber(value: 128.0/255.0)
-            blue = NSNumber(value: 194.0/255.0)
-            selectedTag = 0
-        case ThemeColor.kPhotoNotesRed.rawValue:
-            red = NSNumber(value: 150.0/255.0)     // 207/255 //-> 150/255.0
-            green = NSNumber(value: 0)   // 54/255  //-> 0/255.0
-            blue = NSNumber(value: 23.0/255.0)     // 51/255  //-> 23/255.0
-            selectedTag = 1
-        case ThemeColor.kPhotoNotesBlack.rawValue:
-            red = NSNumber(value: 50.0/255.0)
-            green = NSNumber(value: 50.0/255.0)
-            blue = NSNumber(value: 50.0/255.0)
-            selectedTag = 2
-        case ThemeColor.kPhotoNotesPurple.rawValue:
-            red = NSNumber(value: 130.0/255)
-            green = NSNumber(value: 0)
-            blue = NSNumber(value: 202.0/255.0)
-            selectedTag = 3
-        case ThemeColor.kPhotoNotesOrange.rawValue:
-            red = NSNumber(value: 255.0/255.0)
-            green = NSNumber(value: 130.0/255.0)
-            blue = NSNumber(value: 0)
-            selectedTag = 4
-        case ThemeColor.kPhotoNotesYellow.rawValue:
-            red = NSNumber(value: 242.0/255.0)
-            green = NSNumber(value: 242.0/255.0)
-            blue = NSNumber(value: 83.0/255.0)
-            selectedTag = 5
-        case ThemeColor.kPhotoNotesGreen.rawValue:
-            red = NSNumber(value: 0)
-            green = NSNumber(value: 122.0/255.0)
-            blue = NSNumber(value: 39.0/255.0)
-            selectedTag = 6
-        case ThemeColor.kPhotoNotesWhite.rawValue:
-            red = NSNumber(value: 1.0)
-            green = NSNumber(value: 1.0)
-            blue = NSNumber(value: 1.0)
-            selectedTag = 7
-        default: // set to PhotoNotesBlue
-            red = NSNumber(value: 60.0/255.0)
-            green = NSNumber(value: 128.0/255.0)
-            blue = NSNumber(value: 194.0/255.0)
-            selectedTag = 0
-        }
-        
-        dictionary.setValue(red, forKey: "PhotoNotesRed")
-        dictionary.setValue(green, forKey: "PhotoNotesGreen")
-        dictionary.setValue(blue, forKey: "PhotoNotesBlue")
-        dictionary.setValue(selectedTag, forKey: "PhotoNotesColorTag")
-        
-        return dictionary
+        // Update appearance for new user preferred theme color.
+        appearanceForPreferredColor()
     }
     
     //MARK: - Opacity Slider
@@ -278,8 +208,6 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         let navigationVC = storyboard.instantiateViewController(withIdentifier: "NavPhotoGrabViewController") as! UINavigationController
         let vc = navigationVC.topViewController as! PHNImportAlbumsViewController
         vc.delegate = self
-        vc.userColor = userColor
-        vc.userColorTag = userColorTag
         vc.singleSelection = true
         
         present(navigationVC, animated: true, completion: nil)

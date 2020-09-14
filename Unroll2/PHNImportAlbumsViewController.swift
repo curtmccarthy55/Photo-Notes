@@ -69,23 +69,32 @@ class PHNImportAlbumsViewController: UITableViewController {
         userCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelPressed))
         
-        if userColorTag != 5 && userColorTag != 7 {
-            navigationController?.navigationBar.barStyle = .black
-            navigationController?.navigationBar.tintColor = .white
-            navigationController?.toolbar.tintColor = .white
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        } else {
+        appearanceForPreferredColor()
+    }
+    
+    /// Updates navigation bar style, tint, and color based on user selected theme color.
+    func appearanceForPreferredColor() {
+        let themeColor = PHNUser.current.preferredThemeColor
+        userColor = themeColor.colorForTheme()
+        
+        let colorBrightness = themeColor.colorBrightness()
+        switch colorBrightness {
+        case .light:
+            // Light theme will require dark text and icons.
             navigationController?.navigationBar.barStyle = .default
             navigationController?.navigationBar.tintColor = .black
             navigationController?.toolbar.tintColor = .black
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+        case .dark:
+            // Dark themes will require light text and icons.
+            navigationController?.navigationBar.barStyle = .default
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.toolbar.tintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         }
         
         navigationController?.navigationBar.barTintColor = userColor
         navigationController?.toolbar.barTintColor = userColor
-    /*
-         
- */
     }
     
     @objc func cancelPressed() {

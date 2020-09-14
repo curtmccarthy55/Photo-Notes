@@ -18,7 +18,7 @@ public enum Environment {
 public let appEnvironment: Environment = .development
 
 /// Enumeration to specify theme color (bars, background colors, etc.).
-enum NewThemeColor {
+enum NewThemeColor: Equatable {
     case blue
     case red
     case black
@@ -28,72 +28,6 @@ enum NewThemeColor {
     case green
     case white
     case custom(CGFloat, CGFloat, CGFloat, CGFloat) // (red, green, blue, alpha values).
-    
-    enum ColorBrightness {
-        case dark
-        case light
-    }
-    
-    
-    /// Determines how bright the passed in color by taking an average of the color values.
-    /// - Parameters:
-    ///   - red: Red color value.
-    ///   - green: Green color value.
-    ///   - blue: Blue color value.
-    /// - Returns: `ColorBrightness` value, `.light` or `.dark`.
-    func determineBrightness(red: CGFloat, green: CGFloat, blue: CGFloat) -> ColorBrightness {
-        let average = (red + green + blue) / 3.0
-        if average >= 0.55 {
-            return .light
-        } else {
-            return .dark
-        }
-    }
-    
-    /// Determines the average brightness of the color based on it's RGB values and returns a float between 0.0 (dark) and 1.0 (light) to indicate this.  A returned value greater than 0.55 is better suited to have dark-tinted navigation items, home indicator, etc, while a returned value lower than 0.55 will be better suited with light-tinted navigation items, home indicator, etc.
-    /// - Returns: `CGFloat` representing how dark or bright the color is.
-    func colorBrightness() -> ColorBrightness {
-        switch self {
-        case .blue:
-            return determineBrightness(red: 60.0/255.0,
-                                     green: 128.0/255.0,
-                                      blue: 194.0/255.0)
-        case .red:
-            return determineBrightness(red: 150.0/255.0,
-                                     green: 0,
-                                      blue: 23.0/255.0)
-                
-        case .black:
-            return determineBrightness(red: 50.0/255.0,
-                                     green: 50.0/255.0,
-                                      blue: 50.0/255.0)
-                
-        case .purple:
-            return determineBrightness(red: 130.0/255.0,
-                                     green: 0,
-                                      blue: 202.0/255.0)
-        case .orange:
-            return determineBrightness(red: 1.0,
-                                     green: 130.0/255.0,
-                                      blue: 0)
-        case .yellow:
-            return determineBrightness(red: 242.0/255.0,
-                                     green: 242.0/255.0,
-                                      blue: 83.0/255.0)
-        case .green:
-            return determineBrightness(red: 0,
-                                     green: 122.0/255.0,
-                                      blue: 39.0/255.0)
-        case .white:
-            return determineBrightness(red: 1.0,
-                                     green: 1.0,
-                                      blue: 1.0)
-        case .custom(let red, let green, let blue, _):
-            return determineBrightness(red: red,
-                                     green: green,
-                                      blue: blue)
-        }
-    }
     
     /// Returns the UIColor for this theme.
     /// - Returns: UIColor for this theme.
@@ -156,6 +90,102 @@ enum NewThemeColor {
         }
         
         return color
+    }
+    
+    // MARK: Equatable
+    static func ==(lhs: NewThemeColor, rhs: NewThemeColor) -> Bool {
+        switch (lhs, rhs) {
+        case (let .custom(r1, g1, b1, a1), let .custom(r2, g2, b2, a2)):
+            if r1 == r2 && g1 == g2 && b1 == b2 && a1 == a2 {
+                return true
+            } else {
+                return false
+            }
+        case (.blue, .blue):
+            return true
+        case (.red, .red):
+            return true
+        case (.black, .black):
+            return true
+        case (.purple, .purple):
+            return true
+        case (.orange, .orange):
+            return true
+        case (.yellow, .yellow):
+            return true
+        case (.green, .green):
+            return true
+        case (.white, .white):
+            return true
+        default:
+            return false
+        }
+    }
+    
+    //MARK: enum ColorBrightness
+    enum ColorBrightness {
+        case dark
+        case light
+    }
+    
+    /// Determines how bright the passed in color by taking an average of the color values.
+    /// - Parameters:
+    ///   - red: Red color value.
+    ///   - green: Green color value.
+    ///   - blue: Blue color value.
+    /// - Returns: `ColorBrightness` value, `.light` or `.dark`.
+    func determineBrightness(red: CGFloat, green: CGFloat, blue: CGFloat) -> ColorBrightness {
+        let average = (red + green + blue) / 3.0
+        if average >= 0.55 {
+            return .light
+        } else {
+            return .dark
+        }
+    }
+    
+    /// Determines the average brightness of the color based on it's RGB values and returns a float between 0.0 (dark) and 1.0 (light) to indicate this.  A returned value greater than 0.55 is better suited to have dark-tinted navigation items, home indicator, etc, while a returned value lower than 0.55 will be better suited with light-tinted navigation items, home indicator, etc.
+    /// - Returns: `CGFloat` representing how dark or bright the color is.
+    func colorBrightness() -> ColorBrightness {
+        switch self {
+        case .blue:
+            return determineBrightness(red: 60.0/255.0,
+                                     green: 128.0/255.0,
+                                      blue: 194.0/255.0)
+        case .red:
+            return determineBrightness(red: 150.0/255.0,
+                                     green: 0,
+                                      blue: 23.0/255.0)
+                
+        case .black:
+            return determineBrightness(red: 50.0/255.0,
+                                     green: 50.0/255.0,
+                                      blue: 50.0/255.0)
+                
+        case .purple:
+            return determineBrightness(red: 130.0/255.0,
+                                     green: 0,
+                                      blue: 202.0/255.0)
+        case .orange:
+            return determineBrightness(red: 1.0,
+                                     green: 130.0/255.0,
+                                      blue: 0)
+        case .yellow:
+            return determineBrightness(red: 242.0/255.0,
+                                     green: 242.0/255.0,
+                                      blue: 83.0/255.0)
+        case .green:
+            return determineBrightness(red: 0,
+                                     green: 122.0/255.0,
+                                      blue: 39.0/255.0)
+        case .white:
+            return determineBrightness(red: 1.0,
+                                     green: 1.0,
+                                      blue: 1.0)
+        case .custom(let red, let green, let blue, _):
+            return determineBrightness(red: red,
+                                     green: green,
+                                      blue: blue)
+        }
     }
     
     /*
@@ -221,15 +251,4 @@ enum NewThemeColor {
     }
     */
 }
-/*
-enum ThemeColor: Int {
-    case kPhotoNotesBlue = 0
-    case kPhotoNotesRed
-    case kPhotoNotesBlack
-    case kPhotoNotesPurple
-    case kPhotoNotesOrange
-    case kPhotoNotesYellow
-    case kPhotoNotesGreen
-    case kPhotoNotesWhite
-}
- */
+

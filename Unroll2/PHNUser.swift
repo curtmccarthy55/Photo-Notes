@@ -20,7 +20,7 @@ class PHNUser {
     /// User's preferred note opacity. Used as alpha value for the note section.
     var preferredNoteOpacity: CGFloat = 0.75
     /// Users preferred color for container views, bars, etc.  Defaults to light blue shade.
-    var preferredThemeColor: NewThemeColor = .blue
+    var preferredThemeColor: NewThemeColor = .custom(0, 128.0/255.0, 128.0/255.0, 1.0)
     
     /*
     func userColors() {
