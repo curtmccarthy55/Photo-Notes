@@ -12,17 +12,6 @@ import MessageUI
 import StoreKit
 import Photos
 
-enum ThemeColor: Int {
-    case kPhotoNotesBlue = 0
-    case kPhotoNotesRed
-    case kPhotoNotesBlack
-    case kPhotoNotesPurple
-    case kPhotoNotesOrange
-    case kPhotoNotesYellow
-    case kPhotoNotesGreen
-    case kPhotoNotesWhite
-}
-
 class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDelegate, SFSafariViewControllerDelegate, MFMailComposeViewControllerDelegate {
     //MARK: - Properties
     
@@ -41,9 +30,9 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     /// IBOutlet collection of color buttons.
     @IBOutlet var colorButtons: [UIButton]!
     /// Arrangement of color options for the color buttons.
-    var colorOptions: [NewThemeColor] = [ .blue, .red, .black, .purple, .orange, .yellow, .green, .white ]
+    var colorOptions: [PHNThemeColor] = [ .blue, .red, .black, .purple, .orange, .yellow, .green, .white ]
     /// Holds newly selected theme color until user selects Done and it's assigned as the user's preferred theme color.
-    var temporaryColorTheme: NewThemeColor?
+    var temporaryColorTheme: PHNThemeColor?
     /// Flag indicating if a new theme color has been selected.
     var colorChanged = false
     
@@ -100,7 +89,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     
     /// Updates navigation bar style, tint, and color based on user selected theme color.
     func appearanceForPreferredColor() {
-        var themeColor: NewThemeColor
+        var themeColor: PHNThemeColor
         // If a new theme color has been selected, use that. Otherwise, use User color.
         if let tempTheme = temporaryColorTheme {
             themeColor = tempTheme

@@ -49,6 +49,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Register cell.
         let nib = UINib(nibName: "PHNAlbumListTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: PHNAlbumsCellIdentifier)
         tableView.rowHeight = 120 // was 80
