@@ -13,6 +13,10 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     
     private let PHNAlbumsCellIdentifier = "AlbumCell"
     private let PHNAlbumPickerNavigationIdentifier = "AListPickerViewController"
+    
+    // Search bar
+    let searchController = UISearchController(searchResultsController: nil)
+    
     // Segue identifiers
     private let SEGUE_VIEW_GALLERY = "ViewGallery"
     private let SEGUE_EDIT_ALBUM = "EditAlbum"
@@ -48,6 +52,26 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         let nib = UINib(nibName: "PHNAlbumListTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: PHNAlbumsCellIdentifier)
         tableView.rowHeight = 120 // was 80
+        
+        prepareSearchBar()
+    }
+    
+    /// Sets up and adds the search bar to the scene.
+    func prepareSearchBar() {
+//        searchController.searchResultsUpdater = self
+//        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Photo Notes"
+        if #available(iOS 13.0, *) {
+            searchController.searchBar.searchTextField.backgroundColor = .white
+        } 
+        definesPresentationContext = true
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
+        } else {
+            tableView.tableHeaderView = searchController.searchBar
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -101,6 +101,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     /// Updates navigation bar style, tint, and color based on user selected theme color.
     func appearanceForPreferredColor() {
         var themeColor: NewThemeColor
+        // If a new theme color has been selected, use that. Otherwise, use User color.
         if let tempTheme = temporaryColorTheme {
             themeColor = tempTheme
         } else {
