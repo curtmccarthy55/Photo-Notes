@@ -9,20 +9,20 @@
 import UIKit
 import Photos
 
+/// Initial view controller, displaying the list of user Photo Notes albums, and offering navigation to Settings, QuickNote, etc.
 class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewControllerDelegate, PHNFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, PHNPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHNAlbumPickerDelegate {
     
-    private let PHNAlbumsCellIdentifier = "AlbumCell"
+    // Cell and Segue Identifiers
+    private let PHNAlbumsCellIdentifier            = "AlbumCell"
     private let PHNAlbumPickerNavigationIdentifier = "AListPickerViewController"
+    private let SEGUE_VIEW_GALLERY                 = "ViewGallery"
+    private let SEGUE_EDIT_ALBUM                   = "EditAlbum"
+    private let SEGUE_ADD_ALBUM                    = "AddAlbum"
+    private let SEGUE_QUICK_NOTE                   = "ViewQuickNote"
+    private let SEGUE_VIEW_SETTINGS                = "ViewSettings"
     
     // Search bar
     let searchController = UISearchController(searchResultsController: nil)
-    
-    // Segue identifiers
-    private let SEGUE_VIEW_GALLERY = "ViewGallery"
-    private let SEGUE_EDIT_ALBUM = "EditAlbum"
-    private let SEGUE_ADD_ALBUM = "AddAlbum"
-    private let SEGUE_QUICK_NOTE = "ViewQuickNote"
-    private let SEGUE_VIEW_SETTINGS = "ViewSettings"
     
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
@@ -113,7 +113,6 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         }
         
-//        userColorTag = tag // cjm modernize - figure out what needs to be done with userColorTag
         navigationController?.navigationBar.barTintColor = userColor
         navigationController?.toolbar.barTintColor = userColor
     }
@@ -279,6 +278,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     func presentPhotoGrabViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let navigationVC = storyboard.instantiateViewController(withIdentifier: "NavPhotoGrabViewController") as! UINavigationController
+        navigationVC.modalPresentationStyle = .fullScreen
         let vc = navigationVC.topViewController as! PHNImportAlbumsViewController
         vc.delegate = self
         vc.userColor = userColor
@@ -355,8 +355,8 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             aListPickerVC.delegate = self
             aListPickerVC.title = "Select Destination"
             aListPickerVC.currentAlbumName = nil
-            aListPickerVC.userColor = self?.userColor;
-            aListPickerVC.userColorTag = self?.userColorTag;
+            aListPickerVC.userColor = self?.userColor
+            aListPickerVC.userColorTag = self?.userColorTag
             
             self?.present(aListPickerVC, animated: true, completion: nil)
         }

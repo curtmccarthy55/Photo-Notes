@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 
+/// Protocol for handling image import processing and cancellation.
 protocol PHNPhotoGrabCompletionDelegate: class {
     func photoGrabSceneDidCancel()
     func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset])
@@ -21,6 +22,7 @@ fileprivate enum Section {
     case allPhotos, smartAlbums, userCollections
 }
 
+/// View controller to display user Photos albums.
 class PHNImportAlbumsViewController: UITableViewController {
     //MARK: - Properties
     
