@@ -17,3 +17,8 @@ public enum Environment {
 
 public let appEnvironment: Environment = .development
 
+extension UINavigationController {
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+      return topViewController?.preferredStatusBarStyle ?? .default
+   }
+}

@@ -13,17 +13,44 @@ import UIKit
 class PHNUser {
     /// Singleton for `PHNUser`.
     static let current = PHNUser()
-    private init() {}
+    private init() {
+        setThemeColor(.red)
+    }
     
     // MARK: - User Preferences
     
     /// User's preferred note opacity. Used as alpha value for the note section.
     var preferredNoteOpacity: CGFloat = 0.75
     /// Users preferred color for container views, bars, etc.  Defaults to light blue shade.
-    var preferredThemeColor: PHNThemeColor = .custom(0, 128.0/255.0, 128.0/255.0, 1.0)
+    var preferredThemeColor: PHNThemeColor = .blue // .custom(0, 128.0/255.0, 128.0/255.0, 1.0) // .teal
+    
+    /// Sets the `preferredThemeColor` and accordingly updates the appearance of UINavigationBar and UIToolbar.
+    /// - Parameter newTheme: The new `PHNThemeColor`.
+    func setThemeColor(_ newTheme: PHNThemeColor) {
+        preferredThemeColor = newTheme
+        
+        let userColor = preferredThemeColor.colorForTheme()
+        UINavigationBar.appearance().barTintColor = userColor
+        UIToolbar.appearance().barTintColor = userColor
+        
+        let colorBrightnness = preferredThemeColor.colorBrightness()
+        switch colorBrightnness {
+        case .light:
+            UINavigationBar.appearance().barStyle = .default
+            UINavigationBar.appearance().tintColor = .black
+            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+            UIToolbar.appearance().tintColor = .black
+        case .dark:
+            UINavigationBar.appearance().barStyle = .default
+            UINavigationBar.appearance().tintColor = .white
+            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+            UIToolbar.appearance().tintColor = .white
+        }
+    }
 }
 
 /// Enumeration to specify theme color (bars, background colors, etc.).
+/// - Call instance methods `colorForTheme()` for the UIColor, and `colorBrightness()` for the general brightness of the color to determine tint on overlaid objects, like BarButtons or the Home indicator.
 enum PHNThemeColor: Equatable {
     case blue
     case red

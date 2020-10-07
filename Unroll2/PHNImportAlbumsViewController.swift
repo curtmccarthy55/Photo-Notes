@@ -29,7 +29,6 @@ class PHNImportAlbumsViewController: UITableViewController {
     //MARK: Internal Properties
     weak var delegate: PHNPhotoGrabCompletionDelegate?
     var userColor: UIColor?
-    var userColorTag: Int? // was NSNumber
     var singleSelection: Bool?
     
     //MARK: Private Properties
@@ -188,8 +187,6 @@ class PHNImportAlbumsViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination as! PHNPhotoGrabViewController
         vc.delegate = delegate
-        vc.userColor = userColor!
-        vc.userColorTag = userColorTag!
         vc.singleSelection = singleSelection!
         
         if selectedIndex?.section == 0 {

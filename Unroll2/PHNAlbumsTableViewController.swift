@@ -41,9 +41,14 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     
     var pickerPhotos: [[String : Any?]]?
     var imageManager: PHCachingImageManager?
-
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+        switch PHNUser.current.preferredThemeColor.colorBrightness() {
+        case .light:
+            return .default
+        case .dark:
+            return .lightContent
+        }
     }
     
     override func viewDidLoad() {
@@ -54,7 +59,16 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         tableView.register(nib, forCellReuseIdentifier: PHNAlbumsCellIdentifier)
         tableView.rowHeight = 120 // was 80
         
+        updateNavigationBars()
         prepareSearchBar()
+    }
+    
+    func updateNavigationBars() {
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.toolbar.isHidden = false
+        navigationController?.toolbar.isTranslucent = true
     }
     
     /// Sets up and adds the search bar to the scene.
@@ -79,15 +93,13 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         super.viewWillAppear(animated)
         
         appearanceForPreferredColor()
-        navigationController?.toolbar.isHidden = false
-        navigationController?.toolbar.isTranslucent = true
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.isTranslucent = true
         
+        setNeedsStatusBarAppearanceUpdate()
+
         let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
         backgroundView.contentMode = .scaleAspectFill
         tableView.backgroundView = backgroundView
-        
+
         noAlbumsPopUp()
         tableView.reloadData()
     }
@@ -96,25 +108,24 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     func appearanceForPreferredColor() {
         let themeColor = PHNUser.current.preferredThemeColor
         userColor = themeColor.colorForTheme()
+        navigationController?.navigationBar.barTintColor = userColor
+        navigationController?.toolbar.barTintColor = userColor
         
         let colorBrightness = themeColor.colorBrightness()
         switch colorBrightness {
         case .light:
             // Light theme will require dark text and icons.
-            navigationController?.navigationBar.barStyle = .default
             navigationController?.navigationBar.tintColor = .black
             navigationController?.toolbar.tintColor = .black
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+            navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
         case .dark:
             // Dark themes will require light text and icons.
-            navigationController?.navigationBar.barStyle = .default
             navigationController?.navigationBar.tintColor = .white
             navigationController?.toolbar.tintColor = .white
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+            navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         }
-        
-        navigationController?.navigationBar.barTintColor = userColor
-        navigationController?.toolbar.barTintColor = userColor
     }
     
     //If there are no albums, prompt the user to create one after a delay.
@@ -281,8 +292,6 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         navigationVC.modalPresentationStyle = .fullScreen
         let vc = navigationVC.topViewController as! PHNImportAlbumsViewController
         vc.delegate = self
-        vc.userColor = userColor
-        vc.userColorTag = userColorTag
         vc.singleSelection = false
         
         present(navigationVC, animated: true, completion: nil)

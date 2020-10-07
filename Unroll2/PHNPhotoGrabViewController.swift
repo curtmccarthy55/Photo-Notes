@@ -17,8 +17,7 @@ class PHNPhotoGrabViewController: UIViewController, UICollectionViewDataSource, 
     //MARK: Internal Properties
     
     weak var delegate: PHNPhotoGrabCompletionDelegate?
-    var userColor: UIColor!
-    var userColorTag: Int! // Was NSNumber
+    var userColor: UIColor?
     var singleSelection: Bool!
     var fetchResult: PHFetchResult<PHAsset>?
     
@@ -41,25 +40,36 @@ class PHNPhotoGrabViewController: UIViewController, UICollectionViewDataSource, 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(donePressed))
         navigationItem.rightBarButtonItem?.isEnabled = false
         
-        if userColorTag != 5 && userColorTag != 7 {
-            navigationController?.navigationBar.barStyle = .black
-            navigationController?.navigationBar.tintColor = .white
-            navigationController?.toolbar.tintColor = .white
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        } else {
-            navigationController?.navigationBar.barStyle = .default
-            navigationController?.navigationBar.tintColor = .black
-            navigationController?.toolbar.tintColor = .black
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
-        }
-        
-        navigationController?.navigationBar.barTintColor = userColor
-        navigationController?.toolbar.barTintColor = userColor
+        appearanceForPreferredColor()
         
         // Scroll to bottom before displaying.  TODO: this can be improved.
         let pageSize = view.bounds.size
         let contentOffSet = CGPoint(x: 0, y: pageSize.height * CGFloat(integerLiteral: fetchResult!.count - 1))
         collectionView.setContentOffset(contentOffSet, animated: false)
+    }
+    
+    /// Updates navigation bar style, tint, and color based on user selected theme color.
+    func appearanceForPreferredColor() {
+        let userColor = PHNUser.current.preferredThemeColor
+        
+        let colorBrightness = userColor.colorBrightness()
+        switch colorBrightness {
+        case .light:
+            // Light theme will require dark text and icons.
+            navigationController?.navigationBar.barStyle = .default
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.toolbar.tintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+        case .dark:
+            // Dark themes will require light text and icons.
+            navigationController?.navigationBar.barStyle = .default
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.toolbar.tintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        }
+        
+        navigationController?.navigationBar.barTintColor = userColor.colorForTheme()
+        navigationController?.toolbar.barTintColor = userColor.colorForTheme()
     }
     
     //MARK: - CollectionView Data Source

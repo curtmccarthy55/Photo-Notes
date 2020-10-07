@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var launchDic: [UIApplication.LaunchOptionsKey: Any]?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        PHNUser.current
         Fabric.with([Crashlytics.self])
         
         if UserDefaults.standard.bool(forKey: "HasLaunchedOnce") != true {
@@ -37,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         #if DEBUG
-        PHNServices.sharedInstance.beginReportingMemoryToConsole(withInterval: 5.0)
+//        PHNServices.sharedInstance.beginReportingMemoryToConsole(withInterval: 5.0)
         #endif
         
         //Return false incase application was launched from shorcut to prevent application(_:performActionForShortcutItem:completionHandler:) from being called

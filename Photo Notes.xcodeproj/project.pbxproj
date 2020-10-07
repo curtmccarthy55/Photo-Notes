@@ -542,7 +542,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Unroll2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Desdinova.$(PRODUCT_NAME:rfc1034identifier)";
@@ -570,7 +570,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Unroll2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Desdinova.$(PRODUCT_NAME:rfc1034identifier)";

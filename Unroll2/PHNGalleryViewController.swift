@@ -363,8 +363,6 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         navigationVC.modalPresentationStyle = .fullScreen
         let vc = navigationVC.topViewController as! PHNImportAlbumsViewController
         vc.delegate = self
-        vc.userColor = userColor
-        vc.userColorTag = userColorTag
         vc.singleSelection = false
         
         present(navigationVC, animated: true, completion: nil)

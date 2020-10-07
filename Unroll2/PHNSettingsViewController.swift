@@ -15,37 +15,50 @@ import Photos
 class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDelegate, SFSafariViewControllerDelegate, MFMailComposeViewControllerDelegate {
     //MARK: - Properties
     
+    /* --- Outlets --- */
+    
     @IBOutlet weak var btnDone: UIBarButtonItem!
+    /// Slider to adjust note opacity.
     @IBOutlet weak var sldOpacity: UISlider!
+    /// View to demo the currently set note opacity.
     @IBOutlet weak var noteView: UIView!
+    /// Label to display current note opacity level.
     @IBOutlet weak var lblOpacity: UITextField!
+    /// Image view behind the note opacity view.
     @IBOutlet weak var sampleImage: UIImageView!
-    var finalVal: CGFloat?
-    
-//    var fetchResult: PHFetchResult?
-    var imageManager: PHCachingImageManager?
-    
+    /// ImageView to display thumbnail of QuickNote's current background image.
+    @IBOutlet weak var qnThumbnail: UIImageView!
     /// IBOutlet collection of color buttons.
     @IBOutlet var colorButtons: [UIButton]!
     /// Easy-accessor for whiteButton, which needs additional handling when highlighting for selection/deselection.
     @IBOutlet weak var whiteButton: UIButton!
     
+    /* --- Variables --- */
+    
+    //    var fetchResult: PHFetchResult?
+    var imageManager: PHCachingImageManager?
     /// Arrangement of color options for the color buttons.
     var colorOptions: [PHNThemeColor] = [ .blue, .red, .black, .purple, .orange, .yellow, .green, .white ]
     /// Holds newly selected theme color until user selects Done and it's assigned as the user's preferred theme color.
     var temporaryColorTheme: PHNThemeColor?
     /// Flag indicating if a new theme color has been selected.
     var colorChanged = false
-    /// ImageView to display thumbnail of QuickNote's current background image.
-    @IBOutlet weak var qnThumbnail: UIImageView!
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        switch PHNUser.current.preferredThemeColor.colorBrightness() {
+        case .light:
+            return .default
+        case .dark:
+            return .lightContent
+        }
+    }
     
     // MARK: - Scene Set Up
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Prepare navigationController.
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.isTranslucent = true
+        /* --- Prepare navigationController. --- */
+        updateNavigationBars()
         
         // Prepare background.
         let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
@@ -56,9 +69,9 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         btnDone.isEnabled = false
         
         // Update preferred colors.
-        appearanceForPreferredColor()
+//        appearanceForPreferredColor()
         
-        // Set current opacity.
+        /* --- Set current opacity. --- */
         var opacity: CGFloat
         if let currentOpacity = UserDefaults.standard.value(forKey: "noteOpacity") as? NSNumber {
             opacity = CGFloat(exactly: currentOpacity) ?? 0.75
@@ -69,7 +82,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         lblOpacity.text = "\(roundf(Float(opacity * 100)))%"
         sldOpacity.setValue(Float(opacity * 100.0), animated: false)
         
-        // Highlight the button for the currently selected color.
+        /* --- Highlight the button for the currently selected color. --- */
         whiteButton.layer.borderWidth = 1.0
         whiteButton.layer.borderColor = UIColor.black.cgColor
         if let buttonIndex = colorOptions.firstIndex(of: PHNUser.current.preferredThemeColor) {
@@ -94,7 +107,17 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        appearanceForPreferredColor()
         displayQuickNoteThumbnail()
+        setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    func updateNavigationBars() {
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.toolbar.isHidden = false
+        navigationController?.toolbar.isTranslucent = true
     }
     
     /// Updates navigation bar style, tint, and color based on user selected theme color.
@@ -107,25 +130,31 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
             themeColor = PHNUser.current.preferredThemeColor
         }
         let userColor = themeColor.colorForTheme()
+        navigationController?.navigationBar.barTintColor = userColor
+        navigationController?.toolbar.barTintColor = userColor
         
         let colorBrightness = themeColor.colorBrightness()
         switch colorBrightness {
         case .light:
             // Light theme will require dark text and icons.
-            navigationController?.navigationBar.barStyle = .default
             navigationController?.navigationBar.tintColor = .black
             navigationController?.toolbar.tintColor = .black
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+            navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
         case .dark:
             // Dark themes will require light text and icons.
-            navigationController?.navigationBar.barStyle = .default
             navigationController?.navigationBar.tintColor = .white
             navigationController?.toolbar.tintColor = .white
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+            navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         }
         
-        navigationController?.navigationBar.barTintColor = userColor
-        navigationController?.toolbar.barTintColor = userColor
+
+        
+//        let gradientMask = CAGradientLayer()
+//        gradientMask.frame = navigationController?.navigationBar.frame ?? CGRect.zero
+//        gradientMask.colors = [UIColor.darkGray.cgColor, UIColor.clear.cgColor]
+//        navigationController?.navigationBar.layer.insertSublayer(gradientMask, at: 1)
     }
     
     /// Displays a thumbnail for the current QuickNote background.
@@ -138,16 +167,23 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
             let qnImage = album.albumPhotos[0]
             
             PHNServices.sharedInstance.fetchThumbnailForImage(photoNote: qnImage) { [weak self] (thumbnail) in
+                guard let weakSelf = self else {
+                    return
+                }
+                guard let image = thumbnail else {
+                    weakSelf.qnThumbnail.image = UIImage(named: "InAppIcon")
+                    return
+                }
                 // If thumbnail not properly captured during import, create one.
-                if thumbnail?.size.width == 0 {
+                if image.size.width == 0 {
                     qnImage.thumbnailNeedsRedraw = true
                     PHNServices.sharedInstance.removeImageFromCache(qnImage)
                 } else {
-                    self?.qnThumbnail.image = thumbnail
+                    weakSelf.qnThumbnail.image = image
                 }
             }
         } else { // No user photo exists, use default image.
-            qnThumbnail.image = UIImage(named: "QuickNote PN Background")
+            qnThumbnail.image = UIImage(named: "InAppIcon")
         }
     }
     
@@ -230,6 +266,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         let sbName = "Main"
         let storyboard = UIStoryboard(name: sbName, bundle: nil)
         let navigationVC = storyboard.instantiateViewController(withIdentifier: "NavPhotoGrabViewController") as! UINavigationController
+        navigationVC.modalPresentationStyle = .fullScreen
         let vc = navigationVC.topViewController as! PHNImportAlbumsViewController
         vc.delegate = self
         vc.singleSelection = true
