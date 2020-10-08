@@ -222,7 +222,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
             if currentColorIndex <= colorButtons.count - 1 {
                 let currentButton = colorButtons[currentColorIndex]
                 if (currentColor == .white) ||
-                    (currentColor == .custom(1.0, 1.0, 1.0, 1.0)) {
+                    (currentColor == .custom(red: 1.0, green: 1.0, blue: 1.0)) {
                     // White button needs black border to stand out from white background.
                     currentButton.layer.borderWidth = 1.0
                     currentButton.layer.borderColor = UIColor.black.cgColor

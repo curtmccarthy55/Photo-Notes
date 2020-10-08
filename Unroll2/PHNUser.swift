@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 /// Type to manage user set preferences and settings (e.g. app color, note opacity, etc.).
-class PHNUser {
+class PHNUser: Codable {
     /// Singleton for `PHNUser`.
     static let current = PHNUser()
     private init() {
@@ -47,11 +47,49 @@ class PHNUser {
             UIToolbar.appearance().tintColor = .white
         }
     }
+    
+    //MARK: - Codable
+    
+    private enum CodingKeys: String, CodingKey {
+        case preferredNoteOpacity
+        case preferredThemeColor
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(preferredNoteOpacity, forKey: .preferredNoteOpacity)
+        try container.encode(preferredThemeColor, forKey: .preferredThemeColor)
+//        try container.encode(inspectionUUID, forKey: .inspectionUUID)
+//        try container.encode(dateUpdated, forKey: .dateUpdated)
+//        try container.encode(images, forKey: .images)
+//        try container.encode(requireImages, forKey: .requireImages)
+//        try container.encode(versionAtSave, forKey: .versionAtSave)
+//        try container.encode(sentToServer, forKey: .sentToServer)
+//        try container.encode(status.rawValue, forKey: .status)
+//        try container.encode(scopeHeader, forKey: .scopeHeader)
+//        try container.encode(scopeParts, forKey: .scopeParts)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container        = try decoder.container(keyedBy: CodingKeys.self)
+        preferredThemeColor  = try container.decode(PHNThemeColor.self, forKey: .preferredThemeColor)
+        preferredNoteOpacity = try container.decode(CGFloat.self, forKey: .preferredNoteOpacity)
+//        inspectionUUID   = try container.decode(String.self, forKey: .inspectionUUID)
+//        dateUpdated      = try container.decode(Date.self, forKey: .dateUpdated)
+//        images           = try container.decode([PDRImage].self, forKey: .images)
+//        requireImages    = try container.decode(Bool.self, forKey: .requireImages)
+//        versionAtSave    = try container.decode(String.self, forKey: .versionAtSave)
+//        sentToServer     = try container.decode(Bool.self, forKey: .sentToServer)
+//        let rawStatus    = try container.decode(Int.self, forKey: .status)
+//        status           = InspectionStatus(rawValue: rawStatus) ?? .saved
+////        selectedMatrixID = try container.decode(Int.self, forKey: .selectedMatrixID)
+//        scopeHeader      = try container.decode(HeaderFields.self, forKey: .scopeHeader)
+//        scopeParts       = try container.decode([ScopePanel : PDRPartData?].self, forKey: .scopeParts)
+    }
 }
 
 /// Enumeration to specify theme color (bars, background colors, etc.).
 /// - Call instance methods `colorForTheme()` for the UIColor, and `colorBrightness()` for the general brightness of the color to determine tint on overlaid objects, like BarButtons or the Home indicator.
-enum PHNThemeColor: Equatable {
+enum PHNThemeColor: Codable, Equatable {
     case blue
     case red
     case black
@@ -60,7 +98,92 @@ enum PHNThemeColor: Equatable {
     case yellow
     case green
     case white
-    case custom(CGFloat, CGFloat, CGFloat, CGFloat) // (red, green, blue, alpha values).
+    case custom(red: Float, green: Float, blue: Float, alpha: Float = 1.0)
+    
+    private enum CodingKeys: CodingKey {
+        case blue, red, black, purple, orange, yellow, green, white, custom
+    }
+    
+    /*
+     • For cases without associated values, we don't need to decode anything, only assign the case to self.
+     • For cases with one associated value, we try to decode that value.
+     • For cases with multiple associated values, we need to get the nestedUnkeyedContainer from the decoder, then decode the values one by one in the correct order.
+     • If we hit the default case, we will throw a DecodingError including the codingPath for debugging.
+     */
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        // We get the KeyedDecodingContainer from the decoder and extract its first key. As we encoded an enum, we only expect to have one top level key. Then we switch on the key to initialize the enum.
+        let key = container.allKeys.first
+        
+        switch key {
+        case .blue:
+            self = .blue
+        case .red:
+            self = .red
+        case .black:
+            self = .red
+        case .purple:
+            self = .purple
+        case .orange:
+            self = .orange
+        case .yellow:
+            self = .yellow
+        case .green:
+            self = .green
+        case .white:
+            self = .white
+        case .custom:
+            var nestedContainer = try container.nestedUnkeyedContainer(forKey: .custom)
+            let red = try nestedContainer.decode(Float.self)
+            let green = try nestedContainer.decode(Float.self)
+            let blue = try nestedContainer.decode(Float.self)
+            let alpha = try nestedContainer.decode(Float.self)
+            
+            self = PHNThemeColor.custom(red: red, green: green, blue: blue, alpha: alpha)
+        default:
+            throw DecodingError.dataCorrupted(
+                        DecodingError.Context(
+                            codingPath: container.codingPath,
+                            debugDescription: "Unabled to decode theme color."
+                        )
+                    )
+        }
+    }
+    
+    /*
+     • If the case doesn't have any associated values, we will encode true as its value to keep the JSON structure consistent.
+     • For cases with one associated value that itself conforms to Codable, we will encode this value using the current case as a key.
+     • For cases with multiple associated values, we will encode the values inside a nestedUnkeyedContainer maintaining their order.
+     */
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        switch self {
+        case .blue:
+            try container.encode(true, forKey: .blue)
+        case .red:
+            try container.encode(true, forKey: .red)
+        case .black:
+            try container.encode(true, forKey: .black)
+        case .purple:
+            try container.encode(true, forKey: .purple)
+        case .orange:
+            try container.encode(true, forKey: .orange)
+        case .yellow:
+            try container.encode(true, forKey: .yellow)
+        case .green:
+            try container.encode(true, forKey: .green)
+        case .white:
+            try container.encode(true, forKey: .white)
+        case .custom(let red, let green, let blue, let alpha):
+            // With multiple associated values, encode the values inside a nestedUnkeyedContainer, maintaining their order.
+            var nestedContainer = container.nestedUnkeyedContainer(forKey: .custom)
+            try nestedContainer.encode(red)
+            try nestedContainer.encode(green)
+            try nestedContainer.encode(blue)
+            try nestedContainer.encode(alpha)
+        }
+    }
     
     /// Returns the UIColor for this theme.
     /// - Returns: UIColor for this theme.
@@ -116,10 +239,10 @@ enum PHNThemeColor: Equatable {
                           alpha: 1.0)
 //            selectedTag = 7
         case .custom(let red, let green, let blue, let alpha):
-            color = UIColor(red: red,
-                          green: green,
-                           blue: blue,
-                          alpha: alpha)
+            color = UIColor(red: CGFloat(red),
+                          green: CGFloat(green),
+                           blue: CGFloat(blue),
+                          alpha: CGFloat(alpha))
         }
         
         return color
@@ -168,7 +291,7 @@ enum PHNThemeColor: Equatable {
     ///   - green: Green color value.
     ///   - blue: Blue color value.
     /// - Returns: `ColorBrightness` value, `.light` or `.dark`.
-    func determineBrightness(red: CGFloat, green: CGFloat, blue: CGFloat) -> ColorBrightness {
+    func determineBrightness(red: Float, green: Float, blue: Float) -> ColorBrightness {
         let average = (red + green + blue) / 3.0
         if average >= 0.55 {
             return .light
