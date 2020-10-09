@@ -14,6 +14,17 @@ class PHNUser: Codable {
     /// Singleton for `PHNUser`.
     static let current = PHNUser()
     private init() {
+        if let user =
+        /*
+        if let set = fileSerializer.readObjectFromRelativePath(CJMAlbumFileName) as? [PHNPhotoAlbum] {
+            #if DEBUG
+            print("PHNPhotoAlbums fetched for album manager.")
+            #endif
+            return set
+        }
+        return []
+*/
+        
         setThemeColor(.red)
     }
     
@@ -58,32 +69,12 @@ class PHNUser: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(preferredNoteOpacity, forKey: .preferredNoteOpacity)
         try container.encode(preferredThemeColor, forKey: .preferredThemeColor)
-//        try container.encode(inspectionUUID, forKey: .inspectionUUID)
-//        try container.encode(dateUpdated, forKey: .dateUpdated)
-//        try container.encode(images, forKey: .images)
-//        try container.encode(requireImages, forKey: .requireImages)
-//        try container.encode(versionAtSave, forKey: .versionAtSave)
-//        try container.encode(sentToServer, forKey: .sentToServer)
-//        try container.encode(status.rawValue, forKey: .status)
-//        try container.encode(scopeHeader, forKey: .scopeHeader)
-//        try container.encode(scopeParts, forKey: .scopeParts)
     }
     
     required init(from decoder: Decoder) throws {
         let container        = try decoder.container(keyedBy: CodingKeys.self)
         preferredThemeColor  = try container.decode(PHNThemeColor.self, forKey: .preferredThemeColor)
         preferredNoteOpacity = try container.decode(CGFloat.self, forKey: .preferredNoteOpacity)
-//        inspectionUUID   = try container.decode(String.self, forKey: .inspectionUUID)
-//        dateUpdated      = try container.decode(Date.self, forKey: .dateUpdated)
-//        images           = try container.decode([PDRImage].self, forKey: .images)
-//        requireImages    = try container.decode(Bool.self, forKey: .requireImages)
-//        versionAtSave    = try container.decode(String.self, forKey: .versionAtSave)
-//        sentToServer     = try container.decode(Bool.self, forKey: .sentToServer)
-//        let rawStatus    = try container.decode(Int.self, forKey: .status)
-//        status           = InspectionStatus(rawValue: rawStatus) ?? .saved
-////        selectedMatrixID = try container.decode(Int.self, forKey: .selectedMatrixID)
-//        scopeHeader      = try container.decode(HeaderFields.self, forKey: .scopeHeader)
-//        scopeParts       = try container.decode([ScopePanel : PDRPartData?].self, forKey: .scopeParts)
     }
 }
 

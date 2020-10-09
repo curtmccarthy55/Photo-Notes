@@ -26,6 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.bool(forKey: "HasLaunchedOnce") != true {
             UserDefaults.standard.set(true, forKey: "HasLaunchedOnce")
             UserDefaults.standard.synchronize()
+        } else  {
+            let user = PHNFileSerializer.
         }
         
         var launchedFromShortCut = false

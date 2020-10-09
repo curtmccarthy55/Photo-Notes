@@ -9,6 +9,12 @@
 import Foundation
 import UIKit
 
+/* --- Global Strings --- */
+/// End file path for the Photo Notes collection.
+let PHN_ALBUMS_FILE = "Unroll.plist"
+/// End file path for the Photo Notes user information.
+let PHN_USER_FILE = "PHNUser.plist"
+
 public enum Environment {
     case development
     case staging

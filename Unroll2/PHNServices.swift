@@ -21,6 +21,12 @@ class PHNServices: NSObject {
     var fileSerializer = PHNFileSerializer()
     var debug_memoryReportingTimer: Timer? //was NSTimer
     
+    //MARK:  - User Read / Write
+    
+    func loadUser() {
+        
+    }
+    
     //MARK: - Image Fetch and Delete
     
     func fetchImageWithName(_ name: String, asData: Bool, handler: PHNImageCompletionHandler?) {
@@ -66,11 +72,6 @@ class PHNServices: NSObject {
         if cache.object(forKey: photoNote.thumbnailFileName as NSString) != nil {
             cache.removeObject(forKey: photoNote.thumbnailFileName as NSString)
         }
-    }
-    
-    //TODO remove: may be able to remove, not called anywhere.
-    func fetchUserAlbums(handler: PHNCompletionHandler?) {
-        handler?(PHNAlbumManager.sharedInstance.allAlbums)
     }
     
     func fetchImage(photoNote: PhotoNote, handler: PHNImageCompletionHandler?) {
