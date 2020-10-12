@@ -26,8 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.bool(forKey: "HasLaunchedOnce") != true {
             UserDefaults.standard.set(true, forKey: "HasLaunchedOnce")
             UserDefaults.standard.synchronize()
-        } else  {
-            let user = PHNFileSerializer.
         }
         
         var launchedFromShortCut = false
@@ -40,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         #if DEBUG
-//        PHNServices.sharedInstance.beginReportingMemoryToConsole(withInterval: 5.0)
+//        PHNServices.shared.beginReportingMemoryToConsole(withInterval: 5.0)
         #endif
         
         //Return false incase application was launched from shorcut to prevent application(_:performActionForShortcutItem:completionHandler:) from being called
@@ -61,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PHNAlbumManager.sharedInstance.save()
         launchDic = nil
         #if DEBUG
-        PHNServices.sharedInstance.endReportingMemoryToConsole()
+        PHNServices.shared.endReportingMemoryToConsole()
         #endif
     }
     
@@ -69,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         
         #if DEBUG
-        PHNServices.sharedInstance.beginReportingMemoryToConsole(withInterval: 5.0)
+        PHNServices.shared.beginReportingMemoryToConsole(withInterval: 5.0)
         #endif
     }
     

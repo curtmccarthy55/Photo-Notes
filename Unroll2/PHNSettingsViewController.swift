@@ -166,7 +166,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         if album.albumPhotos.count > 0 { // User selected photo exists.
             let qnImage = album.albumPhotos[0]
             
-            PHNServices.sharedInstance.fetchThumbnailForImage(photoNote: qnImage) { [weak self] (thumbnail) in
+            PHNServices.shared.fetchThumbnailForImage(photoNote: qnImage) { [weak self] (thumbnail) in
                 guard let weakSelf = self else {
                     return
                 }
@@ -177,7 +177,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
                 // If thumbnail not properly captured during import, create one.
                 if image.size.width == 0 {
                     qnImage.thumbnailNeedsRedraw = true
-                    PHNServices.sharedInstance.removeImageFromCache(qnImage)
+                    PHNServices.shared.removeImageFromCache(qnImage)
                 } else {
                     weakSelf.qnThumbnail.image = image
                 }
@@ -284,7 +284,6 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset]) {
         var newImages = [PhotoNote]()
         // Pull the images, image creation dates, and image locations from each PHAsset in the received array.
-        let fileSerializer = PHNFileSerializer()
         
         if imageManager != nil {
             imageManager = PHCachingImageManager()
@@ -304,8 +303,10 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
                     if let cInfo = info,
                         let degraded = cInfo[PHImageResultIsDegradedKey] as? Bool,
                         !degraded {
-                        fileSerializer.writeObject(imageData, toRelativePath: assetImage.fileName)
-                        //                        imageLoadGroup.leave()
+                        if let data = imageData {
+                            PHNServices.shared.writeImageData(data,
+                                                forPhotoNote: assetImage)
+                        }
                     }
                     imageLoadGroup.leave()
                 })
@@ -322,7 +323,8 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
                         let cInfo = info,
                         let degraded = cInfo[PHImageResultIsDegradedKey] as? Bool,
                         !degraded {
-                        fileSerializer.writeImage(cResult, toRelativePath: assetImage.thumbnailFileName)
+                        PHNServices.shared.writeThumbnail( cResult,
+                                                     forPhotoNote: assetImage)
                         assetImage.thumbnailNeedsRedraw = false
                         
                         //                        imageLoadGroup.leave()

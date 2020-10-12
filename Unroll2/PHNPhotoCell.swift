@@ -20,12 +20,12 @@ class PHNPhotoCell: UICollectionViewCell {
 
     func updateWith(photoNote: PhotoNote) {
         self.photoNote = photoNote
-        PHNServices.sharedInstance.fetchThumbnailForImage(photoNote: photoNote) { [weak self] (thumbnail) in
+        PHNServices.shared.fetchThumbnailForImage(photoNote: photoNote) { [weak self] (thumbnail) in
             // if thumbnail not properly captured during import, create one.
             if let cThumbnail = thumbnail {
                 if cThumbnail.size.width == 0 {
                     self?.photoNote.thumbnailNeedsRedraw = true
-                    PHNServices.sharedInstance.removeImageFromCache(self?.photoNote)
+                    PHNServices.shared.removeImageFromCache(self?.photoNote)
                 } else {
                     self?.cellImage.image = cThumbnail
                 }

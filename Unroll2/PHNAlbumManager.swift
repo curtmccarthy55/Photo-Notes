@@ -12,11 +12,10 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
     static let sharedInstance = PHNAlbumManager()
     
     //MARK: - Properties
-    lazy var fileSerializer = PHNFileSerializer()
     
     private lazy var allAlbumsEdit: [PHNPhotoAlbum] = { //was NSMutableOrderedSet
         /*
-        if let set = fileSerializer.readObjectFromRelativePath(CJMAlbumFileName) as? [PHNPhotoAlbum] {
+        if let set = PHNServices.shared.loadPhotoNoteAlbums() as? [PHNPhotoAlbum] {
             #if DEBUG
             print("PHNPhotoAlbums fetched for album manager.")
             #endif
@@ -25,7 +24,7 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
         return []
 */
         // TODO: PHASE OUT - model type transitions following Swift migration. Established post v2.1. Replace with above.
-        let set = fileSerializer.readObjectFromRelativePath(PHN_ALBUMS_FILE)
+        let set = PHNServices.shared.loadPhotoNoteAlbums()
         if set is [PHNPhotoAlbum] {
             print("set is [PHNPhotoAlbum]")
             return (set as! [PHNPhotoAlbum])
@@ -158,7 +157,7 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
         guard let album = existingAlbum(named: name) else { return }
         
         for doomedImage in images.reversed() {
-            PHNServices.sharedInstance.deleteImageFrom(photoNote: doomedImage)
+            PHNServices.shared.deleteImageFrom(photoNote: doomedImage)
             if doomedImage.photoFavorited {
                 if album.albumTitle != "Favorites" {
                     favPhotosAlbum?.remove(doomedImage)
@@ -188,7 +187,7 @@ class PHNAlbumManager: NSObject, PHNPhotoAlbumDelegate {
     //MARK: - Requests
     @discardableResult
     func save() -> Bool {
-        return fileSerializer.writeObject(allAlbumsEdit, toRelativePath: PHN_ALBUMS_FILE)
+        return PHNServices.shared.savePhotoNoteAlbums(allAlbumsEdit)
     }
     
     func existingAlbum(named: String) -> PHNPhotoAlbum? {

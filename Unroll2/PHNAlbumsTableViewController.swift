@@ -306,8 +306,6 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset]) {
         var newImages = [PhotoNote]()
         // Pull the images, image creation dates, and image locations from each PHAsset in the received array.
-        let fileSerializer = PHNFileSerializer()
-        
         if imageManager == nil {
             imageManager = PHCachingImageManager()
         }
@@ -326,8 +324,10 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
                     if let cInfo = info,
                         let degraded = cInfo[PHImageResultIsDegradedKey] as? Bool,
                         !degraded {
-                        fileSerializer.writeObject(imageData, toRelativePath: assetImage.fileName)
-//                        imageLoadGroup.leave()
+                        if let data = imageData {
+                            PHNServices.shared.writeImageData(data,
+                                                forPhotoNote: assetImage)
+                        }
                     }
                     imageLoadGroup.leave()
                 })
@@ -340,7 +340,8 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
                         let cInfo = info,
                         let degraded = cInfo[PHImageResultIsDegradedKey] as? Bool,
                         !degraded {
-                        fileSerializer.writeImage(cResult, toRelativePath: assetImage.thumbnailFileName)
+                        PHNServices.shared.writeThumbnail( cResult,
+                                                     forPhotoNote: assetImage)
                         assetImage.thumbnailNeedsRedraw = false
                         
 //                        imageLoadGroup.leave()
@@ -706,16 +707,17 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             return
         }
         
-        let fileSerializer = PHNFileSerializer()
         var tempAlbum = [PhotoNote]()
         
         for dic in pickedPhotos {
             let newPhotoNote = PhotoNote()
-            if let newPhotoData = dic["newImage"] as? NSData {
-                fileSerializer.writeObject(newPhotoData, toRelativePath: newPhotoNote.fileName)
+            if let newPhotoData = dic["newImage"] as? Data {
+                PHNServices.shared.writeImageData(newPhotoData,
+                                    forPhotoNote: newPhotoNote)
             }
             if let thumbnail = dic["newThumbnail"] as? UIImage {
-                fileSerializer.writeImage(thumbnail, toRelativePath: newPhotoNote.thumbnailFileName)
+                PHNServices.shared.writeThumbnail(thumbnail,
+                                    forPhotoNote: newPhotoNote)
             }
             
             newPhotoNote.photoCreationDate = Date()

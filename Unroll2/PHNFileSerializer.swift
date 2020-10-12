@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Type to handle low level read/write/delete operations.
 class PHNFileSerializer: NSObject {
     
     override init() {

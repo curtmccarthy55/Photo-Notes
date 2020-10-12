@@ -156,15 +156,14 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         cell.updateWith(photoNote: imageForCell)
         
         if imageForCell.thumbnailNeedsRedraw {
-            let fileSerializer = PHNFileSerializer()
-            
             var tempFullImage: UIImage?
-            PHNServices.sharedInstance.fetchImage(photoNote: imageForCell) { (fetchedImage) in
+            PHNServices.shared.fetchImage(photoNote: imageForCell) { (fetchedImage) in
                 tempFullImage = fetchedImage
             }
             let thumbnail = getCenterMaxSquareImageByCroppingImage((tempFullImage ?? UIImage(named: "NoImage")!) , andShrinkToSize: cellSize)
             imageForCell.thumbnailNeedsRedraw = (tempFullImage == nil)
-            fileSerializer.writeImage(thumbnail, toRelativePath: imageForCell.thumbnailFileName)
+            PHNServices.shared.writeThumbnail( thumbnail,
+                                         forPhotoNote: imageForCell)
             cell.updateWith(photoNote: imageForCell)
             PHNAlbumManager.sharedInstance.save()
         }
@@ -734,8 +733,6 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     }
     
     @objc func photoCaptureFinished() {
-        let serializer = PHNFileSerializer()
-        
         guard pickerPhotos != nil else {
             // TODO some alert saying pickerPhotos is empty, followed by cleanup, and return.
             return
@@ -745,8 +742,10 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
             let thumbnail = dic["newThumbnail"]! as! UIImage
             let newPhotoNote = PhotoNote()
             
-            serializer.writeObject(newPhotoData, toRelativePath: newPhotoNote.fileName)
-            serializer.writeImage(thumbnail, toRelativePath: newPhotoNote.thumbnailFileName)
+            PHNServices.shared.writeImageData(newPhotoData,
+                                        forPhotoNote: newPhotoNote)
+            PHNServices.shared.writeThumbnail(thumbnail,
+                                        forPhotoNote: newPhotoNote)
             
             newPhotoNote.setInitialValuesWithAlbum(album.albumTitle)
             newPhotoNote.photoCreationDate = Date()
@@ -844,12 +843,11 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
     /// Iterate through array of selected photos, convert them to PhotoNotes, and add to the current album.
     func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset]) {
         var newImages = [PhotoNote]()
-        let fileSerializer = PHNFileSerializer()
         if imageManager == nil { imageManager = PHCachingImageManager() }
         
         let imageLoadGroup = DispatchGroup()
         for asset in photos {
-            let assetImage = PhotoNote()
+            let photoNote = PhotoNote()
             
             let options = PHImageRequestOptions()
             options.isNetworkAccessAllowed = true
@@ -860,9 +858,10 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
                 imageManager!.requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) in
                     if let cInfo = info,
                         let degraded = cInfo[PHImageResultIsDegradedKey] as? Bool,
-                        !degraded {
-                        fileSerializer.writeObject(imageData, toRelativePath: assetImage.fileName)
-                        //                        imageLoadGroup.leave()
+                        !degraded,
+                        let data = imageData {
+                        PHNServices.shared.writeImageData(data,
+                                            forPhotoNote: photoNote)
                     }
                     imageLoadGroup.leave()
                 })
@@ -875,18 +874,18 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
                         let cInfo = info,
                         let degraded = cInfo[PHImageResultIsDegradedKey] as? Bool,
                         !degraded {
-                        fileSerializer.writeImage(cResult, toRelativePath: assetImage.thumbnailFileName)
-                        assetImage.thumbnailNeedsRedraw = false
+                        PHNServices.shared.writeThumbnail(cResult,
+                                            forPhotoNote: photoNote)
+                        photoNote.thumbnailNeedsRedraw = false
                         
-                                                imageLoadGroup.leave()
+                        imageLoadGroup.leave()
                     }
-//                    imageLoadGroup.leave()
                 })
             })
-            assetImage.setInitialValuesWithAlbum(album.albumTitle)
-            assetImage.photoCreationDate = asset.creationDate
+            photoNote.setInitialValuesWithAlbum(album.albumTitle)
+            photoNote.photoCreationDate = asset.creationDate
             
-            newImages.append(assetImage)
+            newImages.append(photoNote)
         }
         
         album.addMultiple(newImages)

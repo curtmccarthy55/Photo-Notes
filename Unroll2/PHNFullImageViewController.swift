@@ -102,7 +102,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             index = 0
         }
         prepareWithAlbumNamed(albumName!, andIndex: index!)
-        PHNServices.sharedInstance.fetchImage(photoNote: photoNote!) { [weak self] (fetchedImage) in
+        PHNServices.shared.fetchImage(photoNote: photoNote!) { [weak self] (fetchedImage) in
             self?.fullImage = fetchedImage
         }
         
@@ -618,7 +618,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             UIImageWriteToSavedPhotosAlbum(self.fullImage!, nil, nil, nil)
             self.favoriteChanged = false
             self.delegate?.photoIsFavorited(false)
-            PHNServices.sharedInstance.deleteImageFrom(photoNote: self.photoNote!)
+            PHNServices.shared.deleteImageFrom(photoNote: self.photoNote!)
             PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, removeImageWithUUID: self.photoNote!.fileName)
             if albumIsFavorites {
                 PHNAlbumManager.sharedInstance.albumWithName(self.photoNote!.originalAlbum!, removeImageWithUUID: self.photoNote!.fileName)
@@ -634,7 +634,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             self.favoriteChanged = false
             self.delegate?.photoIsFavorited(false)
             
-            PHNServices.sharedInstance.deleteImageFrom(photoNote: self.photoNote!)
+            PHNServices.shared.deleteImageFrom(photoNote: self.photoNote!)
             PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, removeImageWithUUID: self.photoNote!.fileName)
             if albumIsFavorites {
                 PHNAlbumManager.sharedInstance.albumWithName(self.photoNote!.originalAlbum!, removeImageWithUUID: self.photoNote!.fileName)

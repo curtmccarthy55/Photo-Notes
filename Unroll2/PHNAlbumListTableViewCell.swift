@@ -44,7 +44,7 @@ class PHNAlbumListTableViewCell: UITableViewCell {
     
     func configureThumbnail(forAlbum album: PHNPhotoAlbum) {
         if album.albumPreviewImage != nil {
-            PHNServices.sharedInstance.fetchThumbnailForImage(photoNote: album.albumPreviewImage!) { [weak self] thumbnail in
+            PHNServices.shared.fetchThumbnailForImage(photoNote: album.albumPreviewImage!) { [weak self] thumbnail in
                 self?.cellThumbnail.image = thumbnail
             }
         }
@@ -52,7 +52,7 @@ class PHNAlbumListTableViewCell: UITableViewCell {
         if cellThumbnail.image == nil {
             if album.albumPhotos.count >= 1 {
                 let firstPhoto = album.albumPhotos[0]
-                PHNServices.sharedInstance.fetchThumbnailForImage(photoNote: firstPhoto) { [weak self] thumbnail in
+                PHNServices.shared.fetchThumbnailForImage(photoNote: firstPhoto) { [weak self] thumbnail in
                     self?.cellThumbnail.image = thumbnail
                 }
             } else {

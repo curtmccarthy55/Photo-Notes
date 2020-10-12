@@ -14,7 +14,7 @@ class PHNUser: Codable {
     /// Singleton for `PHNUser`.
     static let current = PHNUser()
     private init() {
-        if let user =
+//        if let user =
         /*
         if let set = fileSerializer.readObjectFromRelativePath(CJMAlbumFileName) as? [PHNPhotoAlbum] {
             #if DEBUG

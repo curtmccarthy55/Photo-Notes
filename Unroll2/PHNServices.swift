@@ -11,23 +11,58 @@ import UIKit
 public typealias PHNCompletionHandler = ([Any]?) -> Void
 public typealias PHNImageCompletionHandler = (UIImage?) -> Void
 
-/// Handles image fetch/cache/delete, album save, and memory reporting.
+/// Type to handle abstracted read/write/cache/delete operations, as well as general app operations like memory reporting.
 class PHNServices: NSObject {
     //MARK: - Properties
     
-    static let sharedInstance = PHNServices()
+    /// `PHNServices` singleton.
+    static let shared = PHNServices()
     
+    /// Image cache.
     var cache: PHNCache = PHNCache()
+    /// Disk read/write.
     var fileSerializer = PHNFileSerializer()
     var debug_memoryReportingTimer: Timer? //was NSTimer
     
-    //MARK:  - User Read / Write
+    // MARK: - Read / Write PhotoNotes
+    /// Load any existing photo note albums from disk.
+    /// - Returns: Data (as Any?) for the existing collection of PhotoNote albums.  TODO - post v2.1 where we're mapping the old objective-c format into the new swift format, we should change this function to return an optional array of PHNPhotoAlbum.
+    func loadPhotoNoteAlbums() -> Any? /*[PHNPhotoAlbum]?*/ {
+        return fileSerializer.readObjectFromRelativePath(PHN_ALBUMS_FILE)
+    }
     
-    func loadUser() {
+    /// Saves the passed in `PHNPhotoAlbum` collection to disk.
+    /// - Parameter albums: The `PHNPhotoAlbum`s to write to disk.
+    /// - Returns: `true` if save was successful, `false` if save failed.
+    func savePhotoNoteAlbums(_ albums: [PHNPhotoAlbum]) -> Bool {
+        return fileSerializer.writeObject(albums,
+                          toRelativePath: PHN_ALBUMS_FILE)
+    }
+    
+    //MARK: - User Read / Write
+    
+    func loadUser() { //cjm 10/11
         
     }
     
     //MARK: - Image Fetch and Delete
+    
+    /// Writes full-image data to disk for the passed-in `PhotoNote`.
+    /// - Parameters:
+    ///     - imageData: Data for the image.
+    ///     - photoNote: PhotoNote object associated with the image.
+    func writeImageData(_ imageData: Data, forPhotoNote photoNote: PhotoNote) {
+        fileSerializer.writeObject(imageData, toRelativePath: photoNote.fileName)
+    }
+    
+    /// Writes the thumbnail image to disk for the passed-in `PhotoNote`.
+    /// - Parameters:
+    ///   - thumbnail: Thumbnail image.
+    ///   - photoNote: PhotoNote object associated with the thumbnail.
+    func writeThumbnail(_ thumbnail: UIImage, forPhotoNote photoNote: PhotoNote) {
+        fileSerializer.writeImage( thumbnail,
+                   toRelativePath: photoNote.thumbnailFileName)
+    }
     
     func fetchImageWithName(_ name: String, asData: Bool, handler: PHNImageCompletionHandler?) {
         if let image = cache.object(forKey: name as NSString) {
