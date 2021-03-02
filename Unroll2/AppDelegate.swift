@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Fabric
-import Crashlytics
 
 let kQuickNoteAction = "com.Desdinova.Unroll2.QuickNote"
 let kCameraAction = "com.Desdinova.Unroll2.OpenCamera"
@@ -21,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         PHNUser.current
-        Fabric.with([Crashlytics.self])
         
         if UserDefaults.standard.bool(forKey: "HasLaunchedOnce") != true {
             UserDefaults.standard.set(true, forKey: "HasLaunchedOnce")
