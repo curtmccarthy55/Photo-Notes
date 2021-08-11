@@ -24,8 +24,11 @@ class PHNUser: Codable {
         }
         return []
 */
-        
-        setThemeColor(.red)
+    }
+    
+    /// Prepare user defaults.
+    func prepareDefaults() {
+        setThemeColor(.blue)
     }
     
     // MARK: - User Preferences
@@ -78,6 +81,7 @@ class PHNUser: Codable {
     }
 }
 
+// MARK: -
 /// Enumeration to specify theme color (bars, background colors, etc.).
 /// - Call instance methods `colorForTheme()` for the UIColor, and `colorBrightness()` for the general brightness of the color to determine tint on overlaid objects, like BarButtons or the Home indicator.
 enum PHNThemeColor: Codable, Equatable {

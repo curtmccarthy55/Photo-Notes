@@ -70,9 +70,9 @@ class PHNAlbumDetailViewController: UITableViewController, UIImagePickerControll
         navigationController?.navigationBar.barTintColor = userColor
         navigationController?.toolbar.barTintColor = userColor
         
-        let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
-        backgroundView.contentMode = .scaleAspectFill
-        tableView.backgroundView = backgroundView
+//        let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
+//        backgroundView.contentMode = .scaleAspectFill
+//        tableView.backgroundView = backgroundView
     }
     
     override func viewDidAppear(_ animated: Bool) {

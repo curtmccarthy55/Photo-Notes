@@ -59,16 +59,21 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         tableView.register(nib, forCellReuseIdentifier: PHNAlbumsCellIdentifier)
         tableView.rowHeight = 120 // was 80
         
+        updateRootNavigationController()
         updateNavigationBars()
         prepareSearchBar()
     }
     
-    func updateNavigationBars() {
+    func updateRootNavigationController() {
         navigationController?.navigationBar.barStyle = .default
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.toolbar.isHidden = false
         navigationController?.toolbar.isTranslucent = true
+    }
+    
+    func updateNavigationBars() {
+        navigationItem.largeTitleDisplayMode = .automatic
     }
     
     /// Sets up and adds the search bar to the scene.
@@ -79,7 +84,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         searchController.searchBar.placeholder = "Search Photo Notes"
         if #available(iOS 13.0, *) {
             searchController.searchBar.searchTextField.backgroundColor = .white
-        } 
+        }
         definesPresentationContext = true
         if #available(iOS 11.0, *) {
             navigationItem.searchController = searchController
@@ -96,9 +101,10 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         
         setNeedsStatusBarAppearanceUpdate()
 
-        let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
-        backgroundView.contentMode = .scaleAspectFill
-        tableView.backgroundView = backgroundView
+//        let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
+//        backgroundView.contentMode = .scaleAspectFill
+//        tableView.backgroundView = backgroundView
+        tableView.backgroundColor = .white
 
         noAlbumsPopUp()
         tableView.reloadData()

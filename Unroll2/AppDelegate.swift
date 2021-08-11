@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var launchDic: [UIApplication.LaunchOptionsKey: Any]?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        PHNUser.current
+        PHNUser.current.prepareDefaults()
         
         if UserDefaults.standard.bool(forKey: "HasLaunchedOnce") != true {
             UserDefaults.standard.set(true, forKey: "HasLaunchedOnce")
@@ -87,22 +87,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         completionHandler(handledShortcut)
     }
     
+    @discardableResult
+    /// Process a received `UIApplicationShortcutItem`, preparing any appropriate segues.
+    /// - Parameter shortcutItem: The application shortcut item initiated by the user.
+    /// - Returns: Boolean indicating if a segue is prepared.
     func handleShortcutItem(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
         var handled = false
-        var shortcutType = shortcutItem.type
+        let shortcutType = shortcutItem.type
         
-        if shortcutType != nil {
-            let rootNavController = window?.rootViewController as! UINavigationController
-            let rootViewController = rootNavController.viewControllers.first as! PHNAlbumsTableViewController
-            rootNavController.popToRootViewController(animated: true)
-            
-            if shortcutType == kQuickNoteAction {
-                rootViewController.performSegue(withIdentifier: "ViewQuickNote", sender: nil)
-                handled = true
-            } else if shortcutType == kCameraAction {
-                rootViewController.openCamera()
-                handled = true
-            }
+        let rootNavController = window?.rootViewController as! UINavigationController
+        let rootViewController = rootNavController.viewControllers.first as! PHNAlbumsTableViewController
+        rootNavController.popToRootViewController(animated: true)
+        
+        if shortcutType == kQuickNoteAction {
+            rootViewController.performSegue(withIdentifier: "ViewQuickNote", sender: nil)
+            handled = true
+        } else if shortcutType == kCameraAction {
+            rootViewController.openCamera()
+            handled = true
         }
         
         return handled

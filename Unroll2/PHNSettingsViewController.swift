@@ -61,9 +61,9 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         updateNavigationBars()
         
         // Prepare background.
-        let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
-        backgroundView.contentMode = .scaleAspectFill
-        tableView.backgroundView = backgroundView
+//        let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
+//        backgroundView.contentMode = .scaleAspectFill
+//        tableView.backgroundView = backgroundView
 
         // Disable Done button until changes are made.
         btnDone.isEnabled = false
@@ -115,7 +115,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     func updateNavigationBars() {
         navigationController?.navigationBar.barStyle = .default
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.isTranslucent = true
+//        navigationController?.navigationBar.isTranslucent = true
         navigationController?.toolbar.isHidden = false
         navigationController?.toolbar.isTranslucent = true
     }
