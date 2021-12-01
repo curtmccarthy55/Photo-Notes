@@ -53,6 +53,10 @@ class PHNAlbumPickerViewController: UITableViewController {
                                                             target: self,
                                                             action: #selector(doneTapped))
         
+//        customizeNavigationControllerAppearance()
+    }
+    
+    func customizeNavigationControllerAppearance() {
         if userColorTag != 5 && userColorTag != 7 {
             navigationController?.navigationBar.barStyle = .black
             navigationController?.navigationBar.tintColor = .white

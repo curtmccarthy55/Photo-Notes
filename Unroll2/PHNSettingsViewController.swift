@@ -58,12 +58,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         super.viewDidLoad()
         
         /* --- Prepare navigationController. --- */
-        updateNavigationBars()
-        
-        // Prepare background.
-//        let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
-//        backgroundView.contentMode = .scaleAspectFill
-//        tableView.backgroundView = backgroundView
+//        updateNavigationBars()
 
         // Disable Done button until changes are made.
         btnDone.isEnabled = false
@@ -107,7 +102,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        appearanceForPreferredColor()
+//        appearanceForPreferredColor()
         displayQuickNoteThumbnail()
         setNeedsStatusBarAppearanceUpdate()
     }
@@ -243,7 +238,7 @@ class PHNSettingsViewController: UITableViewController, PHNPhotoGrabCompletionDe
         temporaryColorTheme = selectedTheme
         
         // Update appearance for new user preferred theme color.
-        appearanceForPreferredColor()
+//        appearanceForPreferredColor()
     }
     
     //MARK: - Opacity Slider

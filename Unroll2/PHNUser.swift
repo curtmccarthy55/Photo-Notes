@@ -24,6 +24,7 @@ class PHNUser: Codable {
         }
         return []
 */
+        print("User loaded.")
     }
     
     /// Prepare user defaults.

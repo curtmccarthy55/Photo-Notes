@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XRF-wX-XIn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XRF-wX-XIn">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,7 +18,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                         <color key="tintColor" systemColor="darkTextColor"/>
-                        <color key="separatorColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <connections>
                             <outlet property="dataSource" destination="NO4-kQ-OsT" id="byY-Oz-XQ6"/>
                             <outlet property="delegate" destination="NO4-kQ-OsT" id="qLo-w4-bMl"/>
@@ -25,31 +25,42 @@
                     </tableView>
                     <toolbarItems>
                         <barButtonItem title="Edit" id="zk0-Rl-znW">
+                            <color key="tintColor" systemColor="labelColor"/>
                             <connections>
                                 <action selector="editTableView" destination="NO4-kQ-OsT" id="78n-Un-RBE"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="0Wj-Ry-7YY"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="0Wj-Ry-7YY">
+                            <color key="tintColor" systemColor="labelColor"/>
+                        </barButtonItem>
                         <barButtonItem title="QuickNote" id="qsQ-ZU-jQf">
+                            <color key="tintColor" systemColor="labelColor"/>
                             <connections>
                                 <segue destination="Oy1-bg-qji" kind="presentation" identifier="ViewQuickNote" id="Of8-SX-qwO"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="rt5-SI-mbi"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="rt5-SI-mbi">
+                            <color key="tintColor" systemColor="labelColor"/>
+                        </barButtonItem>
                         <barButtonItem systemItem="camera" id="igR-0V-lHp">
+                            <color key="tintColor" systemColor="labelColor"/>
                             <connections>
                                 <action selector="photoGrab" destination="NO4-kQ-OsT" id="U10-yZ-OnD"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Albums" id="QE4-93-jxo">
-                        <barButtonItem key="backBarButtonItem" title="Albums" id="L1L-3p-ckW"/>
+                        <barButtonItem key="backBarButtonItem" title="Albums" id="L1L-3p-ckW">
+                            <color key="tintColor" systemColor="labelColor"/>
+                        </barButtonItem>
                         <barButtonItem key="leftBarButtonItem" image="FatGear" id="N5S-FN-s6G">
+                            <color key="tintColor" systemColor="labelColor"/>
                             <connections>
                                 <segue destination="35L-F5-Xgc" kind="presentation" identifier="ViewSettings" id="BYx-NY-d7v"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Reb-LD-ifB">
+                            <color key="tintColor" systemColor="labelColor"/>
                             <connections>
                                 <segue destination="EVj-cY-PaK" kind="presentation" identifier="AddAlbum" id="zVD-Ov-2nV"/>
                             </connections>
@@ -729,18 +740,12 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="FjD-u0-3Hr">
                         <rect key="frame" x="0.0" y="44" width="428" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.2363378931" green="0.50007843730000001" blue="0.76112388959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" id="vtd-Aj-Rz9">
+                    <toolbar key="toolbar" contentMode="scaleToFill" translucent="NO" id="vtd-Aj-Rz9">
                         <rect key="frame" x="0.0" y="843" width="428" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.2363378931" green="0.50007843730000001" blue="0.76112388959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </toolbar>
                     <connections>
                         <segue destination="NO4-kQ-OsT" kind="relationship" relationship="rootViewController" id="aSG-Ve-ZJ2"/>
@@ -992,7 +997,7 @@
                             <tableViewSection headerTitle="QuickNote" id="LTr-xb-sqA">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="o81-Eb-qOO">
-                                        <rect key="frame" x="0.0" y="321.66666603088379" width="428" height="120"/>
+                                        <rect key="frame" x="0.0" y="321.66666603088373" width="428" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="o81-Eb-qOO" id="iDx-ge-Hze">
                                             <rect key="frame" x="0.0" y="0.0" width="428" height="120"/>
@@ -1026,7 +1031,7 @@
                             <tableViewSection headerTitle="Developer" id="Vew-Mq-2Ew">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="YIG-ZB-4kY" rowHeight="44" style="IBUITableViewCellStyleDefault" id="jbD-Ds-tdL">
-                                        <rect key="frame" x="0.0" y="474.33333206176758" width="428" height="44"/>
+                                        <rect key="frame" x="0.0" y="474.33333206176752" width="428" height="44.000000000000057"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jbD-Ds-tdL" id="QgA-rc-1Sh">
                                             <rect key="frame" x="0.0" y="0.0" width="398.33333333333331" height="44"/>
@@ -1268,6 +1273,9 @@
         </systemColor>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var launchDic: [UIApplication.LaunchOptionsKey: Any]?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        PHNUser.current.prepareDefaults()
+//        PHNUser.current.prepareDefaults()
         
         if UserDefaults.standard.bool(forKey: "HasLaunchedOnce") != true {
             UserDefaults.standard.set(true, forKey: "HasLaunchedOnce")
@@ -28,11 +28,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var launchedFromShortCut = false
         launchDic = launchOptions
         
-//        if application.responds(to: #selector(setShortcutItems)) {
         if let item = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
             launchedFromShortCut = true
             handleShortcutItem(item)
         }
+        
+        customizeNavigationControllerAppearances()
         
         #if DEBUG
 //        PHNServices.shared.beginReportingMemoryToConsole(withInterval: 5.0)
@@ -40,6 +41,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //Return false incase application was launched from shorcut to prevent application(_:performActionForShortcutItem:completionHandler:) from being called
         return !launchedFromShortCut
+    }
+    
+    func customizeNavigationControllerAppearances() {
+//        let photoNotesBlue = UIColor(red: 60.0/255.0, //0.23
+//                                     green: 128.0/255.0, //0.50
+//                                      blue: 194.0/255.0, //0.76
+//                                     alpha: 1.0)
+        
+        UINavigationBar.appearance().barStyle = .default
+        UINavigationBar.appearance().isTranslucent = true
+        UINavigationBar.appearance().prefersLargeTitles = true
+//        UINavigationBar.appearance().tintColor = .white
+        UIToolbar.appearance().barStyle = .default
+        UIToolbar.appearance().isHidden = false
+        UIToolbar.appearance().isTranslucent = true
+        
+        /*
+        if #available(iOS 13, *) {
+            let normalBarButtonItemAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.label //photoNotesBlue
+            ]
+            let disabledBarButtonItemAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.gray
+            ]
+            let highlightedBarButtonItemAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.lightGray
+            ]
+            
+            let barButtonItemAppearance = UIBarButtonItemAppearance()
+            barButtonItemAppearance.normal.titleTextAttributes = normalBarButtonItemAttributes
+            barButtonItemAppearance.disabled.titleTextAttributes = disabledBarButtonItemAttributes
+            barButtonItemAppearance.highlighted.titleTextAttributes = highlightedBarButtonItemAttributes
+            
+            let navBarAppearance = UINavigationBarAppearance()
+            navBarAppearance.configureWithDefaultBackground()
+            navBarAppearance.buttonAppearance = barButtonItemAppearance
+            navBarAppearance.backButtonAppearance = barButtonItemAppearance
+            
+            UINavigationBar.appearance().standardAppearance = navBarAppearance
+            UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        } else {
+            
+        }
+         */
+        
+//        let navVC = window?.rootViewController as! UINavigationController
     }
     
     func applicationWillResignActive(_ application: UIApplication) {

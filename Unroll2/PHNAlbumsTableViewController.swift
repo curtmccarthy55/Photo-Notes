@@ -42,38 +42,31 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     var pickerPhotos: [[String : Any?]]?
     var imageManager: PHCachingImageManager?
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        switch PHNUser.current.preferredThemeColor.colorBrightness() {
-        case .light:
-            return .default
-        case .dark:
-            return .lightContent
-        }
-    }
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        switch PHNUser.current.preferredThemeColor.colorBrightness() {
+//        case .light:
+//            return .default
+//        case .dark:
+//            return .lightContent
+//        }
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        registerCells()
+        prepareSearchBar()
+        if #available(iOS 13, *) {
+            view.backgroundColor = .systemGray5
+        }
+    }
+    
+    /// Register custom cells for the table view.
+    func registerCells() {
         // Register cell.
         let nib = UINib(nibName: "PHNAlbumListTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: PHNAlbumsCellIdentifier)
         tableView.rowHeight = 120 // was 80
-        
-        updateRootNavigationController()
-        updateNavigationBars()
-        prepareSearchBar()
-    }
-    
-    func updateRootNavigationController() {
-        navigationController?.navigationBar.barStyle = .default
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.toolbar.isHidden = false
-        navigationController?.toolbar.isTranslucent = true
-    }
-    
-    func updateNavigationBars() {
-        navigationItem.largeTitleDisplayMode = .automatic
     }
     
     /// Sets up and adds the search bar to the scene.
@@ -97,14 +90,11 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        appearanceForPreferredColor()
+//        appearanceForPreferredColor() //cjm 12/01
         
         setNeedsStatusBarAppearanceUpdate()
 
-//        let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
-//        backgroundView.contentMode = .scaleAspectFill
-//        tableView.backgroundView = backgroundView
-        tableView.backgroundColor = .white
+//        tableView.backgroundColor = .white
 
         noAlbumsPopUp()
         tableView.reloadData()
@@ -134,7 +124,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         }
     }
     
-    //If there are no albums, prompt the user to create one after a delay.
+    /// If there are no albums, prompt the user to create one after a delay.
     func noAlbumsPopUp() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             if PHNAlbumManager.sharedInstance.allAlbums.count == 0 {
@@ -170,23 +160,23 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 1.0, height: 1.0))
-        return view
-    }
+//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let view = UIView(frame: CGRect(x: 0, y: 0, width: 1.0, height: 1.0))
+//        return view
+//    }
+//
+//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 4.0
+//    }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 4.0
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 1.0, height: 1.0))
-        return view
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 4.0
-    }
+//    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        let view = UIView(frame: CGRect(x: 0, y: 0, width: 1.0, height: 1.0))
+//        return view
+//    }
+//
+//    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 4.0
+//    }
     
     //MARK: - TableView Delegate
     

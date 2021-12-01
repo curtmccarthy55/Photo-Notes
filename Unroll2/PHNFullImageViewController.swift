@@ -177,24 +177,28 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
                                                                action: #selector(clearNote))
             oneTap.isEnabled = false
             scrollView.backgroundColor = .black // fullImage == nil ? userColor : .black
-            if (userColorTag! != 5) && (userColorTag! != 7) {
-                navigationController?.navigationBar.barStyle = .black
-                navigationController?.navigationBar.tintColor = .white
-                navigationController?.toolbar.tintColor = .white
-                navigationController?.navigationBar.titleTextAttributes = [ NSAttributedString.Key.foregroundColor : UIColor.white ]
-            } else {
-                navigationController?.navigationBar.barStyle = .default
-                navigationController?.navigationBar.tintColor = .black
-                navigationController?.toolbar.tintColor = .black
-                navigationController?.navigationBar.titleTextAttributes = [ NSAttributedString.Key.foregroundColor : UIColor.black ]
-            }
-            navigationController?.navigationBar.barTintColor = userColor
-            navigationController?.toolbar.barTintColor = userColor
+//            customizeNavigationControllerAppearance()
             
             if isQuickNote != nil, isQuickNote! {
                 navigationController?.setToolbarHidden(true, animated: false)
             }
         }
+    }
+    
+    func customizeNavigationControllerAppearance() {
+        if (userColorTag! != 5) && (userColorTag! != 7) {
+            navigationController?.navigationBar.barStyle = .black
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.toolbar.tintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [ NSAttributedString.Key.foregroundColor : UIColor.white ]
+        } else {
+            navigationController?.navigationBar.barStyle = .default
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.toolbar.tintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [ NSAttributedString.Key.foregroundColor : UIColor.black ]
+        }
+        navigationController?.navigationBar.barTintColor = userColor
+        navigationController?.toolbar.barTintColor = userColor
     }
     
     override func viewDidAppear(_ animated: Bool) {

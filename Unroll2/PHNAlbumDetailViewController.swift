@@ -55,6 +55,10 @@ class PHNAlbumDetailViewController: UITableViewController, UIImagePickerControll
             noteField.text = albumToEdit!.albumNote
         }
         
+//        customizeNavigationControllerAppearance()
+    }
+    
+    func customizeNavigationControllerAppearance() {
         if userColorTag != 5 && userColorTag != 7 {
             navigationController?.navigationBar.barStyle = .black
             navigationController?.navigationBar.tintColor = .white
@@ -69,10 +73,6 @@ class PHNAlbumDetailViewController: UITableViewController, UIImagePickerControll
         
         navigationController?.navigationBar.barTintColor = userColor
         navigationController?.toolbar.barTintColor = userColor
-        
-//        let backgroundView = UIImageView(image: UIImage(named: "AlbumListBackground"))
-//        backgroundView.contentMode = .scaleAspectFill
-//        tableView.backgroundView = backgroundView
     }
     
     override func viewDidAppear(_ animated: Bool) {

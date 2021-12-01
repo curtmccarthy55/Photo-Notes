@@ -40,7 +40,7 @@ class PHNPhotoGrabViewController: UIViewController, UICollectionViewDataSource, 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(donePressed))
         navigationItem.rightBarButtonItem?.isEnabled = false
         
-        appearanceForPreferredColor()
+//        appearanceForPreferredColor()
         
         // Scroll to bottom before displaying.  TODO: this can be improved.
         let pageSize = view.bounds.size
