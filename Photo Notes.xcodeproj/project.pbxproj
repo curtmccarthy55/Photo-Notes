@@ -36,6 +36,8 @@
 		75BD865A22F4E232006F4B91 /* PHNGrabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BD865922F4E232006F4B91 /* PHNGrabCell.swift */; };
 		75BD865C22F73F12006F4B91 /* PHNAlbumDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */; };
 		75BD865E22F78721006F4B91 /* PHNSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BD865D22F78721006F4B91 /* PHNSettingsViewController.swift */; };
+		75D22596275ABCBE003D6EAD /* PHNAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D22595275ABCBE003D6EAD /* PHNAlbumsViewController.swift */; };
+		75D22598275ABE59003D6EAD /* PHNAlbumsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D22597275ABE59003D6EAD /* PHNAlbumsViewModel.swift */; };
 		75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */; };
 		75D6433F22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */; };
 		840852A61B5DA49E00664849 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 840852A51B5DA49E00664849 /* no_image.jpg */; };
@@ -84,6 +86,8 @@
 		75BD865922F4E232006F4B91 /* PHNGrabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNGrabCell.swift; sourceTree = "<group>"; };
 		75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumDetailViewController.swift; sourceTree = "<group>"; };
 		75BD865D22F78721006F4B91 /* PHNSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNSettingsViewController.swift; sourceTree = "<group>"; };
+		75D22595275ABCBE003D6EAD /* PHNAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumsViewController.swift; sourceTree = "<group>"; };
+		75D22597275ABE59003D6EAD /* PHNAlbumsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumsViewModel.swift; sourceTree = "<group>"; };
 		75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNImportAlbumsViewController.swift; sourceTree = "<group>"; };
 		75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPhotoGrabViewController.swift; sourceTree = "<group>"; };
 		840852A51B5DA49E00664849 /* no_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_image.jpg; sourceTree = "<group>"; };
@@ -138,6 +142,8 @@
 		7561EDD720331CE500F99E3F /* Album List */ = {
 			isa = PBXGroup;
 			children = (
+				75D22597275ABE59003D6EAD /* PHNAlbumsViewModel.swift */,
+				75D22595275ABCBE003D6EAD /* PHNAlbumsViewController.swift */,
 				7540EA8D22C67CE60000D60E /* PHNAlbumsTableViewController.swift */,
 				75AD4BBA250E70A4005990CC /* PHNAlbumsListViewModel.swift */,
 				75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */,
@@ -370,9 +376,11 @@
 				75AD4BB9250DE944005990CC /* PHNConfig.swift in Sources */,
 				752A624F22E0E0B900E4A84D /* PHNFullImageViewController.swift in Sources */,
 				75BD865C22F73F12006F4B91 /* PHNAlbumDetailViewController.swift in Sources */,
+				75D22598275ABE59003D6EAD /* PHNAlbumsViewModel.swift in Sources */,
 				751AE8B822D7CB75007CF2FE /* PHNGalleryViewController.swift in Sources */,
 				75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */,
 				75BD865A22F4E232006F4B91 /* PHNGrabCell.swift in Sources */,
+				75D22596275ABCBE003D6EAD /* PHNAlbumsViewController.swift in Sources */,
 				7540EA9022C67EEB0000D60E /* PhotoNote.swift in Sources */,
 				75AAA4B223F2F9FA00F30F74 /* NetworkReachability.swift in Sources */,
 				7540EA9822CC172E0000D60E /* PHNServices.swift in Sources */,

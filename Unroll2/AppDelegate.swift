@@ -49,13 +49,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                                      blue: 194.0/255.0, //0.76
 //                                     alpha: 1.0)
         
+        // NavigationBar appearance
         UINavigationBar.appearance().barStyle = .default
         UINavigationBar.appearance().isTranslucent = true
         UINavigationBar.appearance().prefersLargeTitles = true
 //        UINavigationBar.appearance().tintColor = .white
+        
+        // Toolbar appearance
         UIToolbar.appearance().barStyle = .default
         UIToolbar.appearance().isHidden = false
         UIToolbar.appearance().isTranslucent = true
+        
+        // SearchBar appearance
+        // For some reason, barTintColor and backgroundColor need to be set together when trying to make the search bar containing view a dynamic color, otherwise there ends up being a visible rect tight around the search bar text field.
+        if #available(iOS 13.0, *) {
+            UISearchBar.appearance().barTintColor = .systemGray6
+            UISearchBar.appearance().backgroundColor = .systemGray6
+            UISearchBar.appearance().tintColor = .label
+            UISearchBar.appearance().searchTextField.backgroundColor = .systemGray3
+        }
         
         /*
         if #available(iOS 13, *) {

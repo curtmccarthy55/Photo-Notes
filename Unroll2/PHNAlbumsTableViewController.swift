@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 /// Initial view controller, displaying the list of user Photo Notes albums, and offering navigation to Settings, QuickNote, etc.
-class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewControllerDelegate, PHNFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, PHNPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHNAlbumPickerDelegate {
+class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewControllerDelegate, PHNFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, PHNPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHNAlbumPickerDelegate, UISearchControllerDelegate, UISearchBarDelegate {
     
     // Cell and Segue Identifiers
     private let PHNAlbumsCellIdentifier            = "AlbumCell"
@@ -72,19 +72,26 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     /// Sets up and adds the search bar to the scene.
     func prepareSearchBar() {
 //        searchController.searchResultsUpdater = self
-//        searchController.searchBar.delegate = self
+        searchController.delegate = self
+        searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Photo Notes"
-        if #available(iOS 13.0, *) {
-            searchController.searchBar.searchTextField.backgroundColor = .white
-        }
         definesPresentationContext = true
-        if #available(iOS 11.0, *) {
-            navigationItem.searchController = searchController
-            navigationItem.hidesSearchBarWhenScrolling = false
-        } else {
-            tableView.tableHeaderView = searchController.searchBar
-        }
+//        addSearchBar()
+    }
+    
+    func addSearchBar() {
+//        if #available(iOS 11.0, *) {
+//            navigationItem.searchController = searchController
+//            navigationItem.hidesSearchBarWhenScrolling = true
+//        } else {
+//            tableView.tableHeaderView = searchController.searchBar
+//        }
+    }
+    
+    /// Responds to user tapping the magnifying glass bar button.  Presents the search controller.
+    @IBAction func tappedSearch(_ sender: Any?) {
+        present(searchController, animated: true, completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,6 +105,12 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
 
         noAlbumsPopUp()
         tableView.reloadData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+//        addSearchBar()
     }
     
     /// Updates navigation bar style, tint, and color based on user selected theme color.
@@ -853,6 +866,12 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         default:
             print("PHNAlbumsTableViewController performing segue with identifier: \(identifier)")
         }
+    }
+    
+    //MARK: - UISearchBarDelegate
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        dismiss(animated: true, completion: nil)
     }
     
     //MARK: - DetailViewController Delegate

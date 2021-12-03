@@ -59,12 +59,20 @@
                                 <segue destination="35L-F5-Xgc" kind="presentation" identifier="ViewSettings" id="BYx-NY-d7v"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Reb-LD-ifB">
-                            <color key="tintColor" systemColor="labelColor"/>
-                            <connections>
-                                <segue destination="EVj-cY-PaK" kind="presentation" identifier="AddAlbum" id="zVD-Ov-2nV"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="Reb-LD-ifB">
+                                <color key="tintColor" systemColor="labelColor"/>
+                                <connections>
+                                    <segue destination="EVj-cY-PaK" kind="presentation" identifier="AddAlbum" id="zVD-Ov-2nV"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="search" id="1a1-yP-gjw">
+                                <color key="tintColor" systemColor="labelColor"/>
+                                <connections>
+                                    <action selector="tappedSearch:" destination="NO4-kQ-OsT" id="9cD-5S-QOX"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
@@ -158,7 +166,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UEJ-PL-hae" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2724" y="-352"/>
+            <point key="canvasLocation" x="3623.8317757009345" y="-352.48380129589634"/>
         </scene>
         <!--Popover View Controller-->
         <scene sceneID="L8e-gh-bBZ">
@@ -1121,7 +1129,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JkA-2z-Mze" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2724" y="-1046"/>
+            <point key="canvasLocation" x="3623.8317757009345" y="-1046.4362850971922"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7kw-SU-7qu">
@@ -1144,7 +1152,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z1b-TA-Swf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1894" y="-351"/>
+            <point key="canvasLocation" x="2793.9252336448599" y="-351.18790496760261"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Fa9-Uw-fSI">
@@ -1258,7 +1266,93 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c6S-gS-At9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1863" y="-1045"/>
+            <point key="canvasLocation" x="2761.6822429906542" y="-1045.1403887688987"/>
+        </scene>
+        <!--Albums-->
+        <scene sceneID="gei-E1-WJI">
+            <objects>
+                <viewController id="kQk-Zr-wUP" customClass="PHNAlbumsViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UzV-P5-93Q">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="qKl-ei-X5N">
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="kQk-Zr-wUP" id="ePb-kx-WTQ"/>
+                                    <outlet property="delegate" destination="kQk-Zr-wUP" id="gZ2-K5-Rbn"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="R3r-yH-iaX"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="qKl-ei-X5N" firstAttribute="top" secondItem="UzV-P5-93Q" secondAttribute="top" id="RY1-OX-xiy"/>
+                            <constraint firstItem="qKl-ei-X5N" firstAttribute="leading" secondItem="R3r-yH-iaX" secondAttribute="leading" id="X5Z-BX-3JA"/>
+                            <constraint firstAttribute="bottom" secondItem="qKl-ei-X5N" secondAttribute="bottom" id="n8b-4I-vbV"/>
+                            <constraint firstItem="qKl-ei-X5N" firstAttribute="trailing" secondItem="R3r-yH-iaX" secondAttribute="trailing" id="niY-MU-mYw"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems>
+                        <barButtonItem systemItem="edit" id="pW3-Ax-Zkv">
+                            <color key="tintColor" systemColor="labelColor"/>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="1Vo-qf-Fw3"/>
+                        <barButtonItem title="QuickNote" id="3P6-3J-gpa">
+                            <color key="tintColor" systemColor="labelColor"/>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="V9B-oz-JPe"/>
+                        <barButtonItem systemItem="camera" id="YOu-Tm-XdR">
+                            <color key="tintColor" systemColor="labelColor"/>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="Albums" id="vyP-oc-KwK">
+                        <barButtonItem key="leftBarButtonItem" title="Settings" image="FatGear" id="cmh-94-G6F">
+                            <color key="tintColor" systemColor="labelColor"/>
+                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="Cmw-9N-aVA">
+                                <color key="tintColor" systemColor="labelColor"/>
+                            </barButtonItem>
+                            <barButtonItem systemItem="search" id="CYE-7t-WUn">
+                                <color key="tintColor" systemColor="labelColor"/>
+                                <connections>
+                                    <action selector="tappedSearch:" destination="kQk-Zr-wUP" id="0vX-Ib-tI7"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="tableView" destination="qKl-ei-X5N" id="vEi-VE-pTP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VfT-OG-pGc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1006.5420560747663" y="-351.18790496760261"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="hsT-ta-YkY">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="Kyt-pl-wRR" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="FID-T5-uqZ">
+                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="K4U-EN-1Gc">
+                        <rect key="frame" x="0.0" y="843" width="428" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="kQk-Zr-wUP" kind="relationship" relationship="rootViewController" id="VSy-Kx-OOG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9b2-J6-iDJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="105" y="-351"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
@@ -1276,6 +1370,9 @@
         </systemColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>
