@@ -81,12 +81,12 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     }
     
     func addSearchBar() {
-//        if #available(iOS 11.0, *) {
-//            navigationItem.searchController = searchController
-//            navigationItem.hidesSearchBarWhenScrolling = true
-//        } else {
-//            tableView.tableHeaderView = searchController.searchBar
-//        }
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = true
+        } else {
+            tableView.tableHeaderView = searchController.searchBar
+        }
     }
     
     /// Responds to user tapping the magnifying glass bar button.  Presents the search controller.
@@ -158,7 +158,6 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     // MARK: - TableView Data Source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return PHNAlbumManager.sharedInstance.allAlbums.count
     }
 
