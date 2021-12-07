@@ -220,38 +220,6 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     
     //MARK: - Photo Fetch
     
-    func getCenterMaxSquareImageByCroppingImage(_ image: UIImage, andShrinkToSize newSize: CGSize) -> UIImage {
-        guard let imageCG = image.cgImage else { return UIImage(named: "NoImage")! }
-        // Get crop bounds
-        var centerSquareSize: CGSize = .zero
-        let originalImageWidth = CGFloat(imageCG.width)
-        let originalImageHeight = CGFloat(imageCG.height)
-        if originalImageHeight <= originalImageWidth {
-            centerSquareSize.width = originalImageHeight
-            centerSquareSize.height = originalImageHeight
-        } else {
-            centerSquareSize.width = originalImageWidth
-            centerSquareSize.height = originalImageWidth
-        }
-        
-        // Determine crop origin
-        let x = (originalImageWidth - centerSquareSize.width) / 2.0
-        let y = (originalImageHeight - centerSquareSize.height) / 2.0
-        
-        // Crop and create CGImageRef. This is where future improvement likely lies.
-        let cropRect = CGRect(x: x, y: y, width: centerSquareSize.width, height: centerSquareSize.height)
-        let imageRef = imageCG.cropping(to: cropRect)! //CGImageCreateWithImageInRect(image.cgImage!, cropRect)
-        let cropped = UIImage(cgImage: imageRef, scale: 0.0, orientation: image.imageOrientation)
-        
-        // Scale the image down to the smaller file size and return.
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
-        cropped.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return newImage!
-    }
-    
     @IBAction func photoGrab() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         // Access camera
@@ -669,7 +637,9 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         let newPhoto = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
 //        let newPhotoData = newPhoto?.jpegData(compressionQuality: 1.0)
         let newPhotoData = newPhoto?.pngData()
-        let thumbnail = getCenterMaxSquareImageByCroppingImage(newPhoto!, andShrinkToSize: CGSize(width: 120.0, height: 120.0))
+        
+        // cjm TODO: previously the value passed in for size was CGSize(width: 120.0, height: 120.0).  Consider changing 'size' type on generateSquareThumbnail.
+        let thumbnail = PHNImageServices.shared.generateSquareThumbnail(fromImage: newPhoto!, size: .largeThumbnail)
         
         //cjm album fetch
         let metaDic = info[UIImagePickerController.InfoKey.mediaMetadata]

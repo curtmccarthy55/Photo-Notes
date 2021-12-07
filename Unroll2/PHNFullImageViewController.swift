@@ -570,9 +570,11 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     
     //MARK: - Button Responses
     
+    /// Export and other action options for the photo.
     func showPopUpMenu() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
+        // Action to set the image as the preview thumbnail for the album.
         let setPreviewImage = UIAlertAction(title: "Use For Album List Thumbnail", style: .default) { [unowned self] (_) in
             PHNAlbumManager.sharedInstance.albumWithName(self.albumName!, createPreviewFromImage: self.photoNote!)
             PHNAlbumManager.sharedInstance.save()
@@ -588,6 +590,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             })
         }
         
+        // Action to save the image to the users Photos collection.
         let saveImageAction = UIAlertAction(title: "Save To Camera Roll", style: .default) { [unowned self] (_) in
             UIImageWriteToSavedPhotosAlbum(self.fullImage!, nil, nil, nil)
             
@@ -612,12 +615,15 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
         present(alert, animated: true, completion: nil)
     }
     
+    /// Present an alert confirming the user would like to delete the photo.
     func confirmImageDelete() {
         let albumIsFavorites = albumName == "Favorites"
         let message = albumIsFavorites ? "Delete from all albums or unfavorite?" : "You cannot recover this photo after deleting."
         let alertController = UIAlertController(title: "Delete Photo?",
                                               message: message,
                                        preferredStyle: .actionSheet)
+        
+        // Action to save the image to the user's Photos collection *before* deleting from Photo Notes.
         let saveToPhotosAndDelete = UIAlertAction(title: "Save To Camera Roll And Then Delete", style: .default) { [unowned self] (_) in
             UIImageWriteToSavedPhotosAlbum(self.fullImage!, nil, nil, nil)
             self.favoriteChanged = false
@@ -634,6 +640,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             self.delegate?.viewController(self, deletedImageAtIndex: self.index!)
         }
         
+        // Action to delete the photo without first saving to the Photos collection.
         let deletePhoto = UIAlertAction(title: "Delete Permanently", style: .default) { [unowned self] (_) in
             self.favoriteChanged = false
             self.delegate?.photoIsFavorited(false)
@@ -649,6 +656,7 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
             self.delegate?.viewController(self, deletedImageAtIndex: self.index!)
         }
         
+        // Action to remove the photo from favorites and the original collection.
         let unfavoritePhoto = UIAlertAction(title: "Unfavorite And Remove", style: .default) { [unowned self] (_) in
             self.favoriteChanged = false
             self.delegate?.photoIsFavorited(false)

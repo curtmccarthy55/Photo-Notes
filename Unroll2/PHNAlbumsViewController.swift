@@ -59,9 +59,12 @@ class PHNAlbumsViewController: UIViewController, UITableViewDelegate, UITableVie
         searchController.delegate = self
 //        searchController.searchResultsUpdater = self // requires conforming to UISearchResultsUpdating
         searchController.searchBar.delegate = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Photo Notes"
+        searchController.obscuresBackgroundDuringPresentation = true
+        searchController.searchBar.placeholder = NSLocalizedString("Search Photo Notes",
+                                                          comment: "Search bar placeholder.")
         definesPresentationContext = true
+        
+//        searchController.searchBar.scopeButtonTitles = ["Titles", "Tags"]
     }
     
     /// Adds the search controller's search bar to the navigation bar.  Currently unused as the search controller itself is presented in `tappedSearch(_:)`
@@ -87,9 +90,34 @@ class PHNAlbumsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // MARK: - BarButtonItem actions
     
-    /// Responds to user tapping the magnifying glass bar button.  Presents the search controller.
+    /// 'Magnifying glass' button action.  Presents the search controller.
     @IBAction func tappedSearch(_ sender: Any?) {
         present(searchController, animated: true, completion: nil)
+    }
+    
+    /// 'Camera' button action.  Presents options to choose a photo from the library, take a new photo using the camera, or cancel.
+    @IBAction func tappedCamera(_ sender: Any?) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        // Access camera
+        let cameraAction = UIAlertAction(title: "Take Photo", style: .default, handler: { [weak self] action in
+            self?.openCamera()
+        })
+        // Access photo library
+        let libraryAction = UIAlertAction(title: "Choose From Library", style: .default, handler: { [weak self] action in
+            self?.photosFromLibrary()
+        })
+        // Cancel
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(cameraAction)
+        alert.addAction(libraryAction)
+        alert.addAction(cancel)
+        
+        alert.popoverPresentationController?.barButtonItem = cameraButton
+        alert.popoverPresentationController?.permittedArrowDirections = .down
+        alert.popoverPresentationController?.sourceView = self.view
+        
+        present(alert, animated: true, completion: nil)
     }
     
     
@@ -131,7 +159,7 @@ class PHNAlbumsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // MARK: - UISearchBarDelegate
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        dismiss(animated: true, completion: nil)
-    }
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        dismiss(animated: true, completion: nil)
+//    }
 }

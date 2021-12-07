@@ -160,7 +160,9 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
             PHNServices.shared.fetchImage(photoNote: imageForCell) { (fetchedImage) in
                 tempFullImage = fetchedImage
             }
-            let thumbnail = getCenterMaxSquareImageByCroppingImage((tempFullImage ?? UIImage(named: "NoImage")!) , andShrinkToSize: cellSize)
+
+            // cjm TODO: previously the value passed in for size was the local 'cellSize' value.  Consider changing 'size' type on generateSquareThumbnail.
+            let thumbnail = PHNImageServices.shared.generateSquareThumbnail(fromImage: (tempFullImage ?? UIImage(named: "NoImage")!), size: .largeThumbnail)
             imageForCell.thumbnailNeedsRedraw = (tempFullImage == nil)
             PHNServices.shared.writeThumbnail( thumbnail,
                                          forPhotoNote: imageForCell)
@@ -715,7 +717,9 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         let newPhoto = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
         //        let newPhotoData = newPhoto?.jpegData(compressionQuality: 1.0)
         let newPhotoData = newPhoto?.pngData()
-        let thumbnail = getCenterMaxSquareImageByCroppingImage(newPhoto!, andShrinkToSize: CGSize(width: 120.0, height: 120.0))
+
+        // cjm TODO: previously the value passed in for size was CGSize(width: 120.0, height: 120.0).  Consider changing 'size' type on generateSquareThumbnail.
+        let thumbnail = PHNImageServices.shared.generateSquareThumbnail(fromImage: newPhoto!)
         
         //cjm album fetch
         let metaDic = info[UIImagePickerController.InfoKey.mediaMetadata]
@@ -796,42 +800,6 @@ class PHNGalleryViewController: UICollectionViewController, UICollectionViewDele
         pickerPhotos = nil
         imagePicker = nil
         dismiss(animated: true, completion: nil)
-    }
-    
-    //MARK: - New Photo Note Prep
-    
-    // Holy Grail of of thumbnail creation.  Well... Holy Dixie Cup may be more appropriate.
-    /// Takes full UIImage and compresses to thumbnail with size ~100KB.
-    func getCenterMaxSquareImageByCroppingImage(_ image: UIImage, andShrinkToSize newSize: CGSize) -> UIImage {
-        guard let imageCG = image.cgImage else { return UIImage(named: "NoImage")! }
-        // Get crop bounds
-        var centerSquareSize = CGSize.zero
-        let originalImageWidth = CGFloat(imageCG.width)
-        let originalImageHeight = CGFloat(imageCG.height)
-//        var originalImageHeight: Double = CGImageGetHeight(image.cgImage)
-        if originalImageHeight <= originalImageWidth {
-            centerSquareSize.width = originalImageHeight
-            centerSquareSize.height = originalImageHeight
-        } else {
-            centerSquareSize.width = originalImageWidth
-            centerSquareSize.height = originalImageWidth
-        }
-        // Determine crop origin
-        let x = (originalImageWidth - centerSquareSize.width) / 2.0
-        let y = (originalImageHeight - centerSquareSize.height) / 2.0
-        
-        // Crop and create CGImageRef.  This is where an improvement likely lies
-        let cropRect = CGRect(x: x, y: y, width: centerSquareSize.height, height: centerSquareSize.width)
-        let imageRef = imageCG.cropping(to: cropRect)!
-        let cropped = UIImage(cgImage: imageRef, scale: 0.0, orientation: image.imageOrientation)
-        
-        // Scale the image down to the smaller file size and return.
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
-        cropped.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return newImage!
     }
     
     //MARK: - PHNPhotoGrabDelegate

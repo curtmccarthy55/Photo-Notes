@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func customizeNavigationControllerAppearances() {
+//        let navVC = window?.rootViewController as! UINavigationController
 //        let photoNotesBlue = UIColor(red: 60.0/255.0, //0.23
 //                                     green: 128.0/255.0, //0.50
 //                                      blue: 194.0/255.0, //0.76
@@ -97,8 +98,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }
          */
-        
-//        let navVC = window?.rootViewController as! UINavigationController
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
