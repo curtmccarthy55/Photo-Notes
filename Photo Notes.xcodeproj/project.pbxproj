@@ -39,6 +39,7 @@
 		75D22596275ABCBE003D6EAD /* PHNAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D22595275ABCBE003D6EAD /* PHNAlbumsViewController.swift */; };
 		75D22598275ABE59003D6EAD /* PHNAlbumsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D22597275ABE59003D6EAD /* PHNAlbumsViewModel.swift */; };
 		75D2259A275ED294003D6EAD /* PHNImageServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D22599275ED294003D6EAD /* PHNImageServices.swift */; };
+		75D2259C27601B0F003D6EAD /* PHNCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D2259B27601B0F003D6EAD /* PHNCamera.swift */; };
 		75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */; };
 		75D6433F22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */; };
 		840852A61B5DA49E00664849 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 840852A51B5DA49E00664849 /* no_image.jpg */; };
@@ -90,6 +91,7 @@
 		75D22595275ABCBE003D6EAD /* PHNAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumsViewController.swift; sourceTree = "<group>"; };
 		75D22597275ABE59003D6EAD /* PHNAlbumsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumsViewModel.swift; sourceTree = "<group>"; };
 		75D22599275ED294003D6EAD /* PHNImageServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNImageServices.swift; sourceTree = "<group>"; };
+		75D2259B27601B0F003D6EAD /* PHNCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNCamera.swift; sourceTree = "<group>"; };
 		75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNImportAlbumsViewController.swift; sourceTree = "<group>"; };
 		75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPhotoGrabViewController.swift; sourceTree = "<group>"; };
 		840852A51B5DA49E00664849 /* no_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_image.jpg; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */,
 				75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */,
 				75D22599275ED294003D6EAD /* PHNImageServices.swift */,
+				75D2259B27601B0F003D6EAD /* PHNCamera.swift */,
 			);
 			name = "Image Services";
 			sourceTree = "<group>";
@@ -385,6 +388,7 @@
 				75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */,
 				75BD865A22F4E232006F4B91 /* PHNGrabCell.swift in Sources */,
 				75D22596275ABCBE003D6EAD /* PHNAlbumsViewController.swift in Sources */,
+				75D2259C27601B0F003D6EAD /* PHNCamera.swift in Sources */,
 				7540EA9022C67EEB0000D60E /* PhotoNote.swift in Sources */,
 				75AAA4B223F2F9FA00F30F74 /* NetworkReachability.swift in Sources */,
 				7540EA9822CC172E0000D60E /* PHNServices.swift in Sources */,

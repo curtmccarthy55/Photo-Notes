@@ -31,6 +31,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     var userColorTag: Int? // was NSNumber
     var selectedPhotos: [PhotoNote]?
     
+    /* Moving to PHNCamera
     var imagePicker: UIImagePickerController?
     var flashButton: UIButton?
     var doneButton: UIButton?
@@ -38,8 +39,9 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     var cameraCancelButton: UIButton?
     var cameraFlipButton: UIButton?
     var lastOrientation: UIDeviceOrientation?
+     */
     
-    var pickerPhotos: [[String : Any?]]?
+//    var pickerPhotos: [[String : Any?]]?
     var imageManager: PHCachingImageManager?
     
 //    override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -370,6 +372,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         PHNAlbumManager.sharedInstance.save()
         
         selectedPhotos = nil
+        /* these properties were moved to PHNCamera.
         flashButton = nil
         capturedPhotos = nil
         cameraCancelButton = nil
@@ -377,13 +380,14 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         doneButton = nil
         imagePicker = nil
         pickerPhotos = nil
+         */
         NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
         
         dismiss(animated: true, completion: nil)
     }
     
     //MARK: - ImagePicker Delegate and Controls
-    
+    /* Moving to PHNCamera
     func openCamera() {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             let alert = UIAlertController(title: "No Camera Available", message: "There's no camera available for Photo Notes to use.", preferredStyle: .alert)
@@ -728,6 +732,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             self?.imagePicker = nil
         }
     }
+    */
     
     //MARK: - List Editing
     
