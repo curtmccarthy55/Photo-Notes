@@ -11,6 +11,7 @@ import Photos
 
 fileprivate let CELL_IDENTIFIER = "GrabCell"
 
+/// Screen presenting an individual collection of photos (e.g. "All Photos", "Favorites", "Dropbox", etc.) from which to pull photos for import into Photo Notes.
 class PHNPhotoGrabViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate {
     //MARK: - Properties
     

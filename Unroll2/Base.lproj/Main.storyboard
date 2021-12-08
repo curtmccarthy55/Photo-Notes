@@ -1305,6 +1305,9 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="V9B-oz-JPe"/>
                         <barButtonItem systemItem="camera" id="YOu-Tm-XdR">
                             <color key="tintColor" systemColor="labelColor"/>
+                            <connections>
+                                <action selector="tappedCamera:" destination="kQk-Zr-wUP" id="DXD-ob-IzU"/>
+                            </connections>
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Albums" id="vyP-oc-KwK">
@@ -1325,6 +1328,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="cameraButton" destination="YOu-Tm-XdR" id="QzK-sd-Ux3"/>
                         <outlet property="tableView" destination="qKl-ei-X5N" id="vEi-VE-pTP"/>
                     </connections>
                 </viewController>

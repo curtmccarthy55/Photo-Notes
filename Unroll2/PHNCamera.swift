@@ -3,15 +3,27 @@
 //  Unroll2
 //
 //  Created by Curtis McCarthy on 12/7/21.
-//  Copyright © 2021 Bluewraith. All rights reserved.
+//  Copyright © 2021 Curtis McCarthy. All rights reserved.
 //
 
 import Foundation
 import UIKit
 import Photos
 
+protocol PHNCameraDelegate: AnyObject {
+    func camera(_ camera: PHNCamera, didFinishProcessingPhotos photoNotes: [PhotoNote]?)
+    func cameraDidCancel(error: CameraError?)
+}
+
+enum CameraError: Error {
+    case AccessDenied
+    case CameraUnavailable
+}
+
 /// Class to help present and receive user actions for the on-device camera.
 class PHNCamera: NSObject { // Object conformance added to allow conformance to UIImagePickerControllerDelegate.
+    weak var delegate: PHNCameraDelegate?
+    
     /// The view controller to present the camera from.
     weak var presentingView: UIViewController?
     /// ImagePickerController to use the device camera.
@@ -28,62 +40,48 @@ class PHNCamera: NSObject { // Object conformance added to allow conformance to 
     var capturedPhotos: UIImageView?
     /// Variable to help track device orientation
     var lastOrientation: UIDeviceOrientation?
-    /// TODO more clearly define what this is used for...
+    /// Collection of new image data from the UIImagePickerController.
     var pickerPhotos: [[String : Any?]]?
+    /// A temporary container for newly created Photo Notes, imported from a user library or captured by the camera.
+    var newPhotoNotes: [PhotoNote]?
     
     convenience init(presentingView: UIViewController) {
+        self.init()
         self.presentingView = presentingView
     }
     
+    /// Confirm camera access authorization, then present.
     func openCamera() {
+        // Check if a camera is available, and alert the user and return if not.
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            let alert = UIAlertController(title: "No Camera Available", message: "There's no camera available for Photo Notes to use.", preferredStyle: .alert)
-            let dismiss = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-            alert.addAction(dismiss)
-            presentingView?.present(alert, animated: true, completion: nil)
-            
+            delegate?.cameraDidCancel(error: .CameraUnavailable)
             return
         }
-        
+        // Check for camera access authorization.
         let mediaType = AVMediaType.video
         let authStatus = AVCaptureDevice.authorizationStatus(for: mediaType)
-        if authStatus != .authorized {
+        if authStatus == .authorized {
+            // If authorized, present the camera.
+            prepareAndPresentCamera()
+        } else {
+            // If not authorized, request access.
             AVCaptureDevice.requestAccess(for: .video) { [weak self] (granted) in
                 if granted {
+                    // If camera access is granted, call for the camera to be prepared and presented.
                     #if DEBUG
                         print("Permission for camera access granted")
                     #endif
-                    self?.prepAndDisplayCamera()
+                    self?.prepareAndPresentCamera()
                 } else {
-                    let alert = UIAlertController(title: "Camera Access Denied", message: "Please allow Photo Notes permission to use the camera.", preferredStyle: .alert)
-                    
-                     if let settingsUrl = URL(string: UIApplication.openSettingsURLString),
-                        UIApplication.shared.canOpenURL(settingsUrl)
-                     {
-                        let actionSettings = UIAlertAction(title: "Open Settings",
-                                                           style: .default,
-                                                         handler: { (_) in
-                            UIApplication.shared.open(settingsUrl) { (success) in
-                                #if DEBUG
-                                    print("Settings opened: \(success)")
-                                #endif
-                            }
-                        })
-                        alert.addAction(actionSettings)
-                     }
-                    
-                    let actionDismiss = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
-                    alert.addAction(actionDismiss)
-                    
-                    self?.presentingView?.present(alert, animated: true, completion: nil)
+                    // If camera access denied, alert the user that they'll need to enable it to allow photo capture.
+                    self?.delegate?.cameraDidCancel(error: .AccessDenied)
                 }
             }
-        } else {
-            prepAndDisplayCamera()
         }
     }
     
-    func prepAndDisplayCamera() {
+    /// Prepares the camera overlay and then presents it on the presenting view controller.
+    func prepareAndPresentCamera() {
         imagePicker = UIImagePickerController()
         imagePicker?.sourceType = UIImagePickerController.SourceType.camera
         imagePicker?.showsCameraControls = false
@@ -91,6 +89,7 @@ class PHNCamera: NSObject { // Object conformance added to allow conformance to 
         imagePicker?.delegate = self
         imagePicker?.cameraFlashMode = .off
         imagePicker?.cameraDevice = .rear
+        imagePicker?.mediaTypes
         
         // Determine if viewport needs translation, and find bottom bar height.
         let screenHeight = UIScreen.main.bounds.size.height
@@ -300,10 +299,10 @@ class PHNCamera: NSObject { // Object conformance added to allow conformance to 
         imagePicker?.takePicture()
     }
     
+    /// Called once the user dismisses the camera with the 'Done' button.
     @objc func photoCaptureFinished() {
         guard let pickedPhotos = pickerPhotos else {
-            presentingView?.navigationController?.view.isUserInteractionEnabled = true
-            presentingView?.dismiss(animated: true, completion: nil)
+            delegate?.camera(self, didFinishProcessingPhotos: nil)
             return
         }
         
@@ -325,23 +324,8 @@ class PHNCamera: NSObject { // Object conformance added to allow conformance to 
             tempAlbum.append(newPhotoNote)
         }
         
-        selectedPhotos = Array(tempAlbum)
-        presentingView?.navigationController?.view.isUserInteractionEnabled = true
-        presentingView?.dismiss(animated: true, completion: nil)
-        
-        // Instantiate and present PHNAlbumPickerViewController
-//        let albumPickerVC = PHNAlbumPickerViewController(nibName: "PHNAlbumPickerViewController", bundle: nil)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let navVC = storyboard.instantiateViewController(withIdentifier: PHNAlbumPickerNavigationIdentifier) as! UINavigationController
-        let albumPickerVC = navVC.topViewController as! PHNAlbumPickerViewController
-        albumPickerVC.delegate = self
-        albumPickerVC.title = "Select Destination"
-        albumPickerVC.currentAlbumName = nil
-//        albumPickerVC.userColor = userColor
-//        albumPickerVC.userColorTag = userColorTag
-        presentingView?.present(navVC, animated: true, completion: nil)
-        
-        PHNAlbumManager.sharedInstance.save()
+        newPhotoNotes = Array(tempAlbum)
+        delegate?.camera(self, didFinishProcessingPhotos: newPhotoNotes)
     }
     
     @objc func cancelCamera() {

@@ -154,14 +154,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let shortcutType = shortcutItem.type
         
         let rootNavController = window?.rootViewController as! UINavigationController
-        let rootViewController = rootNavController.viewControllers.first as! PHNAlbumsTableViewController
+        let rootViewController = rootNavController.viewControllers.first as! PHNAlbumsViewController
         rootNavController.popToRootViewController(animated: true)
         
         if shortcutType == kQuickNoteAction {
             rootViewController.performSegue(withIdentifier: "ViewQuickNote", sender: nil)
             handled = true
         } else if shortcutType == kCameraAction {
-            rootViewController.openCamera()
+//            rootViewController.openCamera()
+            rootViewController.tappedCamera(nil)
             handled = true
         }
         

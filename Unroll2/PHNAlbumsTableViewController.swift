@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 /// Initial view controller, displaying the list of user Photo Notes albums, and offering navigation to Settings, QuickNote, etc.
-class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewControllerDelegate, PHNFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, PHNPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHNAlbumPickerDelegate, UISearchControllerDelegate, UISearchBarDelegate {
+class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewControllerDelegate, PHNFullImageViewControllerDelegate, UIPopoverPresentationControllerDelegate, PHNPopoverDelegate, PHNPhotoGrabCompletionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, /*PHNAlbumPickerDelegate,*/ UISearchControllerDelegate, UISearchBarDelegate {
     
     // Cell and Segue Identifiers
     private let PHNAlbumsCellIdentifier            = "AlbumCell"
@@ -29,7 +29,6 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     private var popoverPresent = false
     var userColor: UIColor?
     var userColorTag: Int? // was NSNumber
-    var selectedPhotos: [PhotoNote]?
     
     /* Moving to PHNCamera
     var imagePicker: UIImagePickerController?
@@ -40,8 +39,10 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
     var cameraFlipButton: UIButton?
     var lastOrientation: UIDeviceOrientation?
      */
-    
+    // Photos added from camera capture or the photo library.
 //    var pickerPhotos: [[String : Any?]]?
+    /// A temporary container for newly created Photo Notes, imported from a user library or captured by the camera.
+    var newPhotoNotes: [PhotoNote]?
     var imageManager: PHCachingImageManager?
     
 //    override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -226,7 +227,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         // Access camera
         let cameraAction = UIAlertAction(title: "Take Photo", style: .default, handler: { [weak self] action in
-            self?.openCamera()
+//            self?.openCamera()
         })
         // Access photo library
         let libraryAction = UIAlertAction(title: "Choose From Library", style: .default, handler: { [weak self] action in
@@ -281,6 +282,8 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         dismiss(animated: true, completion: nil)
     }
     
+    /// Delegate method to handle import of selected images from one of the user photo libraries.
+    /// - Parameter photos: The collection of selected photos to import.
     func photoGrabSceneDidFinishSelectingPhotos(_ photos: [PHAsset]) {
         var newImages = [PhotoNote]()
         // Pull the images, image creation dates, and image locations from each PHAsset in the received array.
@@ -331,7 +334,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             newImages.append(assetImage)
         }
         
-        selectedPhotos = Array(newImages)
+        newPhotoNotes = Array(newImages)
         
         imageLoadGroup.notify(queue: .main) { [weak self] in
             self?.navigationController?.view.isUserInteractionEnabled = true
@@ -340,7 +343,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let navVC = storyboard.instantiateViewController(withIdentifier: "AListPickerViewController") as! UINavigationController
             let aListPickerVC = navVC.topViewController as! PHNAlbumPickerViewController
-            aListPickerVC.delegate = self
+//            aListPickerVC.delegate = self
             aListPickerVC.title = "Select Destination"
             aListPickerVC.currentAlbumName = nil
             aListPickerVC.userColor = self?.userColor
@@ -350,28 +353,29 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         }
     }
     
+    /* Moved to AlbumsViewController
     func albumPickerViewControllerDidCancel(_ controller: PHNAlbumPickerViewController) {
-        selectedPhotos = nil
+        newPhotoNotes = nil
         dismiss(animated: true, completion: nil)
     }
     
     func albumPickerViewController(_ controller: PHNAlbumPickerViewController, didFinishPicking album: PHNPhotoAlbum) {
-        guard selectedPhotos != nil, !selectedPhotos!.isEmpty else {
+        guard newPhotoNotes != nil, !newPhotoNotes!.isEmpty else {
             dismiss(animated: true, completion: nil)
             return
         }
         
-        for image in selectedPhotos! {
+        for image in newPhotoNotes! {
             image.selectCoverHidden = true
             image.photoTitle = "No Title Created "
             image.photoNote = "Tap Edit to change the title and note!"
             image.photoFavorited = false
             image.originalAlbum = album.albumTitle
         }
-        album.addMultiple(selectedPhotos!)
+        album.addMultiple(newPhotoNotes!)
         PHNAlbumManager.sharedInstance.save()
         
-        selectedPhotos = nil
+        newPhotoNotes = nil
         /* these properties were moved to PHNCamera.
         flashButton = nil
         capturedPhotos = nil
@@ -385,6 +389,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
         
         dismiss(animated: true, completion: nil)
     }
+     */
     
     //MARK: - ImagePicker Delegate and Controls
     /* Moving to PHNCamera
@@ -707,7 +712,7 @@ class PHNAlbumsTableViewController: UITableViewController, PHNAlbumDetailViewCon
             tempAlbum.append(newPhotoNote)
         }
         
-        selectedPhotos = Array(tempAlbum)
+        newPhotoNotes = Array(tempAlbum)
         navigationController?.view.isUserInteractionEnabled = true
         dismiss(animated: true, completion: nil)
         
