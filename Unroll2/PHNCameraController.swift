@@ -1,5 +1,5 @@
 //
-//  PHNCamera.swift
+//  PHNCameraController.swift
 //  Unroll2
 //
 //  Created by Curtis McCarthy on 12/7/21.
@@ -11,7 +11,7 @@ import UIKit
 import Photos
 
 protocol PHNCameraDelegate: AnyObject {
-    func camera(_ camera: PHNCamera, didFinishProcessingPhotos photoNotes: [PhotoNote]?)
+    func camera(_ camera: PHNCameraController, didFinishProcessingPhotos photoNotes: [PhotoNote]?)
     func cameraDidCancel(error: CameraError?)
 }
 
@@ -21,7 +21,7 @@ enum CameraError: Error {
 }
 
 /// Class to help present and receive user actions for the on-device camera.
-class PHNCamera: NSObject { // Object conformance added to allow conformance to UIImagePickerControllerDelegate.
+class PHNCameraController: NSObject { // Object conformance added to allow conformance to UIImagePickerControllerDelegate.
     weak var delegate: PHNCameraDelegate?
     
     /// The view controller to present the camera from.
@@ -336,7 +336,7 @@ class PHNCamera: NSObject { // Object conformance added to allow conformance to 
     }
 }
 
-extension PHNCamera: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension PHNCameraController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     // Converting photo captured by in-app camera to PhotoNote.
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         doneButton?.isEnabled = true
