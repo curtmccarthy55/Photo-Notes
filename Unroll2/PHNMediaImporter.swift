@@ -7,3 +7,8 @@
 //
 
 import Foundation
+
+/// Handles importing photos (and later: videos, live photos, and potentially other media) from the user's external files (e.g. Files, Photos, Dropbox, etc).
+class PHNMediaImporter {
+    
+}

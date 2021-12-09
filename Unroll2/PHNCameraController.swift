@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Photos
 
-protocol PHNCameraDelegate: AnyObject {
+protocol PHNCameraControllerDelegate: AnyObject {
     func camera(_ camera: PHNCameraController, didFinishProcessingPhotos photoNotes: [PhotoNote]?)
     func cameraDidCancel(error: CameraError?)
 }
@@ -22,7 +22,7 @@ enum CameraError: Error {
 
 /// Class to help present and receive user actions for the on-device camera.
 class PHNCameraController: NSObject { // Object conformance added to allow conformance to UIImagePickerControllerDelegate.
-    weak var delegate: PHNCameraDelegate?
+    weak var delegate: PHNCameraControllerDelegate?
     
     /// The view controller to present the camera from.
     weak var presentingView: UIViewController?

@@ -16,7 +16,6 @@
 		752A624B22DD27F800E4A84D /* PHNPageImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A624A22DD27F800E4A84D /* PHNPageImageViewController.swift */; };
 		752A624D22E0C03400E4A84D /* PHNFullImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 752A624C22E0C03300E4A84D /* PHNFullImageViewController.xib */; };
 		752A624F22E0E0B900E4A84D /* PHNFullImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A624E22E0E0B900E4A84D /* PHNFullImageViewController.swift */; };
-		7540EA8E22C67CE60000D60E /* PHNAlbumsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EA8D22C67CE60000D60E /* PHNAlbumsTableViewController.swift */; };
 		7540EA9022C67EEB0000D60E /* PhotoNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EA8F22C67EEB0000D60E /* PhotoNote.swift */; };
 		7540EA9222CA7A430000D60E /* PHNPhotoAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EA9122CA7A430000D60E /* PHNPhotoAlbum.swift */; };
 		7540EA9422CABD630000D60E /* PHNAlbumManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7540EA9322CABD630000D60E /* PHNAlbumManager.swift */; };
@@ -39,7 +38,8 @@
 		75D22596275ABCBE003D6EAD /* PHNAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D22595275ABCBE003D6EAD /* PHNAlbumsViewController.swift */; };
 		75D22598275ABE59003D6EAD /* PHNAlbumsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D22597275ABE59003D6EAD /* PHNAlbumsViewModel.swift */; };
 		75D2259A275ED294003D6EAD /* PHNImageServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D22599275ED294003D6EAD /* PHNImageServices.swift */; };
-		75D2259C27601B0F003D6EAD /* PHNCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D2259B27601B0F003D6EAD /* PHNCamera.swift */; };
+		75D2259C27601B0F003D6EAD /* PHNCameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D2259B27601B0F003D6EAD /* PHNCameraController.swift */; };
+		75D2259E2761C3D7003D6EAD /* PHNMediaImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D2259D2761C3D7003D6EAD /* PHNMediaImporter.swift */; };
 		75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */; };
 		75D6433F22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */; };
 		840852A61B5DA49E00664849 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 840852A51B5DA49E00664849 /* no_image.jpg */; };
@@ -68,7 +68,6 @@
 		752A624A22DD27F800E4A84D /* PHNPageImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPageImageViewController.swift; sourceTree = "<group>"; };
 		752A624C22E0C03300E4A84D /* PHNFullImageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PHNFullImageViewController.xib; sourceTree = "<group>"; };
 		752A624E22E0E0B900E4A84D /* PHNFullImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNFullImageViewController.swift; sourceTree = "<group>"; };
-		7540EA8D22C67CE60000D60E /* PHNAlbumsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumsTableViewController.swift; sourceTree = "<group>"; };
 		7540EA8F22C67EEB0000D60E /* PhotoNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoNote.swift; sourceTree = "<group>"; };
 		7540EA9122CA7A430000D60E /* PHNPhotoAlbum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPhotoAlbum.swift; sourceTree = "<group>"; };
 		7540EA9322CABD630000D60E /* PHNAlbumManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumManager.swift; sourceTree = "<group>"; };
@@ -91,7 +90,8 @@
 		75D22595275ABCBE003D6EAD /* PHNAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumsViewController.swift; sourceTree = "<group>"; };
 		75D22597275ABE59003D6EAD /* PHNAlbumsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNAlbumsViewModel.swift; sourceTree = "<group>"; };
 		75D22599275ED294003D6EAD /* PHNImageServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNImageServices.swift; sourceTree = "<group>"; };
-		75D2259B27601B0F003D6EAD /* PHNCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNCamera.swift; sourceTree = "<group>"; };
+		75D2259B27601B0F003D6EAD /* PHNCameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNCameraController.swift; sourceTree = "<group>"; };
+		75D2259D2761C3D7003D6EAD /* PHNMediaImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNMediaImporter.swift; sourceTree = "<group>"; };
 		75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNImportAlbumsViewController.swift; sourceTree = "<group>"; };
 		75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHNPhotoGrabViewController.swift; sourceTree = "<group>"; };
 		840852A51B5DA49E00664849 /* no_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_image.jpg; sourceTree = "<group>"; };
@@ -129,7 +129,8 @@
 				75D6431E22F3918B00AD6528 /* PHNImportAlbumsViewController.swift */,
 				75D6433E22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift */,
 				75D22599275ED294003D6EAD /* PHNImageServices.swift */,
-				75D2259B27601B0F003D6EAD /* PHNCamera.swift */,
+				75D2259B27601B0F003D6EAD /* PHNCameraController.swift */,
+				75D2259D2761C3D7003D6EAD /* PHNMediaImporter.swift */,
 			);
 			name = "Image Services";
 			sourceTree = "<group>";
@@ -150,7 +151,6 @@
 			children = (
 				75D22597275ABE59003D6EAD /* PHNAlbumsViewModel.swift */,
 				75D22595275ABCBE003D6EAD /* PHNAlbumsViewController.swift */,
-				7540EA8D22C67CE60000D60E /* PHNAlbumsTableViewController.swift */,
 				75AD4BBA250E70A4005990CC /* PHNAlbumsListViewModel.swift */,
 				75BD865B22F73F12006F4B91 /* PHNAlbumDetailViewController.swift */,
 				75BD865D22F78721006F4B91 /* PHNSettingsViewController.swift */,
@@ -372,7 +372,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7540EA8E22C67CE60000D60E /* PHNAlbumsTableViewController.swift in Sources */,
 				75AD4BBB250E70A4005990CC /* PHNAlbumsListViewModel.swift in Sources */,
 				75D6433F22F4BF1E00AD6528 /* PHNPhotoGrabViewController.swift in Sources */,
 				7540EA9E22CD5D180000D60E /* PHNPopoverViewController.swift in Sources */,
@@ -381,6 +380,7 @@
 				7540EA9222CA7A430000D60E /* PHNPhotoAlbum.swift in Sources */,
 				75AD4BB9250DE944005990CC /* PHNConfig.swift in Sources */,
 				752A624F22E0E0B900E4A84D /* PHNFullImageViewController.swift in Sources */,
+				75D2259E2761C3D7003D6EAD /* PHNMediaImporter.swift in Sources */,
 				75BD865C22F73F12006F4B91 /* PHNAlbumDetailViewController.swift in Sources */,
 				75D2259A275ED294003D6EAD /* PHNImageServices.swift in Sources */,
 				75D22598275ABE59003D6EAD /* PHNAlbumsViewModel.swift in Sources */,
@@ -388,7 +388,7 @@
 				75D6431F22F3918B00AD6528 /* PHNImportAlbumsViewController.swift in Sources */,
 				75BD865A22F4E232006F4B91 /* PHNGrabCell.swift in Sources */,
 				75D22596275ABCBE003D6EAD /* PHNAlbumsViewController.swift in Sources */,
-				75D2259C27601B0F003D6EAD /* PHNCamera.swift in Sources */,
+				75D2259C27601B0F003D6EAD /* PHNCameraController.swift in Sources */,
 				7540EA9022C67EEB0000D60E /* PhotoNote.swift in Sources */,
 				75AAA4B223F2F9FA00F30F74 /* NetworkReachability.swift in Sources */,
 				7540EA9822CC172E0000D60E /* PHNServices.swift in Sources */,

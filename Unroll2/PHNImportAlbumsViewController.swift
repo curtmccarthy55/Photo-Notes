@@ -42,35 +42,56 @@ class PHNImportAlbumsViewController: UITableViewController {
     
     var selectedIndex: IndexPath?
     
+    lazy var mediaImporter = PHNMediaImporter()
+    
     //MARK: - Scene Set Up
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let nib = UINib(nibName: "PHNAlbumListTableViewCell", bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: CELL_IDENTIFIER)
-        tableView.rowHeight = 80
-        navigationItem.title = "Photos"
+        registerCells()
+        customizeNavigationBar()
+        prepareDataSource()
+        
+//        appearanceForPreferredColor()
+    }
+    
+    /// Prepare the table view section data.
+    func prepareDataSource() {
         sectionLocalizedTitles = ["", "Library", "My Albums"]
         
         // Create a PHFetchResult object for each section in the table view.
         ascendingOptions = PHFetchOptions()
-        ascendingOptions?.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        ascendingOptions?.sortDescriptors = [NSSortDescriptor(key: "creationDate",
+                                                        ascending: true)]
         
         allPhotos = PHAsset.fetchAssets(with: ascendingOptions)
         smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum,
                                                            subtype: .albumRegular,
                                                            options: nil)
+        userCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
         /*
          TODO we should remove Recently Deleted and All Photos from this collection.  Need to see what All Photos collection name actually is though.
          We'll need to set up a fetchOption that excludes these albums and include that in the smartAlbums fetch.
          I should also filter out FetchResults that have count == 0.
          */
-        
-        userCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelPressed))
-        
-        appearanceForPreferredColor()
+    }
+    
+    /// Register cells and set row height for the table view.
+    func registerCells() {
+        let nib = UINib(nibName: "PHNAlbumListTableViewCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: CELL_IDENTIFIER)
+        tableView.rowHeight = 80
+    }
+    
+    
+    /// Make desired changes to the navigation bar and navigation item.
+    func customizeNavigationBar() {
+        navigationItem.title = "Photos"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel",
+                                                           style: .plain,
+                                                           target: self,
+                                                           action: #selector(cancelPressed))
     }
     
     /// Updates navigation bar style, tint, and color based on user selected theme color.
@@ -97,6 +118,8 @@ class PHNImportAlbumsViewController: UITableViewController {
         navigationController?.navigationBar.barTintColor = userColor
         navigationController?.toolbar.barTintColor = userColor
     }
+    
+    // MARK: - Button actions
     
     @objc func cancelPressed() {
         delegate?.photoGrabSceneDidCancel()
@@ -212,9 +235,4 @@ class PHNImportAlbumsViewController: UITableViewController {
             }
         }
     }
-    /*
-     
- */
-    
-
 }

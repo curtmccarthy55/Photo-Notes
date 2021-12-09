@@ -41,6 +41,14 @@ class PhotoNote: NSObject, NSCoding {
         super.init()
     }
     
+    /// Set default values for the Photo Note.
+    func configureWithDefaultValues() {
+        selectCoverHidden = true
+        photoTitle = "No Title Created "
+        photoNote = "Tap Edit to change the title and note!"
+        photoFavorited = false
+    }
+    
     //MARK: - Property Modifiers
     func setInitialValuesWithAlbum(_ album: String) {
         photoTitle = "No Title Created "

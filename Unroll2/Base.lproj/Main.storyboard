@@ -9,83 +9,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Albums-->
-        <scene sceneID="lJj-hb-zQi">
-            <objects>
-                <tableViewController id="NO4-kQ-OsT" customClass="PHNAlbumsTableViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="LAb-oi-MDb">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="755"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
-                        <color key="tintColor" systemColor="darkTextColor"/>
-                        <connections>
-                            <outlet property="dataSource" destination="NO4-kQ-OsT" id="byY-Oz-XQ6"/>
-                            <outlet property="delegate" destination="NO4-kQ-OsT" id="qLo-w4-bMl"/>
-                        </connections>
-                    </tableView>
-                    <toolbarItems>
-                        <barButtonItem title="Edit" id="zk0-Rl-znW">
-                            <color key="tintColor" systemColor="labelColor"/>
-                            <connections>
-                                <action selector="editTableView" destination="NO4-kQ-OsT" id="78n-Un-RBE"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="0Wj-Ry-7YY">
-                            <color key="tintColor" systemColor="labelColor"/>
-                        </barButtonItem>
-                        <barButtonItem title="QuickNote" id="qsQ-ZU-jQf">
-                            <color key="tintColor" systemColor="labelColor"/>
-                            <connections>
-                                <segue destination="Oy1-bg-qji" kind="presentation" identifier="ViewQuickNote" id="Of8-SX-qwO"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="rt5-SI-mbi">
-                            <color key="tintColor" systemColor="labelColor"/>
-                        </barButtonItem>
-                        <barButtonItem systemItem="camera" id="igR-0V-lHp">
-                            <color key="tintColor" systemColor="labelColor"/>
-                            <connections>
-                                <action selector="photoGrab" destination="NO4-kQ-OsT" id="U10-yZ-OnD"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" title="Albums" id="QE4-93-jxo">
-                        <barButtonItem key="backBarButtonItem" title="Albums" id="L1L-3p-ckW">
-                            <color key="tintColor" systemColor="labelColor"/>
-                        </barButtonItem>
-                        <barButtonItem key="leftBarButtonItem" image="FatGear" id="N5S-FN-s6G">
-                            <color key="tintColor" systemColor="labelColor"/>
-                            <connections>
-                                <segue destination="35L-F5-Xgc" kind="presentation" identifier="ViewSettings" id="BYx-NY-d7v"/>
-                            </connections>
-                        </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem systemItem="add" id="Reb-LD-ifB">
-                                <color key="tintColor" systemColor="labelColor"/>
-                                <connections>
-                                    <segue destination="EVj-cY-PaK" kind="presentation" identifier="AddAlbum" id="zVD-Ov-2nV"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem systemItem="search" id="1a1-yP-gjw">
-                                <color key="tintColor" systemColor="labelColor"/>
-                                <connections>
-                                    <action selector="tappedSearch:" destination="NO4-kQ-OsT" id="9cD-5S-QOX"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
-                    </navigationItem>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <connections>
-                        <outlet property="cameraButton" destination="igR-0V-lHp" id="9XR-NO-XTn"/>
-                        <outlet property="editButton" destination="zk0-Rl-znW" id="BEt-pL-9iy"/>
-                        <segue destination="EVj-cY-PaK" kind="presentation" identifier="EditAlbum" id="a2e-sF-Y6k"/>
-                        <segue destination="uLg-8C-qq2" kind="show" identifier="ViewGallery" id="FTW-8o-DJa"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="yfX-L9-hlb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="990" y="340"/>
-        </scene>
         <!--Album Detail View Controller-->
         <scene sceneID="gFj-lg-Zlh">
             <objects>
@@ -166,7 +89,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UEJ-PL-hae" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3623.8317757009345" y="-352.48380129589634"/>
+            <point key="canvasLocation" x="2756" y="-427"/>
         </scene>
         <!--Popover View Controller-->
         <scene sceneID="L8e-gh-bBZ">
@@ -285,7 +208,7 @@
             <objects>
                 <collectionViewController id="uLg-8C-qq2" customClass="PHNGalleryViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" id="9nl-h9-yxM">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="755"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" sectionInsetReference="safeArea" id="eJ5-cr-OcG">
@@ -387,6 +310,7 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
+                    <navigationItem key="navigationItem" id="ZaH-vR-Ypd"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="cameraButton" destination="r9C-xl-G7l" id="NPB-SI-bTW"/>
@@ -458,11 +382,11 @@
             <objects>
                 <viewController storyboardIdentifier="FullImageVC" id="9ae-Ea-iTf" customClass="PHNFullImageViewController" customModule="Unroll2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ulg-px-Jgm">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="816"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="838"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.5" maximumZoomScale="1.5" translatesAutoresizingMaskIntoConstraints="NO" id="657-po-rB3">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="816"/>
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="838"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="100" placeholderIntrinsicHeight="100" translatesAutoresizingMaskIntoConstraints="NO" id="21o-UG-qC7">
                                         <rect key="frame" x="137" y="251" width="100" height="100"/>
@@ -483,7 +407,7 @@
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlx-cQ-nGb">
-                                <rect key="frame" x="0.0" y="772" width="428" height="816"/>
+                                <rect key="frame" x="0.0" y="760" width="428" height="838"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="INM-E8-0PE">
                                         <rect key="frame" x="8" y="0.0" width="412" height="58.333333333333336"/>
@@ -564,7 +488,7 @@
                                         </constraints>
                                     </stackView>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Enter note here." adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5T-Ao-Wwn">
-                                        <rect key="frame" x="4" y="60.333333333333371" width="420" height="751.66666666666663"/>
+                                        <rect key="frame" x="4" y="60.333333333333371" width="420" height="739.66666666666663"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -738,30 +662,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4d7-gt-o0N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1894" y="1803"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="ndF-DM-kDb">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="XRF-wX-XIn" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="FjD-u0-3Hr">
-                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <toolbar key="toolbar" contentMode="scaleToFill" translucent="NO" id="vtd-Aj-Rz9">
-                        <rect key="frame" x="0.0" y="843" width="428" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="NO4-kQ-OsT" kind="relationship" relationship="rootViewController" id="aSG-Ve-ZJ2"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ICN-Zc-fi1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="268" y="340"/>
         </scene>
         <!--Settings-->
         <scene sceneID="p0k-Fz-9mP">
@@ -1129,7 +1029,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JkA-2z-Mze" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3623.8317757009345" y="-1046.4362850971922"/>
+            <point key="canvasLocation" x="2756" y="-1121"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7kw-SU-7qu">
@@ -1152,7 +1052,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z1b-TA-Swf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2793.9252336448599" y="-351.18790496760261"/>
+            <point key="canvasLocation" x="1926" y="-426"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Fa9-Uw-fSI">
@@ -1228,7 +1128,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Oy1-bg-qji" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="M1T-6M-Ndd">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.2363378931" green="0.50007843730000001" blue="0.76112388959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1250,6 +1150,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="35L-F5-Xgc" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="8dt-Mg-2yC"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="bUi-gy-uQt">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1266,7 +1167,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c6S-gS-At9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2761.6822429906542" y="-1045.1403887688987"/>
+            <point key="canvasLocation" x="1894" y="-1120"/>
         </scene>
         <!--Albums-->
         <scene sceneID="gei-E1-WJI">
@@ -1295,8 +1196,11 @@
                         </constraints>
                     </view>
                     <toolbarItems>
-                        <barButtonItem systemItem="edit" id="pW3-Ax-Zkv">
+                        <barButtonItem title="Edit" id="pW3-Ax-Zkv">
                             <color key="tintColor" systemColor="labelColor"/>
+                            <connections>
+                                <action selector="tappedEdit" destination="kQk-Zr-wUP" id="a50-jJ-xRj"/>
+                            </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="1Vo-qf-Fw3"/>
                         <barButtonItem title="QuickNote" id="3P6-3J-gpa">
@@ -1313,10 +1217,16 @@
                     <navigationItem key="navigationItem" title="Albums" id="vyP-oc-KwK">
                         <barButtonItem key="leftBarButtonItem" title="Settings" image="FatGear" id="cmh-94-G6F">
                             <color key="tintColor" systemColor="labelColor"/>
+                            <connections>
+                                <segue destination="35L-F5-Xgc" kind="presentation" identifier="ViewSettings" id="ttD-h9-yyC"/>
+                            </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="Cmw-9N-aVA">
                                 <color key="tintColor" systemColor="labelColor"/>
+                                <connections>
+                                    <segue destination="EVj-cY-PaK" kind="presentation" identifier="AddAlbum" id="j04-iy-ZHm"/>
+                                </connections>
                             </barButtonItem>
                             <barButtonItem systemItem="search" id="CYE-7t-WUn">
                                 <color key="tintColor" systemColor="labelColor"/>
@@ -1326,15 +1236,17 @@
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="cameraButton" destination="YOu-Tm-XdR" id="QzK-sd-Ux3"/>
+                        <outlet property="editButton" destination="pW3-Ax-Zkv" id="fJx-wt-pvH"/>
                         <outlet property="tableView" destination="qKl-ei-X5N" id="vEi-VE-pTP"/>
+                        <segue destination="uLg-8C-qq2" kind="show" identifier="ViewGallery" id="Chg-Ty-HX7"/>
+                        <segue destination="EVj-cY-PaK" kind="presentation" identifier="EditAlbum" id="4EO-zL-Yie"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VfT-OG-pGc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1006.5420560747663" y="-351.18790496760261"/>
+            <point key="canvasLocation" x="820" y="340"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hsT-ta-YkY">
@@ -1356,19 +1268,16 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9b2-J6-iDJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="105" y="-351"/>
+            <point key="canvasLocation" x="73" y="340"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="zVD-Ov-2nV"/>
+        <segue reference="4EO-zL-Yie"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="FatGear" width="22" height="22"/>
         <image name="InAppIcon" width="341.33334350585938" height="341.33334350585938"/>
         <image name="WhiteStarEmpty" width="44" height="44"/>
-        <systemColor name="darkTextColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
