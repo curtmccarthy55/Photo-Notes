@@ -19,11 +19,16 @@ class PHNAlbumListTableViewCell: UITableViewCell {
         // Initialization code
         backgroundColor = .clear
         contentView.backgroundColor = .clear
-//        subContentView.backgroundColor = UIColor(white: 1.0, alpha: 0.9)
         subContentView.layer.cornerRadius = 8.0
         subContentView.layer.borderColor = UIColor.black.cgColor
         subContentView.layer.borderWidth = 1.0
         subContentView.clipsToBounds = true
+        
+        addBackgroundBlurAndVibrancy()
+    }
+    
+    func addBackgroundBlurAndVibrancy() {
+//        subContentView.backgroundColor = UIColor(white: 1.0, alpha: 0.9)
         
         if #available(iOS 13.0, *) {
             cellAlbumName.textColor = .label
@@ -46,6 +51,39 @@ class PHNAlbumListTableViewCell: UITableViewCell {
           blurView.leadingAnchor.constraint(equalTo: subContentView.leadingAnchor),
           blurView.heightAnchor.constraint(equalTo: subContentView.heightAnchor),
           blurView.widthAnchor.constraint(equalTo: subContentView.widthAnchor)
+        ])
+        
+        addVibrancyWith(blurView: blurView, blurEffect: blurEffect)
+    }
+    
+    func addVibrancyWith(blurView: UIVisualEffectView, blurEffect: UIBlurEffect) {
+        /* ~~~ Add Vibrancy - Requires blur view ~~~ */
+        // 1. Create a UIVibrancyEffect that uses the blurEffect you set up earlier. UIVibrancyEffect is another subclass of UIVisualEffect.
+        let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
+        // 2. Create a UIVisualEffectView to contain the vibrancy effect. This process is exactly the same as creating a blur. Since you’re using Auto Layout, you make sure to disable auto-resizing translations here.
+        let vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
+        vibrancyView.translatesAutoresizingMaskIntoConstraints = false
+        // 3. Add optionsView as a subview of your vibrancy view’s contentView. This ensures the vibrancy effect is applied to the view that contains all the controls.
+        vibrancyView.contentView.addSubview(subContentView)
+        // 4. Add the vibrancy view to the blur view’s contentView to complete the effect.
+        blurView.contentView.addSubview(vibrancyView)
+
+        NSLayoutConstraint.activate([
+          vibrancyView.heightAnchor.constraint(equalTo:blurView.contentView.heightAnchor),
+          vibrancyView
+            .widthAnchor
+            .constraint(equalTo: blurView.contentView.widthAnchor),
+          vibrancyView
+            .centerXAnchor
+            .constraint(equalTo: blurView.contentView.centerXAnchor),
+          vibrancyView
+            .centerYAnchor
+            .constraint(equalTo: blurView.contentView.centerYAnchor)
+        ])
+
+        NSLayoutConstraint.activate([
+          subContentView.centerXAnchor.constraint(equalTo: vibrancyView.contentView.centerXAnchor),
+          subContentView.centerYAnchor.constraint(equalTo: vibrancyView.contentView.centerYAnchor)
         ])
     }
 
