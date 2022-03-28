@@ -53,7 +53,7 @@ class PHNAlbumListTableViewCell: UITableViewCell {
           blurView.widthAnchor.constraint(equalTo: subContentView.widthAnchor)
         ])
         
-        addVibrancyWith(blurView: blurView, blurEffect: blurEffect)
+//        addVibrancyWith(blurView: blurView, blurEffect: blurEffect)
     }
     
     func addVibrancyWith(blurView: UIVisualEffectView, blurEffect: UIBlurEffect) {

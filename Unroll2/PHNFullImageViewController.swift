@@ -418,11 +418,13 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
     
     func updateForBarVisibility(visible: Bool, animated: Bool) {
         // if called from viewWillAppear: animated == false, else animated == true
-        let duration = 0.0 //animated ? 0.2 : 0.0
+        let duration = animated ? 0.2 : 0.0
         if visible {
             if isQuickNote == nil || isQuickNote == false {
                 delegate?.makeHomeIndicatorVisible(true)
             }
+            // Animate in new appearance.
+            view.setNeedsLayout()
             UIView.animate(withDuration: duration) { [unowned self] in
                 // Toggle bars
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -434,8 +436,12 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
                 self.noteHidden = false
                 self.editNoteButton.setTitle("Edit", for: .normal)
                 self.editNoteButton.isHidden = true
+                
+                self.view.layoutIfNeeded()
             }
         } else {
+            // Animate in new appearance.
+            view.setNeedsLayout()
             UIView.animate(withDuration: duration) { [unowned self] in
                 // Toggle bars
                 self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -445,6 +451,8 @@ class PHNFullImageViewController: UIViewController, UIScrollViewDelegate, UIGest
                 self.scrollView.backgroundColor = .black
                 self.editNoteButton.setTitle("Hide", for: .normal)
                 self.editNoteButton.isHidden = false
+                
+                self.view.layoutIfNeeded()
             }
         }
     }
