@@ -45,6 +45,7 @@ class PHNAlbumsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         registerCells()
         prepareSearchBar()
+        tableView.separatorStyle = .none
         if #available(iOS 13, *) {
             view.backgroundColor = .systemGray5
         }
